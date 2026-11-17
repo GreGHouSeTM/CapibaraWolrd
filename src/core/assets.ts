@@ -5,7 +5,11 @@ export type TexSet = { map: THREE.Texture; normalMap: THREE.Texture; roughnessMa
 export const TEX: Record<string, TexSet> = {};
 export const IMG: Record<string, HTMLImageElement> = {};
 
-const NAMES = ['asphalt', 'cobble', 'sidewalk', 'brick', 'sand', 'snow', 'rock', 'grass'] as const;
+const NAMES = [
+  'asphalt', 'cobble', 'sidewalk', 'brick', 'sand', 'snow', 'rock', 'grass',
+  // village et nature (Poly Haven CC0)
+  'planks', 'plaster', 'rooftiles', 'bark', 'pinebark', 'stonewall', 'forestfloor', 'dirtroad', 'gravel', 'mossrock', 'villagecobble', 'roughwood',
+] as const;
 export type TexName = (typeof NAMES)[number];
 
 let maxAniso = 4;
