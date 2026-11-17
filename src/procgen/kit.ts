@@ -132,23 +132,25 @@ export function gableRoof(w: number, d: number, y0: number, h: number, over = 0.
   const roof = new GeoBuilder();
   const gable = new GeoBuilder();
   const alongX = w >= d;
-  const L = (alongX ? w : d) / 2 + over, S = (alongX ? d : w) / 2 + over;
+  const Lw = (alongX ? w : d) / 2, Sw = (alongX ? d : w) / 2;
+  const L = Lw + over, S = Sw + over;
   const s = 0.25;
   const P = (l: number, y: number, sd: number) => (alongX ? V(l, y, sd) : V(sd, y, l));
-  const sl = Math.hypot(S, h);
-  const ridge = y0 + h + over * (h / S);
-  // pans
+  // le pan passe exactement par le haut du mur (Sw, y0) et le faîtage (0, y0 + h)
+  const ridge = y0 + h;
+  const eave = y0 - (h * over) / Sw;
+  const sl = Math.hypot(S, ridge - eave);
   const flip = alongX;
   const q = (a: THREE.Vector3, b: THREE.Vector3, c: THREE.Vector3, dd: THREE.Vector3) =>
     flip ? roof.quad(a, b, c, dd, [[0, 0], [2 * L * s, 0], [2 * L * s, sl * s], [0, sl * s]]) : roof.quad(dd, c, b, a, [[0, 0], [2 * L * s, 0], [2 * L * s, sl * s], [0, sl * s]]);
-  q(P(-L, y0, S), P(L, y0, S), P(L, ridge, 0), P(-L, ridge, 0));
-  q(P(L, y0, -S), P(-L, y0, -S), P(-L, ridge, 0), P(L, ridge, 0));
-  // pignons (triangles)
-  const Lw = L - over, Sw = S - over;
+  q(P(-L, eave, S), P(L, eave, S), P(L, ridge, 0), P(-L, ridge, 0));
+  q(P(L, eave, -S), P(-L, eave, -S), P(-L, ridge, 0), P(L, ridge, 0));
+  // pignons (triangles) avec UV en mètres
+  const uvOf = (p: THREE.Vector3): [number, number] => [(alongX ? p.z : p.x) * s, (p.y - y0) * s];
   const t = (a: THREE.Vector3, b: THREE.Vector3, c: THREE.Vector3) =>
-    flip ? gable.tri(a, b, c, [[0, 0], [1, 0], [0.5, 0.5]]) : gable.tri(c, b, a, [[0.5, 0.5], [1, 0], [0, 0]]);
-  t(P(Lw, y0, Sw), P(Lw, y0, -Sw), P(Lw, y0 + h, 0));
-  t(P(-Lw, y0, -Sw), P(-Lw, y0, Sw), P(-Lw, y0 + h, 0));
+    flip ? gable.tri(a, b, c, [uvOf(a), uvOf(b), uvOf(c)]) : gable.tri(c, b, a, [uvOf(c), uvOf(b), uvOf(a)]);
+  t(P(Lw, y0, Sw), P(Lw, y0, -Sw), P(Lw, ridge, 0));
+  t(P(-Lw, y0, -Sw), P(-Lw, y0, Sw), P(-Lw, ridge, 0));
   return { roof: roof.build(), gable: gable.build(), ridge };
 }
 

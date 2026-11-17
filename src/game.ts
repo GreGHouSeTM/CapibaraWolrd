@@ -305,7 +305,7 @@ export class Game {
   }
 
   private applySettings(s: SaveData['settings']) {
-    const reload = s.quality !== this.quality;
+    const reload = s.quality !== this.save.settings.quality;
     this.save.settings = s;
     this.audio.setVolumes(s.music, s.sfx);
     this.rig.sensitivity = s.sensitivity;

@@ -9,6 +9,7 @@ import { bigBen, parliament, ferrisWheel, towerBridge } from '../procgen/monumen
 import { BuildCtx, RegionContent, emptyContent, phoneBooth, bench } from './common';
 import { riverDistance, RIVERS } from '../world/heightmap';
 import { paveRect } from '../world/grass';
+import { pbr } from '../core/assets';
 
 export function buildLondon(ctx: BuildCtx): RegionContent {
   const R = regionById('london');
@@ -17,6 +18,7 @@ export function buildLondon(ctx: BuildCtx): RegionContent {
   const slate = roofTexture('slate');
   const slateMat = new THREE.MeshStandardMaterial({ map: slate.map, normalMap: slate.normalMap, roughness: 0.75, color: 0xb8bcc4 });
   const chim = std(0x9a5a42, 0.9);
+  const gableMat = pbr('brick', { scale: 3, color: 0xd8b89a });
   const pot = std(0xb86a40, 0.85);
   const facades = [londonBrick(1), londonBrick(2), londonBrick(3), londonBrick(4)];
   const shops = [shopfront(31, 'london'), shopfront(32, 'london'), shopfront(33, 'london')];
@@ -28,7 +30,7 @@ export function buildLondon(ctx: BuildCtx): RegionContent {
       const g = gableRoof(w, d, top, Math.min(w, d) * 0.32, 0.3);
       const tm = new THREE.Matrix4().makeTranslation(x, 0, z);
       b.add(g.roof, slateMat, tm);
-      b.add(g.gable, facadeMaterial(set), tm);
+      b.add(g.gable, gableMat, tm);
       if (r.chance(0.8)) {
         const alongX = w >= d;
         const cx = x + (alongX ? (r.chance(0.5) ? 1 : -1) * (w / 2 - 0.6) : 0);

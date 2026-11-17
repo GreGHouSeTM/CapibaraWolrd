@@ -82,7 +82,7 @@ export class UI {
     if (hasSave) {
       add('Continuer l’aventure', 'primary', () => onPlay(false)).focus();
       add('Nouvelle partie', '', () => { if (confirm('Effacer la sauvegarde et recommencer ?')) onPlay(true); });
-    } else add('Jouer', 'primary', () => onPlay(true)).focus();
+    } else add('Jouer', 'primary', () => onPlay(false)).focus();
     add('Réglages', '', onSettings);
     add('Commandes', '', onHelp);
   }

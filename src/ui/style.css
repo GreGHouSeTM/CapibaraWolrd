@@ -73,7 +73,7 @@ canvas#game { position: absolute; inset: 0; width: 100%; height: 100%; display: 
 #dialog .next { text-align: right; font-size: 15px; opacity: .7; margin-top: 4px; }
 
 /* ---------- Panneaux (pause, carte, boutique…) ---------- */
-.overlay { position: absolute; inset: 0; z-index: 40; display: flex; align-items: center; justify-content: center; background: rgba(30, 15, 0, 0.45); backdrop-filter: blur(4px); pointer-events: auto; }
+.overlay { position: absolute; inset: 0; z-index: 60; display: flex; align-items: center; justify-content: center; background: rgba(30, 15, 0, 0.45); backdrop-filter: blur(4px); pointer-events: auto; }
 .panel { background: var(--panel); border-radius: 26px; padding: 26px 30px; box-shadow: var(--shadow); max-width: min(920px, 94vw); max-height: 90vh; overflow: auto; }
 .panel h2 { margin: 0 0 14px; font-size: 32px; }
 .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }

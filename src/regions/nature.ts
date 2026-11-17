@@ -297,6 +297,7 @@ export function buildHub(ctx: BuildCtx): RegionContent {
   const tiles = roofTexture('tiles');
   const tileMat = new THREE.MeshStandardMaterial({ map: tiles.map, normalMap: tiles.normalMap, roughness: 0.8, color: 0xffffff });
   const sets = [cottage(1), cottage(2), cottage(3), cottage(4)];
+  const gableMat = std(0xf2e6cf, 0.95);
   const plaza = pbr('cobble', { scale: 3.5, color: 0xf0e4cc });
   // place centrale pavée et fontaine
   b.addAt(planarUV(new THREE.CylinderGeometry(26, 26, 0.3, 48), 1), plaza, 0, R.ground, 0, 0, false);
@@ -319,7 +320,7 @@ export function buildHub(ctx: BuildCtx): RegionContent {
     b.add(facadeBox(w, dd, 0, 6.4, set, 3, 3.2, rng.int(0, 3) * 0.25, 0), facadeMaterial(set), m);
     const gr = gableRoof(w, dd, 6.4, 3.4, 0.7);
     b.add(gr.roof, tileMat, m);
-    b.add(gr.gable, facadeMaterial(set), m);
+    b.add(gr.gable, gableMat, m);
     // porte
     const door = new THREE.BoxGeometry(1.3, 2.2, 0.2).translate(0, 1.1, dd / 2);
     b.add(door, std(0x6a3a1c, 0.7), m);
