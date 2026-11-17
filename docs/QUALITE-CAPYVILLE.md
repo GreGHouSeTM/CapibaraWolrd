@@ -4,20 +4,41 @@ Ce document sert de référence à chaque passage de la boucle d'amélioration.
 Un critère n'est coché que s'il est **visible sur les captures** du passage (pas seulement « codé »).
 La boucle s'arrête quand toutes les cases sont cochées.
 
+## Direction artistique (décidée avec le client)
+
+**Capyville est un village thermal japonais de montagne (onsen)** : les capybaras adorent les bains chauds.
+Images de référence du rendu attendu dans `docs/references/` (ref-1 à ref-4 : onsen, pagode, place au cerisier,
+torrent et ponts de bois dans la brume ; ref-5 : vue de conduite à l'aube, ref-6 et ref-7 : lac turquoise et rochers).
+La région « Japon » garde la ville moderne, le lac au torii et le mont Fuji ; Capyville en est la version montagnarde et thermale.
+
 ## Charte visuelle commune (à respecter par tous les agents)
 
-- **Ambiance** : village de conte, chaleureux, ensoleillé, inspiré des villages alsaciens/normands à colombages,
-  rendu « stylisé-réaliste » : volumes simples mais **matières riches** (relief, usure, variations de teinte).
-- **Palette** : enduits crème/beige/rose pâle, bois brun chaud `#6b4428`, tuiles terre cuite `#b0603a`,
-  volets vert sauge `#3f7a5a` ou bleu `#3a6a9a`, pierre grise chaude `#a8a094`, herbe vert-jaune lumineux.
-- **Échelle** : le capybara mesure ~0,55 m au garrot. Portes 2,1 m, étages 3,2 m, marches 0,18 m.
-- **Lumière** : soleil chaud doré, ombres douces bleutées, nuit bleu nuit lisible avec flaques de lumière orangée sous chaque lanterne.
+- **Ambiance** : aube ou fin d'après-midi dorée, brume dans les vallées, vapeur des bassins, lumière chaude des lanternes,
+  rendu **le plus réaliste possible** (matières photoscannées, relief, usure, mousse, humidité).
+- **Architecture** : maisons et ryokan en bois sombre patiné, enduit clair, cloisons shōji éclairées de l'intérieur,
+  toits de tuiles kawara gris anthracite aux bords relevés, engawa (coursives), noren (rideaux d'entrée), lanternes de papier,
+  enseignes peintes (温泉 pour la source chaude), pagode rouge à plusieurs étages sur la colline, torii, sanctuaire, puits couvert.
+- **Paysage** : vallée de montagne boisée (cèdres, pins, érables rouges, cerisiers en fleurs), torrent rocheux avec petites cascades,
+  ponts de bois arqués, chemins de dalles de pierre irrégulières, lanternes de pierre moussues, bambous, gros rochers couverts de mousse.
+- **Palette** : bois `#5a3a24` à `#7a5236`, tuiles `#3e4247`, laque rouge `#b8342a`, papier `#f4e6c8`, mousse `#5f7a3a`,
+  pierre `#8f8a80`, ciel d'aube orange-rose, ombres bleutées.
+- **Échelle** : le capybara mesure ~0,55 m au garrot. Portes 1,9 m, étages 2,8 m, marches 0,18 m.
+- **Lumière** : soleil rasant doré, rayons à travers la brume et les arbres, ombres douces ; nuit bleu nuit lisible
+  avec flaques de lumière orangée sous chaque lanterne et fenêtres shōji lumineuses.
 - **Interdits** : grandes surfaces de couleur unie sans texture, objets qui flottent ou s'enfoncent, textes en miroir,
-  copier un jeu existant (personnages, logos, musiques).
-- **Technique** : Three.js r170, WebGL2. Budget en qualité « Moyenne » : < 700 appels de dessin et < 3 M triangles dans le village.
-  Fusionner les géométries statiques (`Batch` dans `src/procgen/kit.ts`) et instancier les objets répétés.
-- **Textures** : PNG ou JPG dans `public/assets/tex/` (Poly Haven CC0 ou générées par script), avec carte de normales.
-  Textures peintes au canvas acceptées si elles ont relief et rugosité.
+  copier un jeu existant (personnages, logos, cartes, musiques).
+
+## Chaîne de production des assets
+
+- **Blender par scripts** (module Python `bpy` 5.3 installé dans le conteneur ; scripts dans `tools/blender/`) :
+  bâtiments détaillés, objets sur mesure, capybara avec squelette et animations. Export glTF binaire (`.glb`) dans
+  `public/assets/models/`, textures cuites (normales, occlusion) si utile. Chaque script doit être relançable et documenté.
+- **Poly Haven (CC0)** : modèles photoscannés (rochers moussus, fougères, arbustes, pins, souches, herbes, fleurs, lanternes,
+  tonneaux, caisses, seaux, foyer…) et textures, téléchargés via l'API (`https://api.polyhaven.com/files/<id>`), en 1k ou 2k,
+  convertis en `.glb` compacts si besoin (Blender peut importer/réexporter).
+- Chargement dans le jeu avec `GLTFLoader` (+ `DRACOLoader`/`KTX2Loader` si compression), instanciation des objets répétés.
+- **Budget** en qualité « Moyenne » : < 700 appels de dessin et < 3 M triangles dans le village ; LOD pour les objets lourds ;
+  poids total des assets du village < 80 Mo.
 
 ## Grille de qualité
 
@@ -30,20 +51,20 @@ La boucle s'arrête quand toutes les cases sont cochées.
 - [ ] Carte cohérente : rien ne bloque une route, chaque chemin mène quelque part, repères visibles de loin
 
 ### Architecture et décor
-- [ ] Au moins 5 types de bâtiments distincts (chaumière, boulangerie, auberge, grange, maison à tourelle, moulin…)
-- [ ] Fenêtres en vrai relief : encadrement, appui, volets 3D, vitres réfléchissantes, rideaux éclairés la nuit
-- [ ] Portes avec encadrement, marche, heurtoir ou lanterne ; soubassement en pierre
-- [ ] Toits avec épaisseur, faîtage, débord avec chevrons visibles, cheminées qui fument
-- [ ] Rues pavées et chemins de terre reliant toutes les maisons ; place centrale détaillée
-- [ ] Au moins 300 objets de décor : barrières, puits, charrettes, tonneaux, caisses, étals de marché garnis,
-      bottes de foin, cordes à linge, boîtes aux lettres, jardinières, potagers, bancs, panneaux
+- [ ] Au moins 5 types de bâtiments japonais distincts (ryokan à étage, bains publics, maison de thé, échoppes, sanctuaire, pagode, moulin à eau…) modélisés dans Blender
+- [ ] Façades en vrai relief : poteaux et poutres, cloisons shōji et grilles koshi, engawa, noren, lanternes ; shōji lumineux la nuit
+- [ ] Entrées avec marches de pierre, soubassement de pierres sèches, galets ; enseignes peintes
+- [ ] Toits de tuiles kawara modélisées (épaisseur, faîtage, bords relevés, chevrons visibles) ; fumée et vapeur
+- [ ] Chemins de dalles irrégulières et ruelles en escaliers reliant les maisons ; place centrale avec cerisier et puits couvert
+- [ ] Au moins 300 objets de décor (dont modèles Poly Haven) : lanternes de pierre et de papier, barrières de bambou, seaux et baquets en bois,
+      tonneaux, caisses, étals garnis, bancs, pots de fleurs, bannières, bambous coupés, bois empilé, sandales, parapluies en papier
 - [ ] Aucune grande surface plate sans détail visible depuis la caméra de jeu
 
 ### Nature
-- [ ] Arbres avec feuillage en cartes de feuilles (alpha), troncs texturés, plusieurs espèces
+- [ ] Arbres crédibles (cèdres, pins, érables rouges, cerisiers en fleurs) : modèles Poly Haven/Blender, feuillage détaillé, pétales qui tombent
 - [ ] Buissons, haies, massifs de fleurs, champs de fleurs sauvages
 - [ ] Zones de hautes herbes bien visibles (terrain des ennemis)
-- [ ] Ruisseau avec ponts de pierre ou de bois ; étang avec nénuphars et roseaux
+- [ ] Torrent rocheux avec petites cascades et ponts de bois arqués ; étang avec nénuphars, roseaux et carpes koï
 - [ ] Rochers moussus, souches, champignons
 - [ ] Vie : papillons, oiseaux, lucioles la nuit, poissons ou grenouilles
 
