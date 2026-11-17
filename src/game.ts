@@ -108,6 +108,13 @@ export class Game {
     setMaxAnisotropy(Math.min(8, this.renderer.capabilities.getMaxAnisotropy()));
     this.input = new Input(this.canvas);
     window.addEventListener('resize', () => this.resize());
+    // la souris est libérée (Échap) : on met en pause
+    document.addEventListener('pointerlockchange', () => {
+      if (!document.pointerLockElement && this.state === 'play' && !this.ui.dialogOpen && !this.manual) this.pause();
+    });
+    this.canvas.addEventListener('click', () => {
+      if (this.state === 'play') this.input.requestLock();
+    });
     (window as any).__game = this;
   }
 

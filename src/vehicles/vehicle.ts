@@ -23,9 +23,9 @@ export interface VehicleSpec {
 }
 
 export const SPECS: Record<VehicleType, VehicleSpec> = {
-  car: { name: 'Cabriolet', maxSpeed: 30, accel: 11, turn: 1.9, radius: 1.6, seat: new THREE.Vector3(0.35, 0.42, -0.25), camDist: 9, camHeight: 3.2, wheelBase: 2.5, track: 1.6, sitStyle: 'inside' },
-  taxi: { name: 'Taxi', maxSpeed: 30, accel: 11, turn: 1.8, radius: 1.7, seat: new THREE.Vector3(0.35, 0.42, -0.1), camDist: 9.5, camHeight: 3.4, wheelBase: 2.6, track: 1.6, sitStyle: 'inside' },
-  jeep: { name: 'Jeep des sables', maxSpeed: 27, accel: 10, turn: 1.8, radius: 1.7, seat: new THREE.Vector3(0.38, 0.62, -0.2), camDist: 9.5, camHeight: 3.4, wheelBase: 2.5, track: 1.7, sitStyle: 'inside' },
+  car: { name: 'Cabriolet', maxSpeed: 30, accel: 11, turn: 1.9, radius: 1.6, seat: new THREE.Vector3(0.38, 0.66, -0.3), camDist: 9, camHeight: 3.2, wheelBase: 2.5, track: 1.6, sitStyle: 'inside' },
+  taxi: { name: 'Taxi', maxSpeed: 30, accel: 11, turn: 1.8, radius: 1.7, seat: new THREE.Vector3(0.38, 0.55, -0.1), camDist: 9.5, camHeight: 3.4, wheelBase: 2.6, track: 1.6, sitStyle: 'inside' },
+  jeep: { name: 'Jeep des sables', maxSpeed: 27, accel: 10, turn: 1.8, radius: 1.7, seat: new THREE.Vector3(0.4, 0.9, -0.25), camDist: 9.5, camHeight: 3.4, wheelBase: 2.5, track: 1.7, sitStyle: 'inside' },
   bus: { name: 'Bus à impériale', maxSpeed: 20, accel: 6, turn: 1.1, radius: 2.4, seat: new THREE.Vector3(0.6, 1.2, 3.6), camDist: 15, camHeight: 5.5, wheelBase: 6, track: 2.2, sitStyle: 'inside' },
   scooter: { name: 'Scooter', maxSpeed: 22, accel: 12, turn: 2.6, radius: 0.9, seat: new THREE.Vector3(0, 0.62, -0.25), camDist: 6.5, camHeight: 2.4, wheelBase: 1.3, track: 0.1, sitStyle: 'ride' },
   snowmobile: { name: 'Motoneige', maxSpeed: 26, accel: 12, turn: 2.2, radius: 1.2, seat: new THREE.Vector3(0, 0.75, -0.3), camDist: 7.5, camHeight: 2.8, wheelBase: 2.2, track: 1, sitStyle: 'ride' },

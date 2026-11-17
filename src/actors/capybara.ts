@@ -251,17 +251,18 @@ export class Capybara {
     const bodyMesh = new THREE.Mesh(bodyGeo, this.furMat);
     bodyMesh.castShadow = true;
     this.body.add(bodyMesh);
-    this.body.position.y = 0.42;
+    this.body.position.y = 0.36;
     this.root.add(this.body);
 
     // Tête : grosse et carrée, museau haut
-    this.head.position.set(0, 0.16, 0.42);
+    this.head.position.set(0, 0.17, 0.4);
     this.body.add(this.head);
-    const headGeo = superSphere(0.19, 0.2, 0.3, 0.72, 40, (v) => {
-      const front = clamp(v.z / 0.3, 0, 1);
-      v.y *= 1 - front * 0.12;
-      v.x *= 1 - front * 0.15;
-      v.y -= front * 0.03;
+    const headGeo = superSphere(0.2, 0.21, 0.32, 0.6, 40, (v) => {
+      const front = clamp(v.z / 0.32, 0, 1);
+      v.x *= 1 - front * 0.12;
+      v.y -= front * 0.02;
+      // dessus du crâne plat, joues larges
+      if (v.y > 0.12) v.y = 0.12 + (v.y - 0.12) * 0.5;
     });
     const headMesh = new THREE.Mesh(headGeo, this.furMat);
     headMesh.position.set(0, 0.02, 0.14);
@@ -269,25 +270,25 @@ export class Capybara {
     headMesh.castShadow = true;
     this.head.add(headMesh);
     // truffe
-    const nose = new THREE.Mesh(superSphere(0.11, 0.07, 0.03, 0.8, 20), noseMat);
-    nose.position.set(0, -0.02, 0.43);
-    nose.rotation.x = 0.22;
+    const nose = new THREE.Mesh(superSphere(0.075, 0.045, 0.025, 0.8, 20), noseMat);
+    nose.position.set(0, 0.0, 0.455);
+    nose.rotation.x = 0.1;
     this.head.add(nose);
     for (const s of [-1, 1]) {
       const nostril = new THREE.Mesh(new THREE.SphereGeometry(0.014, 8, 6), new THREE.MeshBasicMaterial({ color: 0x000000 }));
-      nostril.position.set(s * 0.035, 0.0, 0.453);
+      nostril.position.set(s * 0.03, 0.005, 0.475);
       this.head.add(nostril);
       // yeux placés haut sur la tête
       const eye = new THREE.Mesh(new THREE.SphereGeometry(0.033, 16, 12), eyeMat);
-      eye.position.set(s * 0.155, 0.1, 0.13);
+      eye.position.set(s * 0.17, 0.1, 0.12);
       const shine = new THREE.Mesh(new THREE.SphereGeometry(0.009, 8, 6), shineMat);
       shine.position.set(s * 0.008, 0.014, 0.026);
       eye.add(shine);
       this.head.add(eye);
       this.eyes.push(eye);
       // oreilles
-      const ear = new THREE.Mesh(superSphere(0.05, 0.055, 0.025, 1, 16), darkMat);
-      ear.position.set(s * 0.12, 0.2, -0.04);
+      const ear = new THREE.Mesh(superSphere(0.055, 0.06, 0.028, 1, 16), darkMat);
+      ear.position.set(s * 0.13, 0.19, -0.06);
       ear.rotation.set(-0.2, s * 0.3, s * -0.3);
       ear.castShadow = true;
       this.head.add(ear);
@@ -295,16 +296,16 @@ export class Capybara {
     }
     // bouche (petit trait sombre)
     const mouth = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.008, 0.01), noseMat);
-    mouth.position.set(0, -0.1, 0.41);
+    mouth.position.set(0, -0.09, 0.44);
     mouth.rotation.x = 0.4;
     this.head.add(mouth);
 
     // pattes
-    const legGeo = new THREE.CapsuleGeometry(0.065, 0.2, 6, 12);
-    legGeo.translate(0, -0.13, 0);
-    const footGeo = superSphere(0.07, 0.035, 0.09, 1, 12);
+    const legGeo = new THREE.CapsuleGeometry(0.08, 0.12, 6, 12);
+    legGeo.translate(0, -0.1, 0);
+    const footGeo = superSphere(0.085, 0.04, 0.1, 1, 12);
     const legPos: [number, number, number][] = [
-      [0.17, -0.12, 0.28], [-0.17, -0.12, 0.28], [0.19, -0.12, -0.3], [-0.19, -0.12, -0.3],
+      [0.16, -0.12, 0.28], [-0.16, -0.12, 0.28], [0.18, -0.12, -0.3], [-0.18, -0.12, -0.3],
     ];
     for (const p of legPos) {
       const pivot = new THREE.Group();
@@ -312,7 +313,7 @@ export class Capybara {
       const leg = new THREE.Mesh(legGeo, darkMat);
       leg.castShadow = true;
       const foot = new THREE.Mesh(footGeo, darkMat);
-      foot.position.set(0, -0.27, 0.02);
+      foot.position.set(0, -0.22, 0.03);
       pivot.add(leg, foot);
       this.body.add(pivot);
       this.legs.push(pivot);
@@ -327,7 +328,7 @@ export class Capybara {
       this.body.add(scarf);
     }
 
-    this.hatAnchor.position.set(0, 0.2, 0.08);
+    this.hatAnchor.position.set(0, 0.17, 0.08);
     this.head.add(this.hatAnchor);
     this.setHat(opts.hat ?? 'none');
     this.root.scale.setScalar(opts.size ?? 1);
@@ -365,7 +366,7 @@ export class Capybara {
       }
       const bob = state === 'ground' ? Math.abs(Math.sin(p)) * 0.035 * Math.min(1, gait * 2) : 0;
       const breathe = Math.sin(time * 2.2) * 0.006;
-      const baseY = state === 'swim' ? 0.32 : 0.42;
+      const baseY = state === 'swim' ? 0.28 : 0.36;
       this.body.position.y = lerp(this.body.position.y, baseY + bob + breathe, 1 - Math.exp(-dt * 12));
       this.body.rotation.z = Math.sin(p) * 0.03 * gait;
       const pitch = state === 'air' ? -0.12 : state === 'swim' ? -0.08 : Math.sin(p * 2) * 0.02 * gait;
