@@ -1,9 +1,9 @@
 // Entrées clavier (AZERTY et QWERTY via les codes physiques), souris et manette.
-export type Action = 'jump' | 'run' | 'interact' | 'photo' | 'map' | 'pause' | 'horn' | 'vehicle' | 'respawn' | 'brake' | 'help';
+export type Action = 'jump' | 'run' | 'interact' | 'photo' | 'map' | 'pause' | 'horn' | 'vehicle' | 'respawn' | 'brake' | 'help' | 'attack' | 'dodge' | 'fullscreen';
 
 const KEYMAP: Record<string, Action> = {
   Space: 'jump', ShiftLeft: 'run', ShiftRight: 'run', KeyE: 'interact', Enter: 'interact', KeyF: 'photo', KeyP: 'photo',
-  KeyM: 'map', Tab: 'map', Escape: 'pause', KeyH: 'horn', KeyV: 'vehicle', KeyR: 'respawn', KeyX: 'brake', F1: 'help',
+  KeyM: 'map', Tab: 'map', Escape: 'pause', KeyH: 'horn', KeyV: 'vehicle', KeyR: 'respawn', KeyX: 'brake', F1: 'help', KeyO: 'fullscreen', KeyC: 'dodge',
 };
 
 export class Input {
@@ -17,6 +17,8 @@ export class Input {
   private padPrev: boolean[] = [];
   enabled = true;
   usingPad = false;
+  /** la manette n'est prise en compte qu'après l'appui d'un bouton */
+  padActive = false;
 
   constructor(private el: HTMLElement) {
     window.addEventListener('keydown', (e) => {
@@ -31,6 +33,13 @@ export class Input {
     });
     window.addEventListener('keyup', (e) => this.keys.delete(e.code));
     window.addEventListener('blur', () => this.keys.clear());
+    document.addEventListener('visibilitychange', () => this.keys.clear());
+    document.addEventListener('pointerlockchange', () => this.keys.clear());
+    window.addEventListener('contextmenu', (e) => { e.preventDefault(); this.keys.clear(); });
+    el.addEventListener('mousedown', (e) => {
+      if (e.button === 0) this.pressed.add('attack');
+      if (e.button === 2) this.pressed.add('dodge');
+    });
     el.addEventListener('mousemove', (e) => {
       if (!this.pointerLocked) return;
       this.look.x += e.movementX;
@@ -55,10 +64,10 @@ export class Input {
     const p = this.gamepad;
     if (p) {
       const ax = p.axes[0] ?? 0, ay = p.axes[1] ?? 0;
-      if (Math.hypot(ax, ay) > 0.18) { x = ax; y = -ay; this.usingPad = true; }
+      if (this.padActive && Math.hypot(ax, ay) > 0.25) { x = ax; y = -ay; this.usingPad = true; }
       // gâchettes pour la conduite
       const rt = p.buttons[7]?.value ?? 0, lt = p.buttons[6]?.value ?? 0;
-      if (rt > 0.1 || lt > 0.1) { y = rt - lt; this.usingPad = true; }
+      if (this.padActive && (rt > 0.1 || lt > 0.1)) { y = rt - lt; this.usingPad = true; }
     }
     const l = Math.hypot(x, y);
     if (l > 1) { x /= l; y /= l; }
@@ -81,12 +90,12 @@ export class Input {
       const map: [number, Action][] = [[0, 'jump'], [3, 'interact'], [2, 'photo'], [8, 'map'], [9, 'pause'], [4, 'vehicle'], [5, 'horn'], [1, 'interact']];
       for (const [i, a] of map) {
         const on = !!p.buttons[i]?.pressed;
-        if (on && !this.padPrev[i]) { this.pressed.add(a); this.usingPad = true; }
+        if (on && !this.padPrev[i]) { this.pressed.add(a); this.usingPad = true; this.padActive = true; }
         this.padPrev[i] = on;
       }
       const rx = p.axes[2] ?? 0, ry = p.axes[3] ?? 0;
-      if (Math.abs(rx) > 0.15) this.look.x += rx * 14;
-      if (Math.abs(ry) > 0.15) this.look.y += ry * 9;
+      if (this.padActive && Math.abs(rx) > 0.2) this.look.x += rx * 14;
+      if (this.padActive && Math.abs(ry) > 0.2) this.look.y += ry * 9;
     }
   }
 

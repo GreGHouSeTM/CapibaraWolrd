@@ -18,6 +18,15 @@ export const TIPS = [
   'La nuit, Paris scintille et le ciel du Pôle Nord s’illumine d’aurores boréales…',
 ];
 
+export function toggleFullscreen() {
+  try {
+    if (document.fullscreenElement) document.exitFullscreen();
+    else document.documentElement.requestFullscreen({ navigationUI: 'hide' });
+  } catch {
+    /* plein écran refusé par le navigateur */
+  }
+}
+
 export class UI {
   root = $('#app');
   dialogOpen = false;
@@ -85,6 +94,7 @@ export class UI {
     } else add('Jouer', 'primary', () => onPlay(false)).focus();
     add('Réglages', '', onSettings);
     add('Commandes', '', onHelp);
+    add('Plein écran', 'small', () => toggleFullscreen());
   }
 
   hideTitle() {
@@ -212,8 +222,9 @@ export class UI {
       <button class="btn" data-a="album">Album photo</button>
       <button class="btn" data-a="settings">Réglages</button>
       <button class="btn" data-a="help">Commandes</button>
+      <button class="btn" data-a="fullscreen">Plein écran</button>
       <button class="btn small" data-a="title">Écran titre</button></div>`);
-    p.querySelectorAll<HTMLButtonElement>('button').forEach((b) => (b.onclick = () => (actions as any)[b.dataset.a!]()));
+    p.querySelectorAll<HTMLButtonElement>('button').forEach((b) => (b.onclick = () => (b.dataset.a === 'fullscreen' ? toggleFullscreen() : (actions as any)[b.dataset.a!]())));
     p.querySelector<HTMLButtonElement>('button')?.focus();
   }
 
@@ -229,6 +240,7 @@ export class UI {
       <span><kbd>H</kbd></span><span>Klaxon</span>
       <span><kbd>M</kbd></span><span>Carte du monde</span>
       <span><kbd>R</kbd></span><span>Revenir sur la terre ferme</span>
+      <span><kbd>O</kbd></span><span>Plein écran</span>
       <span><kbd>Échap</kbd></span><span>Pause</span>
       <span><kbd>🎮</kbd></span><span>Manette : stick gauche, A sauter, Y/B interagir, X photo, gâchettes pour conduire</span>
       </div><div style="margin-top:16px;text-align:right"><button class="btn" id="back">Retour</button></div>`);

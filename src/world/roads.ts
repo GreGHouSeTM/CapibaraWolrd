@@ -3,23 +3,18 @@ import * as THREE from 'three';
 import { roadSamples, heightAt } from './heightmap';
 import { pbr } from '../core/assets';
 import { Batch, std } from '../procgen/kit';
-import { addLamp } from '../procgen/city';
+import { addLamp, insideCity } from '../procgen/city';
 import { paveRect } from './grass';
 
-export function buildRoads(): THREE.Group {
-  const asphalt = pbr('asphalt', { scale: 7, roughness: 1 });
-  const line = std(0xf4f4ec, 0.6);
-  const dash = std(0xf2d14a, 0.6);
-  const b = new Batch(200);
-  for (const road of roadSamples) {
-    const { pts, h, width } = road;
+function ribbon(b: Batch, pts: [number, number][], h: number[], width: number, asphalt: THREE.Material, line: THREE.Material, dash: THREE.Material) {
+  {
     const pos: number[] = [], uv: number[] = [], nor: number[] = [], idx: number[] = [];
     const lines: number[][] = [[], [], []];
     let along = 0;
     const W = width / 2;
     const across = 4;
     for (let i = 0; i < pts.length; i++) {
-      const p = pts[Math.min(i, pts.length - 1)];
+      const p = pts[i];
       const q = pts[Math.min(i + 1, pts.length - 1)];
       const o = pts[Math.max(i - 1, 0)];
       const dx = q[0] - o[0], dz = q[1] - o[1];
@@ -38,10 +33,11 @@ export function buildRoads(): THREE.Group {
         const x = p[0] + nx * off, z = p[1] + nz * off;
         lines[li].push(x, Math.max(h[i], heightAt(x, z)) + 0.15, z);
       }
-      if (i % 10 === 0) paveRect(p[0], p[1], width + 3, 10, -Math.atan2(dx, dz));
+      // herbe retirée sur toute la chaussée et ses bas-côtés
+      paveRect(p[0], p[1], width + 4, 7, -Math.atan2(dx, dz));
       if (i % 14 === 7) {
-        const x = p[0] + nx * (W + 1.2), z = p[1] + nz * (W + 1.2);
-        addLamp(b, 'paris', x, heightAt(x, z), z, Math.atan2(nx, nz) + Math.PI);
+        const x = p[0] + nx * (W + 1.6), z = p[1] + nz * (W + 1.6);
+        if (!insideCity(x, z, 4)) addLamp(b, 'paris', x, heightAt(x, z), z, Math.atan2(nx, nz) + Math.PI);
       }
     }
     const row = across + 1;
@@ -57,7 +53,6 @@ export function buildRoads(): THREE.Group {
     g.setIndex(idx);
     g.computeVertexNormals();
     b.add(g, asphalt, undefined, false);
-    // marquages
     lines.forEach((ln, li) => {
       for (let i = 0; i < ln.length / 3 - 1; i++) {
         if (li === 2 && i % 2 === 1) continue;
@@ -69,6 +64,25 @@ export function buildRoads(): THREE.Group {
         b.add(geo, li === 2 ? dash : line, m, false);
       }
     });
+  }
+}
+
+export function buildRoads(): THREE.Group {
+  const asphalt = pbr('asphalt', { scale: 7, roughness: 1 });
+  const line = std(0xf4f4ec, 0.6);
+  const dash = std(0xf2d14a, 0.6);
+  const b = new Batch(200);
+  for (const road of roadSamples) {
+    // on découpe la route en tronçons hors des villes (les rues de la ville prennent le relais)
+    const runs: { pts: [number, number][]; h: number[] }[] = [];
+    let cur: { pts: [number, number][]; h: number[] } | null = null;
+    road.pts.forEach((p, i) => {
+      if (insideCity(p[0], p[1], 2)) { cur = null; return; }
+      if (!cur) runs.push((cur = { pts: [], h: [] }));
+      cur.pts.push(p);
+      cur.h.push(road.h[i]);
+    });
+    for (const run of runs) if (run.pts.length > 1) ribbon(b, run.pts, run.h, road.width, asphalt, line, dash);
   }
   return b.build('roads');
 }

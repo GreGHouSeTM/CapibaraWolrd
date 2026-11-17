@@ -262,11 +262,12 @@ export class AudioSystem {
     this.region = region;
     const t = c.currentTime;
     if (this.wind) {
-      const w = region === 'pole' ? 0.12 : region === 'desert' ? 0.08 : 0.025;
-      this.wind.gain.gain.setTargetAtTime(w + (nearWater ? 0.03 : 0), t, 1);
+      const base = region === 'pole' ? 0.035 : region === 'desert' ? 0.022 : 0;
+      const gust = 0.5 + 0.5 * Math.sin(t * 0.21) * Math.sin(t * 0.13 + 1.7);
+      this.wind.gain.gain.setTargetAtTime(base * gust + (nearWater ? 0.006 : 0), t, 1.5);
       this.wind.filter.frequency.setTargetAtTime(region === 'pole' ? 800 : nearWater ? 350 : 500, t, 1);
     }
-    if (this.hum) this.hum.gain.gain.setTargetAtTime(look === 'city' ? 0.05 : 0, t, 1.5);
+    if (this.hum) this.hum.gain.gain.setTargetAtTime(look === 'city' ? 0.012 : 0, t, 1.5);
     // oiseaux le jour à la campagne
     this.birdT -= 1 / 60;
     if (this.birdT < 0) {

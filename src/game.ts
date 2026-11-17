@@ -22,7 +22,7 @@ import { NpcManager } from './actors/npcs';
 import { Capybara, HATS, HatId } from './actors/capybara';
 import { Vehicle } from './vehicles/vehicle';
 import { Traffic } from './vehicles/traffic';
-import { UI } from './ui/ui';
+import { UI, toggleFullscreen } from './ui/ui';
 import { buildMapImage, Minimap, worldToMap } from './ui/map';
 import type { VehicleType } from './regions/common';
 
@@ -111,6 +111,9 @@ export class Game {
     // la souris est libérée (Échap) : on met en pause
     document.addEventListener('pointerlockchange', () => {
       if (!document.pointerLockElement && this.state === 'play' && !this.ui.dialogOpen && !this.manual) this.pause();
+    });
+    this.canvas.addEventListener('mousedown', (e) => {
+      if (e.button === 0 && this.ui.dialogOpen) this.ui.advanceDialog();
     });
     this.canvas.addEventListener('click', () => {
       if (this.state === 'play') this.input.requestLock();
@@ -636,6 +639,7 @@ export class Game {
       document.exitPointerLock?.();
       return this.openMap(() => { this.ui.close(); this.state = 'play'; this.input.requestLock(); });
     }
+    if (inp.consume('fullscreen')) toggleFullscreen();
     if (inp.consume('photo')) this.takePhoto();
     if (inp.consume('vehicle')) this.callCar();
     if (inp.consume('respawn')) this.respawn();

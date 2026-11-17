@@ -157,7 +157,12 @@ export function signpost(b: Batch, x: number, y: number, z: number, arrows: { te
     const geo = new THREE.ExtrudeGeometry(shape, { depth: 0.05, bevelEnabled: false });
     const uv = geo.attributes.uv as THREE.BufferAttribute;
     const pos = geo.attributes.position as THREE.BufferAttribute;
-    for (let k = 0; k < uv.count; k++) uv.setXY(k, pos.getX(k) / 1.75, (pos.getY(k) + 0.18) / 0.36);
+    const nrm = geo.attributes.normal as THREE.BufferAttribute;
+    for (let k = 0; k < uv.count; k++) {
+      const u = pos.getX(k) / 1.75;
+      // face arrière : texture retournée pour que le texte ne soit pas en miroir
+      uv.setXY(k, nrm.getZ(k) < -0.5 ? 1 - u : u, (pos.getY(k) + 0.18) / 0.36);
+    }
     geo.translate(0.1, 2.9 - i * 0.45, -0.025);
     b.addAt(geo, mat, x, y, z, a.angle);
   });

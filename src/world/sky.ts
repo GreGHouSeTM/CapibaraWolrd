@@ -178,8 +178,8 @@ export class SkySystem {
     const horDay = new THREE.Color(0.68, 0.82, 0.95);
     const zenDusk = new THREE.Color(0.2, 0.25, 0.5);
     const horDusk = new THREE.Color(1.0, 0.55, 0.3);
-    const zenNight = new THREE.Color(0.01, 0.015, 0.05);
-    const horNight = new THREE.Color(0.04, 0.06, 0.13);
+    const zenNight = new THREE.Color(0.025, 0.04, 0.11);
+    const horNight = new THREE.Color(0.09, 0.12, 0.22);
     const zen = zenDay.clone().lerp(zenDusk, dusk).lerp(zenNight, night);
     const hor = horDay.clone().lerp(horDusk, dusk).lerp(horNight, night);
     const u = this.uniforms;
@@ -198,7 +198,7 @@ export class SkySystem {
     // Lumière du soleil (ou de la lune la nuit)
     const lightDir = night > 0.5 ? sunDir.clone().negate() : sunDir;
     this.sun.color.copy(night > 0.5 ? new THREE.Color(0.55, 0.65, 1.0) : sunCol);
-    this.sun.intensity = night > 0.5 ? 0.35 * smoothstep(0.5, 1, night) : 3.2 * smoothstep(-0.05, 0.25, e) * (1 - night);
+    this.sun.intensity = night > 0.5 ? 1.1 * smoothstep(0.5, 1, night) : 3.2 * smoothstep(-0.05, 0.25, e) * (1 - night);
     // ombres stabilisées : on aligne la position sur la grille des texels
     const ext = this.shadowExtent;
     const texel = (ext * 2) / this.sun.shadow.mapSize.x;
@@ -206,7 +206,7 @@ export class SkySystem {
     const fz = Math.round(focus.z / texel) * texel;
     this.sun.target.position.set(fx, focus.y, fz);
     this.sun.position.set(fx + lightDir.x * 300, focus.y + Math.max(0.15, lightDir.y) * 300, fz + lightDir.z * 300);
-    this.hemi.intensity = lerp(0.35, 0.08, night);
+    this.hemi.intensity = lerp(0.35, 0.32, night);
     this.hemi.color.copy(zen).lerp(new THREE.Color(1, 1, 1), 0.4);
 
     this.mesh.position.copy(focus);
@@ -221,7 +221,7 @@ export class SkySystem {
       this.scene.environment = this.envRT.texture;
       old?.dispose();
     }
-    this.scene.environmentIntensity = lerp(1.0, 0.25, night);
+    this.scene.environmentIntensity = lerp(1.0, 0.6, night);
   }
 
   forceEnvUpdate() {

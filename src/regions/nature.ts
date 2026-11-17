@@ -312,7 +312,7 @@ export function buildHub(ctx: BuildCtx): RegionContent {
     const x = Math.cos(a) * d, z = Math.sin(a) * d;
     const ang = Math.atan2(-x, -z);
     // on évite les routes (directions des régions)
-    if (REGIONS.slice(1).some((r) => Math.abs(Math.atan2(r.x, r.z) - Math.atan2(x, z)) < 0.17)) continue;
+    if (REGIONS.slice(1).some((r) => Math.abs(Math.atan2(r.x, r.z) - Math.atan2(x, z)) < 0.3)) continue;
     const y = groundY(x, z);
     const w = rng.range(8, 11), dd = rng.range(7, 9);
     const set = rng.pick(sets);

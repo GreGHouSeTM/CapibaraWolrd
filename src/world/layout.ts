@@ -111,7 +111,7 @@ function buildRoads(): RoadDef[] {
   const outer = REGIONS.slice(1);
   // Rayons : du village vers chaque région
   for (const r of outer) {
-    const a = edge(hub, r, 120);
+    const a = edge(hub, r, 28);
     const b = edge(r, hub, r.cityRadius * 0.82);
     const mx = (a[0] + b[0]) / 2, mz = (a[1] + b[1]) / 2;
     const px = -(b[1] - a[1]) * 0.08, pz = (b[0] - a[0]) * 0.08;

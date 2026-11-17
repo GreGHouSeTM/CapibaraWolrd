@@ -64,6 +64,13 @@ export interface City {
   loops: THREE.Vector3[][];
 }
 
+/** Emprise des villes (cellules rue + îlot), pour que les routes s'arrêtent à leur bord. */
+export const cityFootprints: { x: number; z: number; half: number }[] = [];
+export function insideCity(x: number, z: number, margin = 0) {
+  for (const c of cityFootprints) if (Math.abs(x - c.x) < c.half + margin && Math.abs(z - c.z) < c.half + margin) return true;
+  return false;
+}
+
 let lampMats: Record<string, THREE.Material> | null = null;
 function lampMaterials() {
   if (lampMats) return lampMats;
@@ -157,6 +164,7 @@ export function buildCity(p: CityParams): City {
       if (!wet && Math.min(heightAt(cx - pitch / 2, cz - pitch / 2), heightAt(cx + pitch / 2, cz + pitch / 2), heightAt(cx + pitch / 2, cz - pitch / 2), heightAt(cx - pitch / 2, cz + pitch / 2)) < G - 2.5) continue;
       bl.kind = wet ? 'skip' : p.kindOf(bl);
       blocks.push(bl);
+      cityFootprints.push({ x: cx, z: cz, half: pitch / 2 });
       if (!wet) {
         // chaussée
         batch.addAt(slab(pitch, pitch, -0.3, 0.32, 1), roadMat, cx, G, cz, 0, false);

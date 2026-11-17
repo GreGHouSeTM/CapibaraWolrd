@@ -75,10 +75,11 @@ export function buildVehicleModel(type: VehicleType, color?: number) {
   const wheels: THREE.Object3D[] = [];
   const addWheels = (positions: [number, number, number][], r: number, w: number) => {
     for (const p of positions) {
-      const wh = wheel(r, w);
-      wh.position.set(...p);
-      g.add(wh);
-      wheels.push(wh);
+      const pivot = new THREE.Group();
+      pivot.position.set(...p);
+      pivot.add(wheel(r, w));
+      g.add(pivot);
+      wheels.push(pivot);
     }
   };
   switch (type) {
@@ -390,7 +391,7 @@ export class Vehicle {
       this.roll = damp(this.roll, s.track > 0.3 ? Math.atan2(hr - hl, s.track) : this.steer * clamp(this.speed / s.maxSpeed, 0, 1) * 0.35, 10, dt);
     }
     // roues
-    for (const w of this.wheels) w.rotation.x += (this.speed * dt) / 0.35;
+    for (const w of this.wheels) w.children[0].rotation.x += (this.speed * dt) / 0.35;
     if (this.wheels.length >= 2 && this.type !== 'scooter') {
       this.wheels[0].rotation.y = this.wheels[1].rotation.y = this.steer * 0.45;
     } else if (this.type === 'scooter' && this.wheels[0]) this.wheels[0].rotation.y = this.steer * 0.35;
