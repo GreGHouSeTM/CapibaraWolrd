@@ -138,7 +138,7 @@ export const COLS: { region: 'paris' | 'newyork' | 'desert' | 'japan' | 'pole' |
   { region: 'paris', bearing: 0, r: 300, y: 22, width: 60 },
   { region: 'newyork', bearing: 60, r: 300, y: 24, width: 60 },
   { region: 'desert', bearing: 120, r: 300, y: 20, width: 70 },
-  { region: 'japan', bearing: 180, r: 290, y: 12, width: 140 },
+  { region: 'japan', bearing: 180, r: 290, y: 16, width: 140 },
   { region: 'pole', bearing: 240, r: 300, y: 22, width: 60 },
   { region: 'london', bearing: 300, r: 300, y: 24, width: 60 },
 ];
@@ -578,9 +578,9 @@ export const LANDMARKS: { id: string; name: string; x: number; z: number; top: n
 
 /** Vues composées (caméra au niveau du joueur, cap en degrés). Servent aussi aux captures de revue. */
 export const VIEWPOINTS: { id: string; name: string; x: number; z: number; bearing: number; sees: string }[] = [
-  { id: 'depart', name: 'Sortie de la maison', x: -3, z: 26, bearing: 0, sees: 'place, Grand Cerisier, torii du sandō, escaliers et pagode sur la colline ; vapeur à droite' },
-  { id: 'place-sud', name: 'Place vers le sud', x: 0, z: 10, bearing: 180, sees: 'Grand-Rue, lanternes, Grand Torii et mont Fuji juste à droite' },
-  { id: 'pont-lanternes', name: 'Pont des Lanternes', x: 66, z: 6, bearing: 5, sees: 'torrent canalisé, balcons du Grand Ryokan, roue du moulin, gorge et mont Tanuki dans la brume' },
+  { id: 'depart', name: 'Sortie de la maison', x: -3, z: 26, bearing: 0, sees: 'place, Grand Cerisier, torii du sandō, escaliers et pagode sur la colline (cap -15°) ; vapeur du yubatake à droite' },
+  { id: 'place-sud', name: 'Place vers le sud', x: 0, z: 10, bearing: 180, sees: 'Grand-Rue, lanternes, Grand Torii (cap 183°) et mont Fuji juste à sa gauche (cap 174°)' },
+  { id: 'pont-lanternes', name: 'Pont des Lanternes', x: 66, z: 6, bearing: 5, sees: 'torrent canalisé, roue du moulin, gorge et mont Tanuki dans la brume ; Grand Ryokan en bord de cadre à droite' },
   { id: 'rotenburo', name: 'Bain extérieur', x: 58, z: 72, bearing: 120, sees: 'pont du Bain, verger de yuzus, érable rouge, vapeur' },
   { id: 'pagode', name: 'Sommet de la pagode', x: -38, z: -108, bearing: 165, sees: 'toits du village, colonnes de vapeur, Grand-Rue jusqu’au torii, mont Fuji au fond' },
   { id: 'etang', name: 'Pont Vermillon', x: -138, z: 68, bearing: 110, sees: 'étang, îlot, cascade aux Koï, cerisiers, maison de thé' },
@@ -588,7 +588,7 @@ export const VIEWPOINTS: { id: string; name: string; x: number; z: number; beari
 ];
 
 /** Position du mont Fuji (région Japon) pour les cadrages : voir FUJI_POS dans heightmap.ts. */
-export const FUJI_BEARING_FROM_PLAZA = 6;
+export const FUJI_BEARING_FROM_PLAZA = 174;
 
 // =================================================================================================== PERFORMANCE
 /** Budget par zone en qualité « Moyenne », caméra placée dans la zone (appels de dessin, triangles). */
