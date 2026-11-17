@@ -27,12 +27,12 @@ import { buildMapImage, Minimap, worldToMap } from './ui/map';
 import type { VehicleType } from './regions/common';
 
 const WATER: Record<RegionId, [number[], number[]]> = {
-  hub: [[0.25, 0.72, 0.66], [0.03, 0.2, 0.3]],
+  hub: [[0.12, 0.66, 0.6], [0.02, 0.18, 0.28]],
   paris: [[0.28, 0.46, 0.42], [0.05, 0.15, 0.17]],
   newyork: [[0.24, 0.45, 0.48], [0.03, 0.12, 0.2]],
   london: [[0.3, 0.42, 0.38], [0.06, 0.13, 0.14]],
-  japan: [[0.2, 0.86, 0.76], [0.02, 0.24, 0.34]],
-  desert: [[0.22, 0.85, 0.8], [0.02, 0.25, 0.38]],
+  japan: [[0.08, 0.78, 0.7], [0.01, 0.2, 0.32]],
+  desert: [[0.08, 0.8, 0.75], [0.01, 0.22, 0.36]],
   pole: [[0.35, 0.62, 0.72], [0.02, 0.1, 0.22]],
 };
 
@@ -428,7 +428,7 @@ export class Game {
     this.markers.setItems([]);
     const giver = this.npcs.get(m.giver);
     if (giver && giver.obj.position.distanceTo(this.player.pos) < 12)
-      setTimeout(() => this.ui.dialog(giver.def.name, m.outro, () => this.refreshMissionFlags()), 900);
+      this.ui.dialog(giver.def.name, m.outro, () => this.refreshMissionFlags());
     else this.ui.note(m.outro[0]);
     this.refreshMissionFlags();
     this.persist();
@@ -493,6 +493,11 @@ export class Game {
         this.ui.toast(m.title, 'Nouvelle mission !');
         this.audio.play('checkpoint');
       });
+      return;
+    }
+    if (this.runner.mission && this.runner.mission.giver === id) {
+      const v = this.runner.view(this.api);
+      this.ui.dialog(n.def.name, ['Tu y es presque, courage !', v ? `Objectif : ${v.text}.` : '']);
       return;
     }
     const lines = n.def.kind === 'penguin' ? CHAT.penguin : CHAT.default;

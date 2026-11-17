@@ -21,7 +21,7 @@ export class Water {
       roughness: 0.06,
       metalness: 0.0,
       transparent: true,
-      envMapIntensity: 1.2,
+      envMapIntensity: 0.7,
     });
     const u = this.uniforms;
     mat.onBeforeCompile = (shader) => {
@@ -61,7 +61,7 @@ export class Water {
           vec2 huv = (vWPos.xz + uWorld*0.5) / uWorld;
           float ground = texture2D(uHeight, huv).r;
           wDepth = max(0.0, -ground);
-          vec3 wcol = mix(uShallow, uDeep, smoothstep(0.3, 9.0, wDepth));
+          vec3 wcol = mix(uShallow, uDeep, smoothstep(0.3, 9.0, wDepth)) * 0.85;
           // caustiques douces en eau peu profonde
           float ca = vn(vWPos.xz * 0.6 + uTime * 0.3) * vn(vWPos.xz * 0.9 - uTime * 0.25);
           wcol += vec3(0.3, 0.4, 0.35) * ca * smoothstep(4.0, 0.3, wDepth) * 0.6;
@@ -70,7 +70,7 @@ export class Water {
           float foam = foamLine * step(0.55, vn(vWPos.xz * 1.3 + uTime * 0.2) + foamLine * 0.4) * uFoam;
           wcol = mix(wcol, vec3(0.95), foam * 0.85);
           diffuseColor.rgb = wcol;
-          diffuseColor.a = mix(0.45, 0.94, smoothstep(0.0, 5.0, wDepth)) + foam * 0.3;
+          diffuseColor.a = mix(0.62, 0.96, smoothstep(0.0, 6.0, wDepth)) + foam * 0.3;
           `,
         )
         .replace(

@@ -108,14 +108,16 @@ export function buildNewYork(ctx: BuildCtx): RegionContent {
       const side = i % 2 ? 1 : -1;
       const z = cz - 40 + Math.floor(i / 2) * 26;
       const x = cx + side * 18;
-      const pole = new THREE.BoxGeometry(2, 22, 2).translate(0, 11, 0);
-      b.addAt(pole, std(0x222222, 0.5, 0.6), x, R.ground, z);
-      const sign = makeSignMesh(ad[0], ad[1], ad[2], 12, 7);
-      sign.position.set(x - side * 1.05, R.ground + 16 + (i % 3) * 1.5, z);
+      const pole = new THREE.CylinderGeometry(0.35, 0.45, 15, 10).translate(0, 7.5, 0);
+      b.addAt(pole, std(0x9aa0a6, 0.35, 0.9), x, R.ground, z);
+      const frame = new THREE.BoxGeometry(0.6, 8.4, 14.4).translate(0, 0, 0);
+      b.addAt(frame, std(0x1a1a1a, 0.5, 0.5), x, R.ground + 15 + (i % 3) * 1.5, z);
+      const sign = makeSignMesh(ad[0], ad[1], ad[2], 14, 8);
+      sign.position.set(x - side * 0.32, R.ground + 15 + (i % 3) * 1.5, z);
       sign.rotation.y = side > 0 ? -Math.PI / 2 : Math.PI / 2;
       out.group.add(sign);
       screens.push(sign);
-      addBox(x, z, 2, 2, R.ground, R.ground + 22);
+      addBox(x, z, 0.9, 0.9, R.ground, R.ground + 11);
     });
     // panneau défilant
     const ticker = signTexture(['★ BIENVENUE À NEW YORK ★ CAPY WORLD ★'], '#000000', '#ffd23b', 1024, 64);

@@ -10,8 +10,8 @@ export class CameraRig {
   camera: THREE.PerspectiveCamera;
   yaw = Math.PI;
   pitch = 0.32;
-  dist = 6;
-  private curDist = 6;
+  dist = 7;
+  private curDist = 7;
   private idle = 0;
   private focus = new THREE.Vector3();
   private shake = 0;

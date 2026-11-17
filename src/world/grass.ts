@@ -87,7 +87,7 @@ void main(){
   float fade = 1.0 - smoothstep(uPatch * 0.32, uPatch * 0.5, dist);
   float dens = mask.a * fade;
   float keep = step(rnd, dens);
-  float h = (0.35 + 0.45 * fract(rnd * 13.7)) * keep * (0.4 + 0.6 * dens);
+  float h = (0.22 + 0.3 * fract(rnd * 13.7)) * keep * (0.4 + 0.6 * dens);
   float ang = rnd * 6.2831 * 7.0;
   vec3 p = position;
   // orientation aléatoire + largeur
