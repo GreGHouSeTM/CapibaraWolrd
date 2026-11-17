@@ -11,6 +11,7 @@ import { riverDistance, RIVERS, heightAt } from '../world/heightmap';
 import { RegionDef } from '../world/layout';
 import { Forest, TreeKind } from '../world/vegetation';
 import { facadeMaterial } from './kit';
+import { addLightSpot } from '../world/registry';
 
 export type BlockKind = 'buildings' | 'park' | 'plaza' | 'skip' | 'special';
 
@@ -88,6 +89,7 @@ function lampMaterials() {
 
 export function addLamp(b: Batch, kind: CityStyle['lamp'], x: number, y: number, z: number, rot = 0) {
   const m = lampMaterials();
+  addLightSpot(x, y + 4.9, z, 0xffc878, 1, 'lamp');
   const post = new THREE.CylinderGeometry(0.07, 0.11, 4.6, 8);
   post.translate(0, 2.3, 0);
   const base = new THREE.CylinderGeometry(0.2, 0.25, 0.6, 8);
