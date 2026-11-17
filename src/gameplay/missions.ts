@@ -4,6 +4,7 @@ import type { RegionId } from '../world/layout';
 import type { VehicleType, RegionContent } from '../regions/common';
 import type { ItemKind } from './markers';
 import type { HatId } from '../actors/capybara';
+import { roadSamples } from '../world/heightmap';
 
 export interface GameAPI {
   playerPos: () => THREE.Vector3;
@@ -12,6 +13,8 @@ export interface GameAPI {
   content: (r: RegionId) => RegionContent;
   lastPhoto: () => { time: number; photoId: string | null; pos: THREE.Vector3 } | null;
   time: () => number;
+  /** chapeau porté par le joueur */
+  hat: () => string;
 }
 
 export interface StepView {
@@ -156,6 +159,57 @@ const spl = (g: GameAPI, r: RegionId, k: string) => (g.content(r).spots as any)[
 const vehicleOf = (g: GameAPI, r: RegionId, t: VehicleType) => g.content(r).vehicles.find((v) => v.type === t)?.pos ?? null;
 
 export const MISSIONS: Mission[] = [
+  // --------------------------------------------------------------- mini-missions de test (Capyville)
+  {
+    id: 'test-drive', title: 'Mini-mission : Premier volant', region: 'hub', giver: 'coach', reward: 15,
+    intro: ['Salut ! Je suis Coach Capy, moniteur d’auto-école.', 'Monte dans le cabriolet bleu (touche E), puis passe dans les anneaux sur la route de Paris. Z pour avancer, Q et D pour tourner, Espace pour freiner !'],
+    outro: ['Bravo, permis réussi ! Tu peux conduire partout maintenant.'],
+    steps: (g) => {
+      const r = roadSamples[0];
+      const at = (i: number) => {
+        const k = Math.min(i, r.pts.length - 1);
+        return new THREE.Vector3(r.pts[k][0], r.h[k], r.pts[k][1]);
+      };
+      const pts = [at(3), at(10), at(18), at(26)];
+      return [
+        enter('Monte dans le cabriolet bleu', 'car', () => vehicleOf(g, 'hub', 'car')),
+        checkpoints('Passe dans les 4 anneaux bleus', () => pts, 'car', 6),
+        custom('Descends de la voiture (touche E)', (gg) => gg.vehicleType() === null, () => null),
+        talk('Retourne voir Coach Capy', 'coach'),
+      ];
+    },
+  },
+  {
+    id: 'test-swim', title: 'Mini-mission : Plouf !', region: 'hub', giver: 'swimmer', reward: 15,
+    intro: ['Coucou ! Moi c’est Nina, la championne de natation.', 'Les capybaras nagent super bien ! Saute dans l’étang et attrape les 3 étoiles qui flottent sur l’eau.'],
+    outro: ['Quelle nageuse ! Tu peux sortir de l’eau tout seul en avançant vers la rive.'],
+    steps: (g) => {
+      const c = sp(g, 'hub', 'pond');
+      const pts = [[0, 0], [11, 4], [-10, -5]].map(([dx, dz]) => new THREE.Vector3(c.x + dx, -0.3, c.z + dz));
+      return [
+        collect('Attrape les 3 étoiles dans l’étang', pts, 'star', 2.4),
+        talk('Sors de l’eau et retourne voir Nina', 'swimmer'),
+      ];
+    },
+  },
+  {
+    id: 'test-photo', title: 'Mini-mission : Clic-clac', region: 'hub', giver: 'photographer', reward: 15,
+    intro: ['Bonjour ! Je suis Léo, photographe.', 'Va prendre le moulin en photo (touche F, en le regardant bien en face).', 'Ensuite, passe chez Basile le chapelier et change de chapeau : je veux une photo de toi bien habillé !'],
+    outro: ['Superbe ! Tu sais faire des photos et changer de tenue. Ton album t’attend (menu Pause).'],
+    steps: (g) => {
+      let startHat = '';
+      return [
+        photo('Prends une photo du moulin (touche F)', 'windmill', () => sp(g, 'hub', 'windmill')),
+        {
+          text: 'Change de chapeau chez Basile le chapelier',
+          start: (gg) => (startHat = gg.hat()),
+          check: (gg) => gg.hat() !== startHat,
+          view: () => ({ beacon: sp(g, 'hub', 'shop') }),
+        },
+        talk('Montre ton nouveau chapeau à Léo', 'photographer'),
+      ];
+    },
+  },
   {
     id: 'welcome', title: 'Bienvenue à Capyville', region: 'hub', giver: 'mamie', reward: 30,
     intro: [

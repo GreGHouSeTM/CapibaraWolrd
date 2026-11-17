@@ -237,6 +237,7 @@ export class Game {
       content: (r) => this.world.contents[r],
       lastPhoto: () => this.lastPhoto,
       time: () => this.time,
+      hat: () => this.player.capy.hatId,
     };
     this.runner.onStepDone = () => this.audio.play('checkpoint');
     this.runner.onItem = () => this.audio.play('coin');
@@ -295,7 +296,7 @@ export class Game {
         this.input.requestLock();
         this.rig.yaw = this.player.yaw + 0.0001;
         if (!this.save.done.includes('welcome') && !this.runner.mission) {
-          this.ui.toast('Capy World', 'Va parler à Mamie Capy (le point d’exclamation jaune) !', 5000);
+          this.ui.toast('Capy World', 'Parle aux capybaras avec un point d’exclamation jaune !', 5000);
         } else this.ui.toast(this.region.name, 'Content de te revoir !');
       },
       () => this.ui.settings(this.save, (s) => this.applySettings(s), () => { this.ui.close(); }),

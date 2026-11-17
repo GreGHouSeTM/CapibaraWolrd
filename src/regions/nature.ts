@@ -383,6 +383,8 @@ export function buildHub(ctx: BuildCtx): RegionContent {
   out.photos.push({ id: 'windmill', name: 'Le moulin de Capyville', region: 'hub', target: new THREE.Vector3(-75, groundY(-75, -70) + 10, -70), radius: 120 });
   // étang avec ponton
   const pond = new THREE.Vector3(HUB_POND[0], 0, HUB_POND[1]);
+  out.spots.pond = pond.clone();
+  out.spots.windmill = new THREE.Vector3(-75, groundY(-75, -70), -70);
   b.addAt(slab(3, 14, -0.3, 0.4, 2), std(0x8a6a48, 0.9), pond.x + 24, 0.9, pond.z, 0.6);
   // panneaux vers les régions
   const arrows = REGIONS.slice(1).map((r) => ({ text: r.name.replace('Le Désert des Dunes', 'Désert').replace('Le ', ''), angle: Math.atan2(r.x, r.z) - Math.PI / 2 }));
@@ -403,6 +405,14 @@ export function buildHub(ctx: BuildCtx): RegionContent {
     { type: 'scooter', pos: new THREE.Vector3(-28, R.ground, 6), rot: -0.4 },
   );
   out.spots.start = new THREE.Vector3(0, R.ground + 0.3, 16);
+  // moniteurs des mini-missions de test
+  const sw = new THREE.Vector3(HUB_POND[0] + 34, 0, HUB_POND[1] - 6);
+  sw.y = groundY(sw.x, sw.z);
+  out.npcs.push(
+    { id: 'coach', name: 'Coach Capy', pos: new THREE.Vector3(24, R.ground + 0.2, -6), fur: 0x8a5a33, hat: 'cap', scarf: 0x1e4fa8 },
+    { id: 'swimmer', name: 'Nina la nageuse', pos: sw, fur: 0xa87a52, hat: 'flower', scarf: 0x3fd0ff },
+    { id: 'photographer', name: 'Léo le photographe', pos: new THREE.Vector3(-22, R.ground + 0.2, 8), fur: 0x9b6a43, hat: 'beret', scarf: 0xffc83a },
+  );
   out.group.add(b.build('hub-props'));
   void bench;
   return out;

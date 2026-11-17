@@ -14,6 +14,7 @@ function fakeApi(pos: THREE.Vector3, vehicle: string | null = null): GameAPI {
     content: () => ({}) as any,
     lastPhoto: () => null,
     time: () => 0,
+    hat: () => 'yuzu',
   };
 }
 

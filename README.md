@@ -37,7 +37,10 @@ La manette est aussi gérée (stick gauche, A pour sauter, gâchettes pour accé
 
 ### Contenu
 
-- **12 missions** : livrer des croissants à Paris, conduire le taxi de New York, retrouver l'étoile de la statue de la Liberté,
+- **3 mini-missions de prise en main** à Capyville, pour tester le jeu en quelques minutes :
+  *Premier volant* (Coach Capy : conduire et passer dans les anneaux), *Plouf !* (Nina : nager et attraper des étoiles dans l'étang)
+  et *Clic-clac* (Léo : prendre une photo et changer de chapeau).
+- **12 missions** d'aventure : livrer des croissants à Paris, conduire le taxi de New York, retrouver l'étoile de la statue de la Liberté,
   faire la tournée du bus rouge à Londres, la fête des lanternes en barque au Japon, le trésor du Sphinx, les cadeaux et le rallye du Pôle Nord…
 - **Album photo** : photographie les monuments avec `F`.
 - **6 bébés capybaras** cachés, un par région : une fois retrouvés, ils t'attendent dans la source chaude de Capyville.
