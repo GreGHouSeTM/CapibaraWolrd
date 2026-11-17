@@ -1,0 +1,35 @@
+{
+  "name": "capy-world",
+  "version": "1.0.0",
+  "description": "Capy World – un open world dans le navigateur avec un capybara",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "test": "vitest run"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GreGHouSeTM/capibarawolrd.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GreGHouSeTM/capibarawolrd/issues"
+  },
+  "homepage": "https://github.com/GreGHouSeTM/capibarawolrd#readme",
+  "dependencies": {
+    "n8ao": "^1.9.3",
+    "postprocessing": "^6.36.4",
+    "three": "^0.170.0"
+  },
+  "devDependencies": {
+    "@types/three": "^0.170.0",
+    "typescript": "^5.6.3",
+    "vite": "^5.4.11",
+    "vitest": "^2.1.8"
+  },
+  "private": true,
+  "type": "module"
+}
