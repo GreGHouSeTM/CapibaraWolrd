@@ -1,0 +1,8 @@
+{
+  "name": "capy-polyhaven-tools",
+  "private": true,
+  "description": "Outils de la chaîne Poly Haven (compression meshopt des .glb). Installer avec : npm install --prefix tools/polyhaven",
+  "devDependencies": {
+    "gltfpack": "1.3.0"
+  }
+}

@@ -10,6 +10,11 @@ const VIEWS = {
   nuit: { pos: [0, 30], yaw: Math.PI, pitch: 0.2, hour: 22, dist: 8 },
   ruisseau: { pos: [112, 60], yaw: 2.6, pitch: 0.2, hour: 9, dist: 8 },
   vueaerienne: { cam: [70, 60, 90], look: [0, 6, 0], hour: 16 },
+  // --- Assets Poly Haven : scène de démonstration (tools/polyhaven/demo.ts) autour de (0, 6, 0), lumière dorée.
+  // `ground` : la hauteur y de cam et look est comptée au-dessus du terrain.
+  polyhaven: { cam: [3, 2.6, 13], look: [-2, 0.6, -3], hour: 6.9, demo: '/tools/polyhaven/demo.ts', ground: true },
+  'polyhaven-props': { cam: [7.5, 1.5, 4.8], look: [6.6, 0.45, -1.2], hour: 6.9, demo: '/tools/polyhaven/demo.ts', ground: true },
+  'polyhaven-sol': { cam: [-3.2, 1.4, 5.5], look: [-6.5, 0.3, -1.5], hour: 6.9, demo: '/tools/polyhaven/demo.ts', ground: true },
 };
 (async () => {
   const [port, out, q, list] = process.argv.slice(2);
@@ -26,6 +31,22 @@ const VIEWS = {
     for (const k of (list || 'place').split(',')) {
       const v = VIEWS[k];
       if (!v) { console.log('vue inconnue', k); continue; }
+      if (v.demo) {
+        // scène de démonstration chargée dynamiquement (une seule fois par page)
+        const r = await page.evaluate(async (v) => {
+          const g = window.__game;
+          if (!g.__demos) g.__demos = {};
+          if (!g.__demos[v.demo]) g.__demos[v.demo] = await (await import(v.demo)).setupDemo(g);
+          if (v.ground) {
+            const { heightAt } = await import('/src/world/heightmap.ts');
+            v.cam = [v.cam[0], heightAt(v.cam[0], v.cam[2]) + v.cam[1], v.cam[2]];
+            v.look = [v.look[0], heightAt(v.look[0], v.look[2]) + v.look[1], v.look[2]];
+          }
+          return { info: g.__demos[v.demo], cam: v.cam, look: v.look };
+        }, v);
+        Object.assign(v, { cam: r.cam, look: r.look, ground: false });
+        console.log('démo', k, JSON.stringify(r.info));
+      }
       await page.evaluate((v) => {
         const g = window.__game; const P = g.player.pos.constructor;
         g.rig.override = null;
