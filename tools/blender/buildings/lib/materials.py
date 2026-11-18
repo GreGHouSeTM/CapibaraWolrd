@@ -29,11 +29,11 @@ MATERIALS = {
 
 # Couleurs cibles (sRGB) de la charte (docs/QUALITE-CAPYVILLE.md)
 C = {
-    'wood_dark': '#5a3a24',
-    'wood_mid': '#6e4b30',
-    'wood_old': '#7a5236',
+    'wood_dark': '#4b3020',
+    'wood_mid': '#5c3e28',
+    'wood_old': '#684630',
     'wood_grey': '#6b6058',     # bois très patiné, gris
-    'wood_light': '#b08d64',    # kumiko et cadres des shōji
+    'wood_light': '#a08060',    # kumiko et cadres des shōji
     'wood_black': '#2a211c',    # yakisugi (bois brûlé)
     'plaster_cream': '#f1e4c6',
     'plaster_white': '#f4f0e6',

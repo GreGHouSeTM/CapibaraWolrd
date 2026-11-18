@@ -196,9 +196,9 @@ def main():
     # bois patiné neutre (grain fort), planches, enduit
     save(neutral(os.path.join(SRC, 'roughwood_diff.jpg'), 0.80, 1.15), 'wood_diff.jpg')
     save(neutral(os.path.join(SRC, 'planks_diff.jpg'), 0.80, 1.0), 'planks_diff.jpg')
-    pl = neutral(os.path.join(SRC, 'plaster_diff.jpg'), 0.90, 1.6)
+    pl = neutral(os.path.join(SRC, 'plaster_diff.jpg'), 0.90, 1.2)
     stains = tile_noise(1024, 3, 71)
-    pl *= (0.93 + 0.07 * stains)[..., None]
+    pl *= (0.95 + 0.05 * stains)[..., None]
     save(pl, 'plaster_diff.jpg')
     # pierre sèche
     st = load(ph('japanese_stone_wall', 'diff'))

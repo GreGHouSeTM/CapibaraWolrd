@@ -273,6 +273,20 @@ def hafu(b, sl, side, lod=0, h=0.28, t=0.06, col=None, r0=0.0, r1=None, out_off=
     quad(b, 'wood', inn_b[0], bot[0], top[0], inn_t[0], col, uvs=(0.3, 0.3), out=sl.out)
 
 
+def roof_under(slopes, x, z, default=None):
+    """Hauteur de la sous-face du toit au-dessus du point (x, z) du repère du bâtiment (min des pans qui le couvrent)."""
+    best = None
+    p = V((x, 0, z))
+    for sl in slopes:
+        rel = p - sl.O
+        a = rel.dot(sl.U)
+        r = -rel.dot(sl.out)
+        if -0.01 <= r <= sl.R + 0.01 and abs(a) <= sl.hw(min(max(r, 0), sl.R)) + 0.01:
+            y = sl.point(a, min(max(r, 0), sl.R)).y - sl.th
+            best = y if best is None else min(best, y)
+    return default if best is None else best
+
+
 # ====================================================================== types de toits complets
 def gable_roof(b, W, D, y_wall, pitch=0.48, ov=1.0, ovg=0.6, lod=0, sag=0.16, ridge_layers=3, oni=0.62,
                th=0.17, rafter=True, back=True, ridge_extra=0.12, col=KAWARA, ridge_axis='x'):
@@ -282,7 +296,11 @@ def gable_roof(b, W, D, y_wall, pitch=0.48, ov=1.0, ovg=0.6, lod=0, sag=0.16, ri
         from .geom import rot_y, affine
         M = affine(rot_y(math.pi / 2))
         with b.at(M):
-            return gable_roof(b, D, W, y_wall, pitch, ov, ovg, lod, sag, ridge_layers, oni, th, rafter, back, ridge_extra, col)
+            slopes, yt = gable_roof(b, D, W, y_wall, pitch, ov, ovg, lod, sag, ridge_layers, oni, th, rafter, back, ridge_extra, col)
+        R3 = rot_y(math.pi / 2)
+        for sl in slopes:
+            sl.O, sl.out, sl.U = R3 @ sl.O, R3 @ sl.out, R3 @ sl.U
+        return slopes, yt
     R = D / 2 + ov
     hw = W / 2 + ovg
     slopes = []
