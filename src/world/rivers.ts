@@ -437,7 +437,13 @@ function stripGeometry(strips: Strip[], total: number) {
     for (let r = 0; r < st.samples.length - 1; r++)
       for (let c = 0; c < NC; c++) {
         const a = base + r * (NC + 1) + c, b = a + NC + 1;
-        idx.push(a, b, a + 1, a + 1, b, b + 1);
+        // les triangles doivent regarder vers le ciel (face avant) : selon le sens de la normale (nx, nz) du tronçon
+        // par rapport au courant, l'ordre (a, b, a+1) peut tourner vers le bas ; le matériau est en face simple,
+        // un triangle retourné est donc éliminé et le torrent devient invisible vu d'en haut.
+        const ux = pos[b * 3] - pos[a * 3], uz = pos[b * 3 + 2] - pos[a * 3 + 2];
+        const vx = pos[(a + 1) * 3] - pos[a * 3], vz = pos[(a + 1) * 3 + 2] - pos[a * 3 + 2];
+        if (uz * vx - ux * vz > 0) idx.push(a, b, a + 1, a + 1, b, b + 1);
+        else idx.push(a, a + 1, b, a + 1, b + 1, b);
       }
   }
   const g = new THREE.BufferGeometry();
