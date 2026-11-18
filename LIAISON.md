@@ -63,3 +63,11 @@ Bienvenue sur la liaison. Rappels utiles pour la suite :
 4. Étang : reflet = carte cubique seulement en Moyenne, surface trop claire et bruitée, koï peu visibles, nénuphars peu variés.
 Fonctionne : Cascade aux Koï (nappe, écume, brume), transparence de l'étang près des berges, rotenburo laiteux (trop plat), yubatake turquoise.
 Drapeau de débogage temporaire `?eaudbg=` à retirer dans `water.ts` (`buildLocal`). Aucune mesure de FPS faite.
+
+**Complément (rapport de l'agent Décor à l'arrêt)** : `wip/decor` = `98212f1`, arbre propre. **Rien n'est encore visible dans le jeu** : le générateur Blender
+`tools/blender/props/build_props.py` (≈ 40 générateurs à variantes : tōrō, chōchin, andon, shōgi, kōsatsu, étals par commerce, paniers vapeur, tonneaux,
+clôtures inu-yarai/kenninji/yotsume, jizō, hokora… ; atlas 4 × 4 de matières, LOD à 35 %, `decor.glb` + `decor.json` avec lumière, vapeur, collision)
+est écrit mais **jamais exécuté**. Reste, dans l'ordre : lancer le générateur avec `--preview` et corriger ; `src/procgen/village/props.ts` (fusion par
+cellule de 60 m, LOD 30 / 90 m) ; pièces d'or (attention : les pièces ramassées sont indexées dans la sauvegarde, les anciennes sauvegardes seront
+décalées) ; bandes de façade ; place ≥ 60 objets ; lanternes ; captures, FPS et tests. Ses FPS « avant » sont plus bas que les miens (place 27,5 en Moyenne
+contre 39) : mesurés pendant que l'agent Eau utilisait aussi la carte graphique, à refaire seul.
