@@ -387,4 +387,111 @@ export class Capybara {
     this.ears[0].rotation.z = -0.3 + twitch;
     this.ears[1].rotation.z = 0.3 - twitch;
   }
+
+  // ---------------------------------------------------------------------------------------------- poses de combat
+  // Poses procédurales appliquées APRÈS `animate()` (elles écrasent la marche). Elles seront remplacées par les
+  // clips du modèle Blender animé (attaque ×3, roulade, sursaut, KO) : garder cette interface `combatPose()`.
+
+  /** Applique une pose de combat (ou `null` pour revenir à la locomotion normale). `t` va de 0 à 1. */
+  combatPose(p: CombatPose | null) {
+    if (!p) {
+      // retour propre à la locomotion : angles ramenés dans [-π, π] (fin de roulade = 2π), décalages remis à zéro
+      const rx = this.body.rotation.x;
+      this.body.rotation.x = Math.atan2(Math.sin(rx), Math.cos(rx));
+      this.body.rotation.y = 0;
+      this.body.position.z = 0;
+      this.legs[0].rotation.z = 0;
+      return;
+    }
+    const t = clamp(p.t, 0, 1);
+    switch (p.kind) {
+      case 'tete': this.poseHeadbutt(t); break;
+      case 'patte': this.posePawSwipe(t); break;
+      case 'ruade': this.poseBuck(t); break;
+      case 'roulade': this.poseRoll(t); break;
+      case 'sursaut': this.poseFlinch(t); break;
+      case 'ko': this.poseKo(t); break;
+    }
+  }
+
+  /** Coup de tête : la tête recule, puis le capybara pique du nez vers l'avant. */
+  private poseHeadbutt(t: number) {
+    const wind = smooth01(t / 0.3), strike = smooth01((t - 0.3) / 0.2), back = smooth01((t - 0.6) / 0.4);
+    const k = strike * (1 - back);
+    this.body.rotation.x = lerp(-0.22 * wind, 0.32, k) * (1 - back);
+    this.body.position.z = 0.18 * k;
+    this.head.rotation.x = lerp(-0.35 * wind, 0.45, k) * (1 - back);
+    this.legs[2].rotation.x = 0.35 * k;
+    this.legs[3].rotation.x = 0.35 * k;
+    this.legs[0].rotation.x = -0.25 * k;
+    this.legs[1].rotation.x = -0.25 * k;
+  }
+
+  /** Coup de patte : la patte avant droite se lève et balaie l'avant, le corps se tord. */
+  private posePawSwipe(t: number) {
+    const lift = smooth01(t / 0.28), sweep = smooth01((t - 0.28) / 0.25), back = smooth01((t - 0.65) / 0.35);
+    const on = lift * (1 - back);
+    this.legs[0].rotation.x = -1.5 * on;
+    this.legs[0].rotation.z = lerp(0.7, -0.9, sweep) * on;
+    this.body.rotation.y = lerp(0.35, -0.45, sweep) * on;
+    this.body.rotation.z = lerp(-0.12, 0.16, sweep) * on;
+    this.body.rotation.x = -0.12 * on;
+    this.head.rotation.y = lerp(0.3, -0.4, sweep) * on;
+  }
+
+  /** Ruade : demi-tour, coup des deux pattes arrière vers l'avant, puis retour. */
+  private poseBuck(t: number) {
+    const turn = smooth01(t / 0.32), kick = smooth01((t - 0.32) / 0.16), back = smooth01((t - 0.62) / 0.38);
+    this.body.rotation.y = Math.PI * turn * (1 - back);
+    const k = kick * (1 - back);
+    this.body.rotation.x = 0.5 * k; // l'avant plonge, l'arrière se lève
+    this.body.position.y = 0.36 + 0.1 * k;
+    this.legs[2].rotation.x = 1.35 * k;
+    this.legs[3].rotation.x = 1.35 * k;
+    this.legs[0].rotation.x = -0.3 * k;
+    this.legs[1].rotation.x = -0.3 * k;
+    this.head.rotation.x = 0.3 * k;
+  }
+
+  /** Roulade : le capybara se met en boule et fait un tour complet vers l'avant. */
+  private poseRoll(t: number) {
+    const tuck = Math.sin(Math.PI * t);
+    this.body.rotation.x = Math.PI * 2 * smooth01(t);
+    this.body.position.y = 0.36 - 0.06 * tuck + 0.12 * Math.sin(Math.PI * t);
+    for (let i = 0; i < 4; i++) this.legs[i].rotation.x = (i < 2 ? -1.3 : 1.3) * tuck;
+    this.head.rotation.x = 0.6 * tuck;
+  }
+
+  /** Sursaut (touché) : recule l'avant, tête relevée, oreilles plaquées. */
+  private poseFlinch(t: number) {
+    const k = Math.sin(Math.PI * clamp(t * 1.2, 0, 1));
+    this.body.rotation.x = -0.35 * k;
+    this.head.rotation.x = -0.3 * k;
+    this.legs[0].rotation.x = -0.6 * k;
+    this.legs[1].rotation.x = -0.6 * k;
+    this.ears[0].rotation.z = -0.3 - 0.5 * k;
+    this.ears[1].rotation.z = 0.3 + 0.5 * k;
+    for (const e of this.eyes) e.scale.y = 1 + 0.25 * k;
+  }
+
+  /** KO (« Ouf ! ») : couché sur le flanc, yeux fermés. */
+  private poseKo(t: number) {
+    const k = smooth01(t / 0.4);
+    this.body.rotation.z = 1.35 * k;
+    this.body.position.y = lerp(0.36, 0.24, k);
+    for (const l of this.legs) l.rotation.x = 0.2 * k;
+    for (const e of this.eyes) e.scale.y = lerp(1, 0.1, k);
+  }
 }
+
+/** Pose de combat du capybara (voir `Capybara.combatPose`). */
+export interface CombatPose {
+  kind: 'tete' | 'patte' | 'ruade' | 'roulade' | 'sursaut' | 'ko';
+  /** avancement de 0 à 1 */
+  t: number;
+}
+
+const smooth01 = (x: number) => {
+  const t = clamp(x, 0, 1);
+  return t * t * (3 - 2 * t);
+};

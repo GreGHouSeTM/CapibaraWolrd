@@ -25,6 +25,9 @@ import { Traffic } from './vehicles/traffic';
 import { UI, toggleFullscreen } from './ui/ui';
 import { buildMapImage, Minimap, worldToMap } from './ui/map';
 import type { VehicleType } from './regions/common';
+// --- COMBAT ---
+import { Combat, CombatSfx } from './gameplay/combat';
+import { NPC_SPOTS } from './world/zones';
 
 const WATER: Record<RegionId, [number[], number[]]> = {
   hub: [[0.12, 0.66, 0.6], [0.02, 0.18, 0.28]],
@@ -88,6 +91,8 @@ export class Game {
   private titleAngle = 0;
   private fps = 60;
   private lastCheckpointPing = 0;
+  // --- COMBAT --- : coups, roulade, cœurs, Grignoteurs (src/gameplay/combat.ts)
+  combat!: Combat;
 
   constructor() {
     this.canvas = document.createElement('canvas');
@@ -146,6 +151,7 @@ export class Game {
     this.ui.setLoading(0.9, 'Réveil des capybaras…');
     await new Promise((r) => setTimeout(r, 0));
     this.setupActors();
+    this.setupCombat(); // --- COMBAT ---
     this.scene.add(this.markers.group);
     this.post = new PostFX(this.renderer, this.scene, this.rig.camera, q);
     this.mapImg = buildMapImage(2048);
@@ -245,6 +251,25 @@ export class Game {
     this.runner.onStepDone = () => this.audio.play('checkpoint');
     this.runner.onItem = () => this.audio.play('coin');
     this.runner.onComplete = (m) => this.completeMission(m);
+    this.refreshMissionFlags();
+  }
+
+  // --- COMBAT --- : système de combat, Gardienne Sora (mission « Les Grignoteurs du Levant »), compteur pour les missions
+  private setupCombat() {
+    // sons provisoires (l'agent Audio pourra donner un vrai son à chaque nom)
+    const SFX: Record<CombatSfx, () => void> = {
+      coup: () => this.audio.play('step', 2.5), touche: () => this.audio.play('bump', 1), aie: () => this.audio.play('bump', 1.4),
+      roulade: () => this.audio.play('step', 2), pouf: () => this.audio.play('checkpoint'), piece: () => this.audio.play('coin'),
+      ouf: () => this.audio.play('bump', 1.6), surgit: () => this.audio.play('jump'),
+    };
+    this.combat = new Combat({
+      player: this.player, rig: this.rig, input: this.input, scene: this.scene,
+      teleport: (p, l) => this.teleport(p, l), addCoins: (n) => this.addCoins(n), sfx: (n) => SFX[n](), note: (t) => this.ui.note(t, 4200),
+    });
+    const g = NPC_SPOTS.guardian;
+    if (!this.npcs.get('guardian'))
+      this.npcs.add({ id: 'guardian', name: 'Gardienne Sora', pos: new THREE.Vector3(g.x, heightAt(g.x, g.z) + 0.2, g.z), rot: g.yaw, fur: 0x8a6a4a, hat: 'kasa', scarf: 0x3a6ab8, size: 1.08 });
+    this.api.defeated = (zone) => this.combat.enemies.defeated[zone] ?? 0;
     this.refreshMissionFlags();
   }
 
@@ -656,7 +681,9 @@ export class Game {
     this.ui.setPrompt(this.interactTarget?.label ?? null);
 
     // physique du joueur et des véhicules
-    this.player.update(dt, inp, this.rig.moveYaw, this.time);
+    // --- COMBAT --- : pendant un coup, une roulade ou un sursaut, le combat pilote le capybara
+    if (!this.combat.update(dt, this.time)) this.player.update(dt, inp, this.rig.moveYaw, this.time);
+    this.combat.lateUpdate(dt, this.time);
     for (const v of this.vehicles) if (v !== this.player.vehicle && (Math.abs(v.speed) > 0.05 || v.vy !== 0)) v.update(dt, 0, 0, false, this.vehicles);
     this.rig.update(dt, this.player, inp);
 
