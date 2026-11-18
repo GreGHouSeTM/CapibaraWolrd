@@ -15,6 +15,8 @@ const VIEWS = {
   jour: { pos: [-20, 4], yaw: 1.25, pitch: 0.1, hour: 13, dist: 8 },
   crepuscule: { pos: [20, 4], yaw: -1.25, pitch: 0.1, hour: 18.4, dist: 8 },
   departaube: { pos: [-3, 26], yaw: Math.PI, pitch: 0.12, hour: 6.75, dist: 7 },
+  // nuit avec des lanternes provisoires autour de la place (test des lumières dynamiques et des taches de lumière)
+  nuitlanternes: { pos: [0, 14], yaw: Math.PI, pitch: 0.22, hour: 22, dist: 8, testLights: true },
   brume: { cam: [-60, 34, 150], look: [60, 6, -60], hour: 6.9 },
 };
 (async () => {
@@ -37,6 +39,11 @@ const VIEWS = {
         g.rig.override = null;
         if (v.cam) { g.rig.override = { pos: new P(...v.cam), look: new P(...v.look) }; g.rig.camera.position.set(...v.cam); }
         else { g.teleport(new P(v.pos[0], 9, v.pos[1]), ''); g.player.yaw = v.yaw; g.rig.yaw = v.yaw; g.rig.pitch = v.pitch; g.rig.dist = v.dist; }
+        if (v.testLights && !g.__testLights && g.lights) {
+          g.__testLights = true;
+          for (let i = 0; i < 12; i++) { const a = i / 12 * Math.PI * 2; g.lights.debugAdd(Math.cos(a) * 11, 7.6, Math.sin(a) * 11, 0xffb060, 1, 'lantern'); }
+          for (let i = 0; i < 6; i++) g.lights.debugAdd(-6 + (i % 2) * 12, 7.2, -14 - Math.floor(i / 2) * 9, 0xffd8a0, 1, 'window');
+        }
         g.sky.hour = v.hour; g.sky.forceEnvUpdate();
         g.step(25, 0.1);
       }, v);

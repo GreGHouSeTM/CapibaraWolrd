@@ -185,12 +185,12 @@ interface Key {
 }
 const NIGHT: Omit<Key, 'h'> = {
   zen: 0x0b1226, hor: 0x1a2440, horSun: 0x1e2a48, belt: 0x1a2440,
-  sun: 0x8aa0d0, sunI: 0.32, disk: 0,
+  sun: 0x8aa0d0, sunI: 0.55, disk: 0,
   cLit: 0x2c3858, cShade: 0x121a2e, cover: 0.38, cirrus: 0.2, stars: 1,
   fog: 0x18223a, fogSun: 0x1c2844, fogAnti: 0x161f36, fogD: 0.0019,
   mist: 0x34446a, mistD: 0.0026, mistH: 7,
-  aSky: 0x3a5590, aGnd: 0x1c1c26, hemi: 0.55, env: 0.55,
-  exp: 1.75, sat: 0.04, con: 0.05, warm: -0.08, bloomT: 0.85, bloomI: 1.0, rays: 0,
+  aSky: 0x4a64a8, aGnd: 0x22222e, hemi: 1.0, env: 0.7,
+  exp: 2.1, sat: 0.04, con: 0.05, warm: -0.08, bloomT: 0.85, bloomI: 1.0, rays: 0,
 };
 const KEYS: Key[] = [
   { h: 0, ...NIGHT },
@@ -203,15 +203,15 @@ const KEYS: Key[] = [
   // aube dorée (bible : horizon #f6b26b → #f8d0a0, zénith #8fa8c8, soleil #ffb070 2,2, ombres #6a7aa0, brume dense)
   { h: 6.3, zen: 0x7f9cc4, hor: 0xf2c4a0, horSun: 0xf6a860, belt: 0xe0aab0, sun: 0xffa060, sunI: 1.5, disk: 9,
     cLit: 0xffb27a, cShade: 0x7a7a9c, cover: 0.34, cirrus: 0.62, stars: 0,
-    fog: 0xb0aeb8, fogSun: 0xf2b27c, fogAnti: 0x8c9cba, fogD: 0.0025, mist: 0xcfc6c6, mistD: 0.0075, mistH: 6.5,
-    aSky: 0x6a7aa0, aGnd: 0x6a5040, hemi: 0.75, env: 0.75, exp: 1.25, sat: 0.2, con: 0.08, warm: 0.38, bloomT: 1.6, bloomI: 0.6, rays: 1 },
+    fog: 0xa8a6b2, fogSun: 0xf2b27c, fogAnti: 0x8494b4, fogD: 0.0025, mist: 0xaea6ae, mistD: 0.005, mistH: 6,
+    aSky: 0x6a7aa0, aGnd: 0x6a5040, hemi: 0.75, env: 0.7, exp: 1.1, sat: 0.2, con: 0.08, warm: 0.38, bloomT: 1.6, bloomI: 0.6, rays: 1 },
   { h: 6.75, zen: 0x8fa8c8, hor: 0xf8d0a0, horSun: 0xf6b26b, belt: 0xe8b8b4, sun: 0xffb070, sunI: 2.2, disk: 10,
     cLit: 0xffc490, cShade: 0x8a8aa6, cover: 0.34, cirrus: 0.6, stars: 0,
-    fog: 0xbab8c0, fogSun: 0xf6c088, fogAnti: 0x96a6c0, fogD: 0.0024, mist: 0xd8d0cc, mistD: 0.0072, mistH: 6.5,
-    aSky: 0x6a7aa0, aGnd: 0x7a5a42, hemi: 0.7, env: 0.8, exp: 1.15, sat: 0.2, con: 0.08, warm: 0.36, bloomT: 1.8, bloomI: 0.55, rays: 1 },
+    fog: 0xb4b2bc, fogSun: 0xf6c088, fogAnti: 0x8e9ebc, fogD: 0.0024, mist: 0xb8b0b4, mistD: 0.0048, mistH: 6,
+    aSky: 0x6a7aa0, aGnd: 0x7a5a42, hemi: 0.7, env: 0.75, exp: 0.98, sat: 0.2, con: 0.08, warm: 0.36, bloomT: 1.8, bloomI: 0.55, rays: 1 },
   { h: 7.6, zen: 0x86a8d2, hor: 0xf0dcc0, horSun: 0xf4c088, belt: 0xd8c8c8, sun: 0xffc488, sunI: 2.6, disk: 10,
     cLit: 0xffe0c0, cShade: 0x9a9eb6, cover: 0.36, cirrus: 0.5, stars: 0,
-    fog: 0xc4c6cc, fogSun: 0xf0d0a8, fogAnti: 0xa4b4c8, fogD: 0.0021, mist: 0xe0dcd8, mistD: 0.0045, mistH: 7,
+    fog: 0xc4c6cc, fogSun: 0xf0d0a8, fogAnti: 0xa4b4c8, fogD: 0.0021, mist: 0xc8c6c6, mistD: 0.0032, mistH: 7,
     aSky: 0x7a8cb0, aGnd: 0x7a6048, hemi: 0.6, env: 0.85, exp: 1.08, sat: 0.19, con: 0.07, warm: 0.28, bloomT: 2.2, bloomI: 0.45, rays: 0.75 },
   { h: 9, zen: 0x6c9fd6, hor: 0xd8e4ec, horSun: 0xe8e6dc, belt: 0xd8e4ec, sun: 0xffeccc, sunI: 2.9, disk: 10,
     cLit: 0xffffff, cShade: 0xa6b0c4, cover: 0.4, cirrus: 0.3, stars: 0,
@@ -232,10 +232,10 @@ const KEYS: Key[] = [
     fog: 0xc6c0c0, fogSun: 0xf2c690, fogAnti: 0xa2acc4, fogD: 0.0019, mist: 0xdcd4cc, mistD: 0.0022, mistH: 7,
     aSky: 0x7f8cb4, aGnd: 0x74583e, hemi: 0.5, env: 0.9, exp: 1.08, sat: 0.2, con: 0.08, warm: 0.36, bloomT: 2.2, bloomI: 0.45, rays: 0.8 },
   // crépuscule (bible : soleil #ff8a40 1,8, ciel orange-rose-violet, ombres violettes, brume qui remonte des berges)
-  { h: 18.4, zen: 0x50578e, hor: 0xf39a68, horSun: 0xff8040, belt: 0xc08ab4, sun: 0xff8a40, sunI: 1.8, disk: 9,
-    cLit: 0xff9a68, cShade: 0x6a5a86, cover: 0.38, cirrus: 0.6, stars: 0,
-    fog: 0xb09aa8, fogSun: 0xf49a60, fogAnti: 0x8a88aa, fogD: 0.0021, mist: 0xc4acb4, mistD: 0.0034, mistH: 7,
-    aSky: 0x7a70a8, aGnd: 0x5a3c34, hemi: 0.65, env: 0.8, exp: 1.22, sat: 0.24, con: 0.08, warm: 0.46, bloomT: 1.5, bloomI: 0.65, rays: 1 },
+  { h: 18.4, zen: 0x4a5490, hor: 0xe8a07a, horSun: 0xfa8a4a, belt: 0xb08ab4, sun: 0xff8a40, sunI: 1.8, disk: 9,
+    cLit: 0xf8a070, cShade: 0x625a88, cover: 0.38, cirrus: 0.6, stars: 0,
+    fog: 0xa096a8, fogSun: 0xe89a6a, fogAnti: 0x8088aa, fogD: 0.0021, mist: 0xa89cac, mistD: 0.003, mistH: 7,
+    aSky: 0x7a76b0, aGnd: 0x5a3c34, hemi: 0.75, env: 0.8, exp: 1.08, sat: 0.12, con: 0.07, warm: 0.22, bloomT: 1.5, bloomI: 0.65, rays: 1 },
   // après le coucher : lueur rouge à l'ouest, ciel violet
   { h: 19.3, zen: 0x2a3266, hor: 0x8e6a8c, horSun: 0xd8704a, belt: 0x6a5a88, sun: 0xff7040, sunI: 0.0, disk: 0,
     cLit: 0xc06a6a, cShade: 0x3c3a5c, cover: 0.38, cirrus: 0.55, stars: 0.25,
