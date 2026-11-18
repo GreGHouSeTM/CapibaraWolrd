@@ -22,6 +22,7 @@ from lib import export as ex          # noqa: E402
 from lib import town                  # noqa: E402
 from lib import sacred                # noqa: E402
 from lib import bath                  # noqa: E402
+from lib import misc                  # noqa: E402
 import math as _m                     # noqa: E402
 
 ROOT = os.path.abspath(os.path.join(HERE, '../..', '..'))
@@ -68,6 +69,17 @@ BUILDERS = {
     'chaya': lambda b, v: bath.ryokan(b['w'], b['d'], b['floors'], seed_of(b['id']), kind='chaya'),
     'moulin': lambda b, v: bath.moulin(b['w'], b['d'], seed_of(b['id']), b['wheel_local']),
     'roue': lambda b, v: bath.wheel(b['diameter'], b['width']),
+    'kura': lambda b, v: misc.kura(b['w'], b['d'], b['floors'], seed_of(b['id'])),
+    'gassho': lambda b, v: misc.gassho(b['w'], b['d'], seed_of(b['id'])),
+    'azumaya': lambda b, v: misc.azumaya(b['w'], b['d'], seed_of(b['id']), 'yosemune' if b['roof'] == 'yosemune' else 'irimoya'),
+    'puits': lambda b, v: misc.puits(b['w'], b['d'], seed_of(b['id'])),
+    'ashiyu': lambda b, v: misc.ashiyu(b['w'], b['d'], seed_of(b['id'])),
+    'yatai': lambda b, v: misc.yatai(b['w'], b['d'], seed_of(b['id'])),
+    # typologies proches d'une minka (mêmes pièces du kit) :
+    'honjin': lambda b, v: town.minka(b['w'], b['d'], 2, 'b', seed_of(b['id'])),
+    'chashitsu': lambda b, v: town.minka(b['w'], b['d'], 1, 'b', seed_of(b['id']), roof_mat='thatch' if b['roof'] == 'kayabuki' else 'kawara'),
+    'grange': lambda b, v: town.minka(b['w'], b['d'], 1, 'c', seed_of(b['id'])),
+    'datsuijo': lambda b, v: town.minka(b['w'], b['d'], 1, 'c', seed_of(b['id'])),
     'torii': lambda b, v: sacred.torii(b['h'], b['kind'], b.get('span'), seed_of(b['id'])),
 }
 

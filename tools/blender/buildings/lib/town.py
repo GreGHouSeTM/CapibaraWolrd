@@ -207,9 +207,10 @@ def pent_roof_back(b, W, D, y, lod, kcol):
 
 
 # ====================================================================== MINKA
-def minka(W, D, floors=1, variant='a', seed=1):
+def minka(W, D, floors=1, variant='a', seed=1, roof_mat='kawara', pal=None):
+    """roof_mat = 'thatch' : chaume épais (chashitsu, gasshō, grange)."""
     rng = random.Random(seed)
-    pal = _pal(rng, 'minka')
+    pal = pal or _pal(rng, 'minka')
     kcol = _kawara_col(rng)
     hw = 2.75
     y1 = FL + hw
@@ -233,6 +234,9 @@ def minka(W, D, floors=1, variant='a', seed=1):
     mirror = rng.random() < 0.5
 
     def roof(lod, b):
+        if roof_mat == 'thatch':
+            return hip_roof(b, W, D, yw, pitch=0.85, ov=ov, lod=lod, sag=0.05, r_break=(D + 2 * ov) / 2 * 0.62, corner_lift=0.0,
+                            th=0.5, mat='thatch', col=(1.0, 0.95, 0.85), rafter=False, under_col=tint('planks', C['wood_grey']))
         if variant == 'b':
             return hip_roof(b, W, D, yw, pitch=0.5, ov=ov, lod=lod, r_break=(D + 2 * ov) / 2 * 0.5, corner_lift=0.18,
                             oni=0.5, col=kcol)
@@ -316,7 +320,7 @@ def minka(W, D, floors=1, variant='a', seed=1):
         slopes, ytop = roof(lod, b)
         fr = slopes[0]
         # pignons et fermetures des combles au-dessus des engawa
-        gables = {'a': ('left', 'right'), 'b': (), 'c': ('front', 'back')}[variant]
+        gables = {'a': ('left', 'right'), 'b': (), 'c': ('front', 'back')}[variant] if roof_mat == 'kawara' else ()
         for side in gables:
             infill(b, pal, side, VW, VD, vc, slopes, yw, lod)
         if variant == 'a':
