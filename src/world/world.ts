@@ -6,6 +6,7 @@ import { bakeGrassMask, Grass } from './grass';
 import { createTerrain, createTerrainMaterial } from './terrain';
 import { Water } from './water';
 import { Forest, scatterNature } from './vegetation';
+import { buildCapyFlora, CapyFlora } from '../procgen/flora/capyville';
 import { buildRoads } from './roads';
 import { buildParis } from '../regions/paris';
 import { buildNewYork } from '../regions/newyork';
@@ -24,6 +25,8 @@ export interface World {
   water: Water;
   grass: Grass;
   forest: Forest;
+  /** VÉGÉTATION : arbres, sous-bois, susuki, riz et théiers de la vallée de Capyville (mise à jour : game.ts). */
+  flora: CapyFlora;
   roads: THREE.Group;
   contents: Record<RegionId, RegionContent>;
 }
@@ -107,8 +110,13 @@ export async function buildWorld(scene: THREE.Scene, q: QualityPreset, ctx: Omit
       }
     });
   }
+  // --- VÉGÉTATION --- vallée de Capyville (remplace les arbres « boules » dans la vallée et sur ses pentes)
+  progress(0.9, 'Pousse des cèdres et des cerisiers…');
+  await frame();
+  const flora = await buildCapyFlora(q.treeDensity >= 0.8 ? 1 : 0.7);
+  scene.add(flora.group);
   const grass = new Grass(q.grass, q.grassPatch);
   grass.maskTex.needsUpdate = true;
   scene.add(grass.mesh);
-  return { terrain, water, grass, forest, roads, contents };
+  return { terrain, water, grass, forest, flora, roads, contents };
 }

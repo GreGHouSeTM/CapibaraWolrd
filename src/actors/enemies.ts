@@ -79,7 +79,7 @@ export const GRIGNOTEUR: EnemyParams = {
   surgeTime: 0.45,
   giveUpRadius: 13,
   patrolTime: 7,
-  hideEyeHeight: 0.36,
+  hideEyeHeight: 0.8,
 };
 
 /** Réglages du Grignoteur selon la difficulté de la prairie (1 Levant, 2 Gué, 3 Plateau). */

@@ -1,4 +1,7 @@
-// Arbres stylisés instanciés (feuillage « nuage » à l'éclairage doux), répartis par cellules pour le culling.
+// Végétation du monde.
+// - Vallée de Capyville (r < CAPY_FLORA_RADIUS) : vrais arbres à cartes de feuilles, voir src/procgen/flora/capyville.ts
+//   (CapyFlora : cèdres, pins noirs, érables, cerisiers, bambous, yuzus, sous-bois, susuki, riz, théiers…).
+// - Autres régions : anciens arbres stylisés instanciés (feuillage « nuage »), répartis par cellules pour le culling.
 import * as THREE from 'three';
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import { Rng, fbm } from '../core/math';
@@ -6,10 +9,23 @@ import { heightAt, splatAt } from './heightmap';
 import { grassDensityAt } from './grass';
 import { REGIONS, RegionId } from './layout';
 import { addCircle } from './physics';
+import { capyLegacyTrees } from '../procgen/flora/legacy';
 
 export type TreeKind = 'oak' | 'pine' | 'cherry' | 'palm' | 'plane' | 'cactus' | 'birch' | 'snowpine' | 'bamboo';
 
 export const windUniform = { value: 0 };
+
+/** Rayon (autour de Capyville) où les anciens arbres « boules » sont remplacés par la nouvelle végétation. */
+export const CAPY_FLORA_RADIUS = 470;
+/**
+ * Susuki des prairies à ennemis (TALL_GRASS_ZONES) : masse des feuilles jusqu'à ≈ 0,85-1,1 m, plumets argentés de 1,2 à
+ * 1,6 m. Pour qu'un Grignoteur caché ne montre que ses yeux, `hideEyeHeight` ≈ 0,8 m (ENEMY_PARAMS de enemies.ts).
+ */
+export const SUSUKI = { bladeTop: [0.85, 1.1], plumeTop: [1.2, 1.6], hideEyeHeight: 0.8, edgeWidth: 6 };
+export { capyLegacyTrees } from '../procgen/flora/legacy';
+export { CapyFlora, forestAt, maskAt } from '../procgen/flora/capyville';
+export { FLORA_WIND } from '../procgen/flora/materials';
+export type { FloraSpecies } from '../procgen/flora/species';
 
 function foliageMaterial(color: THREE.ColorRepresentation, emissive = 0) {
   const m = new THREE.MeshStandardMaterial({ color, roughness: 0.85, vertexColors: true, emissive: new THREE.Color(color), emissiveIntensity: emissive });
@@ -209,6 +225,10 @@ export class Forest {
   private cell = 220;
 
   add(kind: TreeKind, x: number, z: number, scale = 1, rot = Math.random() * 6.28, y?: number, collide = true) {
+    if (Math.hypot(x, z) < CAPY_FLORA_RADIUS) {
+      capyLegacyTrees.push({ kind, x, z, scale });
+      return;
+    }
     const key = `${kind}|${Math.floor(x / this.cell)},${Math.floor(z / this.cell)}`;
     let it = this.items.get(key);
     if (!it) this.items.set(key, (it = { kind, mats: [] }));
@@ -253,6 +273,7 @@ export function scatterNature(forest: Forest, avoid: (x: number, z: number) => b
     const x = rng.range(-1250, 1250), z = rng.range(-1250, 1250);
     const h = heightAt(x, z);
     if (h < 1.2) continue;
+    if (Math.hypot(x, z) < CAPY_FLORA_RADIUS + 150 + 30 * fbm(x / 80, z / 80, 2)) continue; // vallée : CapyFlora
     if (avoid(x, z)) continue;
     // forêts regroupées par bruit
     const f = fbm(x / 260 + 11, z / 260 - 5, 3);

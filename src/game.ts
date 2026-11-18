@@ -779,6 +779,8 @@ export class Game {
     this.sky.update(dt, t, focus, reg.id === 'pole' ? 1 : 0, this.rig.camera);
     const st = this.sky.state;
     windUniform.value = t;
+    // --- VÉGÉTATION --- vent, LOD, imposteurs et élimination hors champ de la flore de Capyville
+    this.world.flora.update(this.rig.camera, this.renderer, t);
     // --- LUMIÈRE --- brouillard, brume, étalonnage par moment, lanternes (allumées à 18 h) et émissifs
     this.sky.applyFog(this.scene.fog as THREE.FogExp2, reg, dt);
     this.lights.update(dt, t, st, this.rig.camera);
