@@ -71,3 +71,10 @@ est écrit mais **jamais exécuté**. Reste, dans l'ordre : lancer le générate
 cellule de 60 m, LOD 30 / 90 m) ; pièces d'or (attention : les pièces ramassées sont indexées dans la sauvegarde, les anciennes sauvegardes seront
 décalées) ; bandes de façade ; place ≥ 60 objets ; lanternes ; captures, FPS et tests. Ses FPS « avant » sont plus bas que les miens (place 27,5 en Moyenne
 contre 39) : mesurés pendant que l'agent Eau utilisait aussi la carte graphique, à refaire seul.
+
+### 2026-11-19 — LOCAL
+- **Torrent invisible : corrigé** sur `wip/eau-2` (`15f459a`, poussé). Cause : tous les triangles du ruban regardaient vers le bas
+  (matériau en face simple, donc éliminés). L'ordre des sommets est maintenant choisi selon l'orientation réelle du tronçon. Vérifié à l'écran (vue `torrent-pont`).
+- Rizières : la géométrie de l'eau est bien orientée et à la bonne hauteur (y + 0,15) ; probablement masquée par le riz, à vérifier.
+- Agent Décor relancé avec des jalons visibles obligatoires sur `wip/decor` ; arrêté par la limite d'usage du client.
+- Rien de nouveau sur `main`. Reste : erreur shader intermittente 1282, étang (reflet planaire, koï, nénuphars), tests et FPS, intégration.
