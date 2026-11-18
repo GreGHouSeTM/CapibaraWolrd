@@ -1,11 +1,11 @@
 // Planches de contrôle des modèles Poly Haven (galerie tools/polyhaven/gallery.html).
 // Usage : W=1200 H=700 tools/shot-lock.sh node tools/polyhaven/shot-gallery.cjs <port> <dossier> <nom>=<requête> [...]
 //   ex. tools/shot-lock.sh node tools/polyhaven/shot-gallery.cjs 5193 test-shots/ph rochers='cat=rocher' lods='ids=rock_07&lod=all'
-const { chromium } = require('playwright');
+const { launch, rendererName } = require('../browser.cjs');
 (async () => {
   const [port, out, ...shots] = process.argv.slice(2);
   const W = +(process.env.W || 1200), H = +(process.env.H || 700);
-  const browser = await chromium.launch({ args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'] });
+  const browser = await launch();
   try {
     const page = await browser.newPage({ viewport: { width: W, height: H } });
     const errs = [];

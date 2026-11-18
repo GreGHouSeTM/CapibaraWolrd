@@ -1,7 +1,8 @@
 // Capture d'écran automatisée. Usage :
-//   tools/shot-lock.sh node tools/shot.cjs <port> <dossier> <qualité> <vue1,vue2,...>
+//   node tools/shot.cjs <port> <dossier> <qualité> <vue1,vue2,...>
+// (GPU par défaut, verrou « un navigateur à la fois » intégré : voir tools/browser.cjs ; CAPY_GL=swiftshader sans GPU)
 // Vues prédéfinies de Capyville ; ajoute les tiennes dans VIEWS si besoin.
-const { chromium } = require('playwright');
+const { launch, rendererName } = require('./browser.cjs');
 const VIEWS = {
   place: { pos: [0, 18], yaw: Math.PI, pitch: 0.25, hour: 10.5, dist: 8 },
   rue: { pos: [38, 20], yaw: -2.2, pitch: 0.12, hour: 15, dist: 6 },
@@ -39,12 +40,15 @@ const VIEWS = {
   nuitlanternes: { pos: [0, 14], yaw: Math.PI, pitch: 0.22, hour: 22, dist: 8, testLights: true },
   brume: { cam: [-60, 34, 150], look: [60, 6, -60], hour: 6.9 },
 };
-(async () => {
+module.exports = { VIEWS };
+if (require.main === module) (async () => {
   const [port, out, q, list] = process.argv.slice(2);
   const W = +(process.env.W || 800), H = +(process.env.H || 450);
-  const browser = await chromium.launch({ args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'] });
+  require('fs').mkdirSync(out, { recursive: true });
+  const browser = await launch();
   try {
     const page = await browser.newPage({ viewport: { width: W, height: H } });
+    console.log('rendu :', await rendererName(page));
     const errs = [];
     page.on('pageerror', (e) => errs.push('PAGEERROR ' + e.message));
     page.on('console', (m) => { if (m.type() === 'error') errs.push('console.error ' + m.text()); });

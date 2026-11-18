@@ -1,11 +1,11 @@
 // Capture de la visionneuse des bâtiments (tools/viewer.html) avec Playwright.
 // Usage : W=960 H=540 tools/shot-lock.sh node tools/blender/preview.cjs <port> <sortie.png> "<query>"
 //   ex. query = "ids=e1,e2,e4&night=0&lod=0"
-const { chromium } = require('playwright');
+const { launch, rendererName } = require('../browser.cjs');
 (async () => {
   const [port, out, query] = process.argv.slice(2);
   const W = +(process.env.W || 960), H = +(process.env.H || 540);
-  const browser = await chromium.launch({ args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'] });
+  const browser = await launch();
   try {
     const page = await browser.newPage({ viewport: { width: W, height: H } });
     const errs = [];

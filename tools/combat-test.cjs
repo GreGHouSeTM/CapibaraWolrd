@@ -3,12 +3,12 @@
 // Prend la mission de la Gardienne Sora, va dans la prairie du Levant, attend un Grignoteur, esquive sa roulade,
 // le frappe jusqu'au « pouf », vérifie que la mission avance puis se termine, et capture la scène de combat.
 // Les longues simulations avancent sans rendu (`frame(dt, false)`) ; seules les captures sont rendues.
-const { chromium } = require('playwright');
+const { launch, rendererName } = require('./browser.cjs');
 
 (async () => {
   const [port, out, q] = process.argv.slice(2);
   const W = +(process.env.W || 800), H = +(process.env.H || 450);
-  const browser = await chromium.launch({ args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'] });
+  const browser = await launch();
   let failed = 0;
   const ok = (cond, label) => {
     console.log((cond ? 'OK   ' : 'ÉCHEC ') + label);
