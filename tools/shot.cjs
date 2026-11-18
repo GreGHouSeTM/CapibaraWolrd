@@ -10,6 +10,12 @@ const VIEWS = {
   nuit: { pos: [0, 30], yaw: Math.PI, pitch: 0.2, hour: 22, dist: 8 },
   ruisseau: { pos: [112, 60], yaw: 2.6, pitch: 0.2, hour: 9, dist: 8 },
   vueaerienne: { cam: [70, 60, 90], look: [0, 6, 0], hour: 16 },
+  // Lumière & atmosphère : même cadrage (vers l'est-sud-est, le lever du soleil) à trois heures, plus la sortie de la maison à l'aube
+  aube: { pos: [-20, 4], yaw: 1.25, pitch: 0.1, hour: 6.75, dist: 8 },
+  jour: { pos: [-20, 4], yaw: 1.25, pitch: 0.1, hour: 13, dist: 8 },
+  crepuscule: { pos: [20, 4], yaw: -1.25, pitch: 0.1, hour: 18.4, dist: 8 },
+  departaube: { pos: [-3, 26], yaw: Math.PI, pitch: 0.12, hour: 6.75, dist: 7 },
+  brume: { cam: [-60, 34, 150], look: [60, 6, -60], hour: 6.9 },
 };
 (async () => {
   const [port, out, q, list] = process.argv.slice(2);
