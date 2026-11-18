@@ -55,7 +55,7 @@ function glow(color: number, base = 0.06, boost = 1.4, extra: THREE.MeshStandard
 }
 function makeMats() {
   return {
-    stone: pbr('rock', { scale: 1.4, color: 0xb9b3a7, roughness: 1 }),
+    stone: pbr('sidewalk', { scale: 1.4, color: 0xc8c2b6, roughness: 1 }),
     lightBox: glow(0xf6e6c0, 0.04, 1.6),
     paperRed: glow(0xc8362a, 0.08, 1.2, { side: THREE.DoubleSide }),
     paperWhite: glow(0xf4ead4, 0.06, 1.1, { side: THREE.DoubleSide }),

@@ -29,6 +29,11 @@ const VIEWS = {
   aube: { pos: [-20, 4], yaw: 1.25, pitch: 0.1, hour: 6.75, dist: 8 },
   jour: { pos: [-20, 4], yaw: 1.25, pitch: 0.1, hour: 13, dist: 8 },
   crepuscule: { pos: [20, 4], yaw: -1.25, pitch: 0.1, hour: 18.4, dist: 8 },
+  // --- Intégration village : sandō et mille torii, moulin à eau, pont des Lanternes, rotenburo
+  sando: { cam: [-12, 10, -16], look: [-26, 12, -70], hour: 9 },
+  moulin: { cam: [30, 12, -60], look: [55, 8, -72], hour: 10 },
+  pont: { cam: [58, 9, 18], look: [70, 6, 2], hour: 10 },
+  rotenburo: { cam: [44, 10, 82], look: [60, 5.5, 68], hour: 10 },
   departaube: { pos: [-3, 26], yaw: Math.PI, pitch: 0.12, hour: 6.75, dist: 7 },
   // nuit avec des lanternes provisoires autour de la place (test des lumières dynamiques et des taches de lumière)
   nuitlanternes: { pos: [0, 14], yaw: Math.PI, pitch: 0.22, hour: 22, dist: 8, testLights: true },

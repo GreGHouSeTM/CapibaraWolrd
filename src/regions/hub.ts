@@ -51,6 +51,8 @@ export async function buildHub(ctx: BuildCtx, progress: (p: number, label?: stri
   const ground = buildVillageGround(inst);
   out.group.add(ground.group);
   const floorAt = (x: number, z: number) => groundAt(x, z, heightAt(x, z) + 0.6);
+  /** sol marchable d'un escalier (marches éventuellement portées au-dessus du terrain) */
+  const stairAt = (x: number, z: number) => groundAt(x, z, heightAt(x, z) + 14);
 
   // ------------------------------------------------------------------ poses des modèles Blender
   const placements: Placement[] = [];
@@ -61,7 +63,7 @@ export async function buildHub(ctx: BuildCtx, progress: (p: number, label?: stri
   for (const t of TORII) placements.push({ id: 'torii-' + t.id, model: 'torii-' + t.id, x: t.x, z: t.z, y: floorAt(t.x, t.z), yaw: t.yaw });
   const tunnel = PATHS.find((p) => p.id === TORII_TUNNEL.pathId)!;
   const tunnelPts = resample(tunnel.pts, TORII_TUNNEL.spacing).pts.slice(1, -1);
-  tunnelPts.forEach((q, i) => placements.push({ id: 'torii-tunnel-' + i, model: 'torii-tunnel', x: q.x, z: q.z, y: floorAt(q.x, q.z), yaw: Math.atan2(q.dx, q.dz) }));
+  tunnelPts.forEach((q, i) => placements.push({ id: 'torii-tunnel-' + i, model: 'torii-tunnel', x: q.x, z: q.z, y: stairAt(q.x, q.z), yaw: Math.atan2(q.dx, q.dz) }));
   const bridgeBase: Record<string, number> = {};
   for (const br of BRIDGES) {
     const y = (heightAt(br.a[0], br.a[1]) + heightAt(br.b[0], br.b[1])) / 2;
@@ -145,7 +147,7 @@ export async function buildHub(ctx: BuildCtx, progress: (p: number, label?: stri
       const side = i % 2 ? 1 : -1;
       if (p.id === 'torii-mille') {
         // chōchin suspendus sous les torii, au milieu du passage
-        const y = floorAt(q.x, q.z);
+        const y = stairAt(q.x, q.z);
         chochin(inst, q.x, y + 2.45, q.z, true, 0.9);
         addLightSpot(q.x, y + 2.45, q.z, 0xffa040, 0.6, 'lantern');
         return;

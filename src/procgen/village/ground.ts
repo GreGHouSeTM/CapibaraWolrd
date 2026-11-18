@@ -21,13 +21,13 @@ const GIRON = 0.35;
 let GM: ReturnType<typeof makeMats> | null = null;
 function makeMats() {
   const off = { polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2 };
-  const dalles = pbr('stonewall', { scale: 4.2, color: 0xc9c2b4, roughness: 0.82, ...off });
-  const curb = pbr('rock', { scale: 1.6, color: 0xa8a296, roughness: 0.9, ...off });
-  const gutter = pbr('mossrock', { scale: 1.2, color: 0x8a8a7a, ...off });
+  const dalles = pbr('stonewall', { scale: 6.5, color: 0xe2dbcc, roughness: 0.78, ...off });
+  const curb = pbr('sidewalk', { scale: 1.6, color: 0xb8b2a6, roughness: 0.9, ...off });
+  const gutter = pbr('cobble', { scale: 1.2, color: 0x8a8a80, ...off });
   const gutterWater = new THREE.MeshStandardMaterial({ color: 0x40585a, roughness: 0.05, metalness: 0.1, transparent: true, opacity: 0.7, ...off });
   const gravel = pbr('gravel', { scale: 2.5, color: 0xd8cfc0, ...off });
   const granite = pbr('cobble', { scale: 2.2, color: 0xc4bcb0, ...off });
-  const steps = pbr('rock', { scale: 1.8, color: 0xb0aa9c, roughness: 0.95 });
+  const steps = pbr('sidewalk', { scale: 1.8, color: 0xc4beb2, roughness: 0.95 });
   const rail = pbr('roughwood', { scale: 1.5, color: 0x7a5236 });
   const bamboo = std(0xa8a060, 0.55);
   return { dalles, curb, gutter, gutterWater, gravel, granite, steps, rail, bamboo };
@@ -168,11 +168,17 @@ function stairs(b: Batch, p: PathDef): StairInfo {
   const h0 = heightAt(S[0].x, S[0].z);
   const treads: StairInfo['treads'] = [];
   // hauteur de marche quantifiée au-dessus du terrain (on ne creuse jamais : la marche couvre le talus)
-  const lev = S.map((q, i) => {
+  let lev = S.map((q, i) => {
     const nxt = S[Math.min(i + 1, S.length - 1)];
     const hm = Math.max(heightAt(q.x, q.z), heightAt(nxt.x, nxt.z));
     return Math.ceil((hm - h0) / STEP - 0.15);
   });
+  // terrain trop raide par endroits (ressaut > 2 marches) : escalier à pente régulière d'un bout à l'autre,
+  // porté par un massif de pierre là où il passe au-dessus du sol (à signaler au Terrain : talus à régler)
+  if (lev.some((l, i) => i > 0 && Math.abs(l - lev[i - 1]) > 2)) {
+    const h1 = heightAt(S[S.length - 1].x, S[S.length - 1].z);
+    lev = S.map((q) => Math.round(((h1 - h0) * (q.s / len)) / STEP));
+  }
   // regroupe les tranches de même niveau en marches
   let start = 0;
   for (let i = 1; i <= S.length; i++) {
