@@ -63,7 +63,12 @@ plus de texture de dalles dédiée (on utilise `stonewall`).
    (≈ 950 appels de dessin au sol, ≈ 4 900 en vue lointaine, simulation) plutôt que côté carte graphique. Pistes : fusion du décor
    statique par cellule et par matériau, instanciation, LOD et imposteurs du décor lointain, ombres limitées aux objets proches.
 5. Audio, **passe dédiée Lumière & ombres** (ombres de la vallée et des montagnes, AO cuite, ombres de contact, reflets).
-6. Chantier **Monde 8 km** (Lead → Terrain → Végétation et points d'intérêt → Routes → Eau → Lumière).
+6. **Gameplay, quêtes et histoire** (souhait du client, 2026-11-18) : **pas de missions basiques** du type « ramasser les pièces » ;
+   un vrai système de quêtes intéressantes (chaînes de quêtes, choix, énigmes, personnages attachants) porté par une histoire et un lore
+   cohérents avec la bible (§1). **Fil rouge du jeu : les collectionnables « Squishy »** (peluches moelleuses originales, à créer — ne copier
+   aucune marque existante), classés par rareté : basiques, rares, épiques, « dumpling »… ; à préciser avec le client (liste des raretés,
+   où et comment on les obtient, album de collection, récompenses). Le Lead écrira une bible gameplay avant toute production.
+7. Chantier **Monde 8 km** (Lead → Terrain → Végétation et points d'intérêt → Routes → Eau → Lumière).
 
 ## 7. Méthode et outils
 - Lancer le jeu : `npm install`, `npm run dev` (http://localhost:5173). Tests : `npx tsc --noEmit -p .`, `npx vitest run`, `npm run build`.
