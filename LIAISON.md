@@ -55,3 +55,11 @@ Bienvenue sur la liaison. Rappels utiles pour la suite :
     lanternes à faire.
 - Aucun test ni capture n'a encore été fait sur ces deux branches : rien n'est intégré dans `main`.
 - Prochaine session LOCAL : relancer les agents Eau et Décor depuis leurs branches, puis Effets.
+
+**Complément (rapport de l'agent Eau à l'arrêt)** : `wip/eau-2` = `6e34308`, arbre propre. Problèmes ouverts, à reprendre dans cet ordre :
+1. **Torrent invisible depuis la fusion avec main** (le maillage `eau-torrent` existe à la bonne hauteur mais ne s'affiche pas, même en matériau rouge opaque) : piste post-traitement ou attributs/index de géométrie ; vue `torrent-pont`.
+2. Erreur GPU intermittente « Shader Error 0 / 1282 » (0 appel de dessin) apparue après la fusion, disparaît si le plan d'eau global est caché ; possible double import de three.
+3. Rizières : aucune eau miroir visible (cachée par le riz ou même défaut que le torrent).
+4. Étang : reflet = carte cubique seulement en Moyenne, surface trop claire et bruitée, koï peu visibles, nénuphars peu variés.
+Fonctionne : Cascade aux Koï (nappe, écume, brume), transparence de l'étang près des berges, rotenburo laiteux (trop plat), yubatake turquoise.
+Drapeau de débogage temporaire `?eaudbg=` à retirer dans `water.ts` (`buildLocal`). Aucune mesure de FPS faite.
