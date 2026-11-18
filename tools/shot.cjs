@@ -25,6 +25,12 @@ const VIEWS = {
   etang: { cam: [-150, 14, 140], look: [-110, 2, 85], hour: 10 },
   paris: { cam: [60, 90, -470], look: [-60, 20, -800], hour: 12 },
   newyork: { cam: [480, 90, -230], look: [693, 40, -400], hour: 12 },
+  // Lumière & atmosphère : même cadrage (vers l'est-sud-est, le lever du soleil) à trois heures, plus la sortie de la maison à l'aube
+  aube: { pos: [-20, 4], yaw: 1.25, pitch: 0.1, hour: 6.75, dist: 8 },
+  jour: { pos: [-20, 4], yaw: 1.25, pitch: 0.1, hour: 13, dist: 8 },
+  crepuscule: { pos: [20, 4], yaw: -1.25, pitch: 0.1, hour: 18.4, dist: 8 },
+  departaube: { pos: [-3, 26], yaw: Math.PI, pitch: 0.12, hour: 6.75, dist: 7 },
+  brume: { cam: [-60, 34, 150], look: [60, 6, -60], hour: 6.9 },
 };
 (async () => {
   const [port, out, q, list] = process.argv.slice(2);
