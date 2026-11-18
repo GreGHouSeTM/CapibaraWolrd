@@ -59,15 +59,15 @@ export class Water {
     mat.onBeforeCompile = (shader) => {
       Object.assign(shader.uniforms, u);
       shader.vertexShader = shader.vertexShader
-        .replace('#include <common>', '#include <common>\nvarying vec3 vWPos; varying vec4 vReflUv; uniform mat4 uReflMat;')
+        .replace('#include <common>', '#include <common>\nvarying vec3 vWPos;')
         .replace('#include <worldpos_vertex>', `#include <worldpos_vertex>
-          vWPos = (modelMatrix * vec4(transformed, 1.0)).xyz;
-          vReflUv = uReflMat * vec4(vWPos, 1.0);`);
+          vWPos = (modelMatrix * vec4(transformed, 1.0)).xyz;`);
       shader.fragmentShader = shader.fragmentShader
         .replace(
           '#include <common>',
           `#include <common>
-          varying vec3 vWPos; varying vec4 vReflUv;
+          varying vec3 vWPos;
+          uniform mat4 uReflMat;
           uniform float uTime, uWorld, uFoam, uReflW, uNight;
           uniform sampler2D uHeight, uDet, uPond, uRefl;
           uniform vec4 uPondBox, uPondC;
@@ -164,7 +164,7 @@ export class Water {
           `#include <lights_fragment_maps>
           if (uReflW > 0.0) {
             // réflexion planaire (qualité haute) : remplace le ciel par le reflet de la scène, déformé par les rides
-            vec4 ruv = vReflUv;
+            vec4 ruv = uReflMat * vec4(vWPos, 1.0);
             ruv.xy += gWN.xz * 0.6 * ruv.w * 0.05;
             vec3 rc = texture2DProj(uRefl, ruv).rgb;
             radiance = mix(radiance, rc, uReflW * gPondW);
@@ -188,10 +188,12 @@ export class Water {
    */
   buildLocal(scene: THREE.Scene, village?: THREE.Object3D, q?: QualityPreset) {
     this.quality = q ?? null;
+    const DBG = typeof location !== 'undefined' ? new URLSearchParams(location.search).get('eaudbg') || '' : '';
     this.rivers = buildRivers(village);
-    scene.add(this.rivers.group);
+    if (!DBG.includes('r')) scene.add(this.rivers.group);
     this.aquatic = buildAquatic();
-    scene.add(this.aquatic.group);
+    if (!DBG.includes('a')) scene.add(this.aquatic.group);
+    if (DBG.includes('w')) this.mesh.visible = false;
     return this.rivers;
   }
 

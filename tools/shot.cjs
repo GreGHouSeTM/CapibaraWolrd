@@ -19,8 +19,20 @@ const VIEWS = {
   'etang-reflets': { cam: [-160, 3.2, 104], look: [-112, 2, 80], hour: 17.8 },
   yubatake: { cam: [29, 9.5, -27], look: [40, 6.2, -37], hour: 8.2 },
   ashiyu: { cam: [18.5, 7.6, 7.5], look: [22, 6.2, 2], hour: 10 },
-  rizieres: { cam: [-130, 13, -40], look: [-170, 9, -4], hour: 17.6 },
+  'riz-miroir': { cam: [-130, 13, -40], look: [-170, 9, -4], hour: 17.6 },
   eaunuit: { cam: [64, 7.6, -9], look: [67, 4.8, 14], hour: 21.5 },
+  // vue composée de l'étang (bible §5.2 : (-138, 68), cap 110°) à l'aube, en plein jour et de nuit, caméra de jeu
+  'etang-aube': { pos: [-138, 68], yaw: 1.22, pitch: 0.1, hour: 6.75, dist: 7 },
+  'etang-jour': { pos: [-138, 68], yaw: 1.22, pitch: 0.1, hour: 12.5, dist: 7 },
+  'etang-nuit': { pos: [-138, 68], yaw: 1.22, pitch: 0.1, hour: 22, dist: 7 },
+  // gros plans à hauteur de capybara : rive aux nénuphars, koï vus du ponton, rotenburo, rizières en miroir
+  'etang-rive': { cam: [-148, 1.6, 98], look: [-132, -0.4, 92], hour: 9.5 },
+  'etang-koi': { cam: [-112, 3.2, 70], look: [-116, -0.8, 78], hour: 11 },
+  'etang-cascade': { cam: [-112, 2.4, 96], look: [-96, 1.2, 109], hour: 15.5 },
+  'rotenburo-eau': { cam: [51, 7.6, 63], look: [61, 5.2, 71], hour: 7 },
+  'riz-aube': { cam: [-136, 10, -30], look: [-176, 9, -2], hour: 6.9 },
+  'riz-proche': { cam: [-149, 9.4, -20], look: [-160, 8.2, -6], hour: 7.2 },
+  'torrent-pont': { cam: [66, 8.6, 6], look: [64, 4.9, -12], hour: 9.5 },
   vueaerienne: { cam: [70, 60, 90], look: [0, 6, 0], hour: 16 },
   // --- Assets Poly Haven : scène de démonstration (tools/polyhaven/demo.ts) autour de (0, 6, 0), lumière dorée.
   // `ground` : la hauteur y de cam et look est comptée au-dessus du terrain ; x et z sont relatifs au centre de la démo (DEMO_CENTER).
@@ -72,6 +84,8 @@ if (require.main === module) (async () => {
     await page.goto(`http://localhost:${port}/?manual&q=${q || 'medium'}`, { waitUntil: 'load' });
     await page.waitForFunction(() => window.__game && window.__game.state === 'title', null, { timeout: 300000 });
     await page.evaluate(() => { localStorage.clear(); window.__game.startPlay(); });
+    // SHOT_JS : code de débogage exécuté dans la page avant les captures (résultat affiché)
+    if (process.env.SHOT_JS) console.log('SHOT_JS :', await page.evaluate(process.env.SHOT_JS));
     for (const k of (list || 'place').split(',')) {
       const v = VIEWS[k];
       if (!v) { console.log('vue inconnue', k); continue; }
