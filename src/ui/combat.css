@@ -1,0 +1,37 @@
+/* ---------- Combat : cœurs du HUD et écran « Ouf ! » (spécialité Combat) ---------- */
+#hearts { position: absolute; top: 68px; right: 16px; display: flex; gap: 3px; padding: 5px 9px; border-radius: 16px;
+  background: var(--panel); box-shadow: var(--shadow); }
+#hearts .heart { width: 30px; height: 28px; overflow: visible; }
+#hearts .heart .bg { fill: rgba(120, 60, 40, 0.18); stroke: #a5574a; stroke-width: 1.6; }
+#hearts .heart .fg { fill: #ff4f6d; stroke: #c8243f; stroke-width: 1.6; }
+#hearts .heart .shine { fill: none; stroke: rgba(255, 255, 255, 0.75); stroke-width: 2.2; stroke-linecap: round; }
+#hearts .heart.half .fg { clip-path: inset(0 50% 0 0); }
+#hearts .heart.empty .fg, #hearts .heart.empty .shine { display: none; }
+#hearts.low .heart.full .fg, #hearts.low .heart.half .fg { animation: heart-beat 0.9s ease-in-out infinite; transform-origin: 50% 60%; }
+#hearts.hurt { animation: hearts-hurt 0.45s ease-out; }
+#hearts.heal .heart { animation: heart-heal 0.5s ease-out; }
+@keyframes heart-beat { 0%, 100% { transform: scale(1); } 15% { transform: scale(1.16); } 30% { transform: scale(0.96); } }
+@keyframes hearts-hurt {
+  0% { transform: translateX(0) scale(1.08); background: #ffd7d7; }
+  20% { transform: translateX(-6px); } 40% { transform: translateX(5px); } 60% { transform: translateX(-3px); }
+  100% { transform: translateX(0) scale(1); }
+}
+@keyframes heart-heal { 0% { transform: scale(1); } 40% { transform: scale(1.14); } 100% { transform: scale(1); } }
+
+#ouf { position: absolute; inset: 0; z-index: 40; display: flex; align-items: center; justify-content: center; pointer-events: none;
+  background: radial-gradient(circle at 50% 45%, rgba(255, 247, 232, 0.97), rgba(255, 214, 170, 0.97) 70%, rgba(214, 140, 90, 0.97));
+  opacity: 0; transition: opacity 0.6s ease-in; }
+#ouf.on { opacity: 1; }
+#ouf.out { opacity: 0; transition: opacity 0.7s ease-out; }
+#ouf .ouf-box { text-align: center; transform: scale(0.9); transition: transform 0.6s; }
+#ouf.on .ouf-box { transform: scale(1); }
+#ouf .ouf-title { font-size: clamp(64px, 12vw, 140px); font-weight: 800; color: #ff7a3d; line-height: 1;
+  text-shadow: 0 6px 0 #a4481f, 0 14px 30px rgba(120, 50, 0, 0.3); }
+#ouf .ouf-sub { margin-top: 14px; font-size: clamp(18px, 2.6vw, 28px); font-weight: 700; color: var(--ink); }
+#ouf .ouf-steam { margin-top: 10px; font-size: 54px; color: #d0705a; animation: ouf-steam 1.6s ease-in-out infinite; }
+@keyframes ouf-steam { 0%, 100% { transform: translateY(0); opacity: 0.8; } 50% { transform: translateY(-8px); opacity: 1; } }
+
+@media (max-width: 700px) {
+  #hearts { top: 60px; }
+  #hearts .heart { width: 22px; height: 21px; }
+}

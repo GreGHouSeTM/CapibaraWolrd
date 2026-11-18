@@ -4,7 +4,8 @@ import type { RegionId } from '../world/layout';
 import type { VehicleType, RegionContent } from '../regions/common';
 import type { ItemKind } from './markers';
 import type { HatId } from '../actors/capybara';
-import { roadSamples } from '../world/heightmap';
+import { roadSamples, heightAt } from '../world/heightmap';
+import { TALL_GRASS_ZONES } from '../world/zones';
 
 export interface GameAPI {
   playerPos: () => THREE.Vector3;
@@ -15,6 +16,8 @@ export interface GameAPI {
   time: () => number;
   /** chapeau porté par le joueur */
   hat: () => string;
+  /** nombre d'ennemis chassés (« pouf ») dans une prairie depuis le début de la partie (combat) */
+  defeated?: (zone: string) => number;
 }
 
 export interface StepView {
@@ -149,6 +152,17 @@ export function photo(text: string, photoId: string, where?: () => THREE.Vector3
   };
 }
 
+/** Chasser `count` ennemis d'une prairie (comptés depuis le début de l'étape). */
+export function defeat(text: string, zone: string, count: number, where: () => THREE.Vector3 | null): Step {
+  const done = (g: GameAPI, s: StepState) => (g.defeated?.(zone) ?? 0) - ((s.data.base as number) ?? 0);
+  return {
+    text,
+    start: (g, s) => (s.data.base = g.defeated?.(zone) ?? 0),
+    check: (g, s) => done(g, s) >= count,
+    view: (g, s) => ({ beacon: where(), progress: `${Math.min(count, done(g, s))} / ${count}` }),
+  };
+}
+
 export function custom(text: string, check: (g: GameAPI) => boolean, beacon: () => THREE.Vector3 | null): Step {
   return { text, check: (g) => check(g), view: () => ({ beacon: beacon() }) };
 }
@@ -207,6 +221,26 @@ export const MISSIONS: Mission[] = [
           view: () => ({ beacon: sp(g, 'hub', 'shop') }),
         },
         talk('Montre ton nouveau chapeau à Léo', 'photographer'),
+      ];
+    },
+  },
+  {
+    // --- COMBAT --- : mini-mission de combat (bible §10.1), donnée par la Gardienne Sora à la porte du Levant
+    id: 'grignoteurs', title: 'Les Grignoteurs du Levant', region: 'hub', giver: 'guardian', reward: 40,
+    intro: [
+      'Halte-là, petit voyageur ! Je suis Sora, gardienne de la porte du Levant.',
+      'Au bout du Chemin des Susuki, des Grignoteurs se cachent dans les hautes herbes : de petites boules de ronces grincheuses qui grignotent nos récoltes !',
+      'Fais-les déguerpir ! Clic gauche pour donner un coup (trois de suite pour un combo : coup de tête, coup de patte, ruade). Clic droit ou C pour faire une roulade.',
+      'Quand un Grignoteur tremble avec un « ! » au-dessus de la tête, il va foncer tout droit : roule sur le côté ! Et pas de panique, ils ne font que des chatouilles.',
+    ],
+    outro: ['Bravo ! Les Grignoteurs sont partis bouder dans leurs nids. Les récoltes te disent merci !', 'Ils finissent toujours par revenir… mais maintenant, tu sais t’y prendre.'],
+    steps: (g) => {
+      const z = TALL_GRASS_ZONES.find((t) => t.id === 'levant')!;
+      const center = () => new THREE.Vector3(z.x, heightAt(z.x, z.z), z.z);
+      return [
+        goto('Suis le Chemin des Susuki jusqu’à la prairie du Levant', center, z.r * 0.8, undefined, 30),
+        defeat(`Fais déguerpir les ${z.enemies} Grignoteurs de la prairie`, z.id, z.enemies, center),
+        talk('Retourne voir la Gardienne Sora', 'guardian'),
       ];
     },
   },

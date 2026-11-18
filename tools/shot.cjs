@@ -16,6 +16,15 @@ const VIEWS = {
   'polyhaven-props': { cam: [7.5, 1.5, 4.8], look: [6.6, 0.45, -1.2], hour: 6.9, demo: '/tools/polyhaven/demo.ts', ground: true },
   'polyhaven-sol': { cam: [-3.2, 1.4, 5.5], look: [-6.5, 0.3, -1.5], hour: 6.9, demo: '/tools/polyhaven/demo.ts', ground: true },
   'polyhaven-plan': { cam: [-1, 60, 14], look: [-1, 0, -4], hour: 9, demo: '/tools/polyhaven/demo.ts', ground: true },
+  // --- Terrain & relief : vues de contrôle du relief
+  pagode: { pos: [-38, -108], yaw: 0.26, pitch: 0.12, hour: 8, dist: 6 },
+  'place-ny': { pos: [0, 0], yaw: 2.09, pitch: 0.06, hour: 11, dist: 6 },
+  'place-nord': { pos: [0, 10], yaw: Math.PI, pitch: 0.04, hour: 11, dist: 6 },
+  lointain: { cam: [380, 240, 470], look: [0, 20, 0], hour: 15 },
+  gorge: { cam: [40, 40, -60], look: [110, 20, -200], hour: 10 },
+  etang: { cam: [-150, 14, 140], look: [-110, 2, 85], hour: 10 },
+  paris: { cam: [60, 90, -470], look: [-60, 20, -800], hour: 12 },
+  newyork: { cam: [480, 90, -230], look: [693, 40, -400], hour: 12 },
 };
 (async () => {
   const [port, out, q, list] = process.argv.slice(2);

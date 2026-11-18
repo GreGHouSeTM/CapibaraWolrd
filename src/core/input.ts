@@ -15,6 +15,8 @@ export class Input {
   pointerLocked = false;
   gamepad: Gamepad | null = null;
   private padPrev: boolean[] = [];
+  /** combat : instant d'appui sur B (une tape courte = roulade, un appui long = courir) */
+  private padBDown = -1;
   enabled = true;
   usingPad = false;
   /** la manette n'est prise en compte qu'après l'appui d'un bouton */
@@ -92,6 +94,15 @@ export class Input {
         const on = !!p.buttons[i]?.pressed;
         if (on && !this.padPrev[i]) { this.pressed.add(a); this.usingPad = true; this.padActive = true; }
         this.padPrev[i] = on;
+      }
+      // --- COMBAT --- manette : RB (bouton 5) = attaque (klaxon en voiture), B (bouton 1) tapé brièvement = roulade
+      // (B maintenu reste « courir »). Clavier/souris : clic gauche = attaque, clic droit ou C = roulade.
+      if (p.buttons[5]?.pressed && !this.padPrev[5]) this.pressed.add('attack');
+      const b = !!p.buttons[1]?.pressed, now = performance.now();
+      if (b && this.padBDown < 0) this.padBDown = now;
+      if (!b && this.padBDown >= 0) {
+        if (now - this.padBDown < 250) this.pressed.add('dodge');
+        this.padBDown = -1;
       }
       const rx = p.axes[2] ?? 0, ry = p.axes[3] ?? 0;
       if (this.padActive && Math.abs(rx) > 0.2) this.look.x += rx * 14;
