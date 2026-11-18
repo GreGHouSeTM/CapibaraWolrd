@@ -40,6 +40,19 @@ La région « Japon » garde la ville moderne, le lac au torii et le mont Fuji ;
 - **Budget** en qualité « Moyenne » : < 700 appels de dessin et < 3 M triangles dans le village ; LOD pour les objets lourds ;
   poids total des assets du village < 80 Mo.
 
+
+## Principes de production (demandés par le client)
+
+- **Ne jamais réduire la qualité pour économiser le quota** : on économise sur la méthode (moins de tours, captures ciblées), jamais sur le résultat.
+- **Diversité par générateurs** : chaque famille d'assets (bâtiments, arbres, rochers, lanternes, objets) est produite par un script
+  paramétré (Blender ou code) capable de sortir de nombreuses variantes (proportions, usure, teintes, mousse, casse).
+  Pas deux objets voisins identiques ; mélanger assets photoscannés et générés.
+- **Minutie** : chaque zone doit être regardée de près (caméra de jeu à hauteur de capybara) et de loin ; détails aux pieds des murs,
+  jonctions sol/objet, transitions de matières, usure, humidité, mousse.
+- **Lumière et ombres primordiales** : une passe Lumière & ombres dédiée après l'intégration du village et de la végétation
+  (ombres sur toute la vallée et des montagnes, occlusion ambiante cuite dans Blender, ombres de contact, reflets sur les dalles mouillées
+  et l'eau, lumière filtrée par les feuillages), comparée aux références.
+
 ## Grille de qualité
 
 ### Terrain et level design
