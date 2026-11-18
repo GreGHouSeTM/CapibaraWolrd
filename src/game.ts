@@ -7,7 +7,8 @@ import { PostFX } from './core/postfx';
 import { PRESETS, Quality } from './core/quality';
 import { loadSave, writeSave, resetSave, SaveData, defaultSave } from './core/save';
 import { clamp, damp, lerp, Rng } from './core/math';
-import { SkySystem } from './world/sky';
+import { SkySystem, START_HOUR } from './world/sky';
+import { NightLights } from './fx/lights';
 import { buildWorld, World } from './world/world';
 import { REGIONS, RegionDef, RegionId, nearestRegion, regionById } from './world/layout';
 import { groundAt } from './world/physics';
@@ -63,6 +64,7 @@ export class Game {
   save: SaveData;
   quality: Quality;
   sky!: SkySystem;
+  lights!: NightLights; // --- LUMIÈRE --- réservoir de lumières dynamiques
   world!: World;
   post!: PostFX;
   rig!: CameraRig;
@@ -142,7 +144,8 @@ export class Game {
     await loadAssets((p) => this.ui.setLoading(0.02 + p * 0.18));
     this.sky = new SkySystem(this.renderer, this.scene);
     this.sky.setShadowQuality(q.shadowSize, q.shadowExtent);
-    this.sky.hour = this.save.hour;
+    // --- LUMIÈRE --- nouvelle partie à 6 h 45 (aube dorée), sinon l'heure sauvegardée
+    this.sky.hour = this.save.pos ? this.save.hour : START_HOUR;
     this.scene.fog = new THREE.FogExp2(0xbcd0e0, 0.0012);
     this.rig = new CameraRig(window.innerWidth / window.innerHeight);
     this.rig.sensitivity = this.save.settings.sensitivity;
@@ -154,6 +157,9 @@ export class Game {
     this.setupCombat(); // --- COMBAT ---
     this.scene.add(this.markers.group);
     this.post = new PostFX(this.renderer, this.scene, this.rig.camera, q);
+    // --- LUMIÈRE --- lumières de nuit (PointLights en nombre fixe + taches de lumière)
+    this.lights = new NightLights(this.scene, q);
+    this.post.attachLights(this.lights);
     this.mapImg = buildMapImage(2048);
     this.minimap = new Minimap(this.ui.minimapCanvas(), this.mapImg);
     this.ui.setLoading(0.96, 'Préparation des shaders…');
@@ -766,22 +772,15 @@ export class Game {
     const t = this.time;
     const focus = this.state === 'title' ? new THREE.Vector3(0, 6, 0) : this.player.pos;
     const reg = this.state === 'title' ? REGIONS[0] : nearestRegion(focus.x, focus.z);
-    this.sky.update(dt, t, focus, reg.id === 'pole' ? 1 : 0);
+    // --- LUMIÈRE --- ciel, soleil, ombres avancées dans le regard
+    this.sky.update(dt, t, focus, reg.id === 'pole' ? 1 : 0, this.rig.camera);
     const st = this.sky.state;
-    setNight(st.night);
     windUniform.value = t;
-    // brouillard et étalonnage selon la région
-    const fog = this.scene.fog as THREE.FogExp2;
-    const regionFog = new THREE.Color(...reg.fog);
-    const fogCol = st.horizon.clone().lerp(regionFog, 0.45 * (1 - st.night));
-    fog.color.lerp(fogCol, 1 - Math.exp(-dt * 1.5));
-    fog.density = damp(fog.density, reg.fogDensity * (1 + st.night * 0.3), 1, dt);
-    const g = this.post.grade;
-    this.gradeTarget = { saturation: reg.saturation, contrast: reg.contrast, warmth: reg.warmth + st.dusk * 0.4 };
-    g.set('saturation', damp(g.get('saturation'), this.gradeTarget.saturation, 1, dt));
-    g.set('contrast', damp(g.get('contrast'), this.gradeTarget.contrast, 1, dt));
-    g.set('warmth', damp(g.get('warmth'), this.gradeTarget.warmth, 1, dt));
-    if (this.post.bloom) this.post.bloom.intensity = 0.6 + st.night * 0.9;
+    // --- LUMIÈRE --- brouillard, brume, étalonnage par moment, lanternes (allumées à 18 h) et émissifs
+    this.sky.applyFog(this.scene.fog as THREE.FogExp2, reg, dt);
+    this.lights.update(dt, t, st, this.rig.camera);
+    setNight(Math.max(this.lights.level, st.night * 0.6));
+    this.post.updateAtmosphere(dt, t, st, this.scene.fog as THREE.FogExp2, reg, this.sky.hemi, this.scene.environmentIntensity);
     // eau
     const [sh, dp] = WATER[reg.id];
     this.world.water.update(t, new THREE.Color(...sh), new THREE.Color(...dp), dt);
