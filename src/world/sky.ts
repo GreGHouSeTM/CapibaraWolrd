@@ -185,12 +185,12 @@ interface Key {
 }
 const NIGHT: Omit<Key, 'h'> = {
   zen: 0x0b1226, hor: 0x1a2440, horSun: 0x1e2a48, belt: 0x1a2440,
-  sun: 0x8aa0d0, sunI: 0.55, disk: 0,
+  sun: 0x8aa0d0, sunI: 0.7, disk: 0,
   cLit: 0x2c3858, cShade: 0x121a2e, cover: 0.38, cirrus: 0.2, stars: 1,
   fog: 0x18223a, fogSun: 0x1c2844, fogAnti: 0x161f36, fogD: 0.0019,
   mist: 0x34446a, mistD: 0.0026, mistH: 7,
   aSky: 0x4a64a8, aGnd: 0x22222e, hemi: 1.0, env: 0.7,
-  exp: 2.1, sat: 0.04, con: 0.05, warm: -0.08, bloomT: 0.85, bloomI: 1.0, rays: 0,
+  exp: 2.35, sat: 0.04, con: 0.05, warm: -0.08, bloomT: 0.85, bloomI: 1.0, rays: 0,
 };
 const KEYS: Key[] = [
   { h: 0, ...NIGHT },

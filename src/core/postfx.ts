@@ -484,7 +484,7 @@ export class PostFX {
       .add(this.tmp.copy(hemi.groundColor).multiplyScalar(hemi.intensity * 0.2))
       .add(this.tmp.copy(st.zenith).lerp(st.horizon, 0.5).multiplyScalar(envIntensity * Math.PI * 0.7))
       .add(this.tmp.copy(st.sunColor).multiplyScalar(st.sunIntensity * 0.25));
-    this.atmosphere.rayStrength = this.q.godRays > 0 ? 0.55 : 0;
+    this.atmosphere.rayStrength = this.q.godRays > 0 ? 0.9 : 0;
     this.atmosphere.setState(st, fog.color, fog.density, amb, time);
     // étalonnage : palette du moment, mêlée à la personnalité de la région hors de Capyville
     const g = this.grade;
@@ -497,7 +497,7 @@ export class PostFX {
     const golden = st.dusk * (1 - st.night);
     g.vec('shadowTint').set(1 - 0.05 * golden - 0.03 * st.night, 1 - 0.02 * golden, 1 + 0.07 * golden + 0.06 * st.night);
     g.vec('highTint').set(1 + 0.05 * golden, 1 + 0.01 * golden, 1 - 0.06 * golden);
-    g.vec('lift').set(0.006, 0.010, 0.024).multiplyScalar(st.night);
+    g.vec('lift').set(0.008, 0.013, 0.03).multiplyScalar(st.night);
     if (this.bloom) {
       (this.bloom as any).luminanceMaterial.threshold = st.bloomThreshold;
       this.bloom.intensity = st.bloomIntensity;
