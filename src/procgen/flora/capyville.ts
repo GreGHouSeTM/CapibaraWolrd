@@ -235,6 +235,7 @@ export class CapyFlora {
     this.forests(rng, density);
     this.banks(rng);
     this.susuki(rng);
+    this.flowers(rng);
     this.rice();
     this.tea();
     await this.polyHaven(rng);
@@ -481,6 +482,42 @@ export class CapyFlora {
     }
   }
 
+  /** Fleurs des prés : prés fleuris (FIELDS « fleurs »), prairies de susuki (0,5 / m²), prés et bords de chemins (≈ 0,3 / m²). */
+  private flowers(rng: Rng) {
+    const step = 1.0;
+    for (let gx = -262; gx < 262; gx += step)
+      for (let gz = -262; gz < 262; gz += step) {
+        const x = gx + rng.range(-0.5, 0.5), z = gz + rng.range(-0.5, 0.5);
+        const r = Math.hypot(x, z);
+        if (r > 262) continue;
+        const m = maskAt(x, z);
+        if (m & (NO_PLANT | ORCH)) continue;
+        let p = 0, tiles = [0, 1, 2, 3];
+        if (m & FIELD) {
+          const f = FIELDS.find((q) => q.kind === 'fleurs' && rectSdf(x, z, q.x, q.z, q.w, q.d, q.yaw) < 0.3);
+          if (!f) continue;
+          p = 1.1;
+        } else if (m & GRASSZ) {
+          p = 0.5;
+          tiles = [2, 3, 3, 0];
+        } else {
+          if (r < 108) continue;
+          const u = rng.next();
+          if (u > 0.4) { rng.next(); continue; } // préfiltre (densité moyenne ≈ 0,3 / m²)
+          const n = noise2(x / 14 + 3, z / 14 - 8);
+          const pp = 0.75 * (0.25 + 1.5 * smoothstep(-0.1, 0.5, n));
+          if (u > 0.4 * Math.min(1, pp)) { rng.next(); continue; }
+          const h = heightAt(x, z);
+          if (h < 1 || slopeAt(x, z) > 0.7 || forestAt(x, z, h).f > 0.15 || streamEdge(x, z) < 0.5) continue;
+          p = 1;
+          tiles = n > 0.3 ? [0, 0, 1, 2] : [1, 0, 2, 3];
+        }
+        if (rng.next() > p) continue;
+        if (streamEdge(x, z) < 0.5) continue;
+        this.plant('hana', x, z, { scale: rng.range(0.75, 1.25), variant: tiles[rng.int(0, 3)] });
+      }
+  }
+
   private rice() {
     // 16 touffes / m² : rangs de 0,25 m, marge de 0,6 m pour les diguettes
     let k = 0;
@@ -691,7 +728,7 @@ export class CapyFlora {
   }
 
   private petalMaterial() {
-    const m = new THREE.MeshStandardMaterial({ map: floraTex('ground_leaf.webp'), alphaTest: 0.45, roughness: 0.85, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2 });
+    const m = new THREE.MeshStandardMaterial({ map: floraTex('ground_leaf.webp'), alphaTest: 0.22, roughness: 0.85, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2 });
     m.onBeforeCompile = (s) => {
       s.vertexShader = s.vertexShader
         .replace('#include <common>', '#include <common>\nattribute vec2 aTile;')

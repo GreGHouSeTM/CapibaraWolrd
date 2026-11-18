@@ -7,7 +7,7 @@ import { floraDepthMaterial, floraMaterial, fruitMaterial, propMaterial, WindOpt
 
 export type FloraSpecies =
   | 'sugi' | 'sugi-geant' | 'matsu' | 'momiji' | 'keyaki' | 'sakura' | 'shidare' | 'ichou' | 'yuzu' | 'take'
-  | 'tsutsuji' | 'fern' | 'susuki' | 'ine' | 'misc';
+  | 'tsutsuji' | 'fern' | 'susuki' | 'ine' | 'hana' | 'misc';
 
 export interface SpeciesDef {
   file: string;
@@ -48,6 +48,7 @@ export const SPECIES: Record<FloraSpecies, SpeciesDef> = {
   fern: { file: 'fern', leaf: 'fern', wind: { height: 0.7, flex: 0.04, branch: 0, flutter: 0.05, flutterFreq: 4 }, trans: 0.6, lod: [14, 38, 0], shadow: 0, trunk: 0, height: 0.7, cap: [3000, 10000] },
   susuki: { file: 'susuki', leaf: 'susuki', wind: { height: 1.4, flex: 0.22, branch: 0, flutter: 0.07, flutterFreq: 3.2 }, trans: 0.8, lod: [30, 90, 0], shadow: 0, trunk: 0, height: 1.4, cap: [6000, 12000] },
   ine: { file: 'ine', leaf: 'ine', wind: { height: 0.75, flex: 0.08, branch: 0, flutter: 0.03, flutterFreq: 3 }, trans: 0.5, lod: [30, 140, 0], shadow: 0, trunk: 0, height: 0.75, cap: [20000, 40000] },
+  hana: { file: 'hana', leaf: 'hana', wind: { height: 0.35, flex: 0.05, branch: 0, flutter: 0.03, flutterFreq: 3.5 }, trans: 0.4, lod: [18, 45, 0], shadow: 0, trunk: 0, height: 0.35, cap: [8000, 20000] },
   misc: { file: 'misc', bark: 'sugi', barkTint: 0x8a8a78, leaf: 'sugi', wind: { height: 1, flex: 0, branch: 0, flutter: 0 }, lod: [30, 80, 0], shadow: 1, trunk: 0.35, height: 1 },
 };
 

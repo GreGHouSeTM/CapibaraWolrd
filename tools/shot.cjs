@@ -36,6 +36,8 @@ const VIEWS = {
   foret: { pos: [-46, -138], yaw: -2.51, pitch: 0.08, hour: 9.5, dist: 6 },
   verger: { pos: [92, 128], yaw: 0.785, pitch: 0.12, hour: 10, dist: 7 },
   susuki: { pos: [140, 6], yaw: 0.9, pitch: 0.1, hour: 16, dist: 6 },
+  rizieres: { pos: [-134, -32], yaw: -1.75, pitch: 0.2, hour: 9, dist: 7 },
+  theiers: { pos: [108, -70], yaw: 2.5, pitch: 0.22, hour: 10, dist: 7 },
   brume: { cam: [-60, 34, 150], look: [60, 6, -60], hour: 6.9 },
 };
 (async () => {

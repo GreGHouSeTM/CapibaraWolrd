@@ -492,6 +492,37 @@ def ine():
     c.save('ine_leaf.png')
 
 
+def hana():
+    """Fleurs des prés : 4 tuiles (marguerites, boutons d'or, asters violets, lycoris rouges), tiges en bas."""
+    rng = random.Random(131)
+    c = Canvas()
+    cols = [((250, 250, 240), (240, 200, 60)), ((250, 214, 50), (220, 160, 30)), ((170, 130, 210), (240, 220, 120)), ((214, 40, 36), (230, 60, 50))]
+    for t in range(4):
+        x0, y0, s = tile_box(t % 2, t // 2)
+        petal, heart = cols[t]
+        for k in range(rng.randint(4, 6)):
+            bx = x0 + s * rng.uniform(0.2, 0.8)
+            top = y0 + s * rng.uniform(0.12, 0.45)
+            pts, _ = wander(bx, y0 + s - 2, rng.uniform(-0.15, 0.15), (y0 + s - 2) - top, 6, rng, 0.06)
+            twig(c, pts, (70, 110, 46), 2.2, 1.4)
+            for j in range(2):
+                p = pts[rng.randint(1, 4)]
+                draw_leaf(c, p[0], p[1], rng.choice([-1, 1]) * rng.uniform(0.5, 1.0), rng.uniform(18, 30), 5, jitter((72, 116, 46), rng, 10), rng)
+            fx, fy = pts[-1]
+            if t == 3:  # lycoris : étamines rayonnantes
+                for q in range(9):
+                    a = -math.pi * 0.9 + q * math.pi * 1.8 / 8
+                    c.line([(fx, fy), dir_pt(fx, fy, a, rng.uniform(14, 20))], petal + (255,), 1.6)
+            else:
+                n = 12 if t != 1 else 5
+                r = rng.uniform(9, 13) if t != 1 else rng.uniform(7, 9)
+                rot = rng.uniform(0, math.tau)
+                for q in range(n):
+                    c.poly(leaf_shape(fx, fy, rot + q * math.tau / n, r, r * (0.32 if t != 1 else 0.7), 'petal', 6), jitter(petal, rng, 8) + (255,))
+                c.ellipse(fx, fy, r * 0.3, r * 0.3, heart + (255,))
+    c.save('hana_leaf.png')
+
+
 def ground():
     """Sol : tuiles de pétales roses, feuilles d'érable rouges, feuilles mortes, aiguilles."""
     rng = random.Random(97)
@@ -499,12 +530,12 @@ def ground():
     for t in range(4):
         x0, y0, s = tile_box(t % 2, t // 2)
         cx, cy = x0 + s / 2, y0 + s / 2
-        for _ in range(140 if t == 0 else 26 if t < 3 else 160):
+        for _ in range(420 if t == 0 else 60 if t < 3 else 260):
             r = s * 0.46 * math.sqrt(rng.random())
             a = rng.uniform(0, math.tau)
             x, y = cx + math.cos(a) * r, cy + math.sin(a) * r
             if t == 0:
-                c.poly(leaf_shape(x, y, rng.uniform(0, math.tau), 9, 6, 'petal', 8), jitter((250, 205, 220), rng, 12) + (255,))
+                c.poly(leaf_shape(x, y, rng.uniform(0, math.tau), 12, 8, 'petal', 8), jitter((246, 184, 206), rng, 14) + (255,))
             elif t == 1:
                 maple_leaf(c, x, y, rng.uniform(0, math.tau), rng.uniform(18, 26), jitter((196, 48, 32), rng, 26), rng)
             elif t == 2:
@@ -539,7 +570,7 @@ def cha():
 
 if __name__ == '__main__':
     os.makedirs(OUT, exist_ok=True)
-    which = sys.argv[1:] or ['sakura', 'momiji', 'sugi', 'matsu', 'take', 'yuzu', 'ichou', 'keyaki', 'tsutsuji', 'susuki', 'fern', 'ine', 'ground', 'cha']
+    which = sys.argv[1:] or ['sakura', 'momiji', 'sugi', 'matsu', 'take', 'yuzu', 'ichou', 'keyaki', 'tsutsuji', 'susuki', 'fern', 'ine', 'hana', 'ground', 'cha']
     for w in which:
         if w == 'yuzu':
             broad('yuzu_leaf.png', 43, [(34, 70, 30), (44, 84, 34), (52, 92, 38)], 'ellipse', (32, 14), 120)

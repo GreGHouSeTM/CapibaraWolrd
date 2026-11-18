@@ -72,6 +72,7 @@ ATLAS = {
     'susuki': {'blade': [dict(u0=0.0, v0=0.0, du=0.75, dv=1.0, ax=0.5, ay=1.0)],
                'plume': [dict(u0=0.75, v0=0.0, du=0.25, dv=0.5, ax=0.5, ay=1.0), dict(u0=0.75, v0=0.5, du=0.25, dv=0.5, ax=0.5, ay=1.0)]},
     'fern': {'frond': [dict(u0=k * 0.25, v0=0, du=0.25, dv=1, ax=0.5, ay=1.0) for k in range(4)]},
+    'hana': {'leaf': [T2(i) for i in range(4)]},
     'ine': {'tuft': [dict(u0=k * 0.5, v0=0, du=0.5, dv=1, ax=0.5, ay=1.0) for k in range(2)]},
 }
 
@@ -851,6 +852,22 @@ def ine(seed):
     return t
 
 
+def hana(seed, tile):
+    """Fleurs des prés : deux cartes croisées de 0,35 m (une tuile d'espèce par variante)."""
+    rng = random.Random(seed)
+    t = Tree('hana', 0.35)
+    t.crown_c = np.array([0, 0.15, 0])
+    t.crown_r = 0.3
+    tl = ATLAS['hana']['leaf'][tile]
+    a0 = rng.uniform(0, 3)
+    for k in range(2):
+        a = a0 + k * math.pi / 2
+        udir = np.array([math.cos(a), 0, math.sin(a)])
+        h = rng.uniform(0.3, 0.42)
+        t.add_card([0, 0, 0], UP, udir, h, h, tl, 0.0, keep1=True, segs=1, nrm=UP, flut=(0.0, 1.0))
+    return t
+
+
 def stump(seed, kind):
     """Souche (kind = 'souche') ou tronc couché moussu (kind = 'tronc')."""
     rng = random.Random(seed)
@@ -947,6 +964,7 @@ SPECIES = {
     'fern': lambda: [fern(91), fern(92), fern(93)],
     'susuki': lambda: [susuki(101, 1.25), susuki(102, 1.45), susuki(103, 1.6)],
     'ine': lambda: [ine(111), ine(112)],
+    'hana': lambda: [hana(141, 0), hana(142, 1), hana(143, 2), hana(144, 3)],
     'misc': lambda: [stump(121, 'souche'), stump(122, 'souche'), stump(123, 'tronc')],
 }
 
