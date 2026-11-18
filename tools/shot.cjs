@@ -45,6 +45,16 @@ const VIEWS = {
   rizieres: { pos: [-134, -32], yaw: -1.75, pitch: 0.2, hour: 9, dist: 7 },
   theiers: { pos: [108, -70], yaw: 2.5, pitch: 0.22, hour: 10, dist: 7 },
   brume: { cam: [-60, 34, 150], look: [60, 6, -60], hour: 6.9 },
+  // --- Décor & accessoires : vues rapprochées à hauteur de capybara (œil ≈ 1,2 m)
+  'deco-manju': { cam: [2.2, 7.3, 22], look: [7.6, 6.6, 29], hour: 7.2 },          // confiserie e1 et lanternes e2
+  'deco-yuzu': { cam: [1.6, 7.3, 50], look: [7.6, 6.5, 59], hour: 9 },             // ryokan Momiji, marchand de yuzus e4
+  'deco-ouest': { cam: [-1.8, 7.3, 42], look: [-6.8, 6.6, 50], hour: 9.5 },        // soba w2, dango w3, parapluies w4
+  'deco-jouets': { cam: [1.5, 7.3, 66], look: [7.2, 6.4, 76], hour: 15 },          // jouets e5, maison aux glycines e6
+  'deco-place': { cam: [6, 7.4, 16], look: [-8, 7.5, -8], hour: 7 },              // la place vers le cerisier
+  'deco-place-n': { cam: [-12, 7.6, -14], look: [12, 6.6, 8], hour: 10 },          // la place vers le sud-est (yatai, ashiyu)
+  'deco-ruelle-nuit': { cam: [6, 7.4, 64.6], look: [30, 6.4, 64], hour: 22 },      // Ruelle de la Vapeur, andon allumés
+  'deco-cedres': { cam: [-28, 7.8, -16], look: [-44, 7.2, -32], hour: 9 },         // maisons et clôtures du quartier des Cèdres
+  'deco-col': { cam: [4, 8.6, -40], look: [-4, 8, -52], hour: 10 },               // Rue du Col : maisons, grenier
 };
 module.exports = { VIEWS };
 if (require.main === module) (async () => {
