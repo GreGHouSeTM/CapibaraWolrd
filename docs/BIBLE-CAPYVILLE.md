@@ -754,3 +754,10 @@ Captures : `test-shots/etat-0/` (place, rue, maison, prairie, nuit, vueaerienne,
 8. **Eau absente ou pauvre** : pas de torrent dans le monde, étang à berges verticales et nues.
 9. **Lieux de mission indigents** : source chaude = disque turquoise dans un cercle de cailloux ; moulin à vent posé contre une route.
 10. **Lumière plate et performance** : brume grise uniforme sans soleil rasant ; nuit sans flaques de lumière lisibles ; 2 052 appels de dessin (budget 700).
+
+## Annexe — Décision client : postures du capybara (validée)
+
+- **Debout (bipède)** à l'arrêt et à la marche : silhouette de mascotte expressive, chapeaux et gestes bien lisibles. Les attaques du combo se font debout.
+- **À quatre pattes** pour le sprint (touche Maj) et pour la nage (tête hors de l'eau, comme un vrai capybara). La roulade d'esquive passe en boule.
+- **Transitions** : passage au sprint = bascule vers l'avant et pose des pattes avant en trottinant (~0,25 s) ; retour à la marche = redressement (~0,35 s). Fondus entre clips, jamais de saut d'image ; caméra et hauteur de collision suivent en douceur.
+- Production : spécialité **Rig & animation Blender** (squelette, clips marche debout / sprint / nage / combat / transitions, export glTF), qui remplace les poses procédurales de `src/actors/capybara.ts` (`combatPose`).
