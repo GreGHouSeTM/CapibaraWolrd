@@ -761,3 +761,24 @@ Captures : `test-shots/etat-0/` (place, rue, maison, prairie, nuit, vueaerienne,
 - **À quatre pattes** pour le sprint (touche Maj) et pour la nage (tête hors de l'eau, comme un vrai capybara). La roulade d'esquive passe en boule.
 - **Transitions** : passage au sprint = bascule vers l'avant et pose des pattes avant en trottinant (~0,25 s) ; retour à la marche = redressement (~0,35 s). Fondus entre clips, jamais de saut d'image ; caméra et hauteur de collision suivent en douceur.
 - Production : spécialité **Rig & animation Blender** (squelette, clips marche debout / sprint / nage / combat / transitions, export glTF), qui remplace les poses procédurales de `src/actors/capybara.ts` (`combatPose`).
+
+## Annexe — Décision client : un monde de 8 × 8 km et des terres sauvages (validée)
+
+Objectif ressenti : grandeur, balade sans ennui, passages naturels « qui n'auraient pas été pensés par un développeur » ;
+on voit une maison ou une montagne au loin et on peut y aller sans blocage (genre open world d'exploration, sans rien copier).
+
+- **Taille** : le monde passe de 3,2 × 3,2 km à **8 × 8 km**. Les 7 régions restent, espacées par de vastes terres sauvages.
+  Terrain chargé par morceaux (streaming), LOD et imposteurs, brume et perspective atmosphérique pour la profondeur.
+- **Procédural dirigé** : le Lead fixe à la main les grandes lignes (régions, grands repères visibles à plusieurs km,
+  routes principales) ; la nature est **simulée** : érosion hydraulique et thermique du relief (ravines, éboulis, crêtes,
+  vallons), réseau de rivières par simulation d'écoulement (affluents, gorges, lacs dans les cuvettes, cascades),
+  végétation selon des règles écologiques (pente, humidité, altitude, exposition), points d'intérêt semés par règles
+  (sanctuaires oubliés, grottes derrière les cascades, cabanes, ruines, belvédères, sources chaudes sauvages), puis
+  passe de finition manuelle des zones clés (rythme découverte → point de vue → récompense).
+- **Pas de murs invisibles** : tout ce qui est visible est atteignable (pentes praticables, gués, nage, sentiers de bêtes) ;
+  seules limites naturelles : la mer, les falaises vraiment trop raides.
+- **Biomes des terres sauvages** : plaines et prairies, forêts (feuillus, conifères, bambouseraies), rivières et lacs,
+  moyennes et hautes montagnes, transitions progressives vers chaque région (rizières vers le Japon, dunes vers le désert,
+  toundra vers le pôle, bocage vers Paris et Londres).
+- **Ordre de production** : après Capyville. Chantier « Monde 8 km » : Lead (plan général et repères) → Terrain
+  (agrandissement, streaming, érosion, rivières) → Végétation et Points d'intérêt → Routes → Eau → Lumière (distance).
