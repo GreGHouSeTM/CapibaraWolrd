@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<title>Visionneuse des bâtiments</title>
+<style>html,body{margin:0;height:100%;background:#20160f;overflow:hidden}canvas{display:block}</style>
+</head>
+<body>
+<script type="module">
+// Visionneuse de contrôle des .glb de bâtiments (spécialité Modélisation Blender).
+// /tools/viewer.html?ids=e1,w1&night=0&lod=0&cam=x,y,z&look=x,y,z  — lit manifest.json, lumière dorée rasante.
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js';
+
+const q = new URLSearchParams(location.search);
+const night = q.get('night') === '1';
+const lodSel = +(q.get('lod') || 0);
+const base = '/assets/models/buildings/';
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setSize(innerWidth, innerHeight);
+renderer.setPixelRatio(1);
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = night ? 1.1 : 1.0;
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+document.body.appendChild(renderer.domElement);
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(night ? 0x0b1226 : 0xe9b98a);
+scene.fog = new THREE.Fog(scene.background, 60, 220);
+const cam = new THREE.PerspectiveCamera(40, innerWidth / innerHeight, 0.1, 500);
+const hemi = new THREE.HemisphereLight(night ? 0x34447a : 0xffd3a8, night ? 0x101010 : 0x4a3a2c, night ? 0.35 : 0.9);
+scene.add(hemi);
+const sun = new THREE.DirectionalLight(night ? 0x8090ff : 0xffb070, night ? 0.25 : 3.2);
+sun.castShadow = true;
+sun.shadow.mapSize.set(2048, 2048);
+sun.shadow.bias = -0.0004;
+scene.add(sun, sun.target);
+const ground = new THREE.Mesh(new THREE.PlaneGeometry(400, 400), new THREE.MeshStandardMaterial({ color: night ? 0x2a2622 : 0x6f5c48, roughness: 1 }));
+ground.rotation.x = -Math.PI / 2;
+ground.receiveShadow = true;
+scene.add(ground);
+
+const loader = new GLTFLoader();
+loader.setMeshoptDecoder(MeshoptDecoder);
+const man = await (await fetch(base + 'manifest.json')).json();
+const ids = (q.get('ids') || Object.keys(man.buildings).slice(0, 3).join(',')).split(',');
+let x = 0;
+const boxes = new THREE.Box3();
+const stats = { tris: 0, models: [] };
+for (const id of ids) {
+  const e = man.buildings[id];
+  if (!e) continue;
+  const g = await loader.loadAsync(base + e.file);
+  const root = g.scene;
+  const w = e.w;
+  x += w / 2;
+  root.position.x = x;
+  x += w / 2 + 1.5;
+  root.traverse((o) => {
+    if (o.isMesh) {
+      o.castShadow = o.receiveShadow = true;
+      const m = o.material;
+      if (m.userData && m.userData.night) m.emissiveIntensity = night ? 2.2 : 0;
+    }
+  });
+  for (let i = 0; i < 3; i++) {
+    const n = root.getObjectByName(`${id}_lod${i}`);
+    if (n) n.visible = i === lodSel;
+  }
+  if (night) {
+    for (const a of e.anchors.filter((a) => a.name.startsWith('light_'))) {
+      const l = new THREE.PointLight(0xffa860, 6, 9, 2);
+      l.position.set(a.pos[0] + root.position.x, a.pos[1], a.pos[2]);
+      scene.add(l);
+    }
+  }
+  scene.add(root);
+  root.updateMatrixWorld(true);
+  boxes.expandByObject(root);
+  stats.tris += e.triangles[lodSel];
+  stats.models.push(id);
+}
+const c = boxes.getCenter(new THREE.Vector3());
+const s = boxes.getSize(new THREE.Vector3());
+const look = q.get('look') ? q.get('look').split(',').map(Number) : [c.x, s.y * 0.38, 0];
+const cp = q.get('cam') ? q.get('cam').split(',').map(Number) : [c.x + s.x * 0.18, 2.6, Math.max(s.x, s.z) * 1.05 + 6];
+cam.position.set(...cp);
+cam.lookAt(...look);
+sun.position.set(c.x - 30, 12, 34);
+sun.target.position.copy(c);
+const sc = Math.max(s.x, s.z) * 0.8 + 6;
+Object.assign(sun.shadow.camera, { left: -sc, right: sc, top: sc, bottom: -sc, near: 1, far: 120 });
+sun.shadow.camera.updateProjectionMatrix();
+renderer.render(scene, cam);
+window.__stats = { ...stats, calls: renderer.info.render.calls, rtris: renderer.info.render.triangles };
+window.__ready = true;
+</script>
+</body>
+</html>
