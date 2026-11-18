@@ -5,10 +5,10 @@
  "license": "CC0",
  "units": "mètres, Y vers le haut, origine au centre du bas de la boîte englobante",
  "lodNote": "toutes les LOD d’un modèle sont dans le même .glb (nœuds <id>_lod0, _lod1, _lod2) pour partager les textures ; lodDistances : bascule LOD0->LOD1, LOD1->LOD2, la dernière distance masque l’objet",
- "totalBytes": 17833460,
+ "totalBytes": 17833184,
  "files": {
   "nature/boulder_01.glb": {
-   "bytes": 642908,
+   "bytes": 642736,
    "source": "boulder_01",
    "meshopt": true,
    "materials": 1,
@@ -71,28 +71,28 @@
    "sourceTriangles": 12416
   },
   "nature/rock_face_01.glb": {
-   "bytes": 629604,
+   "bytes": 629600,
    "source": "rock_face_01",
    "meshopt": true,
    "materials": 1,
    "sourceTriangles": 20174
   },
   "nature/rock_face_02.glb": {
-   "bytes": 702792,
+   "bytes": 702764,
    "source": "rock_face_02",
    "meshopt": true,
    "materials": 1,
    "sourceTriangles": 29564
   },
   "nature/rock_moss_set_01.glb": {
-   "bytes": 658984,
+   "bytes": 658980,
    "source": "rock_moss_set_01",
    "meshopt": true,
    "materials": 1,
    "sourceTriangles": 63127
   },
   "nature/rock_moss_set_02.glb": {
-   "bytes": 840008,
+   "bytes": 840032,
    "source": "rock_moss_set_02",
    "meshopt": true,
    "materials": 1,
@@ -288,7 +288,7 @@
    "sourceTriangles": 69806
   },
   "props/stone_fire_pit.glb": {
-   "bytes": 464624,
+   "bytes": 464532,
    "source": "stone_fire_pit",
    "meshopt": true,
    "materials": 1,

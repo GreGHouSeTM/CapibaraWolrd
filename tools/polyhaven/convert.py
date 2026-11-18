@@ -102,8 +102,10 @@ def tint(img, profile):
         h = np.where(green > 0, hue_lerp(h, MOSS_H, 0.55 * green), h)
         s = s + (np.maximum(s, 0.42) - s) * 0.5 * green
         stone = 1 - green
-        h = hue_lerp(h, STONE_H, 0.4 * stone)
-        s = s + (STONE_S - s) * 0.4 * stone
+        # pierres bleutées (teintes 180-260°) ramenées plus franchement vers le gris chaud
+        blue = smooth(170, 200, hd) * (1 - smooth(260, 290, hd))
+        h = hue_lerp(h, STONE_H, (0.4 + 0.4 * blue) * stone)
+        s = s + (STONE_S - s) * (0.4 + 0.3 * blue) * stone
         # luminosité moyenne de la pierre ramenée (en partie) vers la palette
         w = stone.mean()
         if w > 0.05:
