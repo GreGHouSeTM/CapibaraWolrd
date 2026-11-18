@@ -67,8 +67,8 @@ La région « Japon » garde la ville moderne, le lac au torii et le mont Fuji ;
 - [ ] Carte cohérente : rien ne bloque une route, chaque chemin mène quelque part, repères visibles de loin
 
 ### Architecture et décor
-- [ ] Au moins 5 types de bâtiments japonais distincts (ryokan à étage, bains publics, maison de thé, échoppes, sanctuaire, pagode, moulin à eau…) modélisés dans Blender
-- [ ] Façades en vrai relief : poteaux et poutres, cloisons shōji et grilles koshi, engawa, noren, lanternes ; shōji lumineux la nuit
+- [x] Au moins 5 types de bâtiments japonais distincts (ryokan à étage, bains publics, maison de thé, échoppes, sanctuaire, pagode, moulin à eau…) modélisés dans Blender
+- [x] Façades en vrai relief : poteaux et poutres, cloisons shōji et grilles koshi, engawa, noren, lanternes ; shōji lumineux la nuit
 - [ ] Entrées avec marches de pierre, soubassement de pierres sèches, galets ; enseignes peintes
 - [ ] Toits de tuiles kawara modélisées (épaisseur, faîtage, bords relevés, chevrons visibles) ; fumée et vapeur
 - [ ] Chemins de dalles irrégulières et ruelles en escaliers reliant les maisons ; place centrale avec cerisier et puits couvert
@@ -109,3 +109,4 @@ La région « Japon » garde la ville moderne, le lac au torii et le mont Fuji ;
 | Passage | Date | Ce qui a été fait | Critères cochés |
 | --- | --- | --- | --- |
 | 1 | 2026-11-18 | Bible du lead (village onsen, plan coté, zones.ts) ; combat intégré (combo, roulade, cœurs, Grignoteurs, mission de Sora). Terrain, bâtiments Blender (kit, pagode, sanctuaire, torii), Poly Haven et lumière commencés puis interrompus par la limite hebdomadaire : sauvegardés sur `wip/terrain`, `wip/batiments-blender`, `wip/polyhaven`, `wip/lumiere`. | Ennemis cachés dans les hautes herbes ; attaque et combo ; esquive ; télégraphe, recul et « pouf » ; cœurs et réveil ; mini-mission de combat |
+| 2 | 2026-11-18 | Terrain de vallée (grille 0,5 m, torrent, étang, plateformes), lumière (aube dorée, brume, nuit lisible, lumières dynamiques), 88 bâtiments Blender, 97 assets Poly Haven, village onsen intégré (rues dallées, escaliers, ponts, torii, premier décor, < 1 000 appels). Restent : arbres provisoires, trop de pièces dans les rues, pas encore d'eau dans le torrent ni de fumée. | 5 types de bâtiments ; façades en relief |
