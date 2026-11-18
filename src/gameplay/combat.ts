@@ -208,7 +208,8 @@ export class CombatCore {
     this.invuln = Math.max(0, this.invuln - dt);
     if (this.invuln === 0) this.hurtInvuln = false;
     this.dodgeCooldown = Math.max(0, this.dodgeCooldown - dt);
-    this.sinceDamage += dt;
+    // temps « au calme » : remis à zéro par un dégât ou tant qu'un ennemi est engagé
+    this.sinceDamage = fighting ? 0 : this.sinceDamage + dt;
     this.chainT -= dt;
     switch (this.action) {
       case 'attaque': {
@@ -231,7 +232,7 @@ export class CombatCore {
         break;
     }
     // régénération lente hors combat
-    if (this.action !== 'ko' && !fighting && this.sinceDamage > COMBAT.regen.delay && this.halves < this.max) {
+    if (this.action !== 'ko' && this.sinceDamage > COMBAT.regen.delay && this.halves < this.max) {
       this.regenT += dt;
       if (this.regenT >= COMBAT.regen.every) {
         this.regenT = 0;
@@ -281,9 +282,9 @@ export class LeafBurst {
   constructor(cap = 220, puffCap = 48) {
     const leaf = new THREE.PlaneGeometry(0.13, 0.075);
     leaf.translate(0.03, 0, 0);
-    this.leaves = new THREE.InstancedMesh(leaf, new THREE.MeshLambertMaterial({ side: THREE.DoubleSide }), cap);
+    this.leaves = new THREE.InstancedMesh(leaf, new THREE.MeshStandardMaterial({ side: THREE.DoubleSide, roughness: 0.75 }), cap);
     this.leaves.instanceColor = new THREE.InstancedBufferAttribute(new Float32Array(cap * 3), 3);
-    this.puffs = new THREE.InstancedMesh(new THREE.IcosahedronGeometry(1, 1), new THREE.MeshLambertMaterial({ color: 0xfff1d6, emissive: 0x3a2a18 }), puffCap);
+    this.puffs = new THREE.InstancedMesh(new THREE.IcosahedronGeometry(1, 1), new THREE.MeshStandardMaterial({ color: 0xfff1d6, emissive: 0x4a3a28, roughness: 1 }), puffCap);
     for (const m of [this.leaves, this.puffs]) {
       m.frustumCulled = false;
       m.count = 0;

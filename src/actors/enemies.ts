@@ -79,7 +79,7 @@ export const GRIGNOTEUR: EnemyParams = {
   surgeTime: 0.45,
   giveUpRadius: 13,
   patrolTime: 7,
-  hideEyeHeight: 0.45,
+  hideEyeHeight: 0.36,
 };
 
 /** Réglages du Grignoteur selon la difficulté de la prairie (1 Levant, 2 Gué, 3 Plateau). */
@@ -156,6 +156,7 @@ export abstract class Enemy {
   readonly vel = new THREE.Vector2();
   readonly home = new THREE.Vector3();
   yaw = 0;
+  homeYaw = 0;
   hp: number;
   state: EnemyState = 'cache';
   stateT = 0;
@@ -173,7 +174,9 @@ export abstract class Enemy {
     const c = confine(home.x, home.z, zone, 0);
     this.home.set(c.x, groundAt(c.x, c.z), c.z);
     this.pos.copy(this.home);
-    this.yaw = (id * 2.399) % (Math.PI * 2);
+    // caché, il regarde vers l'extérieur de sa prairie (d'où arrive le joueur)
+    this.yaw = Math.atan2(c.x - zone.x, c.z - zone.z) + Math.sin(id * 2.399) * 0.4;
+    this.homeYaw = this.yaw;
   }
 
   /** présent dans le monde (ni « pouf » ni en attente de réapparition) */
@@ -268,6 +271,7 @@ export abstract class Enemy {
     this.pos.copy(this.home);
     this.pos.y = groundAt(this.home.x, this.home.z, this.home.y + 1);
     this.vel.set(0, 0);
+    this.yaw = this.homeYaw;
     this.poufSent = false;
     this.setState('cache');
   }
@@ -473,16 +477,23 @@ function buildShared() {
   ballFlat.setAttribute('uv', new THREE.BufferAttribute(new Float32Array(ballFlat.attributes.position.count * 2), 2));
   parts.push(ballFlat);
 
-  // tiges de ronce enroulées autour de la boule
-  for (let k = 0; k < 7; k++) {
+  // tiges de ronce enroulées autour de la boule : boucles sur des grands cercles d'orientations variées (pelote emmêlée)
+  for (let k = 0; k < 8; k++) {
+    const n = new THREE.Vector3(rng.range(-1, 1), rng.range(-1, 1), rng.range(-1, 1)).normalize();
+    // pas de tige en travers du visage (+z) : on écarte les cercles qui y passent
+    if (Math.abs(n.z) < 0.55 && k > 1) n.set(n.x, n.y, Math.sign(n.z || 1) * 0.8).normalize();
+    const u = new THREE.Vector3(0, 1, 0).cross(n);
+    if (u.lengthSq() < 1e-4) u.set(1, 0, 0);
+    u.normalize();
+    const w = n.clone().cross(u);
     const pts: THREE.Vector3[] = [];
-    const az0 = rng.range(0, Math.PI * 2), tilt = rng.range(-1, 1);
-    for (let i = 0; i <= 10; i++) {
-      const a = az0 + (i / 10) * Math.PI * 1.6;
-      const el = Math.sin(a * 1.3 + k) * 0.7 * tilt;
-      pts.push(onSphere(R * rng.range(0.97, 1.04), a, el));
+    const a0 = rng.range(0, Math.PI * 2), span = rng.range(1.1, 1.7) * Math.PI;
+    for (let i = 0; i <= 14; i++) {
+      const a = a0 + (i / 14) * span;
+      const r = R * (1.0 + 0.05 * Math.sin(a * 5 + k));
+      pts.push(u.clone().multiplyScalar(Math.cos(a) * r).addScaledVector(w, Math.sin(a) * r).addScaledVector(n, Math.sin(a * 3) * R * 0.06));
     }
-    parts.push(prep(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts), 24, R * 0.07, 5), k % 2 ? 0x6b3a5e : 0x553047));
+    parts.push(prep(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts), 28, R * 0.06, 5), k % 2 ? 0x6b3a5e : 0x553047));
   }
   // épines arrondies, couleur crème rosée (mignonnes, pas menaçantes)
   for (let k = 0; k < 34; k++) {
