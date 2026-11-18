@@ -9,7 +9,7 @@
 // `villageInfo` (anchors des bâtiments, statistiques) une fois `buildHub` terminé.
 import * as THREE from 'three';
 import { Batch, std } from '../procgen/kit';
-import { BuildCtx, RegionContent, emptyContent, NpcDef } from './common';
+import { BuildCtx, RegionContent, emptyContent, NpcDef, bench } from './common';
 import { heightAt } from '../world/heightmap';
 import { addBox, groundAt } from '../world/physics';
 import { paveRect } from '../world/grass';
@@ -19,7 +19,7 @@ import { addLightSpot, addSmokeSpot } from '../world/registry';
 import { pbr } from '../core/assets';
 import { Models } from '../core/models';
 import {
-  BRIDGES, BUILDINGS, HOT_SPRING_POOL, MILL_POS, MILL_WHEEL, NPC_SPOTS, ORCHARD, PATHS, POND, SPAWN, TORII, TORII_TUNNEL,
+  BRIDGES, BUILDINGS, HOT_SPRING_POOL, PLAZA, MILL_POS, MILL_WHEEL, NPC_SPOTS, ORCHARD, PATHS, POND, SPAWN, TORII, TORII_TUNNEL,
   VEHICLE_SPOTS, VILLAGE_GATES, YUZU_SPOTS, FEATURE_TREES, pointAlong, distToPolyline,
 } from '../world/zones';
 import { buildVillageBuildings, localToWorld, Placement, VillageBuildings, WorldAnchor } from '../procgen/village/buildings';
@@ -174,6 +174,17 @@ export async function buildHub(ctx: BuildCtx, progress: (p: number, label?: stri
         addBox(x, z, 0.2, 0.2, y, y + 2.6, -yaw, false, 'thin');
       }
     });
+  }
+
+  // ------------------------------------------------------------------ place : 8 lanternes de pierre et 6 bancs (bible §8.1)
+  {
+    const T: [number, number][] = [[-22, -18], [22, -18], [26, 9], [-26, -9], [-24, 18], [24, 18], [-5, -19], [5, 19]];
+    for (const [x, z] of T) {
+      const ly = toro(inst, x, PLAZA.y, z, Math.atan2(-x, -z), 1.1);
+      addLightSpot(x, ly, z, 0xffb060, 0.9, 'lantern');
+    }
+    const B: [number, number, number][] = [[-14, -2, Math.PI / 2], [-3, -12, 0], [14, -14, 0.4], [3, 12, Math.PI], [-12, 12, Math.PI - 0.4], [17, 7, -Math.PI / 2]];
+    for (const [x, z, r] of B) bench(b, x, PLAZA.y, z, r);
   }
 
   // ------------------------------------------------------------------ portes du village et panneaux indicateurs

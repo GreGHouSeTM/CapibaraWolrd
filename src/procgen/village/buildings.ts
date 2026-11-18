@@ -173,7 +173,7 @@ export async function buildVillageBuildings(placements: Placement[], wheelAt: { 
         if (!mesh.isMesh) return;
         R.multiplyMatrices(inv, mesh.matrixWorld).premultiply(M);
         const mats = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
-        merger.add(`${key}|${l}`, mats[0], mesh.geometry, R, l < 2);
+        merger.add(`${key}|${l}`, mats[0], mesh.geometry, R, l === 0);
       });
     });
     if (!info) continue;
