@@ -472,13 +472,12 @@ export function stampDetail(g: Grid) {
         const steep = -POND.depth - 0.4 + (POND.depth + 0.4) * smoothstep(0.86, 0.995, e);
         h = lerp(soft, steep, esc) - 0.06;
       } else if (e < 1.7) {
-        const beach = Math.min(0.55, (e - 1) * 9) + Math.max(0, e - 1.06) * 3; // plage en pente douce
-        const rim = Math.max(h, beach);
-        const cliff = lerp(0.55, 5.6 + 0.6 * noise2(x / 6, z / 6), smoothstep(1.0, 1.05, e));
-        const t = smoothstep(1.7, 1.25, e);
-        h = lerp(h, Math.max(lerp(rim, cliff, esc), h * (1 - esc) + 0 * esc), t);
-        if (esc > 0.01) h = Math.max(h, lerp(h, cliff, esc * smoothstep(1.3, 1.08, e)));
-        h = Math.max(h, e > 1.06 ? 0.55 : beach);
+        // berges douces : plage de 0 à 0,55 m puis pente de 25 à 40 % jusqu'au terrain naturel
+        const beach = Math.min(0.55, (e - 1) * 9);
+        const gentle = Math.max(beach, Math.min(h, 0.55 + Math.max(0, e - 1.06) * 11));
+        // escarpement est : paroi rocheuse de 4 à 6 m
+        const cliff = Math.max(gentle, lerp(0.55, 5.6 + 0.6 * noise2(x / 6, z / 6), smoothstep(1.0, 1.05, e)));
+        h = lerp(gentle, Math.max(h, cliff * smoothstep(1.5, 1.2, e) + h * smoothstep(1.2, 1.5, e)), esc);
       }
       // îlot à la lanterne
       const di = Math.hypot(x - isl.x, z - isl.z);
@@ -609,6 +608,15 @@ export function stampDetail(g: Grid) {
     const d = Math.hypot(x - HOT_SPRING_POOL.x, z - HOT_SPRING_POOL.z);
     if (d > HOT_SPRING_POOL.r + 0.3) return;
     g.h[idx] = lerp(HOT_SPRING_POOL.waterY - 0.75, HOT_SPRING_POOL.deckY, smoothstep(HOT_SPRING_POOL.r - 2.2, HOT_SPRING_POOL.r + 0.3, d));
+  });
+  // berges douces de l'étang : les chemins du tour ne doivent pas créer de marche au bord de l'eau
+  forBox(g, POND.x - POND.rx * 1.3, POND.z - POND.rz * 1.3, POND.x + POND.rx * 1.3, POND.z + POND.rz * 1.3, (idx, x, z) => {
+    const e = pondE(x, z) + 0.035 * noise2(x / 9, z / 9);
+    if (e < 1 || e > 1.25) return;
+    const phi = Math.atan2((z - POND.z) / POND.rz, (x - POND.x) / POND.rx);
+    const esc = smoothstep(-0.65, -0.3, phi) * smoothstep(1.65, 1.3, phi);
+    const lim = Math.min(0.55, (e - 1) * 9) + Math.max(0, e - 1.06) * 11;
+    if (g.h[idx] > lim) g.h[idx] = lerp(g.h[idx], lim, (1 - esc) * smoothstep(1.25, 1.12, e));
   });
   lap('source');
   // ---------------------------------------------------------------- torrent : lit, murs du village, berges, vasques, bief
