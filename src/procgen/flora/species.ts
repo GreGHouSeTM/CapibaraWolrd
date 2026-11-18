@@ -5,7 +5,7 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { floraDepthMaterial, floraMaterial, fruitMaterial, propMaterial, WindOpts } from './materials';
 
 export type FloraSpecies =
-  | 'sugi' | 'sugi-geant' | 'matsu' | 'momiji' | 'sakura' | 'shidare' | 'ichou' | 'yuzu' | 'take'
+  | 'sugi' | 'sugi-geant' | 'matsu' | 'momiji' | 'keyaki' | 'sakura' | 'shidare' | 'ichou' | 'yuzu' | 'take'
   | 'tsutsuji' | 'fern' | 'susuki' | 'ine' | 'misc';
 
 export interface SpeciesDef {
@@ -26,23 +26,27 @@ export interface SpeciesDef {
   trunk: number;
   /** hauteur nominale du modèle (m) */
   height: number;
+  /** capacité des InstancedMesh par variante : [LOD0, LOD1] */
+  cap?: [number, number];
 }
 
-const L = [40, 120, 600] as [number, number, number];
+/** Bible §11 : LOD0 < 40 m, LOD1 < 120 m ; imposteurs jusqu'à 1 100 m (la brume fond les montagnes au loin). */
+const L = [40, 120, 1100] as [number, number, number];
 export const SPECIES: Record<FloraSpecies, SpeciesDef> = {
-  sugi: { file: 'sugi', bark: 'sugi', leaf: 'sugi', wind: { height: 24, flex: 0.35, branch: 0.14, flutter: 0.03 }, trans: 0.3, lod: [45, 130, 650], shadow: 2, trunk: 0.45, height: 24 },
+  sugi: { file: 'sugi', bark: 'sugi', leaf: 'sugi', wind: { height: 24, flex: 0.35, branch: 0.14, flutter: 0.03 }, trans: 0.3, lod: [45, 130, 1100], shadow: 2, trunk: 0.45, height: 24 },
   'sugi-geant': { file: 'sugi-geant', bark: 'sugi', leaf: 'sugi', wind: { height: 34, flex: 0.3, branch: 0.12, flutter: 0.03 }, trans: 0.3, lod: [70, 200, 700], shadow: 2, trunk: 1.6, height: 34 },
   matsu: { file: 'matsu', bark: 'matsu', leaf: 'matsu', wind: { height: 10, flex: 0.18, branch: 0.1, flutter: 0.025 }, trans: 0.3, lod: L, shadow: 2, trunk: 0.3, height: 10.5 },
   momiji: { file: 'momiji', bark: 'momiji', barkTint: 0x9a9088, leaf: 'momiji', wind: { height: 8.5, flex: 0.2, branch: 0.16, flutter: 0.05 }, trans: 0.75, lod: L, shadow: 2, trunk: 0.25, height: 8.5 },
+  keyaki: { file: 'keyaki', bark: 'momiji', barkTint: 0x8a8478, leaf: 'keyaki', wind: { height: 12, flex: 0.25, branch: 0.16, flutter: 0.05 }, trans: 0.7, lod: L, shadow: 2, trunk: 0.4, height: 12 },
   sakura: { file: 'sakura', bark: 'sakura', leaf: 'sakura', wind: { height: 8.5, flex: 0.15, branch: 0.14, flutter: 0.04 }, trans: 0.6, lod: L, shadow: 2, trunk: 0.35, height: 8.5 },
   shidare: { file: 'shidare', bark: 'sakura', leaf: 'sakura', wind: { height: 13, flex: 0.12, branch: 0.32, flutter: 0.05, flutterFreq: 3.5 }, trans: 0.6, lod: [60, 180, 650], shadow: 2, trunk: 0.7, height: 13 },
   ichou: { file: 'ichou', bark: 'momiji', barkTint: 0x8a8070, leaf: 'ichou', wind: { height: 14, flex: 0.22, branch: 0.12, flutter: 0.06 }, trans: 0.7, lod: L, shadow: 2, trunk: 0.42, height: 14 },
   yuzu: { file: 'yuzu', bark: 'momiji', barkTint: 0x8c8a78, leaf: 'yuzu', wind: { height: 3.6, flex: 0.06, branch: 0.06, flutter: 0.03 }, trans: 0.35, lod: [35, 110, 400], shadow: 2, trunk: 0.1, height: 3.6 },
   take: { file: 'take', barkTex: 'take_culm', leaf: 'take', wind: { height: 12, flex: 0.55, branch: 0.12, flutter: 0.06, flutterFreq: 8 }, trans: 0.7, lod: [40, 110, 450], shadow: 2, trunk: 0.55, height: 12 },
   tsutsuji: { file: 'tsutsuji', bark: 'momiji', leaf: 'tsutsuji', wind: { height: 1.4, flex: 0.03, branch: 0.03, flutter: 0.025 }, trans: 0.4, lod: [22, 60, 0], shadow: 1, trunk: 0, height: 1.4 },
-  fern: { file: 'fern', leaf: 'fern', wind: { height: 0.7, flex: 0.04, branch: 0, flutter: 0.05, flutterFreq: 4 }, trans: 0.6, lod: [14, 38, 0], shadow: 0, trunk: 0, height: 0.7 },
-  susuki: { file: 'susuki', leaf: 'susuki', wind: { height: 1.4, flex: 0.22, branch: 0, flutter: 0.07, flutterFreq: 3.2 }, trans: 0.8, lod: [30, 90, 0], shadow: 0, trunk: 0, height: 1.4 },
-  ine: { file: 'ine', leaf: 'ine', wind: { height: 0.75, flex: 0.08, branch: 0, flutter: 0.03, flutterFreq: 3 }, trans: 0.5, lod: [30, 140, 0], shadow: 0, trunk: 0, height: 0.75 },
+  fern: { file: 'fern', leaf: 'fern', wind: { height: 0.7, flex: 0.04, branch: 0, flutter: 0.05, flutterFreq: 4 }, trans: 0.6, lod: [14, 38, 0], shadow: 0, trunk: 0, height: 0.7, cap: [3000, 10000] },
+  susuki: { file: 'susuki', leaf: 'susuki', wind: { height: 1.4, flex: 0.22, branch: 0, flutter: 0.07, flutterFreq: 3.2 }, trans: 0.8, lod: [30, 90, 0], shadow: 0, trunk: 0, height: 1.4, cap: [6000, 12000] },
+  ine: { file: 'ine', leaf: 'ine', wind: { height: 0.75, flex: 0.08, branch: 0, flutter: 0.03, flutterFreq: 3 }, trans: 0.5, lod: [30, 140, 0], shadow: 0, trunk: 0, height: 0.75, cap: [20000, 40000] },
   misc: { file: 'misc', bark: 'sugi', barkTint: 0x8a8a78, leaf: 'sugi', wind: { height: 1, flex: 0, branch: 0, flutter: 0 }, lod: [30, 80, 0], shadow: 1, trunk: 0.35, height: 1 },
 };
 
@@ -70,6 +74,7 @@ export function floraTex(name: string, srgb = true, repeat = false) {
   t = loader.load(BASE + 'tex/' + name);
   t.colorSpace = srgb ? THREE.SRGBColorSpace : THREE.NoColorSpace;
   t.anisotropy = 4;
+  t.flipY = false; // convention glTF (UV des modèles Blender)
   if (repeat) t.wrapS = t.wrapT = THREE.RepeatWrapping;
   texCache.set(key, t);
   return t;

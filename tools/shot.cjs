@@ -32,6 +32,10 @@ const VIEWS = {
   departaube: { pos: [-3, 26], yaw: Math.PI, pitch: 0.12, hour: 6.75, dist: 7 },
   // nuit avec des lanternes provisoires autour de la place (test des lumières dynamiques et des taches de lumière)
   nuitlanternes: { pos: [0, 14], yaw: Math.PI, pitch: 0.22, hour: 22, dist: 8, testLights: true },
+  // Végétation : forêt (bois sacré des cèdres), verger de yuzus, prairie de susuki du Levant, lisière de la gorge
+  foret: { pos: [-46, -138], yaw: -2.51, pitch: 0.08, hour: 9.5, dist: 6 },
+  verger: { pos: [92, 128], yaw: 0.785, pitch: 0.12, hour: 10, dist: 7 },
+  susuki: { pos: [140, 6], yaw: 0.9, pitch: 0.1, hour: 16, dist: 6 },
   brume: { cam: [-60, 34, 150], look: [60, 6, -60], hour: 6.9 },
 };
 (async () => {
@@ -88,6 +92,9 @@ const VIEWS = {
     }
     const info = await page.evaluate(() => { const g = window.__game; g.renderer.info.autoReset = false; g.renderer.info.reset(); g.renderer.render(g.scene, g.rig.camera); const r = { ...g.renderer.info.render }; g.renderer.info.autoReset = true; return r; });
     console.log('rendu direct : appels', info.calls, 'triangles', info.triangles);
+    // Végétation : appels et triangles de la flore de Capyville (dernière vue)
+    const fl = await page.evaluate(() => { const g = window.__game; const f = g.world.flora; if (!f) return null; let calls = 0, tris = 0; f.group.traverse((o) => { if (o.isInstancedMesh && o.visible && o.count) { calls++; const ix = o.geometry.index; tris += (ix ? ix.count : o.geometry.attributes.position.count) / 3 * o.count; } }); return { calls, tris: Math.round(tris), stats: f.stats() }; });
+    if (fl) console.log('flore : appels', fl.calls, 'triangles', fl.tris, JSON.stringify(fl.stats));
     console.log('erreurs :', errs.length ? errs.join('\n') : 'aucune');
   } finally {
     await browser.close();

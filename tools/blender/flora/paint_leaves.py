@@ -200,10 +200,10 @@ def sakura():
         pts, _ = wander(x0 + 64, 0, math.pi, 512, 24, rng, 0.06)
         twig(c, pts, (70, 45, 40), 3, 1.2)
         for i, (x, y) in enumerate(pts[1:]):
-            for _ in range(5):
-                bx, by = x + rng.gauss(0, 15), y + rng.gauss(0, 7)
+            for _ in range(10):
+                bx, by = x + rng.gauss(0, 20), y + rng.gauss(0, 9)
                 if 6 < bx - x0 < 122:
-                    blossom(c, bx, by, rng.uniform(6.5, 9.5), rng, (252, 200, 218) if rng.random() < 0.7 else (255, 228, 236))
+                    blossom(c, bx, by, rng.uniform(7.5, 11), rng, (240, 168, 196) if rng.random() < 0.55 else (250, 205, 222))
     for k in range(2):
         x0, y0, s = 256, k * 256, 256
         cx, cy = x0 + 128, y0 + 128
@@ -220,7 +220,7 @@ def sakura():
             for _ in range(5):
                 bx, by = x + rng.gauss(0, 16), y + rng.gauss(0, 16)
                 if x0 + 8 < bx < x0 + s - 8 and y0 + 8 < by < y0 + s - 8:
-                    blossom(c, bx, by, rng.uniform(7, 11), rng, (250, 196, 214) if rng.random() < 0.65 else (255, 226, 234))
+                    blossom(c, bx, by, rng.uniform(7, 11), rng, (244, 178, 202) if rng.random() < 0.6 else (252, 214, 228))
         # quelques jeunes feuilles rouge-bronze
         for _ in range(10):
             x, y = rng.choice(spots)
@@ -430,8 +430,8 @@ def susuki():
                 L = rng.uniform(14, 40) * (1 - 0.5 * (i - 5) / 20)
                 x1, y1 = dir_pt(sx, sy, a, L)
                 if x0 + 2 < x1 < x0 + 126 and y0 + 2 < y1:
-                    col = jitter((228, 220, 196), rng, 14)
-                    c.line([(sx, sy), (x1, y1)], col + (200,), 1.6)
+                    col = jitter((196, 180, 150) if rng.random() < 0.6 else (176, 150, 130), rng, 14)
+                    c.line([(sx, sy), (x1, y1)], col + (200,), 1.4)
         c.line(stem[5:], (190, 176, 140, 255), 1.5)
     c.save('susuki_leaf.png')
 
@@ -538,10 +538,12 @@ def cha():
 
 if __name__ == '__main__':
     os.makedirs(OUT, exist_ok=True)
-    which = sys.argv[1:] or ['sakura', 'momiji', 'sugi', 'matsu', 'take', 'yuzu', 'ichou', 'tsutsuji', 'susuki', 'fern', 'ine', 'ground', 'cha']
+    which = sys.argv[1:] or ['sakura', 'momiji', 'sugi', 'matsu', 'take', 'yuzu', 'ichou', 'keyaki', 'tsutsuji', 'susuki', 'fern', 'ine', 'ground', 'cha']
     for w in which:
         if w == 'yuzu':
             broad('yuzu_leaf.png', 43, [(34, 70, 30), (44, 84, 34), (52, 92, 38)], 'ellipse', (32, 14), 120)
+        elif w == 'keyaki':
+            broad('keyaki_leaf.png', 49, [(70, 110, 40), (86, 124, 46), (58, 96, 36), (120, 136, 52), (150, 140, 56)], 'ellipse', (26, 11), 130)
         elif w == 'ichou':
             broad('ichou_leaf.png', 47, [(226, 188, 50), (240, 206, 70), (200, 170, 40), (160, 160, 50)], 'fan', (28, 14), 110)
         else:

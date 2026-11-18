@@ -66,6 +66,7 @@ ATLAS = {
     'matsu': {'leaf': [T2(i, 0.5, 0.5) for i in range(4)]},
     'take': {'leaf': [T2(i, 0.12, 0.08) for i in range(4)]},
     'yuzu': {'leaf': [T2(i) for i in range(4)]},
+    'keyaki': {'leaf': [T2(i) for i in range(4)]},
     'ichou': {'leaf': [T2(i) for i in range(4)]},
     'tsutsuji': {'leaf': [T2(i, 0.5, 0.5) for i in range(4)]},
     'susuki': {'blade': [dict(u0=0.0, v0=0.0, du=0.75, dv=1.0, ax=0.5, ay=1.0)],
@@ -375,11 +376,15 @@ def sugi(seed, H, giant=False):
         for k in range(nc):
             tp = 0.25 + 0.75 * k / max(1, nc - 1)
             q, qd, _, w = br.at(tp)
-            for _ in range(2):
-                s = (0.95 + 0.45 * L / Rmax) * rng.uniform(0.85, 1.15) * (1.15 if giant else 1)
-                vdir = norm(qd * 0.8 + t.out_n(q) * 0.5 + UP * rng.uniform(-0.45, 0.25))
+            for _ in range(3):
+                s = (0.8 + 0.4 * L / Rmax) * rng.uniform(0.8, 1.15) * (1.15 if giant else 1)
+                vdir = norm(qd * 0.6 + t.out_n(q) * 0.4 + gn(rng, 0.45) + UP * rng.uniform(-0.5, 0.35))
                 udir = rot(perp(vdir), vdir, rng.uniform(0, math.pi))
-                t.add_card(q - vdir * s * 0.25, vdir, udir, s, s, tiles[rng.randrange(3)], min(1.0, w + 0.25), keep1=(k == nc - 1))
+                q2 = q + gn(rng, 0.18) * (0.5 + L / Rmax)
+                t.add_card(q2 - vdir * s * 0.3, vdir, udir, s, s, tiles[rng.randrange(3)], min(1.0, w + 0.25), keep1=(k == nc - 1))
+                # carte croisée : la gerbe a du volume vue de profil comme de dessous
+                if rng.random() < 0.7:
+                    t.add_card(q2 - vdir * s * 0.3, vdir, norm(np.cross(vdir, udir)), s * 0.85, s * 0.85, tiles[rng.randrange(3)], min(1.0, w + 0.25))
     # flèche sommitale
     for k in range(7):
         q = np.array([0, H - 0.4 - k * 0.45, 0]) + rng.uniform(-0.05, 0.05)
@@ -504,6 +509,8 @@ def deciduous(seed, H, kind):
         trunk_h, r0, n_lead, lead_ang, spread, lead_len = rng.uniform(1.4, 2.2), 0.24, rng.randint(3, 4), (22, 40), 0.55, H - 1.6
     elif kind == 'sakura':
         trunk_h, r0, n_lead, lead_ang, spread, lead_len = rng.uniform(1.6, 2.2), 0.34, rng.randint(4, 5), (45, 62), 0.8, H * 0.72
+    elif kind == 'keyaki':
+        trunk_h, r0, n_lead, lead_ang, spread, lead_len = rng.uniform(2.2, 3.0), 0.4, rng.randint(4, 6), (18, 38), 0.6, H * 0.68
     elif kind == 'yuzu':
         trunk_h, r0, n_lead, lead_ang, spread, lead_len = rng.uniform(0.5, 0.8), 0.085, rng.randint(4, 5), (30, 50), 0.6, H * 0.62
     else:  # ichou : flèche
@@ -518,8 +525,8 @@ def deciduous(seed, H, kind):
     if kind == 'momiji':
         v = seed % 3
         leaf_tiles = [leaf_tiles[i] for i in ([0, 0, 1], [0, 1, 2], [2, 3, 2])[v]]
-    crown_y = {'momiji': H * 0.62, 'sakura': H * 0.62, 'yuzu': H * 0.6, 'ichou': H * 0.6}[kind]
-    crown_r = {'momiji': H * 0.55, 'sakura': H * 0.75, 'yuzu': H * 0.48, 'ichou': H * 0.28}[kind]
+    crown_y = {'keyaki': H * 0.66, 'momiji': H * 0.62, 'sakura': H * 0.62, 'yuzu': H * 0.6, 'ichou': H * 0.6}[kind]
+    crown_r = {'keyaki': H * 0.45, 'momiji': H * 0.55, 'sakura': H * 0.75, 'yuzu': H * 0.48, 'ichou': H * 0.28}[kind]
     t.crown_c, t.crown_r = np.array([0, crown_y, 0]), crown_r
     leaders = []
     top = tr[-1]
@@ -550,25 +557,25 @@ def deciduous(seed, H, kind):
     l2 = []
     for br in leaders:
         L = br.length()
-        n2 = {'momiji': 7, 'sakura': 8, 'yuzu': 6, 'ichou': 3}[kind]
+        n2 = {'keyaki': 8, 'momiji': 7, 'sakura': 8, 'yuzu': 6, 'ichou': 3}[kind]
         for k in range(n2):
             tp = (0.25 if kind != 'ichou' else 0.3) + 0.7 * (k + rng.random() * 0.6) / n2
             q, qd, rq, w = br.at(min(0.98, tp))
             ang = math.radians(rng.uniform(40, 70))
             sd = child_dir(qd, ang, rng.uniform(0, 6.28))
-            if kind in ('momiji', 'sakura'):
+            if kind in ('momiji', 'sakura', 'keyaki'):
                 sd = norm(sd * np.array([1, 0.45, 1]) + t.out_n(q) * 0.4)
-            ll = {'momiji': rng.uniform(1.4, 2.8), 'sakura': rng.uniform(1.8, 3.2), 'yuzu': rng.uniform(0.5, 0.9), 'ichou': rng.uniform(0.7, 1.4)}[kind] * (1.1 - 0.4 * tp)
+            ll = {'keyaki': rng.uniform(1.8, 3.2), 'momiji': rng.uniform(1.4, 2.8), 'sakura': rng.uniform(1.8, 3.2), 'yuzu': rng.uniform(0.5, 0.9), 'ichou': rng.uniform(0.7, 1.4)}[kind] * (1.1 - 0.4 * tp)
             pts = curve(q, sd, ll, 5, rng, curl=0.2, up=0.04, grav=0.05 if kind == 'sakura' else 0.02)
             b2 = Branch(pts, [max(0.012, rq * 0.45) * (1 - 0.75 * j / 5) + 0.006 for j in range(6)], 2, w, 2.5)
             t.branches.append(b2)
             l2.append(b2)
     # rameaux fins (3e ordre) et cartes
-    every = {'momiji': 0.34, 'sakura': 0.36, 'yuzu': 0.22, 'ichou': 0.32}[kind]
-    size = {'momiji': 0.95, 'sakura': 1.05, 'yuzu': 0.62, 'ichou': 0.9}[kind]
-    face = {'momiji': 'flat', 'sakura': 'out', 'yuzu': 'out', 'ichou': 'out'}[kind]
+    every = {'keyaki': 0.32, 'momiji': 0.34, 'sakura': 0.36, 'yuzu': 0.22, 'ichou': 0.32}[kind]
+    size = {'keyaki': 1.25, 'momiji': 0.95, 'sakura': 1.05, 'yuzu': 0.62, 'ichou': 0.9}[kind]
+    face = {'keyaki': 'out', 'momiji': 'flat', 'sakura': 'out', 'yuzu': 'out', 'ichou': 'out'}[kind]
     for b2 in l2:
-        if kind in ('momiji', 'sakura'):
+        if kind in ('momiji', 'sakura', 'keyaki'):
             for k in range(rng.randint(2, 3)):
                 q, qd, rq, w = b2.at(rng.uniform(0.35, 0.9))
                 sd = norm(child_dir(qd, math.radians(50), rng.uniform(0, 6.28)) * np.array([1, 0.4, 1]))
@@ -585,14 +592,24 @@ def deciduous(seed, H, kind):
             vdir = norm(np.array([math.cos(k * 2.4), 1.3, math.sin(k * 2.4)]))
             t.add_card(q, vdir, rot(perp(vdir), vdir, rng.uniform(0, 3)), 1.0, 1.0, leaf_tiles[rng.randrange(4)], 0.5, keep1=True)
     if kind == 'yuzu':
+        # houppier dense et arrondi : coquille de cartes
+        for k in range(150):
+            a = rng.uniform(0, 6.28)
+            el = rng.uniform(-0.5, 1.3)
+            d = np.array([math.cos(a) * math.cos(el), math.sin(el) * 0.8, math.sin(a) * math.cos(el)])
+            c = t.crown_c + d * t.crown_r * rng.uniform(0.6, 0.95)
+            nrm = norm(d)
+            vdir = rot(perp(nrm), nrm, rng.uniform(0, 6.28))
+            s_ = rng.uniform(0.55, 0.75)
+            t.add_card(c - vdir * s_ * 0.5, vdir, np.cross(vdir, nrm), s_, s_, leaf_tiles[rng.randrange(4)], 0.5, keep1=(k % 3 == 0), nrm=nrm)
         # fruits : sous la surface extérieure du houppier
-        n = rng.randint(30, 40)
+        n = rng.randint(42, 55)
         for k in range(n):
             a = rng.uniform(0, 6.28)
             el = rng.uniform(-0.6, 0.7)
             d = np.array([math.cos(a) * math.cos(el), math.sin(el) * 0.75, math.sin(a) * math.cos(el)])
-            c = t.crown_c + d * t.crown_r * rng.uniform(0.82, 0.98)
-            t.fruits.append((c, rng.uniform(0.05, 0.065)))
+            c = t.crown_c + d * t.crown_r * rng.uniform(0.9, 1.04)
+            t.fruits.append((c, rng.uniform(0.065, 0.08)))
     t.lod1_keep = 0.3 if kind != 'yuzu' else 0.35
     return t
 
@@ -631,7 +648,7 @@ def shidare(seed, H):
     # rameaux pendants
     for b2 in arcs:
         L = b2.length()
-        n = int(L / 0.55)
+        n = int(L / 0.4)
         for k in range(n):
             q, qd, rq, w = b2.at(0.2 + 0.8 * k / max(1, n - 1))
             ln = min(q[1] - 0.9, rng.uniform(3.0, 7.0))
@@ -649,9 +666,9 @@ def shidare(seed, H):
                 a = rng.uniform(0, 6.28)
                 udir = np.array([math.cos(a), 0, math.sin(a)])
                 vdir = -d0  # haut de la tuile = haut du rameau
-                t.add_card(p0, vdir, udir, 0.55, hgt, strips[rng.randrange(2)], min(1, ww + 0.1), keep1=(c == 0), nrm=norm(outw + UP * 0.2), flut=(0.6, 1.0))
-                if c % 2 == 0:
-                    t.add_card(p0, vdir, np.cross(UP, udir), 0.5, hgt, strips[rng.randrange(2)], min(1, ww + 0.1), nrm=norm(outw + UP * 0.2), flut=(0.6, 1.0))
+                t.add_card(p0, vdir, udir, 0.85, hgt, strips[rng.randrange(2)], min(1, ww + 0.1), keep1=(c == 0), nrm=norm(outw + UP * 0.2), flut=(0.6, 1.0))
+                if True:
+                    t.add_card(p0, vdir, np.cross(UP, udir), 0.75, hgt, strips[rng.randrange(2)], min(1, ww + 0.1), nrm=norm(outw + UP * 0.2), flut=(0.6, 1.0))
     # dôme fleuri au-dessus des charpentières
     for b2 in arcs:
         broad_cards(t, b2, clusters, 0.6, 1.15, rng, 0.1, 'out', 1)
@@ -805,7 +822,7 @@ def susuki(seed, top):
         a = k / 3 * math.pi + rng.uniform(-0.2, 0.2)
         udir = np.array([math.cos(a), 0, math.sin(a)])
         t.add_card([0, 0, 0], UP, udir, hb * 1.05, hb, bl, 0.0, keep1=(k < 2), segs=3, bend=0.0, nrm=norm(UP + np.cross(UP, udir) * 0.3), flut=(0.0, 1.0))
-    for k in range(rng.randint(5, 7)):
+    for k in range(rng.randint(3, 5)):
         a = rng.uniform(0, 6.28)
         hd = np.array([math.cos(a), 0, math.sin(a)])
         tilt = rng.uniform(0.08, 0.32)
@@ -905,6 +922,7 @@ SPECIES = {
     'sakura': lambda: [deciduous(31, 8.5, 'sakura'), deciduous(32, 7.5, 'sakura')],
     'shidare': lambda: [shidare(41, 13)],
     'ichou': lambda: [deciduous(51, 14, 'ichou')],
+    'keyaki': lambda: [deciduous(131, 12, 'keyaki'), deciduous(132, 10.5, 'keyaki'), deciduous(133, 13, 'keyaki')],
     'yuzu': lambda: [deciduous(61, 3.6, 'yuzu'), deciduous(62, 3.2, 'yuzu'), deciduous(63, 3.9, 'yuzu')],
     'take': lambda: [take(71, 7), take(72, 5), take(73, 9)],
     'tsutsuji': lambda: [tsutsuji(81, 1.1, False), tsutsuji(82, 1.4, True), tsutsuji(83, 1.8, False)],
