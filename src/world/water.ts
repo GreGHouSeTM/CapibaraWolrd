@@ -2,9 +2,12 @@
 import * as THREE from 'three';
 import { getHeightTexture } from './heightmap';
 import { WORLD_SIZE, WATER_LEVEL } from './layout';
+import { buildRivers, Rivers } from './rivers';
 
 export class Water {
   mesh: THREE.Mesh;
+  /** eau locale de la vallée (torrent, cascades, bassins), construite après le village */
+  rivers: Rivers | null = null;
   uniforms = {
     uTime: { value: 0 },
     uHeight: { value: null as THREE.Texture | null },
@@ -98,8 +101,16 @@ export class Water {
     this.mesh.receiveShadow = true;
   }
 
+  /** Construit l'eau locale (torrent, cascades…) ; `village` : groupe de Capyville (rochers du lit pour l'écume). */
+  buildLocal(scene: THREE.Scene, village?: THREE.Object3D) {
+    this.rivers = buildRivers(village);
+    scene.add(this.rivers.group);
+    return this.rivers;
+  }
+
   update(time: number, shallow: THREE.Color, deep: THREE.Color, dt: number) {
     this.uniforms.uTime.value = time;
+    this.rivers?.update(time, dt);
     const k = 1 - Math.exp(-dt * 0.8);
     this.uniforms.uShallow.value.lerp(shallow, k);
     this.uniforms.uDeep.value.lerp(deep, k);
