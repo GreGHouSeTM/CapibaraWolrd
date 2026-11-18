@@ -594,7 +594,7 @@ export function stampDetail(g: Grid) {
     const fx = Math.sin(b.yaw), fz = Math.cos(b.yaw);
     const y = PAD_Y[b.id] ?? sampleGrid(g, b.x + fx * (b.d / 2 + 0.6), b.z + fz * (b.d / 2 + 0.6));
     PADS[b.id] = y;
-    flatRect(g, b.x, b.z, b.w, b.d, b.yaw, y, 0.6, 1.4);
+    flatRect(g, b.x, b.z, b.w, b.d, b.yaw, y, 0.5, 2.5);
   }
   exactFlats();
   // points de contrôle de la bible (portes, ferme…) : petits plats exacts
@@ -718,7 +718,8 @@ export function bakeDetailSurfaces(g: Grid, cell: number) {
         const d = Math.hypot(x - ax - vx * t, z - az - vz * t) + 0.6 * noise2(x / 2.5, z / 2.5);
         const v = smoothstep(hw + ext, hw - 0.3, d);
         if (p.surface === 'pas-japonais') put(idx, 3, v * 0.6);
-        else put(idx, 2, v);
+        else if (p.surface === 'terre' || p.surface === 'gravier') put(idx, 2, v);
+        else put(idx, 3, v * 0.35); // sous les dallages (posés par Routes) : un peu de mousse aux bords
       });
     }
   }
@@ -747,16 +748,8 @@ export function bakeDetailSurfaces(g: Grid, cell: number) {
       else if (f.kind === 'jardin-mousse') put(idx, 3, smoothstep(0.4, -0.4, s) * 0.8);
     });
   }
-  forBox(S, -40, -32, 40, 32, (idx, x, z) => put(idx, 2, smoothstep(0.5, -1, plazaSdf(x, z))));
-  // bâtiments : terre sous l'emprise, galets en pied de mur (zone de pluie sous l'avant-toit)
-  for (const b of BUILDINGS) {
-    const R = Math.hypot(b.w, b.d) / 2 + 2;
-    forBox(S, b.x - R, b.z - R, b.x + R, b.z + R, (idx, x, z) => {
-      const s = rectSdf(x, z, b.x, b.z, b.w, b.d, b.yaw);
-      put(idx, 2, smoothstep(0.2, -0.3, s));
-      put(idx, 1, smoothstep(-0.3, 0.1, s) * smoothstep(1.2, 0.8, s));
-    });
-  }
+  // place et emprises des bâtiments : replats naturels (herbe rase), sans couche minérale :
+  // les dallages et les bâtiments Blender viennent dessus.
   return { data: out, wet, nx, nz, cell };
 }
 

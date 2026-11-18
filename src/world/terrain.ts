@@ -342,8 +342,8 @@ export function createTerrainMaterial(): THREE.MeshStandardMaterial {
         if (dsum > 1.0) { ds /= dsum; dsum = 1.0; }
         float wg = 1.0 - dsum;
         float vill = smoothstep(135.0, 105.0, length(wp));
-        tW[0] = mix(gs.r, wg * (1.0 - vill), inD);
-        tW[1] = inD * wg * vill;
+        tW[0] = mix(gs.r, wg * (1.0 - 0.55 * vill), inD);
+        tW[1] = inD * wg * 0.55 * vill;
         tW[2] = inD * ds.a;
         tW[3] = inD * ds.b;
         tW[4] = inD * ds.g;
