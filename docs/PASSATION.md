@@ -58,8 +58,12 @@ plus de texture de dalles dédiée (on utilise `stonewall`).
 1. ~~Corriger le voile blanc puis pousser la végétation~~ (fait) ; finir et intégrer l'Eau.
 2. Décor (bande devant les façades, place, enseignes ; pièces d'or), Effets (fumée, vapeur, pétales, lucioles ; brancher `setHitFxHandler` du combat), Routes (chemins de terre en campagne), Ennemis & faune.
 3. **Rig & animation Blender du capybara** (postures debout / quatre pattes).
-4. Audio, **passe dédiée Lumière & ombres** (ombres de la vallée et des montagnes, AO cuite, ombres de contact, reflets).
-5. Chantier **Monde 8 km** (Lead → Terrain → Végétation et points d'intérêt → Routes → Eau → Lumière).
+4. **Phase Optimisation** (demandée par le client le 2026-11-18) : gagner en FPS et en fluidité sans perte visuelle. Constat des
+   mesures (`tools/perf.cjs`) : ~25-30 ms par image en Moyenne quelle que soit la résolution, donc limite côté processeur
+   (≈ 950 appels de dessin au sol, ≈ 4 900 en vue lointaine, simulation) plutôt que côté carte graphique. Pistes : fusion du décor
+   statique par cellule et par matériau, instanciation, LOD et imposteurs du décor lointain, ombres limitées aux objets proches.
+5. Audio, **passe dédiée Lumière & ombres** (ombres de la vallée et des montagnes, AO cuite, ombres de contact, reflets).
+6. Chantier **Monde 8 km** (Lead → Terrain → Végétation et points d'intérêt → Routes → Eau → Lumière).
 
 ## 7. Méthode et outils
 - Lancer le jeu : `npm install`, `npm run dev` (http://localhost:5173). Tests : `npx tsc --noEmit -p .`, `npx vitest run`, `npm run build`.
