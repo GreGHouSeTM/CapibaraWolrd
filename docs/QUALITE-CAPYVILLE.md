@@ -12,6 +12,15 @@ torrent et ponts de bois dans la brume ; ref-5 : vue de conduite à l'aube, ref-
 d'atmosphère pour les belvédères et le monde de 8 km : plans successifs de collines bleuies par la brume jusqu'à un sommet enneigé,
 rivières et lacs qui serpentent, ville au loin, premier plan riche en rochers, herbes et fleurs, ciel lumineux à nuages volumétriques ;
 image d'un jeu existant : inspiration d'ambiance seulement, ne rien en reproduire).
+**Références du monde (`docs/references/monde/`, ref-9 à ref-18, données par le client le 2026-11-18)** : cible de rendu pour les terres
+sauvages du monde de 8 km et les autres régions (inspiration d'ambiance, rien à reproduire) :
+- ref-9 à ref-11 : villages de montagne alpins (été, couchant doré, neige) : colombages, toits pentus, prés fleuris, sommets enneigés, ciel à gros cumulus ;
+- ref-12 : pinède enneigée dans une lumière dorée rasante, herbes rousses, sentier ; ref-15 : aurore boréale sur un lac gelé (Pôle Nord la nuit) ;
+- ref-13 : sous-bois de conifères, tapis de mousse, **rayons de soleil volumétriques et longues ombres** ;
+- ref-14 : sanctuaire oublié envahi de mousse sous la pluie (point d'intérêt ; chez nous, une statue originale, par exemple un capybara gardien) ;
+- ref-16 à ref-18 : jungle de brume à arbres géants, cascades, mousses pendantes, **ruisseau d'eau claire sur rochers moussus**.
+Ce qu'elles ont en commun et qui prime : **lumière volumétrique** (rayons, contre-jour, brume qui donne la profondeur), **mousse et humidité**,
+**eau limpide**, densité et variété de la végétation, plans successifs qui bleuissent avec la distance.
 La région « Japon » garde la ville moderne, le lac au torii et le mont Fuji ; Capyville en est la version montagnarde et thermale.
 
 ## Charte visuelle commune (à respecter par tous les agents)
