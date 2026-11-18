@@ -275,7 +275,7 @@ class Mesh:
                 for i in range(nx):
                     q = [grid[side, i, j], grid[side, i + 1, j], grid[side, i + 1, j + 1], grid[side, i, j + 1]]
                     uvs = [(u0 + (ii * w / nx) / sc * ts, v0 + (1 - jj * h / ny / sc) * ts * 0.999) for ii, jj in ((i, j), (i + 1, j), (i + 1, j + 1), (i, j + 1))]
-                    if side == 0:
+                    if side == 1:
                         q, uvs = q[::-1], uvs[::-1]
                     self.face(q, uvs, [color] * 4, mat, True)
 

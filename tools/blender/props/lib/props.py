@@ -571,7 +571,7 @@ def stand(m, rng, L, D, H, tiers=1, w=None):
     for t in range(tiers):
         d = D / tiers
         z = -D / 2 + d * (t + 0.5)
-        h = H + t * 0.28
+        h = H + (tiers - 1 - t) * 0.28   # gradin du fond (z < 0) le plus haut
         m.box((0, h - 0.02, z), (L, 0.04, d), 'planks', mul(w, rng.uniform(0.9, 1.1)), tex=1.6)
         m.box((0, h - 0.07, z + d / 2 - 0.02), (L, 0.07, 0.03), 'wood', w)
         for x in (-L / 2 + 0.05, L / 2 - 0.05):
