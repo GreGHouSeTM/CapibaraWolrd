@@ -8,7 +8,10 @@ La boucle s'arrête quand toutes les cases sont cochées.
 
 **Capyville est un village thermal japonais de montagne (onsen)** : les capybaras adorent les bains chauds.
 Images de référence du rendu attendu dans `docs/references/` (ref-1 à ref-4 : onsen, pagode, place au cerisier,
-torrent et ponts de bois dans la brume ; ref-5 : vue de conduite à l'aube, ref-6 et ref-7 : lac turquoise et rochers).
+torrent et ponts de bois dans la brume ; ref-5 : vue de conduite à l'aube, ref-6 et ref-7 : lac turquoise et rochers ; ref-8 : vue panoramique depuis un promontoire — cible de composition et
+d'atmosphère pour les belvédères et le monde de 8 km : plans successifs de collines bleuies par la brume jusqu'à un sommet enneigé,
+rivières et lacs qui serpentent, ville au loin, premier plan riche en rochers, herbes et fleurs, ciel lumineux à nuages volumétriques ;
+image d'un jeu existant : inspiration d'ambiance seulement, ne rien en reproduire).
 La région « Japon » garde la ville moderne, le lac au torii et le mont Fuji ; Capyville en est la version montagnarde et thermale.
 
 ## Charte visuelle commune (à respecter par tous les agents)
