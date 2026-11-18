@@ -10,6 +10,15 @@ const VIEWS = {
   nuit: { pos: [0, 30], yaw: Math.PI, pitch: 0.2, hour: 22, dist: 8 },
   ruisseau: { pos: [112, 60], yaw: 2.6, pitch: 0.2, hour: 9, dist: 8 },
   vueaerienne: { cam: [70, 60, 90], look: [0, 6, 0], hour: 16 },
+  // --- Terrain & relief : vues de contrôle du relief
+  pagode: { pos: [-38, -108], yaw: 0.26, pitch: 0.12, hour: 8, dist: 6 },
+  'place-ny': { pos: [0, 0], yaw: 2.09, pitch: 0.06, hour: 11, dist: 6 },
+  'place-nord': { pos: [0, 10], yaw: Math.PI, pitch: 0.04, hour: 11, dist: 6 },
+  lointain: { cam: [380, 240, 470], look: [0, 20, 0], hour: 15 },
+  gorge: { cam: [40, 40, -60], look: [110, 20, -200], hour: 10 },
+  etang: { cam: [-150, 14, 140], look: [-110, 2, 85], hour: 10 },
+  paris: { cam: [60, 90, -470], look: [-60, 20, -800], hour: 12 },
+  newyork: { cam: [480, 90, -230], look: [693, 40, -400], hour: 12 },
 };
 (async () => {
   const [port, out, q, list] = process.argv.slice(2);
