@@ -21,6 +21,8 @@ sys.path.insert(0, HERE)
 from lib import export as ex          # noqa: E402
 from lib import town                  # noqa: E402
 from lib import sacred                # noqa: E402
+from lib import bath                  # noqa: E402
+import math as _m                     # noqa: E402
 
 ROOT = os.path.abspath(os.path.join(HERE, '../..', '..'))
 ZJSON = os.path.join(HERE, '.cache', 'zones.json')
@@ -61,6 +63,11 @@ BUILDERS = {
     'honden': lambda b, v: sacred.honden(b['w'], b['d'], seed_of(b['id'])),
     'temizuya': lambda b, v: sacred.temizuya(b['w'], b['d'], seed_of(b['id'])),
     'shoro': lambda b, v: sacred.shoro(b['w'], b['d'], seed_of(b['id'])),
+    'ryokan': lambda b, v: bath.ryokan(b['w'], b['d'], b['floors'], seed_of(b['id'])),
+    'sento': lambda b, v: bath.sento(b['w'], b['d'], seed_of(b['id'])),
+    'chaya': lambda b, v: bath.ryokan(b['w'], b['d'], b['floors'], seed_of(b['id']), kind='chaya'),
+    'moulin': lambda b, v: bath.moulin(b['w'], b['d'], seed_of(b['id']), b['wheel_local']),
+    'roue': lambda b, v: bath.wheel(b['diameter'], b['width']),
     'torii': lambda b, v: sacred.torii(b['h'], b['kind'], b.get('span'), seed_of(b['id'])),
 }
 
@@ -73,6 +80,14 @@ def extras(z):
         span = t['h'] * (0.78 if t['kind'] == 'myojin' else 0.82)
         out.append(dict(id='torii-' + t['id'], type='torii', name=f"Torii {t['id']} ({t['kind']}, {t['h']} m)", w=round(span + d, 2),
                         d=round(d, 2), floors=1, h=t['h'], kind=t['kind'], span=span))
+    mw, mp = z['MILL_WHEEL'], z['MILL_POS']
+    mill = next(b for b in z['BUILDINGS'] if b['id'] == 'moulin')
+    dx, dz = mw['x'] - mp[0], mw['z'] - mp[1]
+    c, s_ = _m.cos(mill['yaw']), _m.sin(mill['yaw'])
+    # monde -> local (rotation.y = yaw) : x = dx·cos − dz·sin ; z = dx·sin + dz·cos
+    mill['wheel_local'] = (round(dx * c - dz * s_, 3), 1.9, round(dx * s_ + dz * c, 3))
+    out.append(dict(id='moulin-roue', type='roue', name='Roue à augets du moulin (animable)', w=mw['width'], d=mw['diameter'], floors=1,
+                    diameter=mw['diameter'], width=mw['width']))
     tt = z['TORII_TUNNEL']
     d = max(0.18, tt['h'] * 0.075)
     out.append(dict(id='torii-tunnel', type='torii', name='Torii de l’escalier aux mille torii', w=tt['w'], d=round(d, 2), floors=1,

@@ -18,6 +18,8 @@ MATERIALS = {
     'copper': dict(diff='tex/copper_diff.jpg', nor='tex/copper_nor.jpg', rough=0.55, metal=0.35, nscale=0.6),
     'namako': dict(diff='tex/namako_diff.jpg', nor='tex/namako_nor.jpg', rough=0.6, nscale=0.8),
     'lacquer': dict(diff='tex/wood_diff.jpg', nor='../../tex/roughwood_nor.jpg', rough=0.42, nscale=0.25),
+    # briques de la cheminée des bains
+    'brick': dict(diff='../../tex/brick_diff.jpg', nor='../../tex/brick_nor.jpg', rough=0.9, nscale=1.0),
     # papier des shōji : émissif (lumière intérieure la nuit) ; l'intégrateur règle emissiveIntensity jour/nuit
     'paper_shoji': dict(diff='tex/paper_diff.jpg', emis='tex/paper_diff.jpg', emis_factor=(1.0, 0.62, 0.30), rough=0.9,
                         extras={'night': True, 'emissiveBoost': 1.0}),

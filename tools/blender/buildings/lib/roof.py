@@ -138,14 +138,15 @@ def cover_rows(b, sl, lod=0, mat='kawara', col=KAWARA, r_end_fn=None, seg=3, tom
             r_end = min(r_end, r_end_fn(a))
         if r_end < 0.15:
             continue
-        rs = [r_end * i / nr for i in range(nr + 1)]
+        ne = 1 if (not sl.sag and not sl.lift_fn) else min(nr, 4)
+        rs = [r_end * i / ne for i in range(ne + 1)]
         path = [sl.point(a, r, 0.005) for r in rs]
         rings, uvr = [], []
         dist = 0.0
         for i, p in enumerate(path):
             if i:
                 dist += (path[i] - path[i - 1]).length
-            T = (path[min(i + 1, nr)] - path[max(i - 1, 0)]).normalized()
+            T = (path[min(i + 1, ne)] - path[max(i - 1, 0)]).normalized()
             S = T.cross(Y).normalized()
             N = S.cross(T).normalized()
             ring, ur = [], []
@@ -158,9 +159,6 @@ def cover_rows(b, sl, lod=0, mat='kawara', col=KAWARA, r_end_fn=None, seg=3, tom
             uvr.append(ur)
         cc = jitter(col, b.rng, 0.05)
         b.grid(mat, rings, uvr, cc, smooth=True, out_fn=lambda i, j, rings=rings, path=path: rings[i][j] - path[i])
-        # bout haut fermé (contre le faîtage ou l'arêtier) : petit demi-disque
-        top = rings[-1]
-        b.face(mat, list(top), [(0.5, 0.5)] * len(top), cc, out=(path[-1] - path[-2]))
         if tomoe:
             T0 = (path[1] - path[0]).normalized()
             c0 = path[0] - T0 * 0.015 - Y * 0.01

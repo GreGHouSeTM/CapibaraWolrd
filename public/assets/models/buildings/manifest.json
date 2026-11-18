@@ -16,11 +16,11 @@
     "e1_lod2"
    ],
    "triangles": [
-    13030,
+    10214,
     2396,
     182
    ],
-   "bytes": 289696,
+   "bytes": 238668,
    "anchors": [
     {
      "name": "anchor_noren_0",
@@ -179,11 +179,11 @@
     "e2_lod2"
    ],
    "triangles": [
-    12320,
+    9504,
     2060,
     182
    ],
-   "bytes": 263056,
+   "bytes": 217232,
    "anchors": [
     {
      "name": "anchor_noren_0",
@@ -310,11 +310,11 @@
     "e4_lod2"
    ],
    "triangles": [
-    11944,
+    9128,
     1912,
     182
    ],
-   "bytes": 267828,
+   "bytes": 215736,
    "anchors": [
     {
      "name": "anchor_noren_0",
@@ -441,11 +441,11 @@
     "n3_lod2"
    ],
    "triangles": [
-    7121,
+    6057,
     1621,
     170
    ],
-   "bytes": 184180,
+   "bytes": 164432,
    "anchors": [
     {
      "name": "anchor_noren_0",
@@ -534,11 +534,11 @@
     "n4_lod2"
    ],
    "triangles": [
-    12955,
+    10911,
     2745,
     318
    ],
-   "bytes": 320296,
+   "bytes": 281352,
    "anchors": [
     {
      "name": "anchor_noren_0",
@@ -627,11 +627,11 @@
     "v1_lod2"
    ],
    "triangles": [
-    7866,
+    5826,
     1534,
     170
    ],
-   "bytes": 190096,
+   "bytes": 156712,
    "anchors": [
     {
      "name": "anchor_noren_0",
@@ -711,11 +711,11 @@
     "e5_lod2"
    ],
    "triangles": [
-    8570,
+    6714,
     1248,
     172
    ],
-   "bytes": 200304,
+   "bytes": 166204,
    "anchors": [
     {
      "name": "anchor_noren_0",
@@ -863,11 +863,11 @@
     "e6_lod2"
    ],
    "triangles": [
-    12955,
+    10911,
     2745,
     318
    ],
-   "bytes": 320136,
+   "bytes": 281108,
    "anchors": [
     {
      "name": "anchor_noren_0",
@@ -956,11 +956,11 @@
     "e8_lod2"
    ],
    "triangles": [
-    7488,
+    5576,
     1432,
     170
    ],
-   "bytes": 189084,
+   "bytes": 155312,
    "anchors": [
     {
      "name": "anchor_noren_0",
@@ -1040,11 +1040,11 @@
     "w1_lod2"
    ],
    "triangles": [
-    10613,
+    8461,
     2377,
     170
    ],
-   "bytes": 249640,
+   "bytes": 216452,
    "anchors": [
     {
      "name": "anchor_noren_0",
@@ -1133,11 +1133,11 @@
     "w2_lod2"
    ],
    "triangles": [
-    14618,
+    11158,
     2366,
     182
    ],
-   "bytes": 320688,
+   "bytes": 256788,
    "anchors": [
     {
      "name": "anchor_noren_0",
@@ -1264,11 +1264,11 @@
     "w3_lod2"
    ],
    "triangles": [
-    11944,
+    9128,
     1912,
     182
    ],
-   "bytes": 257356,
+   "bytes": 211396,
    "anchors": [
     {
      "name": "anchor_noren_0",
@@ -1395,11 +1395,11 @@
     "w4_lod2"
    ],
    "triangles": [
-    13030,
+    10214,
     2396,
     182
    ],
-   "bytes": 292744,
+   "bytes": 241252,
    "anchors": [
     {
      "name": "anchor_noren_0",
@@ -1558,11 +1558,11 @@
     "w5_lod2"
    ],
    "triangles": [
-    8728,
+    6872,
     1296,
     172
    ],
-   "bytes": 192084,
+   "bytes": 163084,
    "anchors": [
     {
      "name": "anchor_noren_0",
@@ -1678,11 +1678,11 @@
     "w6_lod2"
    ],
    "triangles": [
-    6519,
+    5567,
     1503,
     170
    ],
-   "bytes": 166620,
+   "bytes": 150900,
    "anchors": [
     {
      "name": "anchor_noren_0",
@@ -1771,11 +1771,11 @@
     "w7_lod2"
    ],
    "triangles": [
-    12955,
+    10911,
     2745,
     318
    ],
-   "bytes": 317472,
+   "bytes": 279800,
    "anchors": [
     {
      "name": "anchor_noren_0",
@@ -1864,11 +1864,11 @@
     "w8_lod2"
    ],
    "triangles": [
-    6796,
+    5092,
     1406,
     170
    ],
-   "bytes": 176840,
+   "bytes": 146340,
    "anchors": [
     {
      "name": "anchor_noren_0",
@@ -1948,11 +1948,11 @@
     "n1_lod2"
    ],
    "triangles": [
-    13534,
+    10378,
     2266,
     182
    ],
-   "bytes": 289564,
+   "bytes": 238576,
    "anchors": [
     {
      "name": "anchor_noren_0",
@@ -2079,11 +2079,11 @@
     "n9_lod2"
    ],
    "triangles": [
-    12955,
+    10911,
     2745,
     318
    ],
-   "bytes": 306504,
+   "bytes": 270536,
    "anchors": [
     {
      "name": "anchor_noren_0",
@@ -2172,11 +2172,11 @@
     "n5_lod2"
    ],
    "triangles": [
-    13096,
+    9940,
     2074,
     182
    ],
-   "bytes": 294124,
+   "bytes": 235264,
    "anchors": [
     {
      "name": "anchor_noren_0",
@@ -2303,11 +2303,11 @@
     "n6_lod2"
    ],
    "triangles": [
-    8128,
+    5960,
     1550,
     170
    ],
-   "bytes": 202008,
+   "bytes": 162692,
    "anchors": [
     {
      "name": "anchor_noren_0",
@@ -2387,11 +2387,11 @@
     "n7_lod2"
    ],
    "triangles": [
-    9430,
+    7362,
     1352,
     172
    ],
-   "bytes": 211896,
+   "bytes": 177100,
    "anchors": [
     {
      "name": "anchor_noren_0",
@@ -2539,11 +2539,11 @@
     "n8_lod2"
    ],
    "triangles": [
-    6519,
+    5567,
     1503,
     170
    ],
-   "bytes": 168268,
+   "bytes": 152132,
    "anchors": [
     {
      "name": "anchor_noren_0",
@@ -2632,11 +2632,11 @@
     "l1_lod2"
    ],
    "triangles": [
-    12955,
+    10911,
     2745,
     318
    ],
-   "bytes": 319360,
+   "bytes": 280764,
    "anchors": [
     {
      "name": "anchor_noren_0",
@@ -2725,11 +2725,11 @@
     "l2_lod2"
    ],
    "triangles": [
-    7866,
+    5826,
     1534,
     170
    ],
-   "bytes": 194692,
+   "bytes": 159360,
    "anchors": [
     {
      "name": "anchor_noren_0",
@@ -2809,11 +2809,11 @@
     "l3_lod2"
    ],
    "triangles": [
-    7473,
+    6325,
     1633,
     170
    ],
-   "bytes": 180072,
+   "bytes": 161260,
    "anchors": [
     {
      "name": "anchor_noren_0",
@@ -2902,11 +2902,11 @@
     "l7_lod2"
    ],
    "triangles": [
-    7121,
+    6057,
     1621,
     170
    ],
-   "bytes": 178228,
+   "bytes": 159912,
    "anchors": [
     {
      "name": "anchor_noren_0",
@@ -2995,11 +2995,11 @@
     "l4_lod2"
    ],
    "triangles": [
-    12955,
+    10911,
     2745,
     318
    ],
-   "bytes": 321404,
+   "bytes": 282460,
    "anchors": [
     {
      "name": "anchor_noren_0",
@@ -3088,11 +3088,11 @@
     "l6_lod2"
    ],
    "triangles": [
-    8128,
+    5960,
     1550,
     170
    ],
-   "bytes": 196452,
+   "bytes": 159460,
    "anchors": [
     {
      "name": "anchor_noren_0",
@@ -3172,11 +3172,11 @@
     "p1_lod2"
    ],
    "triangles": [
-    12955,
+    10911,
     2745,
     318
    ],
-   "bytes": 293700,
+   "bytes": 259124,
    "anchors": [
     {
      "name": "anchor_noren_0",
@@ -3265,11 +3265,11 @@
     "p2_lod2"
    ],
    "triangles": [
-    7866,
+    5826,
     1534,
     170
    ],
-   "bytes": 198724,
+   "bytes": 161104,
    "anchors": [
     {
      "name": "anchor_noren_0",
@@ -3349,11 +3349,11 @@
     "p3_lod2"
    ],
    "triangles": [
-    7473,
+    6325,
     1633,
     170
    ],
-   "bytes": 182820,
+   "bytes": 163040,
    "anchors": [
     {
      "name": "anchor_noren_0",
@@ -3442,11 +3442,11 @@
     "p7_lod2"
    ],
    "triangles": [
-    12955,
+    10911,
     2745,
     318
    ],
-   "bytes": 313764,
+   "bytes": 276772,
    "anchors": [
     {
      "name": "anchor_noren_0",
@@ -3535,11 +3535,11 @@
     "p4_lod2"
    ],
    "triangles": [
-    12955,
+    10911,
     2745,
     318
    ],
-   "bytes": 320808,
+   "bytes": 281768,
    "anchors": [
     {
      "name": "anchor_noren_0",
@@ -3628,11 +3628,11 @@
     "p5_lod2"
    ],
    "triangles": [
-    7866,
+    5826,
     1534,
     170
    ],
-   "bytes": 192720,
+   "bytes": 158344,
    "anchors": [
     {
      "name": "anchor_noren_0",
@@ -3712,11 +3712,11 @@
     "p6_lod2"
    ],
    "triangles": [
-    7121,
+    6057,
     1621,
     170
    ],
-   "bytes": 181452,
+   "bytes": 162776,
    "anchors": [
     {
      "name": "anchor_noren_0",
@@ -3805,11 +3805,11 @@
     "y1_lod2"
    ],
    "triangles": [
-    7866,
+    5826,
     1534,
     170
    ],
-   "bytes": 200220,
+   "bytes": 162656,
    "anchors": [
     {
      "name": "anchor_noren_0",
@@ -3889,11 +3889,11 @@
     "y2_lod2"
    ],
    "triangles": [
-    8624,
+    6768,
     1248,
     172
    ],
-   "bytes": 202064,
+   "bytes": 167924,
    "anchors": [
     {
      "name": "anchor_noren_0",
@@ -4009,11 +4009,11 @@
     "v2_lod2"
    ],
    "triangles": [
-    7121,
+    6057,
     1621,
     170
    ],
-   "bytes": 183492,
+   "bytes": 163740,
    "anchors": [
     {
      "name": "anchor_noren_0",
@@ -4102,11 +4102,11 @@
     "k1_lod2"
    ],
    "triangles": [
-    7866,
+    5826,
     1534,
     170
    ],
-   "bytes": 189464,
+   "bytes": 156840,
    "anchors": [
     {
      "name": "anchor_noren_0",
@@ -4186,11 +4186,11 @@
     "j1_lod2"
    ],
    "triangles": [
-    7866,
+    5826,
     1534,
     170
    ],
-   "bytes": 199484,
+   "bytes": 162392,
    "anchors": [
     {
      "name": "anchor_noren_0",
@@ -4270,11 +4270,11 @@
     "j2_lod2"
    ],
    "triangles": [
-    7121,
+    6057,
     1621,
     170
    ],
-   "bytes": 176164,
+   "bytes": 158992,
    "anchors": [
     {
      "name": "anchor_noren_0",
@@ -4363,11 +4363,11 @@
     "pagode_lod2"
    ],
    "triangles": [
-    49222,
+    47686,
     13782,
     1934
    ],
-   "bytes": 1157176,
+   "bytes": 1128332,
    "anchors": [
     {
      "name": "anchor_noren_0",
@@ -4901,11 +4901,11 @@
     "shoro_lod2"
    ],
    "triangles": [
-    6668,
+    5660,
     1710,
     604
    ],
-   "bytes": 175048,
+   "bytes": 158480,
    "anchors": [],
    "colliders": [
     {
@@ -5512,6 +5512,1132 @@
     "h": 3.2,
     "kind": "myojin"
    }
+  },
+  "chaya": {
+   "id": "chaya",
+   "type": "chaya",
+   "name": "Maison de thé du Cerisier",
+   "variant": "a",
+   "file": "chaya.glb",
+   "w": 12,
+   "d": 9,
+   "floors": 2,
+   "height": 9.6,
+   "lod": [
+    "chaya_lod0",
+    "chaya_lod1",
+    "chaya_lod2"
+   ],
+   "triangles": [
+    18932,
+    5822,
+    346
+   ],
+   "bytes": 457280,
+   "anchors": [
+    {
+     "name": "anchor_noren_0",
+     "pos": [
+      -5.124,
+      2.5,
+      4.505
+     ],
+     "yaw": 0.0,
+     "w": 1.45,
+     "h": 0.92
+    },
+    {
+     "name": "light_shop_0",
+     "pos": [
+      -5.124,
+      2.05,
+      3.425
+     ],
+     "yaw": 0.0,
+     "color": "#ffb060",
+     "intensity": 1.0
+    },
+    {
+     "name": "anchor_noren_1",
+     "pos": [
+      -3.523,
+      2.5,
+      4.505
+     ],
+     "yaw": 0.0,
+     "w": 1.45,
+     "h": 0.92
+    },
+    {
+     "name": "light_shop_1",
+     "pos": [
+      -3.523,
+      2.05,
+      3.425
+     ],
+     "yaw": 0.0,
+     "color": "#ffb060",
+     "intensity": 1.0
+    },
+    {
+     "name": "anchor_noren_2",
+     "pos": [
+      -1.922,
+      2.5,
+      4.505
+     ],
+     "yaw": 0.0,
+     "w": 1.45,
+     "h": 0.92
+    },
+    {
+     "name": "light_shop_2",
+     "pos": [
+      -1.922,
+      2.05,
+      3.425
+     ],
+     "yaw": 0.0,
+     "color": "#ffb060",
+     "intensity": 1.0
+    },
+    {
+     "name": "anchor_noren_3",
+     "pos": [
+      0.0,
+      2.5,
+      4.545
+     ],
+     "yaw": 0.0,
+     "w": 2.09,
+     "h": 0.92
+    },
+    {
+     "name": "anchor_noren_4",
+     "pos": [
+      1.922,
+      2.5,
+      4.505
+     ],
+     "yaw": 0.0,
+     "w": 1.45,
+     "h": 0.92
+    },
+    {
+     "name": "light_shop_3",
+     "pos": [
+      1.922,
+      2.05,
+      3.425
+     ],
+     "yaw": 0.0,
+     "color": "#ffb060",
+     "intensity": 1.0
+    },
+    {
+     "name": "anchor_noren_5",
+     "pos": [
+      3.523,
+      2.5,
+      4.505
+     ],
+     "yaw": 0.0,
+     "w": 1.45,
+     "h": 0.92
+    },
+    {
+     "name": "light_shop_4",
+     "pos": [
+      3.523,
+      2.05,
+      3.425
+     ],
+     "yaw": 0.0,
+     "color": "#ffb060",
+     "intensity": 1.0
+    },
+    {
+     "name": "anchor_noren_6",
+     "pos": [
+      5.124,
+      2.5,
+      4.505
+     ],
+     "yaw": 0.0,
+     "w": 1.45,
+     "h": 0.92
+    },
+    {
+     "name": "light_shop_5",
+     "pos": [
+      5.124,
+      2.05,
+      3.425
+     ],
+     "yaw": 0.0,
+     "color": "#ffb060",
+     "intensity": 1.0
+    },
+    {
+     "name": "light_room_0",
+     "pos": [
+      0.0,
+      5.05,
+      3.0
+     ],
+     "yaw": 0.0,
+     "color": "#ffb868",
+     "intensity": 1.0
+    },
+    {
+     "name": "anchor_bench_0",
+     "pos": [
+      -3.0,
+      0.0,
+      5.7
+     ],
+     "yaw": 0.0,
+     "kind": "banquette-rouge",
+     "w": 1.8
+    },
+    {
+     "name": "anchor_bench_1",
+     "pos": [
+      3.0,
+      0.0,
+      5.7
+     ],
+     "yaw": 0.0,
+     "kind": "banquette-rouge",
+     "w": 1.8
+    },
+    {
+     "name": "anchor_umbrella_0",
+     "pos": [
+      6.6,
+      0.0,
+      6.1
+     ],
+     "yaw": 0.0,
+     "kind": "ombrelle-rouge"
+    },
+    {
+     "name": "anchor_lantern_0",
+     "pos": [
+      -5.0,
+      2.45,
+      6.3
+     ],
+     "yaw": 0.0,
+     "kind": "chochin-茶"
+    },
+    {
+     "name": "anchor_lantern_1",
+     "pos": [
+      -5.143,
+      3.4,
+      5.5
+     ],
+     "yaw": 0.0,
+     "kind": "chochin-rouge"
+    },
+    {
+     "name": "anchor_lantern_2",
+     "pos": [
+      -1.714,
+      3.4,
+      5.5
+     ],
+     "yaw": 0.0,
+     "kind": "chochin-rouge"
+    },
+    {
+     "name": "anchor_lantern_3",
+     "pos": [
+      1.714,
+      3.4,
+      5.5
+     ],
+     "yaw": 0.0,
+     "kind": "chochin-rouge"
+    },
+    {
+     "name": "anchor_lantern_4",
+     "pos": [
+      5.143,
+      3.4,
+      5.5
+     ],
+     "yaw": 0.0,
+     "kind": "chochin-rouge"
+    },
+    {
+     "name": "light_entrance_0",
+     "pos": [
+      0.0,
+      2.05,
+      3.9
+     ],
+     "yaw": 0.0,
+     "color": "#ffb060",
+     "intensity": 1.2
+    },
+    {
+     "name": "smoke_kitchen_0",
+     "pos": [
+      3.6,
+      9.004,
+      -2.25
+     ],
+     "yaw": 0.0
+    }
+   ],
+   "colliders": [
+    {
+     "x": 0,
+     "z": 0,
+     "w": 12,
+     "d": 9,
+     "y0": -0.5,
+     "y1": 6.55
+    }
+   ]
+  },
+  "sento": {
+   "id": "sento",
+   "type": "sento",
+   "name": "Bains publics de la Croisée",
+   "variant": "a",
+   "file": "sento.glb",
+   "w": 16,
+   "d": 12,
+   "floors": 1,
+   "height": 14.35,
+   "lod": [
+    "sento_lod0",
+    "sento_lod1",
+    "sento_lod2"
+   ],
+   "triangles": [
+    19678,
+    3934,
+    2756
+   ],
+   "bytes": 474264,
+   "anchors": [
+    {
+     "name": "anchor_noren_0",
+     "pos": [
+      -1.241,
+      2.65,
+      6.045
+     ],
+     "yaw": 0.0,
+     "w": 1.76,
+     "h": 0.99
+    },
+    {
+     "name": "anchor_noren_1",
+     "pos": [
+      0.955,
+      2.65,
+      6.005
+     ],
+     "yaw": 0.0,
+     "w": 2.33,
+     "h": 0.99
+    },
+    {
+     "name": "light_shop_0",
+     "pos": [
+      0.955,
+      2.05,
+      4.725
+     ],
+     "yaw": 0.0,
+     "color": "#ffb060",
+     "intensity": 1.0
+    },
+    {
+     "name": "anchor_noren_2",
+     "pos": [
+      -0.7,
+      3.0,
+      6.15
+     ],
+     "yaw": 0.0,
+     "w": 4.0,
+     "h": 1.0,
+     "kind": "grand"
+    },
+    {
+     "name": "anchor_lantern_0",
+     "pos": [
+      -3.3,
+      2.85,
+      8.4
+     ],
+     "yaw": 0.0,
+     "kind": "chochin-rouge"
+    },
+    {
+     "name": "anchor_lantern_1",
+     "pos": [
+      1.9,
+      2.85,
+      8.4
+     ],
+     "yaw": 0.0,
+     "kind": "chochin-rouge"
+    },
+    {
+     "name": "anchor_kanban_0",
+     "pos": [
+      -0.7,
+      3.95,
+      9.02
+     ],
+     "yaw": 0.0,
+     "w": 1.4,
+     "h": 0.5,
+     "kind": "gable"
+    },
+    {
+     "name": "smoke_chimney_0",
+     "pos": [
+      6.4,
+      14.5,
+      -4.6
+     ],
+     "yaw": 0.0
+    },
+    {
+     "name": "smoke_steam_0",
+     "pos": [
+      0.0,
+      9.759,
+      0.0
+     ],
+     "yaw": 0.0,
+     "kind": "steam"
+    },
+    {
+     "name": "anchor_buckets_0",
+     "pos": [
+      6.5,
+      0.0,
+      6.8
+     ],
+     "yaw": 0.0,
+     "kind": "pyramide-seaux"
+    },
+    {
+     "name": "light_bath_0",
+     "pos": [
+      0.0,
+      2.45,
+      4.8
+     ],
+     "yaw": 0.0,
+     "color": "#ffb060",
+     "intensity": 1.2
+    }
+   ],
+   "colliders": [
+    {
+     "x": 0,
+     "z": 0,
+     "w": 16,
+     "d": 12,
+     "y0": -0.5,
+     "y1": 5.25
+    },
+    {
+     "x": 6.4,
+     "z": -4.6,
+     "w": 1.4,
+     "d": 1.4,
+     "y0": -0.5,
+     "y1": 14.35
+    }
+   ]
+  },
+  "e3": {
+   "id": "e3",
+   "type": "ryokan",
+   "name": "Petit ryokan Momiji",
+   "variant": "a",
+   "file": "e3.glb",
+   "w": 12,
+   "d": 12,
+   "floors": 2,
+   "height": 10.39,
+   "lod": [
+    "e3_lod0",
+    "e3_lod1",
+    "e3_lod2"
+   ],
+   "triangles": [
+    21062,
+    6366,
+    346
+   ],
+   "bytes": 540192,
+   "anchors": [
+    {
+     "name": "anchor_noren_0",
+     "pos": [
+      0.0,
+      2.5,
+      6.005
+     ],
+     "yaw": 0.0,
+     "w": 2.09,
+     "h": 0.92
+    },
+    {
+     "name": "light_shop_0",
+     "pos": [
+      0.0,
+      2.05,
+      4.925
+     ],
+     "yaw": 0.0,
+     "color": "#ffb060",
+     "intensity": 1.0
+    },
+    {
+     "name": "light_room_0",
+     "pos": [
+      0.0,
+      5.05,
+      4.5
+     ],
+     "yaw": 0.0,
+     "color": "#ffb868",
+     "intensity": 1.0
+    },
+    {
+     "name": "anchor_noren_1",
+     "pos": [
+      0.0,
+      2.7,
+      6.15
+     ],
+     "yaw": 0.0,
+     "w": 2.76,
+     "h": 1.0,
+     "kind": "grand"
+    },
+    {
+     "name": "anchor_lantern_0",
+     "pos": [
+      -1.98,
+      2.55,
+      8.2
+     ],
+     "yaw": 0.0,
+     "kind": "chochin-rouge"
+    },
+    {
+     "name": "anchor_lantern_1",
+     "pos": [
+      1.98,
+      2.55,
+      8.2
+     ],
+     "yaw": 0.0,
+     "kind": "chochin-rouge"
+    },
+    {
+     "name": "anchor_kanban_0",
+     "pos": [
+      0.0,
+      3.65,
+      8.82
+     ],
+     "yaw": 0.0,
+     "w": 1.4,
+     "h": 0.5,
+     "kind": "gable"
+    },
+    {
+     "name": "anchor_lantern_2",
+     "pos": [
+      -5.143,
+      3.4,
+      7.0
+     ],
+     "yaw": 0.0,
+     "kind": "chochin-rouge"
+    },
+    {
+     "name": "anchor_lantern_3",
+     "pos": [
+      -1.714,
+      3.4,
+      7.0
+     ],
+     "yaw": 0.0,
+     "kind": "chochin-rouge"
+    },
+    {
+     "name": "anchor_lantern_4",
+     "pos": [
+      1.714,
+      3.4,
+      7.0
+     ],
+     "yaw": 0.0,
+     "kind": "chochin-rouge"
+    },
+    {
+     "name": "anchor_lantern_5",
+     "pos": [
+      5.143,
+      3.4,
+      7.0
+     ],
+     "yaw": 0.0,
+     "kind": "chochin-rouge"
+    },
+    {
+     "name": "light_entrance_0",
+     "pos": [
+      0.0,
+      2.05,
+      5.4
+     ],
+     "yaw": 0.0,
+     "color": "#ffb060",
+     "intensity": 1.2
+    },
+    {
+     "name": "smoke_kitchen_0",
+     "pos": [
+      3.6,
+      9.79,
+      -3.0
+     ],
+     "yaw": 0.0
+    }
+   ],
+   "colliders": [
+    {
+     "x": 0,
+     "z": 0,
+     "w": 12,
+     "d": 12,
+     "y0": -0.5,
+     "y1": 6.55
+    }
+   ]
+  },
+  "grand-ryokan": {
+   "id": "grand-ryokan",
+   "type": "ryokan",
+   "name": "Grand Ryokan Yuzu-no-Yado",
+   "variant": "a",
+   "file": "grand-ryokan.glb",
+   "w": 26,
+   "d": 14,
+   "floors": 3,
+   "height": 13.81,
+   "lod": [
+    "grand-ryokan_lod0",
+    "grand-ryokan_lod1",
+    "grand-ryokan_lod2"
+   ],
+   "triangles": [
+    44244,
+    15342,
+    374
+   ],
+   "bytes": 1050700,
+   "anchors": [
+    {
+     "name": "anchor_noren_0",
+     "pos": [
+      0.898,
+      2.5,
+      7.005
+     ],
+     "yaw": 0.0,
+     "w": 2.36,
+     "h": 0.92
+    },
+    {
+     "name": "light_shop_0",
+     "pos": [
+      0.898,
+      2.05,
+      5.925
+     ],
+     "yaw": 0.0,
+     "color": "#ffb060",
+     "intensity": 1.0
+    },
+    {
+     "name": "light_room_0",
+     "pos": [
+      0.0,
+      5.05,
+      5.5
+     ],
+     "yaw": 0.0,
+     "color": "#ffb868",
+     "intensity": 1.0
+    },
+    {
+     "name": "light_room_1",
+     "pos": [
+      0.0,
+      7.95,
+      5.5
+     ],
+     "yaw": 0.0,
+     "color": "#ffb868",
+     "intensity": 1.0
+    },
+    {
+     "name": "anchor_noren_1",
+     "pos": [
+      0.0,
+      2.7,
+      7.15
+     ],
+     "yaw": 0.0,
+     "w": 3.6,
+     "h": 1.0,
+     "kind": "grand"
+    },
+    {
+     "name": "anchor_lantern_0",
+     "pos": [
+      -2.4,
+      2.55,
+      9.2
+     ],
+     "yaw": 0.0,
+     "kind": "chochin-rouge"
+    },
+    {
+     "name": "anchor_lantern_1",
+     "pos": [
+      2.4,
+      2.55,
+      9.2
+     ],
+     "yaw": 0.0,
+     "kind": "chochin-rouge"
+    },
+    {
+     "name": "anchor_kanban_0",
+     "pos": [
+      0.0,
+      3.65,
+      9.82
+     ],
+     "yaw": 0.0,
+     "w": 1.4,
+     "h": 0.5,
+     "kind": "gable"
+    },
+    {
+     "name": "anchor_lantern_2",
+     "pos": [
+      -12.071,
+      3.4,
+      8.0
+     ],
+     "yaw": 0.0,
+     "kind": "chochin-rouge"
+    },
+    {
+     "name": "anchor_lantern_3",
+     "pos": [
+      -8.357,
+      3.4,
+      8.0
+     ],
+     "yaw": 0.0,
+     "kind": "chochin-rouge"
+    },
+    {
+     "name": "anchor_lantern_4",
+     "pos": [
+      -4.643,
+      3.4,
+      8.0
+     ],
+     "yaw": 0.0,
+     "kind": "chochin-rouge"
+    },
+    {
+     "name": "anchor_lantern_5",
+     "pos": [
+      -0.929,
+      3.4,
+      8.0
+     ],
+     "yaw": 0.0,
+     "kind": "chochin-rouge"
+    },
+    {
+     "name": "anchor_lantern_6",
+     "pos": [
+      2.786,
+      3.4,
+      8.0
+     ],
+     "yaw": 0.0,
+     "kind": "chochin-rouge"
+    },
+    {
+     "name": "anchor_lantern_7",
+     "pos": [
+      6.5,
+      3.4,
+      8.0
+     ],
+     "yaw": 0.0,
+     "kind": "chochin-rouge"
+    },
+    {
+     "name": "anchor_lantern_8",
+     "pos": [
+      10.214,
+      3.4,
+      8.0
+     ],
+     "yaw": 0.0,
+     "kind": "chochin-rouge"
+    },
+    {
+     "name": "light_entrance_0",
+     "pos": [
+      0.0,
+      2.05,
+      6.4
+     ],
+     "yaw": 0.0,
+     "color": "#ffb060",
+     "intensity": 1.2
+    },
+    {
+     "name": "smoke_kitchen_0",
+     "pos": [
+      7.8,
+      13.213,
+      -3.5
+     ],
+     "yaw": 0.0
+    }
+   ],
+   "colliders": [
+    {
+     "x": 0,
+     "z": 0,
+     "w": 26,
+     "d": 14,
+     "y0": -0.5,
+     "y1": 9.45
+    }
+   ]
+  },
+  "ryokan-torrent": {
+   "id": "ryokan-torrent",
+   "type": "ryokan",
+   "name": "Ryokan du Torrent",
+   "variant": "a",
+   "file": "ryokan-torrent.glb",
+   "w": 16,
+   "d": 10,
+   "floors": 2,
+   "height": 9.87,
+   "lod": [
+    "ryokan-torrent_lod0",
+    "ryokan-torrent_lod1",
+    "ryokan-torrent_lod2"
+   ],
+   "triangles": [
+    23028,
+    6880,
+    346
+   ],
+   "bytes": 574420,
+   "anchors": [
+    {
+     "name": "anchor_noren_0",
+     "pos": [
+      0.0,
+      2.5,
+      5.005
+     ],
+     "yaw": 0.0,
+     "w": 2.21,
+     "h": 0.92
+    },
+    {
+     "name": "light_shop_0",
+     "pos": [
+      0.0,
+      2.05,
+      3.925
+     ],
+     "yaw": 0.0,
+     "color": "#ffb060",
+     "intensity": 1.0
+    },
+    {
+     "name": "light_room_0",
+     "pos": [
+      0.0,
+      5.05,
+      3.5
+     ],
+     "yaw": 0.0,
+     "color": "#ffb868",
+     "intensity": 1.0
+    },
+    {
+     "name": "anchor_noren_1",
+     "pos": [
+      0.0,
+      2.7,
+      5.15
+     ],
+     "yaw": 0.0,
+     "w": 3.6,
+     "h": 1.0,
+     "kind": "grand"
+    },
+    {
+     "name": "anchor_lantern_0",
+     "pos": [
+      -2.4,
+      2.55,
+      7.2
+     ],
+     "yaw": 0.0,
+     "kind": "chochin-rouge"
+    },
+    {
+     "name": "anchor_lantern_1",
+     "pos": [
+      2.4,
+      2.55,
+      7.2
+     ],
+     "yaw": 0.0,
+     "kind": "chochin-rouge"
+    },
+    {
+     "name": "anchor_kanban_0",
+     "pos": [
+      0.0,
+      3.65,
+      7.82
+     ],
+     "yaw": 0.0,
+     "w": 1.4,
+     "h": 0.5,
+     "kind": "gable"
+    },
+    {
+     "name": "anchor_lantern_2",
+     "pos": [
+      -7.111,
+      3.4,
+      6.0
+     ],
+     "yaw": 0.0,
+     "kind": "chochin-rouge"
+    },
+    {
+     "name": "anchor_lantern_3",
+     "pos": [
+      -3.556,
+      3.4,
+      6.0
+     ],
+     "yaw": 0.0,
+     "kind": "chochin-rouge"
+    },
+    {
+     "name": "anchor_lantern_4",
+     "pos": [
+      0.0,
+      3.4,
+      6.0
+     ],
+     "yaw": 0.0,
+     "kind": "chochin-rouge"
+    },
+    {
+     "name": "anchor_lantern_5",
+     "pos": [
+      3.556,
+      3.4,
+      6.0
+     ],
+     "yaw": 0.0,
+     "kind": "chochin-rouge"
+    },
+    {
+     "name": "anchor_lantern_6",
+     "pos": [
+      7.111,
+      3.4,
+      6.0
+     ],
+     "yaw": 0.0,
+     "kind": "chochin-rouge"
+    },
+    {
+     "name": "light_entrance_0",
+     "pos": [
+      0.0,
+      2.05,
+      4.4
+     ],
+     "yaw": 0.0,
+     "color": "#ffb060",
+     "intensity": 1.2
+    },
+    {
+     "name": "smoke_kitchen_0",
+     "pos": [
+      4.8,
+      9.267,
+      -2.5
+     ],
+     "yaw": 0.0
+    }
+   ],
+   "colliders": [
+    {
+     "x": 0,
+     "z": 0,
+     "w": 16,
+     "d": 10,
+     "y0": -0.5,
+     "y1": 6.55
+    }
+   ]
+  },
+  "moulin": {
+   "id": "moulin",
+   "type": "moulin",
+   "name": "Moulin à eau",
+   "variant": "a",
+   "file": "moulin.glb",
+   "w": 8,
+   "d": 7,
+   "floors": 1,
+   "height": 7.55,
+   "lod": [
+    "moulin_lod0",
+    "moulin_lod1",
+    "moulin_lod2"
+   ],
+   "triangles": [
+    2408,
+    1494,
+    896
+   ],
+   "bytes": 109048,
+   "anchors": [
+    {
+     "name": "anchor_noren_0",
+     "pos": [
+      0.935,
+      2.45,
+      3.505
+     ],
+     "yaw": 0.0,
+     "w": 2.09,
+     "h": 0.9
+    },
+    {
+     "name": "light_shop_0",
+     "pos": [
+      0.935,
+      2.05,
+      1.825
+     ],
+     "yaw": 0.0,
+     "color": "#ffb060",
+     "intensity": 1.0
+    },
+    {
+     "name": "anchor_wheel_0",
+     "pos": [
+      0.0,
+      1.9,
+      -9.2
+     ],
+     "yaw": 0.0,
+     "diameter": 5.5,
+     "width": 1.2,
+     "axis": "x local du modèle de roue = axe z local du moulin"
+    },
+    {
+     "name": "light_mill_0",
+     "pos": [
+      0.0,
+      2.25,
+      2.5
+     ],
+     "yaw": 0.0,
+     "color": "#ffb060",
+     "intensity": 0.6
+    },
+    {
+     "name": "anchor_sacks_0",
+     "pos": [
+      3.0,
+      0.45,
+      4.0
+     ],
+     "yaw": 0.0,
+     "kind": "sacs"
+    }
+   ],
+   "colliders": [
+    {
+     "x": 0,
+     "z": 0,
+     "w": 8,
+     "d": 7,
+     "y0": -0.5,
+     "y1": 3.25
+    }
+   ]
+  },
+  "moulin-roue": {
+   "id": "moulin-roue",
+   "type": "roue",
+   "name": "Roue à augets du moulin (animable)",
+   "variant": "a",
+   "file": "moulin-roue.glb",
+   "w": 1.2,
+   "d": 5.5,
+   "floors": 1,
+   "height": 5.5,
+   "lod": [
+    "moulin-roue_lod0",
+    "moulin-roue_lod1",
+    "moulin-roue_lod2"
+   ],
+   "triangles": [
+    1828,
+    1012,
+    420
+   ],
+   "bytes": 55264,
+   "anchors": [],
+   "colliders": []
   }
  },
  "conventions": {
