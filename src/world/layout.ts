@@ -1,4 +1,5 @@
 // Disposition générale du monde : une prairie centrale (Capyville) entourée de six régions.
+import { colRoute } from './valley';
 export type RegionId = 'hub' | 'paris' | 'newyork' | 'london' | 'japan' | 'desert' | 'pole';
 export type Look = 'city' | 'nature';
 
@@ -111,6 +112,13 @@ function buildRoads(): RoadDef[] {
   const outer = REGIONS.slice(1);
   // Rayons : du village vers chaque région
   for (const r of outer) {
+    // --- TERRAIN & RELIEF : l'axe part de la porte du village et suit le couloir creusé dans le col (valley.ts) ---
+    const pass = colRoute(r.id);
+    if (pass) {
+      roads.push({ pts: pass.pts.map((p) => [p[0], p[1]] as [number, number]), width: 9 });
+      continue;
+    }
+    // --- fin du bloc TERRAIN & RELIEF ---
     const a = edge(hub, r, 28);
     const b = edge(r, hub, r.cityRadius * 0.82);
     const mx = (a[0] + b[0]) / 2, mz = (a[1] + b[1]) / 2;
