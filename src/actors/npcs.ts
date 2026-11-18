@@ -101,7 +101,9 @@ export class NpcManager {
     return this.list.find((n) => n.def.id === id);
   }
 
-  addWalkers(points: THREE.Vector3[], count: number, seed: number) {
+  // --- INTÉGRATION VILLAGE --- : `maxStep` < 70 : le promeneur ne relie que des points voisins et revient sur ses pas
+  // (il suit les rues du village sans traverser les maisons).
+  addWalkers(points: THREE.Vector3[], count: number, seed: number, maxStep = 70) {
     if (points.length < 4) return;
     const rng = new Rng(seed);
     const furs = [0x9b6a43, 0x8a5a33, 0xa87a52, 0x7a5232, 0xb58a60, 0x6e4a30];
@@ -110,11 +112,15 @@ export class NpcManager {
       const capy = new Capybara({ fur: rng.pick(furs), hat: rng.pick(hats), size: rng.range(0.85, 1.1), scarf: rng.chance(0.4) ? rng.pick([0xc8303a, 0x2a5a8a, 0xffd23b, 0x3a8a4a]) : null });
       const path: THREE.Vector3[] = [];
       let p = rng.pick(points);
-      for (let i = 0; i < 5; i++) {
+      const local = maxStep < 70;
+      for (let i = 0; i < (local ? 12 : 5); i++) {
         path.push(p);
-        const cand = points.filter((q) => q !== p && q.distanceTo(p) < 70);
-        p = cand.length ? rng.pick(cand) : rng.pick(points);
+        const prev = path[path.length - 2];
+        let cand = points.filter((q) => q !== p && q.distanceTo(p) < maxStep);
+        if (local && cand.length > 1) cand = cand.filter((q) => q !== prev);
+        p = cand.length ? rng.pick(cand) : local ? p : rng.pick(points);
       }
+      if (local) path.push(...path.slice(1, -1).reverse());
       const pos = path[0].clone();
       capy.root.position.copy(pos);
       this.group.add(capy.root);

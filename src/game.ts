@@ -10,6 +10,7 @@ import { clamp, damp, lerp, Rng } from './core/math';
 import { SkySystem, START_HOUR } from './world/sky';
 import { NightLights } from './fx/lights';
 import { buildWorld, World } from './world/world';
+import { WALK_STEP } from './procgen/village/walk'; // --- INTÉGRATION VILLAGE ---
 import { REGIONS, RegionDef, RegionId, nearestRegion, regionById } from './world/layout';
 import { groundAt } from './world/physics';
 import { heightAt, roadSamples } from './world/heightmap';
@@ -186,6 +187,8 @@ export class Game {
     const start = this.save.pos ? new THREE.Vector3(...this.save.pos) : c.hub.spots.start.clone();
     start.y = groundAt(start.x, start.z, start.y + 1);
     this.player.setPosition(start);
+    // --- INTÉGRATION VILLAGE --- : regard de départ (SPAWN.yaw, vers la place et la pagode)
+    if (!this.save.pos && c.hub.spots.startYaw) this.player.yaw = c.hub.spots.startYaw.x;
     this.player.onStep = () => this.audio.play('step', this.player.state === 'ground' ? 1 : 0.5);
     this.player.onJump = () => this.audio.play('jump');
     this.player.onSplash = () => this.audio.play('splash');
@@ -194,7 +197,7 @@ export class Game {
     for (const r of Object.values(c)) for (const n of r.npcs) this.npcs.add(n);
     this.scene.add(this.npcs.group);
     const rng = new Rng(8);
-    for (const id of ['paris', 'newyork', 'london', 'japan', 'hub'] as RegionId[]) this.npcs.addWalkers(c[id].walkPoints, id === 'hub' ? 6 : 10, rng.int(0, 999));
+    for (const id of ['paris', 'newyork', 'london', 'japan', 'hub'] as RegionId[]) this.npcs.addWalkers(c[id].walkPoints, id === 'hub' ? 8 : 10, rng.int(0, 999), id === 'hub' ? WALK_STEP : 70); // --- INTÉGRATION VILLAGE ---
 
     // véhicules garés
     for (const r of Object.values(c))
