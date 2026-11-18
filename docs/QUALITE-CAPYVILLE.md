@@ -76,12 +76,12 @@ La région « Japon » garde la ville moderne, le lac au torii et le mont Fuji ;
 - [ ] Effets de combat : impact, éclat, feuilles qui volent, petit tremblement de caméra
 
 ### Gameplay : ennemis et combat (adapté 9-12 ans, sans violence)
-- [ ] Ennemis cachés dans les hautes herbes (ex. « Grignoteurs », petites créatures de ronces ou insectes grincheux) qui surgissent quand on approche
-- [ ] Attaque (clic gauche) avec animation du capybara et zone d'impact ; combo de 2-3 coups
-- [ ] Esquive (clic droit ou C) : roulade avec courte invulnérabilité
-- [ ] Ennemis avec signal d'attaque lisible (télégraphe), recul quand ils sont touchés, et qui disparaissent en « pouf » de feuilles en laissant des pièces
-- [ ] Cœurs de vie dans le HUD ; à zéro, le capybara se réveille à la source chaude, sans perte
-- [ ] Une mini-mission de combat à Capyville
+- [x] Ennemis cachés dans les hautes herbes (ex. « Grignoteurs », petites créatures de ronces ou insectes grincheux) qui surgissent quand on approche
+- [x] Attaque (clic gauche) avec animation du capybara et zone d'impact ; combo de 2-3 coups
+- [x] Esquive (clic droit ou C) : roulade avec courte invulnérabilité
+- [x] Ennemis avec signal d'attaque lisible (télégraphe), recul quand ils sont touchés, et qui disparaissent en « pouf » de feuilles en laissant des pièces
+- [x] Cœurs de vie dans le HUD ; à zéro, le capybara se réveille à la source chaude, sans perte
+- [x] Une mini-mission de combat à Capyville
 
 ### Validation
 - [ ] Captures du passage : place de jour, rue, gros plan d'une maison, prairie, nuit, combat (6 vues, qualité Moyenne)
@@ -92,3 +92,4 @@ La région « Japon » garde la ville moderne, le lac au torii et le mont Fuji ;
 
 | Passage | Date | Ce qui a été fait | Critères cochés |
 | --- | --- | --- | --- |
+| 1 | 2026-11-18 | Bible du lead (village onsen, plan coté, zones.ts) ; combat intégré (combo, roulade, cœurs, Grignoteurs, mission de Sora). Terrain, bâtiments Blender (kit, pagode, sanctuaire, torii), Poly Haven et lumière commencés puis interrompus par la limite hebdomadaire : sauvegardés sur `wip/terrain`, `wip/batiments-blender`, `wip/polyhaven`, `wip/lumiere`. | Ennemis cachés dans les hautes herbes ; attaque et combo ; esquive ; télégraphe, recul et « pouf » ; cœurs et réveil ; mini-mission de combat |
