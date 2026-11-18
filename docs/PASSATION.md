@@ -65,9 +65,12 @@ plus de texture de dalles dédiée (on utilise `stonewall`).
 5. Audio, **passe dédiée Lumière & ombres** (ombres de la vallée et des montagnes, AO cuite, ombres de contact, reflets).
 6. **Gameplay, quêtes et histoire** (souhait du client, 2026-11-18) : **pas de missions basiques** du type « ramasser les pièces » ;
    un vrai système de quêtes intéressantes (chaînes de quêtes, choix, énigmes, personnages attachants) porté par une histoire et un lore
-   cohérents avec la bible (§1). **Fil rouge du jeu : les collectionnables « Squishy »** (peluches moelleuses originales, à créer — ne copier
-   aucune marque existante), classés par rareté : basiques, rares, épiques, « dumpling »… ; à préciser avec le client (liste des raretés,
-   où et comment on les obtient, album de collection, récompenses). Le Lead écrira une bible gameplay avant toute production.
+   cohérents avec la bible (§1). **Fil rouge du jeu : les collectionnables « Squishy dumplings »** : tendance actuelle chez les enfants, des squishies
+   en forme de brioches vapeur asiatiques (bao / manjū) aux plis du dessus, petit visage kawaii (yeux noirs, joues roses), vendus dans
+   un **panier vapeur en bambou** et souvent en **boîte mystère**. Variantes de matière qui font naturellement la rareté : mat pastel
+   (basique), nacré ou pailleté (rare), arc-en-ciel (épique), doré ou spécial (légendaire)… Designs **originaux** à créer (aucun emballage,
+   logo ni personnage de marque copié). Lien naturel avec Capyville : les paniers vapeur de manjū de la Grand-Rue (bible §8.1).
+   À préciser avec le client : liste exacte des raretés, obtention (quêtes, cachettes, échanges, paniers mystère), album, récompenses. Le Lead écrira une bible gameplay avant toute production.
 7. Chantier **Monde 8 km** (Lead → Terrain → Végétation et points d'intérêt → Routes → Eau → Lumière).
 
 ## 7. Méthode et outils
