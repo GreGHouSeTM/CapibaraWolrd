@@ -3,11 +3,11 @@
 // Vérifie que Mamie, Coach Capy, Nina, Léo et Basile sont joignables (invite « Parler à » puis dialogue),
 // qu'on peut monter dans le cabriolet, que la photo du moulin vise la roue, que les escaliers et les ponts portent
 // le joueur, et que le bassin, l'étang et les yuzus sont aux positions de zones.ts.
-const { chromium } = require('playwright');
+const { launch, rendererName } = require('./browser.cjs');
 
 (async () => {
   const [port, q] = process.argv.slice(2);
-  const browser = await chromium.launch({ args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'] });
+  const browser = await launch();
   let failed = 0;
   const ok = (cond, label) => { console.log((cond ? 'OK   ' : 'ÉCHEC ') + label); if (!cond) failed++; };
   try {

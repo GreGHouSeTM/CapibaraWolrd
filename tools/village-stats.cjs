@@ -1,7 +1,7 @@
 // Intégration village : répartition des appels de dessin par grand groupe de la scène pour quelques vues.
 // Usage : tools/shot-lock.sh node tools/village-stats.cjs <port> [qualité]
 // Compte les maillages visibles dans le champ (vue principale) et dans les ombres, par ancêtre de premier niveau.
-const { chromium } = require('playwright');
+const { launch, rendererName } = require('./browser.cjs');
 const VIEWS = {
   departaube: { pos: [-3, 26], yaw: Math.PI, pitch: 0.12, dist: 7 },
   place: { pos: [0, 18], yaw: Math.PI, pitch: 0.25, dist: 8 },
@@ -9,7 +9,7 @@ const VIEWS = {
 };
 (async () => {
   const [port, q] = process.argv.slice(2);
-  const browser = await chromium.launch({ args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'] });
+  const browser = await launch();
   try {
     const page = await browser.newPage({ viewport: { width: 800, height: 450 } });
     await page.goto(`http://localhost:${port}/?manual&q=${q || 'medium'}`, { waitUntil: 'load' });
