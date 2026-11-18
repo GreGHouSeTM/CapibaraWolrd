@@ -9,6 +9,7 @@ import { heightAt, splatAt } from './heightmap';
 import { grassDensityAt } from './grass';
 import { REGIONS, RegionId } from './layout';
 import { addCircle } from './physics';
+import { capyLegacyTrees } from '../procgen/flora/legacy';
 
 export type TreeKind = 'oak' | 'pine' | 'cherry' | 'palm' | 'plane' | 'cactus' | 'birch' | 'snowpine' | 'bamboo';
 
@@ -16,8 +17,15 @@ export const windUniform = { value: 0 };
 
 /** Rayon (autour de Capyville) où les anciens arbres « boules » sont remplacés par la nouvelle végétation. */
 export const CAPY_FLORA_RADIUS = 470;
-/** Arbres demandés par les régions (Forest.add) dans la vallée : replantés par CapyFlora avec les nouvelles essences. */
-export const capyLegacyTrees: { kind: TreeKind; x: number; z: number; scale: number }[] = [];
+/**
+ * Susuki des prairies à ennemis (TALL_GRASS_ZONES) : masse des feuilles jusqu'à ≈ 0,85-1,1 m, plumets argentés de 1,2 à
+ * 1,6 m. Pour qu'un Grignoteur caché ne montre que ses yeux, `hideEyeHeight` ≈ 0,8 m (ENEMY_PARAMS de enemies.ts).
+ */
+export const SUSUKI = { bladeTop: [0.85, 1.1], plumeTop: [1.2, 1.6], hideEyeHeight: 0.8, edgeWidth: 6 };
+export { capyLegacyTrees } from '../procgen/flora/legacy';
+export { CapyFlora, forestAt, maskAt } from '../procgen/flora/capyville';
+export { FLORA_WIND } from '../procgen/flora/materials';
+export type { FloraSpecies } from '../procgen/flora/species';
 
 function foliageMaterial(color: THREE.ColorRepresentation, emissive = 0) {
   const m = new THREE.MeshStandardMaterial({ color, roughness: 0.85, vertexColors: true, emissive: new THREE.Color(color), emissiveIntensity: emissive });

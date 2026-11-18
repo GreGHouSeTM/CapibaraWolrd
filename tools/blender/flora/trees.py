@@ -359,11 +359,11 @@ def sugi(seed, H, giant=False):
         L = Rmax * (1 - u) ** 0.85 + 0.5 + rng.uniform(-0.3, 0.3)
         down = math.radians(70 + 30 * (1 - u) + rng.uniform(-8, 8))
         dd = child_dir(UP, down, az)
-        pts = curve(p, dd, L, 6, rng, curl=0.12, up=0.05 + 0.1 * u, grav=0.06)
-        br = Branch(pts, [0.03 + 0.018 * L * (1 - k / 6) for k in range(7)], 1, 0.15, 3.0)
+        pts = curve(p, dd, L, 4, rng, curl=0.12, up=0.05 + 0.1 * u, grav=0.06)
+        br = Branch(pts, [0.03 + 0.018 * L * (1 - k / 4) for k in range(5)], 1, 0.15, 3.0)
         t.branches.append(br)
         # rameaux secondaires (LOD0 seulement, gros arbres)
-        if L > 1.6:
+        if L > 2.4:
             for k in range(2):
                 tp = rng.uniform(0.35, 0.75)
                 q, qd, _, w = br.at(tp)
@@ -401,6 +401,7 @@ def sugi(seed, H, giant=False):
     if giant:
         sugi_rope(t, r0)
     t.lod1_keep = 0.35
+    t.lod1_level = 1 if giant else 0
     return t
 
 
@@ -747,13 +748,13 @@ def take(seed, n_culms):
                 tw = curve(q, sd, ln, 3, rng, curl=0.2, grav=0.12)
                 b2 = Branch(tw, [0.008, 0.006, 0.005, 0.004], 2, w, 1.0)
                 t.branches.append(b2)
-                for j in range(rng.randint(1, 2)):
-                    p, d, _, ww = b2.at(rng.uniform(0.4, 1.0))
+                for j in range(rng.randint(2, 3)):
+                    p, d, _, ww = b2.at(rng.uniform(0.3, 1.0))
                     vdir = norm(-(d * np.array([1, 0, 1])) * 0.3 - UP * 0.15 + gn(rng, 0.2))
                     # tuile : le rameau part du coin haut-gauche et descend vers la droite
                     udir = norm(np.cross(UP, d) + gn(rng, 0.2))
                     t.add_card(p, norm(UP * 0.6 + d * 0.5), udir, 0.95, 0.95, tiles[rng.randrange(4)], min(1, ww + 0.25), keep1=(j == 0 and k == 0))
-            s += node * rng.uniform(1.6, 2.4)
+            s += node * rng.uniform(1.1, 1.6)
         # bouquet sommital retombant
         tip = pts[-1]
         for k in range(5):
@@ -908,10 +909,27 @@ def export(species, trees):
                 to_blender(mb, f'v{k}_lod{lod}_{part}', coll)
                 stats.append(f'v{k} lod{lod} {part}: {mb.tris} tri')
     path = os.path.join(OUT, species + '.glb')
-    bpy.ops.export_scene.gltf(filepath=path, export_format='GLB', use_selection=False, export_yup=True,
+    raw = path + '.brut.glb'
+    bpy.ops.export_scene.gltf(filepath=raw, export_format='GLB', use_selection=False, export_yup=True,
                               export_texcoords=True, export_normals=True, export_vertex_color='ACTIVE',
                               export_materials='NONE', export_animations=False, export_apply=False)
+    pack(raw, path)
     print(species, os.path.getsize(path) // 1024, 'Ko :', '; '.join(stats))
+
+
+def pack(raw, path):
+    """Compression meshopt (gltfpack, sans quantification : noms des nœuds et attributs conservés)."""
+    import shutil
+    import subprocess
+    gp = os.environ.get('GLTFPACK') or os.path.join(ROOT, 'tools', 'polyhaven', 'node_modules', '.bin', 'gltfpack')
+    if not os.path.exists(gp):
+        gp = shutil.which('gltfpack')
+    if gp:
+        subprocess.run([gp, '-i', raw, '-o', path, '-cc', '-noq', '-kn', '-kv'], check=True, capture_output=True)
+        os.remove(raw)
+    else:
+        print('gltfpack introuvable (npm install --prefix tools/polyhaven) : export non compressé')
+        os.replace(raw, path)
 
 
 SPECIES = {

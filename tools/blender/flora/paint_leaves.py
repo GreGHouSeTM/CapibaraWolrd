@@ -46,8 +46,9 @@ class Canvas:
             im = dilate(im)
         else:
             im = im.convert('RGB')
+        name = name.replace('.png', '.webp')
         path = os.path.join(OUT, name)
-        im.save(path, optimize=True)
+        im.save(path, quality=90, method=6)
         print('écrit', path, os.path.getsize(path) // 1024, 'Ko')
 
 

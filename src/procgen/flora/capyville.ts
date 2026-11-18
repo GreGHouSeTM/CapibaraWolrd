@@ -15,7 +15,7 @@ import { Models } from '../../core/models';
 import { FloraLayer } from './field';
 import { FloraSpecies, SPECIES, bakeImposter, floraTex, getSpecies, loadSpecies } from './species';
 import { floraMaterial, updateFloraWind } from './materials';
-import { capyLegacyTrees } from '../../world/vegetation';
+import { capyLegacyTrees } from './legacy';
 
 // =============================================================================================== MASQUE D'OCCUPATION
 /** Grille de 1 m sur [-HALF, HALF]² : bits d'interdiction. */
@@ -39,7 +39,7 @@ function rasterSeg(ax: number, az: number, bx: number, bz: number, rad: [number,
     const vx = bx - ax, vz = bz - az, l2 = vx * vx + vz * vz || 1e-9;
     const t = clamp(((x - ax) * vx + (z - az) * vz) / l2, 0, 1);
     const d = Math.hypot(x - ax - vx * t, z - az - vz * t);
-    for (const [r, bit] of rad) if (d <= r) mask[k] |= bit;
+    for (const [r, bit] of rad) if (d <= r + (bit & NO_TREE ? 0.75 : 0)) mask[k] |= bit;
   });
 }
 function rasterPoly(pts: XZ[], rad: [number, number][]) {
@@ -49,19 +49,20 @@ function rasterRect(cx: number, cz: number, w: number, d: number, yaw: number, r
   const R = Math.hypot(w, d) / 2 + Math.max(...rad.map((r) => r[0]));
   box(cx - R, cz - R, cx + R, cz + R, (k, x, z) => {
     const s = rectSdf(x, z, cx, cz, w, d, yaw);
-    for (const [r, bit] of rad) if (s <= r) mask[k] |= bit;
+    for (const [r, bit] of rad) if (s <= r + (bit & NO_TREE ? 0.75 : 0)) mask[k] |= bit;
   });
 }
 function rasterDisk(cx: number, cz: number, rad: [number, number][]) {
   const R = Math.max(...rad.map((r) => r[0]));
   box(cx - R, cz - R, cx + R, cz + R, (k, x, z) => {
     const d = Math.hypot(x - cx, z - cz);
-    for (const [r, bit] of rad) if (d <= r) mask[k] |= bit;
+    for (const [r, bit] of rad) if (d <= r + (bit & NO_TREE ? 0.75 : 0)) mask[k] |= bit;
   });
 }
 const pondE = (x: number, z: number) => Math.hypot((x - POND.x) / POND.rx, (z - POND.z) / POND.rz);
 
-function bakeMask() {
+/** Cuisson du masque d'occupation (chemins, bâtiments, eau, champs, prairies…) ; appelée par CapyFlora.build. */
+export function bakeFloraMask() {
   mask.fill(0);
   for (const p of PATHS) rasterPoly(p.pts, [[p.width / 2 + 0.4, NO_PLANT], [p.width / 2 + 3, NO_TREE]]);
   for (const r of COL_ROUTES) rasterPoly(r.pts, [[4.8, NO_PLANT], [8, NO_TREE]]);
@@ -84,6 +85,17 @@ function bakeMask() {
     if (e < 1.0) mask[k] |= NO_PLANT;
     if (e < 1.1) mask[k] |= NO_TREE;
   });
+}
+
+/**
+ * Vrai si un arbre peut pousser en (x, z) d'après les retraits de la bible (3 m des chemins, 5 m des bâtiments,
+ * hors de l'eau, des champs, du verger et des prairies à susuki). Utilisable par le Décor et l'Intégration village.
+ */
+export function canPlantTree(x: number, z: number, streamGap = 2.5) {
+  if (Math.abs(x) > HALF - 2 || Math.abs(z) > HALF - 2) return false;
+  if (maskAt(x, z) & (NO_TREE | NO_PLANT | FIELD | ORCH | GRASSZ)) return false;
+  if (streamEdge(x, z) < streamGap) return false;
+  return heightAt(x, z) >= 0.8;
 }
 
 /** Distance au bord mouillé du torrent (négative dans l'eau), Infinity loin du torrent. */
@@ -117,7 +129,8 @@ export function forestAt(x: number, z: number, h = heightAt(x, z), slope = slope
   }
   const r = Math.hypot(x, z);
   // pentes de la couronne : forêt continue (ref-1, ref-4), clairières au bruit, roche nue au-dessus de 45° environ
-  const s = smoothstep(12, 22, h + 8 * noise2(x / 40 + 3, z / 40)) * smoothstep(140, 185, r) * smoothstep(1.45, 1.05, slope)
+  // (au-delà du fond de vallée, r > 250 : forêt quelle que soit l'altitude, jusqu'aux régions voisines)
+  const s = Math.max(smoothstep(12, 22, h + 8 * noise2(x / 40 + 3, z / 40)), smoothstep(235, 275, r)) * smoothstep(140, 185, r) * smoothstep(1.45, 1.05, slope)
     * smoothstep(-0.55, -0.3, noise2(x / 70 - 13, z / 70 + 6));
   if (s > best.f * 0.98) {
     const alt = h + 12 * noise2(x / 90 - 7, z / 90 + 2);
@@ -211,7 +224,7 @@ export class CapyFlora {
 
   // ------------------------------------------------------------------------------------------ construction
   async build(density: number) {
-    bakeMask();
+    bakeFloraMask();
     const rng = new Rng(4242);
     const t0 = performance.now();
     this.featureTrees();
@@ -347,19 +360,14 @@ export class CapyFlora {
   private legacy() {
     for (const t of capyLegacyTrees) {
       if (!this.treeOk(t.x, t.z, 2)) continue;
-      this.plant(LEGACY_MAP[t.kind] ?? 'momiji', t.x, t.z, { scale: clamp(t.scale * 0.8, 0.5, 1.1) });
+      this.plant(LEGACY_MAP[t.kind] ?? 'keyaki', t.x, t.z, { scale: clamp(t.scale * 0.8, 0.5, 1.1) });
     }
     capyLegacyTrees.length = 0;
   }
 
   /** Emplacement acceptable pour un arbre (retraits de la bible). */
   private treeOk(x: number, z: number, streamGap = 2.5) {
-    if (Math.abs(x) > HALF - 2 || Math.abs(z) > HALF - 2) return false;
-    if (maskAt(x, z) & (NO_TREE | NO_PLANT | FIELD | ORCH | GRASSZ)) return false;
-    if (streamEdge(x, z) < streamGap) return false;
-    const h = heightAt(x, z);
-    if (h < 0.8) return false;
-    return true;
+    return canPlantTree(x, z, streamGap);
   }
 
   private forests(rng: Rng, density: number) {
@@ -491,7 +499,7 @@ export class CapyFlora {
 
   /** Haies de théiers arrondies (0,9 × 1,2 m) en lignes continues sur chaque terrasse. */
   private tea() {
-    const map = floraTex('cha_leaf.png');
+    const map = floraTex('cha_leaf.webp');
     const mat = floraMaterial({ name: 'cha', map, leaf: true, height: 1, flex: 0.02, branch: 0, flutter: 0.02, trans: 0.3 });
     for (const f of FIELDS) {
       if (f.kind !== 'the') continue;
@@ -683,7 +691,7 @@ export class CapyFlora {
   }
 
   private petalMaterial() {
-    const m = new THREE.MeshStandardMaterial({ map: floraTex('ground_leaf.png'), alphaTest: 0.45, roughness: 0.85, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2 });
+    const m = new THREE.MeshStandardMaterial({ map: floraTex('ground_leaf.webp'), alphaTest: 0.45, roughness: 0.85, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2 });
     m.onBeforeCompile = (s) => {
       s.vertexShader = s.vertexShader
         .replace('#include <common>', '#include <common>\nattribute vec2 aTile;')
@@ -737,7 +745,7 @@ function distPoly(x: number, z: number, pts: XZ[]) {
 
 /** Construit la végétation de la vallée (à appeler après les régions, avant les herbes). */
 export async function buildCapyFlora(density = 1) {
-  await loadSpecies(Object.keys(SPECIES) as FloraSpecies[]);
+  await loadSpecies((Object.keys(SPECIES) as FloraSpecies[]).filter((s) => s !== 'misc'));
   const f = new CapyFlora();
   await f.build(density);
   return f;

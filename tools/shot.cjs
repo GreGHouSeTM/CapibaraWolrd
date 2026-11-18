@@ -53,6 +53,7 @@ const VIEWS = {
     for (const k of (list || 'place').split(',')) {
       const v = VIEWS[k];
       if (!v) { console.log('vue inconnue', k); continue; }
+      v.steps = v.steps || +(process.env.SHOT_STEPS || 25); // nombre d'images simulées avant la capture
       if (v.demo) {
         // scène de démonstration chargée dynamiquement (une seule fois par page)
         const r = await page.evaluate(async (v) => {
@@ -84,7 +85,7 @@ const VIEWS = {
           for (let i = 0; i < 6; i++) g.lights.debugAdd(-6 + (i % 2) * 12, 7.2, -14 - Math.floor(i / 2) * 9, 0xffd8a0, 1, 'window');
         }
         g.sky.hour = v.hour; g.sky.forceEnvUpdate();
-        g.step(25, 0.1);
+        g.step(v.steps, 0.1);
       }, v);
       await page.screenshot({ path: `${out}/${k}.png`, timeout: 300000 });
       if (v.stats) console.log('  modèles Poly Haven :', JSON.stringify(await page.evaluate(async () => (await import('/src/core/models.ts')).Models.stats())));

@@ -2,6 +2,7 @@
 // Chargement GLTF, préparation des géométries et cuisson des imposteurs (8 vues autour de l'axe vertical).
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js';
 import { floraDepthMaterial, floraMaterial, fruitMaterial, propMaterial, WindOpts } from './materials';
 
 export type FloraSpecies =
@@ -33,14 +34,14 @@ export interface SpeciesDef {
 /** Bible §11 : LOD0 < 40 m, LOD1 < 120 m ; imposteurs jusqu'à 1 100 m (la brume fond les montagnes au loin). */
 const L = [40, 120, 1100] as [number, number, number];
 export const SPECIES: Record<FloraSpecies, SpeciesDef> = {
-  sugi: { file: 'sugi', bark: 'sugi', leaf: 'sugi', wind: { height: 24, flex: 0.35, branch: 0.14, flutter: 0.03 }, trans: 0.3, lod: [45, 130, 1100], shadow: 2, trunk: 0.45, height: 24 },
+  sugi: { file: 'sugi', bark: 'sugi', leaf: 'sugi', wind: { height: 24, flex: 0.35, branch: 0.14, flutter: 0.03 }, trans: 0.3, lod: [35, 130, 1100], shadow: 1, trunk: 0.45, height: 24 },
   'sugi-geant': { file: 'sugi-geant', bark: 'sugi', leaf: 'sugi', wind: { height: 34, flex: 0.3, branch: 0.12, flutter: 0.03 }, trans: 0.3, lod: [70, 200, 700], shadow: 2, trunk: 1.6, height: 34 },
-  matsu: { file: 'matsu', bark: 'matsu', leaf: 'matsu', wind: { height: 10, flex: 0.18, branch: 0.1, flutter: 0.025 }, trans: 0.3, lod: L, shadow: 2, trunk: 0.3, height: 10.5 },
-  momiji: { file: 'momiji', bark: 'momiji', barkTint: 0x9a9088, leaf: 'momiji', wind: { height: 8.5, flex: 0.2, branch: 0.16, flutter: 0.05 }, trans: 0.75, lod: L, shadow: 2, trunk: 0.25, height: 8.5 },
-  keyaki: { file: 'keyaki', bark: 'momiji', barkTint: 0x8a8478, leaf: 'keyaki', wind: { height: 12, flex: 0.25, branch: 0.16, flutter: 0.05 }, trans: 0.7, lod: L, shadow: 2, trunk: 0.4, height: 12 },
-  sakura: { file: 'sakura', bark: 'sakura', leaf: 'sakura', wind: { height: 8.5, flex: 0.15, branch: 0.14, flutter: 0.04 }, trans: 0.6, lod: L, shadow: 2, trunk: 0.35, height: 8.5 },
+  matsu: { file: 'matsu', bark: 'matsu', leaf: 'matsu', wind: { height: 10, flex: 0.18, branch: 0.1, flutter: 0.025 }, trans: 0.3, lod: L, shadow: 1, trunk: 0.3, height: 10.5 },
+  momiji: { file: 'momiji', bark: 'momiji', barkTint: 0x9a9088, leaf: 'momiji', wind: { height: 8.5, flex: 0.2, branch: 0.16, flutter: 0.05 }, trans: 0.75, lod: L, shadow: 1, trunk: 0.25, height: 8.5 },
+  keyaki: { file: 'keyaki', bark: 'momiji', barkTint: 0x8a8478, leaf: 'keyaki', wind: { height: 12, flex: 0.25, branch: 0.16, flutter: 0.05 }, trans: 0.7, lod: L, shadow: 1, trunk: 0.4, height: 12 },
+  sakura: { file: 'sakura', bark: 'sakura', leaf: 'sakura', wind: { height: 8.5, flex: 0.15, branch: 0.14, flutter: 0.04 }, trans: 0.6, lod: L, shadow: 1, trunk: 0.35, height: 8.5 },
   shidare: { file: 'shidare', bark: 'sakura', leaf: 'sakura', wind: { height: 13, flex: 0.12, branch: 0.32, flutter: 0.05, flutterFreq: 3.5 }, trans: 0.6, lod: [60, 180, 650], shadow: 2, trunk: 0.7, height: 13 },
-  ichou: { file: 'ichou', bark: 'momiji', barkTint: 0x8a8070, leaf: 'ichou', wind: { height: 14, flex: 0.22, branch: 0.12, flutter: 0.06 }, trans: 0.7, lod: L, shadow: 2, trunk: 0.42, height: 14 },
+  ichou: { file: 'ichou', bark: 'momiji', barkTint: 0x8a8070, leaf: 'ichou', wind: { height: 14, flex: 0.22, branch: 0.12, flutter: 0.06 }, trans: 0.7, lod: L, shadow: 1, trunk: 0.42, height: 14 },
   yuzu: { file: 'yuzu', bark: 'momiji', barkTint: 0x8c8a78, leaf: 'yuzu', wind: { height: 3.6, flex: 0.06, branch: 0.06, flutter: 0.03 }, trans: 0.35, lod: [35, 110, 400], shadow: 2, trunk: 0.1, height: 3.6 },
   take: { file: 'take', barkTex: 'take_culm', leaf: 'take', wind: { height: 12, flex: 0.55, branch: 0.12, flutter: 0.06, flutterFreq: 8 }, trans: 0.7, lod: [40, 110, 450], shadow: 2, trunk: 0.55, height: 12 },
   tsutsuji: { file: 'tsutsuji', bark: 'momiji', leaf: 'tsutsuji', wind: { height: 1.4, flex: 0.03, branch: 0.03, flutter: 0.025 }, trans: 0.4, lod: [22, 60, 0], shadow: 1, trunk: 0, height: 1.4 },
@@ -94,7 +95,7 @@ function prepGeometry(g: THREE.BufferGeometry, keepColor: boolean) {
   return g;
 }
 
-const gltf = new GLTFLoader();
+const gltf = new GLTFLoader().setMeshoptDecoder(MeshoptDecoder);
 const models = new Map<FloraSpecies, SpeciesModel>();
 export const getSpecies = (id: FloraSpecies) => models.get(id);
 
@@ -115,10 +116,10 @@ export async function loadSpecies(ids: FloraSpecies[]) {
       variants[k].lod[lod][part] = g;
       if (lod === 0) { g.computeBoundingBox(); variants[k].box.union(g.boundingBox!); }
     });
-    const leafMap = floraTex(def.leaf + '_leaf.png');
+    const leafMap = floraTex(def.leaf + '_leaf.webp');
     let barkMap: THREE.Texture | undefined, barkNor: THREE.Texture | undefined;
     if (def.bark) { barkMap = floraTex(def.bark + '_bark.jpg', true, true); barkNor = floraTex(def.bark + '_barknor.jpg', false, true); }
-    else if (def.barkTex) barkMap = floraTex(def.barkTex + '.png', true, true);
+    else if (def.barkTex) barkMap = floraTex(def.barkTex + '.webp', true, true);
     const mats: SpeciesModel['mats'] = {
       leaf: floraMaterial({ ...def.wind, name: id + '-leaf', map: leafMap, leaf: true, trans: def.trans, color: def.leafTint }),
       leafDepth: floraDepthMaterial({ ...def.wind, map: leafMap, leaf: true }),
@@ -234,7 +235,9 @@ function imposterMaterial(tex: THREE.Texture, size: number, y0: number, rows: nu
           vec3 to = cameraPosition - iT; to.y = 0.0;
           to = normalize(to + vec3(1e-4, 0.0, 0.0));
           vec3 right = vec3(to.z, 0.0, -to.x);
-          vec3 wp = iT + right * (position.x * uImp.x * iS) + vec3(0.0, (position.y * uImp.x + uImp.y) * iS, 0.0);
+          // au loin, les houppiers s'élargissent un peu : la canopée se referme comme sur une vraie forêt
+          float iW = 1.0 + 0.35 * smoothstep(150.0, 700.0, length(cameraPosition - iT));
+          vec3 wp = iT + right * (position.x * uImp.x * iS * iW) + vec3(0.0, (position.y * uImp.x + uImp.y) * iS, 0.0);
           transformed = (transpose(iR) * (wp - iT)) / iS2;
           float yaw = atan(iR[2].x, iR[2].z);
           float la = atan(to.x, to.z) - yaw;

@@ -105,7 +105,7 @@ export class FloraLayer {
     this.imp.count = 0;
     this.imp.frustumCulled = false;
     this.imp.castShadow = false;
-    this.imp.receiveShadow = true;
+    this.imp.receiveShadow = false; // au-delà de la portée des ombres
     this.imp.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
     this.imp.name = this.sp.id + '-imposteurs';
     this.group.add(this.imp);
