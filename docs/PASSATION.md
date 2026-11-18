@@ -45,7 +45,7 @@ par exemple une session locale sur le PC du client avec sa carte graphique. Le r
 ## 5. Chantiers en cours, sauvegardés sur des branches (à reprendre)
 | Branche | Contenu | Reste à faire |
 | --- | --- | --- |
-| `wip/vegetation-fusion` | Végétation complète (11 347 arbres à cartes de feuilles : cerisiers, érables, cèdres dont géant 34 m, pins, bambous, yuzus, keyaki ; susuki 1,2-1,6 m, rizières, théiers, sous-bois) **déjà fusionnée** avec `main` | **Bug à corriger avant de pousser** : un voile blanc couvre la moitié basse de l'écran. Le rendu direct (`renderer.render`) est correct : le problème vient de l'effet d'atmosphère de `src/core/postfx.ts` (brume/brouillard calculés depuis la profondeur) combiné à la flore (piste : cuisson des imposteurs dans `src/procgen/flora/species.ts` appelée au premier `flora.update`, ou matériaux de feuillage et profondeur). Masquer la flore, l'herbe, l'eau ou le village ne fait pas disparaître le voile ; il n'existait pas avant la fusion (ni sur `main`, ni dans les captures de l'agent Végétation). |
+| `wip/vegetation-fusion` | **Intégrée dans `main` le 2026-11-18 (session locale)** : le voile blanc ne se reproduit ni sur le GPU du client ni en SwiftShader sous Windows (probablement propre au rendu logiciel Linux du conteneur cloud). Historique : Végétation complète (11 347 arbres à cartes de feuilles : cerisiers, érables, cèdres dont géant 34 m, pins, bambous, yuzus, keyaki ; susuki 1,2-1,6 m, rizières, théiers, sous-bois) **déjà fusionnée** avec `main` | **Bug à corriger avant de pousser** : un voile blanc couvre la moitié basse de l'écran. Le rendu direct (`renderer.render`) est correct : le problème vient de l'effet d'atmosphère de `src/core/postfx.ts` (brume/brouillard calculés depuis la profondeur) combiné à la flore (piste : cuisson des imposteurs dans `src/procgen/flora/species.ts` appelée au premier `flora.update`, ou matériaux de feuillage et profondeur). Masquer la flore, l'herbe, l'eau ou le village ne fait pas disparaître le voile ; il n'existait pas avant la fusion (ni sur `main`, ni dans les captures de l'agent Végétation). |
 | `wip/eau` | Torrent à hauteur locale (flux animé, écume, seuils, bief), cascades et brume | Finir : étang (reflets, nénuphars, koï), bains laiteux, rizières miroir ; tests village/combat |
 | `wip/vegetation`, `wip/integration-village`, `wip/terrain`, `wip/lumiere`, `wip/polyhaven`, `wip/batiments-blender`, `wip/integration-passage-1` | Sauvegardes intermédiaires déjà intégrées dans `main` | Rien (historique) |
 
@@ -55,7 +55,7 @@ sur les vues larges (budget 700 ; ~1 000 au sol, plus en vue aérienne) ; escali
 plus de texture de dalles dédiée (on utilise `stonewall`).
 
 ## 6. Prochaines étapes (ordre prévu)
-1. Corriger le voile blanc puis pousser la végétation ; finir et intégrer l'Eau.
+1. ~~Corriger le voile blanc puis pousser la végétation~~ (fait) ; finir et intégrer l'Eau.
 2. Décor (bande devant les façades, place, enseignes ; pièces d'or), Effets (fumée, vapeur, pétales, lucioles ; brancher `setHitFxHandler` du combat), Routes (chemins de terre en campagne), Ennemis & faune.
 3. **Rig & animation Blender du capybara** (postures debout / quatre pattes).
 4. Audio, **passe dédiée Lumière & ombres** (ombres de la vallée et des montagnes, AO cuite, ombres de contact, reflets).
@@ -64,9 +64,12 @@ plus de texture de dalles dédiée (on utilise `stonewall`).
 ## 7. Méthode et outils
 - Lancer le jeu : `npm install`, `npm run dev` (http://localhost:5173). Tests : `npx tsc --noEmit -p .`, `npx vitest run`, `npm run build`.
 - Mode test : `?manual&q=low|medium|high` ; `window.__game.startPlay()`, `step(n, dt)`, `frame(dt, false)`, `teleport`, `rig.override`.
-- Captures : `tools/shot.cjs <port> <dossier> <qualité> <vues>` (vues prédéfinies ; ajouter `SHOT_STEPS=8` pour les vues lourdes) ;
-  dans le cloud il fallait passer par `tools/shot-lock.sh` (un seul navigateur à la fois, rendu logiciel lent). **Sur un PC avec carte graphique,
-  lancer Chromium avec le GPU** (sans `--use-angle=swiftshader`) : les captures et mesures de FPS deviennent rapides et fiables.
+- Captures : `node tools/shot.cjs <port> <dossier> <qualité> <vues>` (vues prédéfinies ; `SHOT_STEPS=8` pour les vues lourdes).
+  Depuis la session locale (PC Windows du client, GTX 1080 Ti), tous les outils lancent Chromium **sur le GPU** via `tools/browser.cjs`
+  (verrou « un navigateur à la fois » intégré, qui remplace `shot-lock.sh` ; `CAPY_GL=swiftshader` pour le rendu logiciel).
+  FPS réels : `node tools/perf.cjs <port> low,medium,high <vues> [dossier]`.
+- Poste local : Node 24, Git, Python 3.13 + bpy 5.3 dans `.venv-blender` (lancer son `python.exe` directement, une conversion lourde
+  à la fois), gltfpack via `npm install --prefix tools/polyhaven`, Chromium Playwright.
 - Agents : un worktree isolé par agent, brief `docs/BRIEF-AGENTS.md`, 2 ou 3 agents en parallèle au maximum (la limite de 5 h
   du forfait se consomme vite : 300 000 à 400 000 jetons par chantier), commits fréquents, pas de push par les agents ;
   le chef de projet intègre et ne pousse sur `main` qu'en l'absence de régression.

@@ -25,5 +25,5 @@ s'impose à tous, et il relit les captures de chaque passage.
 | 2 | Audio | `src/core/audio.ts` |
 
 Règles communes : charte de `docs/QUALITE-CAPYVILLE.md` et bible du lead ; worktree isolé ; serveur Vite sur un port
-propre ; captures uniquement via `tools/shot-lock.sh` (un seul navigateur à la fois) ; `tsc`, `vitest` et `build` verts ;
+propre ; captures uniquement via les outils de `tools/` (GPU, un seul navigateur à la fois grâce à `tools/browser.cjs`) ; `tsc`, `vitest` et `build` verts ;
 commentaires et textes en français ; aucun `git push` (le chef de projet intègre).

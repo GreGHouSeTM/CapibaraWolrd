@@ -33,7 +33,7 @@ La région « Japon » garde la ville moderne, le lac au torii et le mont Fuji ;
 
 ## Chaîne de production des assets
 
-- **Blender par scripts** (module Python `bpy` 5.3 installé dans le conteneur ; scripts dans `tools/blender/`) :
+- **Blender par scripts** (module Python `bpy` 5.3, Python 3.13, dans `.venv-blender` ; scripts dans `tools/blender/`) :
   bâtiments détaillés, objets sur mesure, capybara avec squelette et animations. Export glTF binaire (`.glb`) dans
   `public/assets/models/`, textures cuites (normales, occlusion) si utile. Chaque script doit être relançable et documenté.
 - **Poly Haven (CC0)** : modèles photoscannés (rochers moussus, fougères, arbustes, pins, souches, herbes, fleurs, lanternes,
@@ -79,7 +79,7 @@ La région « Japon » garde la ville moderne, le lac au torii et le mont Fuji ;
 ### Nature
 - [ ] Arbres crédibles (cèdres, pins, érables rouges, cerisiers en fleurs) : modèles Poly Haven/Blender, feuillage détaillé, pétales qui tombent
 - [ ] Buissons, haies, massifs de fleurs, champs de fleurs sauvages
-- [ ] Zones de hautes herbes bien visibles (terrain des ennemis)
+- [x] Zones de hautes herbes bien visibles (terrain des ennemis)
 - [ ] Torrent rocheux avec petites cascades et ponts de bois arqués ; étang avec nénuphars, roseaux et carpes koï
 - [ ] Rochers moussus, souches, champignons
 - [ ] Vie : papillons, oiseaux, lucioles la nuit, poissons ou grenouilles
@@ -101,7 +101,7 @@ La région « Japon » garde la ville moderne, le lac au torii et le mont Fuji ;
 
 ### Validation
 - [ ] Captures du passage : place de jour, rue, gros plan d'une maison, prairie, nuit, combat (6 vues, qualité Moyenne)
-- [ ] Aucun message d'erreur dans la console ; `npm test` et `npm run build` passent
+- [x] Aucun message d'erreur dans la console ; `npm test` et `npm run build` passent
 - [ ] Mini-missions existantes toujours réussies par le test automatique
 
 ## Journal des passages
@@ -110,3 +110,4 @@ La région « Japon » garde la ville moderne, le lac au torii et le mont Fuji ;
 | --- | --- | --- | --- |
 | 1 | 2026-11-18 | Bible du lead (village onsen, plan coté, zones.ts) ; combat intégré (combo, roulade, cœurs, Grignoteurs, mission de Sora). Terrain, bâtiments Blender (kit, pagode, sanctuaire, torii), Poly Haven et lumière commencés puis interrompus par la limite hebdomadaire : sauvegardés sur `wip/terrain`, `wip/batiments-blender`, `wip/polyhaven`, `wip/lumiere`. | Ennemis cachés dans les hautes herbes ; attaque et combo ; esquive ; télégraphe, recul et « pouf » ; cœurs et réveil ; mini-mission de combat |
 | 2 | 2026-11-18 | Terrain de vallée (grille 0,5 m, torrent, étang, plateformes), lumière (aube dorée, brume, nuit lisible, lumières dynamiques), 88 bâtiments Blender, 97 assets Poly Haven, village onsen intégré (rues dallées, escaliers, ponts, torii, premier décor, < 1 000 appels). Restent : arbres provisoires, trop de pièces dans les rues, pas encore d'eau dans le torrent ni de fumée. | 5 types de bâtiments ; façades en relief |
+| 3 | 2026-11-18 | Session locale (GTX 1080 Ti) : outils de capture et de test sur le GPU (`tools/browser.cjs`, `tools/perf.cjs`), mesures de FPS de référence. Végétation intégrée (11 347 arbres à cartes de feuilles, susuki, rizières, théiers, sous-bois) : le « voile blanc » signalé dans le cloud ne se reproduit ni sur GPU ni en SwiftShader sous Windows, en Basse, Moyenne et Haute ; tests combat et village verts, FPS identiques à `main` (39 FPS sur la place en Moyenne à 1600 × 900). Restent : pétales qui tombent, haies et massifs de fleurs à juger de près, rochers moussus, appels de dessin au-dessus du budget (930-1 230 au sol, 4 900 sur la vue lointaine). | Hautes herbes bien visibles ; console sans erreur, tests et build verts |
