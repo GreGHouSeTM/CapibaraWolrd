@@ -20,6 +20,7 @@ sys.path.insert(0, HERE)
 
 from lib import export as ex          # noqa: E402
 from lib import town                  # noqa: E402
+from lib import sacred                # noqa: E402
 
 ROOT = os.path.abspath(os.path.join(HERE, '../..', '..'))
 ZJSON = os.path.join(HERE, '.cache', 'zones.json')
@@ -55,7 +56,28 @@ def variants(blds):
 BUILDERS = {
     'machiya': lambda b, v: town.machiya(b['w'], b['d'], b['floors'], v, seed_of(b['id'])),
     'minka': lambda b, v: town.minka(b['w'], b['d'], b['floors'], v, seed_of(b['id'])),
+    'pagode': lambda b, v: sacred.pagoda(b['w'], seed_of(b['id'])),
+    'haiden': lambda b, v: sacred.haiden(b['w'], b['d'], seed_of(b['id'])),
+    'honden': lambda b, v: sacred.honden(b['w'], b['d'], seed_of(b['id'])),
+    'temizuya': lambda b, v: sacred.temizuya(b['w'], b['d'], seed_of(b['id'])),
+    'shoro': lambda b, v: sacred.shoro(b['w'], b['d'], seed_of(b['id'])),
+    'torii': lambda b, v: sacred.torii(b['h'], b['kind'], b.get('span'), seed_of(b['id'])),
 }
+
+
+def extras(z):
+    """Ouvrages hors BUILDINGS : torii de TORII et torii de l'escalier aux mille torii (TORII_TUNNEL)."""
+    out = []
+    for t in z['TORII']:
+        d = max(0.18, t['h'] * 0.075)
+        span = t['h'] * (0.78 if t['kind'] == 'myojin' else 0.82)
+        out.append(dict(id='torii-' + t['id'], type='torii', name=f"Torii {t['id']} ({t['kind']}, {t['h']} m)", w=round(span + d, 2),
+                        d=round(d, 2), floors=1, h=t['h'], kind=t['kind'], span=span))
+    tt = z['TORII_TUNNEL']
+    d = max(0.18, tt['h'] * 0.075)
+    out.append(dict(id='torii-tunnel', type='torii', name='Torii de l’escalier aux mille torii', w=tt['w'], d=round(d, 2), floors=1,
+                    h=tt['h'], kind='myojin', span=tt['w'] - d))
+    return out
 
 
 def tri_count(bl):
@@ -81,6 +103,10 @@ def build_one(bdef, variant, do_render=False, night=False, render_only=False):
                      for i, (n, p, y, e) in _numbered(anchors)],
             colliders=meta['colliders'],
         )
+        if 'span' in meta:
+            info['span'] = meta['span']
+        if bdef['type'] == 'torii':
+            info['torii'] = dict(h=bdef['h'], kind=bdef['kind'])
         print(f"  {bid:14s} {bdef['type']:8s} {variant}  tris {info['triangles']}  {info['bytes'] // 1024} Ko  {time.time() - t0:.1f}s")
     if do_render or render_only:
         os.makedirs(RENDERS, exist_ok=True)
@@ -111,7 +137,7 @@ def main():
             types = args[args.index(a) + 1].split(',') if a == '--type' else a.split('=')[1].split(',')
     ids = [a for a in args if not a.startswith('--') and (types is None or a not in ','.join(types))]
     z = zones()
-    blds = z['BUILDINGS']
+    blds = z['BUILDINGS'] + extras(z)
     var = variants(blds)
     todo = [b for b in blds if b['type'] in BUILDERS and (not ids or b['id'] in ids) and (types is None or b['type'] in types)]
     man = json.load(open(MANIFEST)) if os.path.exists(MANIFEST) else {'buildings': {}}

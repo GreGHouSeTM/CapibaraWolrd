@@ -387,3 +387,50 @@ def disc(b, mat, c, nrm, r, seg=8, col=(1, 1, 1), up=Y, uvs=(1.0, 1.0)):
 def smoothstep(a, b_, x):
     t = min(1.0, max(0.0, (x - a) / (b_ - a)))
     return t * t * (3 - 2 * t)
+
+
+def sweep_rect(b, mat, path, w, h, up=Y, col=(1, 1, 1), uvs=(0.5, 2.0), caps=(True, True), ws=None, hs=None):
+    """Section rectangulaire w × h (h selon la normale N) balayée le long d'une polyligne (linteaux courbes de torii)."""
+    path = [V(p) for p in path]
+    n = len(path)
+    frames = []
+    for i, p in enumerate(path):
+        T = (path[min(i + 1, n - 1)] - path[max(i - 1, 0)]).normalized()
+        S = T.cross(V(up)).normalized()
+        N = S.cross(T).normalized()
+        frames.append((T, S, N))
+    rings = []
+    for i, p in enumerate(path):
+        T, S, N = frames[i]
+        ww = (ws[i] if ws else w) / 2
+        hh = (hs[i] if hs else h) / 2
+        rings.append([p + S * ww + N * hh, p - S * ww + N * hh, p - S * ww - N * hh, p + S * ww - N * hh])
+    dist = 0.0
+    for i in range(n - 1):
+        seg = (path[i + 1] - path[i]).length
+        for k in range(4):
+            a, c = rings[i][k], rings[i][(k + 1) % 4]
+            a2, c2 = rings[i + 1][k], rings[i + 1][(k + 1) % 4]
+            out = (a + c) / 2 - path[i]
+            uv = [(k * 0.25, dist / uvs[1]), ((k + 1) * 0.25, dist / uvs[1]), ((k + 1) * 0.25, (dist + seg) / uvs[1]), (k * 0.25, (dist + seg) / uvs[1])]
+            b.face(mat, [a, c, c2, a2], uv, col, out=out)
+        dist += seg
+    if caps[0]:
+        b.face(mat, list(rings[0]), [(0, 0), (1, 0), (1, 1), (0, 1)], col, out=-frames[0][0])
+    if caps[1]:
+        b.face(mat, list(rings[-1]), [(0, 0), (1, 0), (1, 1), (0, 1)], col, out=frames[-1][0])
+
+
+def lathe(b, mat, profile, c=(0, 0, 0), seg=12, col=(1, 1, 1), smooth=True, uvs=(1.0, 1.0)):
+    """Solide de révolution autour de l'axe y : profile = [(rayon, y)] de bas en haut."""
+    c = V(c)
+    rows, uvr = [], []
+    for k, (r, y) in enumerate(profile):
+        rows.append([c + V((r * math.cos(2 * math.pi * j / seg), y, r * math.sin(2 * math.pi * j / seg))) for j in range(seg + 1)])
+        uvr.append([(j / seg * 2 * math.pi * max(r, 0.01) / uvs[0], y / uvs[1]) for j in range(seg + 1)])
+
+    def out(i, j):
+        d = rows[i][j] - V((c.x, rows[i][j].y, c.z))
+        return d if d.length > 1e-6 else Y
+
+    b.grid(mat, rows, uvr, col, smooth, out_fn=out)

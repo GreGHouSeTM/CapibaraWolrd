@@ -20,7 +20,7 @@
     2396,
     182
    ],
-   "bytes": 290512,
+   "bytes": 289696,
    "anchors": [
     {
      "name": "anchor_noren_0",
@@ -183,7 +183,7 @@
     2060,
     182
    ],
-   "bytes": 262908,
+   "bytes": 263056,
    "anchors": [
     {
      "name": "anchor_noren_0",
@@ -314,7 +314,7 @@
     1912,
     182
    ],
-   "bytes": 267028,
+   "bytes": 267828,
    "anchors": [
     {
      "name": "anchor_noren_0",
@@ -445,7 +445,7 @@
     1621,
     170
    ],
-   "bytes": 183812,
+   "bytes": 184180,
    "anchors": [
     {
      "name": "anchor_noren_0",
@@ -538,7 +538,7 @@
     2745,
     318
    ],
-   "bytes": 320164,
+   "bytes": 320296,
    "anchors": [
     {
      "name": "anchor_noren_0",
@@ -631,7 +631,7 @@
     1534,
     170
    ],
-   "bytes": 189516,
+   "bytes": 190096,
    "anchors": [
     {
      "name": "anchor_noren_0",
@@ -694,6 +694,4824 @@
      "y1": 3.4
     }
    ]
+  },
+  "e5": {
+   "id": "e5",
+   "type": "machiya",
+   "name": "Atelier de jouets en bois",
+   "variant": "b",
+   "file": "e5.glb",
+   "w": 8,
+   "d": 9,
+   "floors": 1,
+   "height": 6.59,
+   "lod": [
+    "e5_lod0",
+    "e5_lod1",
+    "e5_lod2"
+   ],
+   "triangles": [
+    8570,
+    1248,
+    172
+   ],
+   "bytes": 200304,
+   "anchors": [
+    {
+     "name": "anchor_noren_0",
+     "pos": [
+      -0.981,
+      2.5,
+      4.545
+     ],
+     "yaw": 0.0,
+     "w": 1.81,
+     "h": 0.92
+    },
+    {
+     "name": "anchor_noren_1",
+     "pos": [
+      0.981,
+      2.5,
+      4.505
+     ],
+     "yaw": 0.0,
+     "w": 1.81,
+     "h": 0.92
+    },
+    {
+     "name": "light_shop_0",
+     "pos": [
+      0.981,
+      2.05,
+      3.225
+     ],
+     "yaw": 0.0,
+     "color": "#ffb060",
+     "intensity": 1.0
+    },
+    {
+     "name": "anchor_noren_2",
+     "pos": [
+      2.944,
+      2.5,
+      4.505
+     ],
+     "yaw": 0.0,
+     "w": 1.81,
+     "h": 0.92
+    },
+    {
+     "name": "light_shop_1",
+     "pos": [
+      2.944,
+      2.05,
+      3.225
+     ],
+     "yaw": 0.0,
+     "color": "#ffb060",
+     "intensity": 1.0
+    },
+    {
+     "name": "anchor_lantern_0",
+     "pos": [
+      -1.712,
+      2.85,
+      5.05
+     ],
+     "yaw": 0.0,
+     "kind": "chochin"
+    },
+    {
+     "name": "anchor_lantern_1",
+     "pos": [
+      0.25,
+      2.85,
+      5.05
+     ],
+     "yaw": 0.0,
+     "kind": "chochin"
+    },
+    {
+     "name": "anchor_lantern_2",
+     "pos": [
+      2.213,
+      2.85,
+      5.05
+     ],
+     "yaw": 0.0,
+     "kind": "chochin"
+    },
+    {
+     "name": "anchor_kanban_0",
+     "pos": [
+      0.0,
+      3.35,
+      4.62
+     ],
+     "yaw": 0.0,
+     "w": 2.2,
+     "h": 0.6,
+     "kind": "horizontal"
+    },
+    {
+     "name": "anchor_kanban_1",
+     "pos": [
+      3.75,
+      1.9,
+      5.1
+     ],
+     "yaw": 0.0,
+     "w": 0.45,
+     "h": 1.6,
+     "kind": "vertical"
+    },
+    {
+     "name": "smoke_kitchen_0",
+     "pos": [
+      2.0,
+      6.689,
+      -2.25
+     ],
+     "yaw": 0.0
+    }
+   ],
+   "colliders": [
+    {
+     "x": 0,
+     "z": 0,
+     "w": 8,
+     "d": 9,
+     "y0": -0.5,
+     "y1": 3.65
+    }
+   ]
+  },
+  "e6": {
+   "id": "e6",
+   "type": "minka",
+   "name": "Maison aux glycines",
+   "variant": "b",
+   "file": "e6.glb",
+   "w": 9,
+   "d": 8,
+   "floors": 1,
+   "height": 6.08,
+   "lod": [
+    "e6_lod0",
+    "e6_lod1",
+    "e6_lod2"
+   ],
+   "triangles": [
+    12955,
+    2745,
+    318
+   ],
+   "bytes": 320136,
+   "anchors": [
+    {
+     "name": "anchor_noren_0",
+     "pos": [
+      -1.463,
+      2.3,
+      4.045
+     ],
+     "yaw": 0.0,
+     "w": 1.82,
+     "h": 0.83
+    },
+    {
+     "name": "anchor_lantern_0",
+     "pos": [
+      -0.712,
+      2.65,
+      4.35
+     ],
+     "yaw": 0.0,
+     "kind": "chochin"
+    },
+    {
+     "name": "anchor_nameplate_0",
+     "pos": [
+      -2.213,
+      1.95,
+      4.1
+     ],
+     "yaw": 0.0
+    },
+    {
+     "name": "light_room_0",
+     "pos": [
+      -0.475,
+      1.85,
+      3.0
+     ],
+     "yaw": 0.0,
+     "color": "#ffb868",
+     "intensity": 0.8
+    },
+    {
+     "name": "smoke_hearth_0",
+     "pos": [
+      0.0,
+      6.177,
+      0.0
+     ],
+     "yaw": 0.0
+    }
+   ],
+   "colliders": [
+    {
+     "x": -0.48,
+     "z": 0.0,
+     "w": 8.05,
+     "d": 8.0,
+     "y0": -0.5,
+     "y1": 3.4
+    },
+    {
+     "x": 4.03,
+     "z": 0,
+     "w": 0.95,
+     "d": 8,
+     "y0": -0.5,
+     "y1": 0.45,
+     "walk": true
+    }
+   ]
+  },
+  "e8": {
+   "id": "e8",
+   "type": "minka",
+   "name": "Maison du potier",
+   "variant": "c",
+   "file": "e8.glb",
+   "w": 8,
+   "d": 8,
+   "floors": 1,
+   "height": 6.32,
+   "lod": [
+    "e8_lod0",
+    "e8_lod1",
+    "e8_lod2"
+   ],
+   "triangles": [
+    7488,
+    1432,
+    170
+   ],
+   "bytes": 189084,
+   "anchors": [
+    {
+     "name": "anchor_noren_0",
+     "pos": [
+      -0.981,
+      2.3,
+      4.045
+     ],
+     "yaw": 0.0,
+     "w": 1.81,
+     "h": 0.83
+    },
+    {
+     "name": "anchor_lantern_0",
+     "pos": [
+      -0.231,
+      2.65,
+      4.35
+     ],
+     "yaw": 0.0,
+     "kind": "chochin"
+    },
+    {
+     "name": "anchor_nameplate_0",
+     "pos": [
+      -1.731,
+      1.95,
+      4.1
+     ],
+     "yaw": 0.0
+    },
+    {
+     "name": "light_room_0",
+     "pos": [
+      0.0,
+      1.85,
+      3.0
+     ],
+     "yaw": 0.0,
+     "color": "#ffb868",
+     "intensity": 0.8
+    },
+    {
+     "name": "smoke_hearth_0",
+     "pos": [
+      0.0,
+      6.42,
+      0.0
+     ],
+     "yaw": 0.0
+    }
+   ],
+   "colliders": [
+    {
+     "x": 0.0,
+     "z": 0.0,
+     "w": 8.0,
+     "d": 8.0,
+     "y0": -0.5,
+     "y1": 3.4
+    }
+   ]
+  },
+  "w1": {
+   "id": "w1",
+   "type": "minka",
+   "name": "Maison de Capy",
+   "variant": "a",
+   "file": "w1.glb",
+   "w": 9,
+   "d": 9,
+   "floors": 2,
+   "height": 9.0,
+   "lod": [
+    "w1_lod0",
+    "w1_lod1",
+    "w1_lod2"
+   ],
+   "triangles": [
+    10613,
+    2377,
+    170
+   ],
+   "bytes": 249640,
+   "anchors": [
+    {
+     "name": "anchor_noren_0",
+     "pos": [
+      3.54,
+      2.3,
+      3.595
+     ],
+     "yaw": 0.0,
+     "w": 1.62,
+     "h": 0.83
+    },
+    {
+     "name": "anchor_lantern_0",
+     "pos": [
+      4.29,
+      2.65,
+      4.85
+     ],
+     "yaw": 0.0,
+     "kind": "andon"
+    },
+    {
+     "name": "anchor_nameplate_0",
+     "pos": [
+      2.79,
+      1.95,
+      3.65
+     ],
+     "yaw": 0.0
+    },
+    {
+     "name": "light_room_0",
+     "pos": [
+      0.0,
+      1.85,
+      2.55
+     ],
+     "yaw": 0.0,
+     "color": "#ffb868",
+     "intensity": 0.8
+    },
+    {
+     "name": "smoke_hearth_0",
+     "pos": [
+      0.0,
+      9.101,
+      0.0
+     ],
+     "yaw": 0.0
+    }
+   ],
+   "colliders": [
+    {
+     "x": 0.0,
+     "z": -0.48,
+     "w": 9.0,
+     "d": 8.05,
+     "y0": -0.5,
+     "y1": 5.8
+    },
+    {
+     "x": 0,
+     "z": 4.03,
+     "w": 9,
+     "d": 0.95,
+     "y0": -0.5,
+     "y1": 0.45,
+     "walk": true
+    }
+   ]
+  },
+  "w2": {
+   "id": "w2",
+   "type": "machiya",
+   "name": "Restaurant de nouilles soba",
+   "variant": "c",
+   "file": "w2.glb",
+   "w": 10,
+   "d": 11,
+   "floors": 2,
+   "height": 9.59,
+   "lod": [
+    "w2_lod0",
+    "w2_lod1",
+    "w2_lod2"
+   ],
+   "triangles": [
+    14618,
+    2366,
+    182
+   ],
+   "bytes": 320688,
+   "anchors": [
+    {
+     "name": "anchor_noren_0",
+     "pos": [
+      -1.97,
+      2.5,
+      5.505
+     ],
+     "yaw": 0.0,
+     "w": 1.82,
+     "h": 0.92
+    },
+    {
+     "name": "light_shop_0",
+     "pos": [
+      -1.97,
+      2.05,
+      4.225
+     ],
+     "yaw": 0.0,
+     "color": "#ffb060",
+     "intensity": 1.0
+    },
+    {
+     "name": "anchor_noren_1",
+     "pos": [
+      1.97,
+      2.5,
+      5.545
+     ],
+     "yaw": 0.0,
+     "w": 1.82,
+     "h": 0.92
+    },
+    {
+     "name": "anchor_lantern_0",
+     "pos": [
+      -2.705,
+      2.85,
+      6.05
+     ],
+     "yaw": 0.0,
+     "kind": "chochin"
+    },
+    {
+     "name": "anchor_lantern_1",
+     "pos": [
+      1.235,
+      2.85,
+      6.05
+     ],
+     "yaw": 0.0,
+     "kind": "chochin"
+    },
+    {
+     "name": "anchor_kanban_0",
+     "pos": [
+      0.0,
+      5.225,
+      5.62
+     ],
+     "yaw": 0.0,
+     "w": 2.2,
+     "h": 0.6,
+     "kind": "horizontal"
+    },
+    {
+     "name": "anchor_kanban_1",
+     "pos": [
+      4.75,
+      1.9,
+      6.1
+     ],
+     "yaw": 0.0,
+     "w": 0.45,
+     "h": 1.6,
+     "kind": "vertical"
+    },
+    {
+     "name": "light_room_0",
+     "pos": [
+      0.0,
+      4.95,
+      4.3
+     ],
+     "yaw": 0.0,
+     "color": "#ffb868",
+     "intensity": 0.8
+    },
+    {
+     "name": "smoke_kitchen_0",
+     "pos": [
+      2.5,
+      9.692,
+      -2.75
+     ],
+     "yaw": 0.0
+    }
+   ],
+   "colliders": [
+    {
+     "x": 0,
+     "z": 0,
+     "w": 10,
+     "d": 11,
+     "y0": -0.5,
+     "y1": 6.15
+    }
+   ]
+  },
+  "w3": {
+   "id": "w3",
+   "type": "machiya",
+   "name": "Échoppe de dango",
+   "variant": "a",
+   "file": "w3.glb",
+   "w": 8,
+   "d": 9,
+   "floors": 2,
+   "height": 8.79,
+   "lod": [
+    "w3_lod0",
+    "w3_lod1",
+    "w3_lod2"
+   ],
+   "triangles": [
+    11944,
+    1912,
+    182
+   ],
+   "bytes": 257356,
+   "anchors": [
+    {
+     "name": "anchor_noren_0",
+     "pos": [
+      -2.944,
+      2.5,
+      4.545
+     ],
+     "yaw": 0.0,
+     "w": 1.81,
+     "h": 0.92
+    },
+    {
+     "name": "anchor_noren_1",
+     "pos": [
+      2.944,
+      2.5,
+      4.505
+     ],
+     "yaw": 0.0,
+     "w": 1.81,
+     "h": 0.92
+    },
+    {
+     "name": "light_shop_0",
+     "pos": [
+      2.944,
+      2.05,
+      3.225
+     ],
+     "yaw": 0.0,
+     "color": "#ffb060",
+     "intensity": 1.0
+    },
+    {
+     "name": "anchor_lantern_0",
+     "pos": [
+      -3.675,
+      2.85,
+      5.05
+     ],
+     "yaw": 0.0,
+     "kind": "chochin"
+    },
+    {
+     "name": "anchor_lantern_1",
+     "pos": [
+      2.213,
+      2.85,
+      5.05
+     ],
+     "yaw": 0.0,
+     "kind": "chochin"
+    },
+    {
+     "name": "anchor_kanban_0",
+     "pos": [
+      0.0,
+      5.075,
+      4.62
+     ],
+     "yaw": 0.0,
+     "w": 2.2,
+     "h": 0.6,
+     "kind": "horizontal"
+    },
+    {
+     "name": "anchor_kanban_1",
+     "pos": [
+      3.75,
+      1.9,
+      5.1
+     ],
+     "yaw": 0.0,
+     "w": 0.45,
+     "h": 1.6,
+     "kind": "vertical"
+    },
+    {
+     "name": "light_room_0",
+     "pos": [
+      0.0,
+      4.95,
+      3.3
+     ],
+     "yaw": 0.0,
+     "color": "#ffb868",
+     "intensity": 0.8
+    },
+    {
+     "name": "smoke_kitchen_0",
+     "pos": [
+      2.0,
+      8.889,
+      -2.25
+     ],
+     "yaw": 0.0
+    }
+   ],
+   "colliders": [
+    {
+     "x": 0,
+     "z": 0,
+     "w": 8,
+     "d": 9,
+     "y0": -0.5,
+     "y1": 5.85
+    }
+   ]
+  },
+  "w4": {
+   "id": "w4",
+   "type": "machiya",
+   "name": "Marchand de parapluies en papier",
+   "variant": "b",
+   "file": "w4.glb",
+   "w": 8,
+   "d": 9,
+   "floors": 2,
+   "height": 9.34,
+   "lod": [
+    "w4_lod0",
+    "w4_lod1",
+    "w4_lod2"
+   ],
+   "triangles": [
+    13030,
+    2396,
+    182
+   ],
+   "bytes": 292744,
+   "anchors": [
+    {
+     "name": "anchor_noren_0",
+     "pos": [
+      -2.944,
+      2.5,
+      4.505
+     ],
+     "yaw": 0.0,
+     "w": 1.81,
+     "h": 0.92
+    },
+    {
+     "name": "light_shop_0",
+     "pos": [
+      -2.944,
+      2.05,
+      3.225
+     ],
+     "yaw": 0.0,
+     "color": "#ffb060",
+     "intensity": 1.0
+    },
+    {
+     "name": "anchor_noren_1",
+     "pos": [
+      -0.981,
+      2.5,
+      4.505
+     ],
+     "yaw": 0.0,
+     "w": 1.81,
+     "h": 0.92
+    },
+    {
+     "name": "light_shop_1",
+     "pos": [
+      -0.981,
+      2.05,
+      3.225
+     ],
+     "yaw": 0.0,
+     "color": "#ffb060",
+     "intensity": 1.0
+    },
+    {
+     "name": "anchor_noren_2",
+     "pos": [
+      0.981,
+      2.5,
+      4.545
+     ],
+     "yaw": 0.0,
+     "w": 1.81,
+     "h": 0.92
+    },
+    {
+     "name": "anchor_lantern_0",
+     "pos": [
+      -3.675,
+      2.85,
+      5.05
+     ],
+     "yaw": 0.0,
+     "kind": "chochin"
+    },
+    {
+     "name": "anchor_lantern_1",
+     "pos": [
+      -1.712,
+      2.85,
+      5.05
+     ],
+     "yaw": 0.0,
+     "kind": "chochin"
+    },
+    {
+     "name": "anchor_lantern_2",
+     "pos": [
+      0.25,
+      2.85,
+      5.05
+     ],
+     "yaw": 0.0,
+     "kind": "chochin"
+    },
+    {
+     "name": "anchor_kanban_0",
+     "pos": [
+      0.0,
+      5.35,
+      4.62
+     ],
+     "yaw": 0.0,
+     "w": 2.2,
+     "h": 0.6,
+     "kind": "horizontal"
+    },
+    {
+     "name": "anchor_kanban_1",
+     "pos": [
+      3.75,
+      1.9,
+      5.1
+     ],
+     "yaw": 0.0,
+     "w": 0.45,
+     "h": 1.6,
+     "kind": "vertical"
+    },
+    {
+     "name": "light_room_0",
+     "pos": [
+      0.0,
+      4.95,
+      3.3
+     ],
+     "yaw": 0.0,
+     "color": "#ffb868",
+     "intensity": 0.8
+    },
+    {
+     "name": "smoke_kitchen_0",
+     "pos": [
+      2.0,
+      9.439,
+      -2.25
+     ],
+     "yaw": 0.0
+    }
+   ],
+   "colliders": [
+    {
+     "x": 0,
+     "z": 0,
+     "w": 8,
+     "d": 9,
+     "y0": -0.5,
+     "y1": 6.4
+    }
+   ]
+  },
+  "w5": {
+   "id": "w5",
+   "type": "machiya",
+   "name": "Herboristerie et thé",
+   "variant": "c",
+   "file": "w5.glb",
+   "w": 8,
+   "d": 9,
+   "floors": 1,
+   "height": 6.59,
+   "lod": [
+    "w5_lod0",
+    "w5_lod1",
+    "w5_lod2"
+   ],
+   "triangles": [
+    8728,
+    1296,
+    172
+   ],
+   "bytes": 192084,
+   "anchors": [
+    {
+     "name": "anchor_noren_0",
+     "pos": [
+      -0.981,
+      2.5,
+      4.545
+     ],
+     "yaw": 0.0,
+     "w": 1.81,
+     "h": 0.92
+    },
+    {
+     "name": "anchor_noren_1",
+     "pos": [
+      0.981,
+      2.5,
+      4.505
+     ],
+     "yaw": 0.0,
+     "w": 1.81,
+     "h": 0.92
+    },
+    {
+     "name": "light_shop_0",
+     "pos": [
+      0.981,
+      2.05,
+      3.225
+     ],
+     "yaw": 0.0,
+     "color": "#ffb060",
+     "intensity": 1.0
+    },
+    {
+     "name": "anchor_lantern_0",
+     "pos": [
+      -1.712,
+      2.85,
+      5.05
+     ],
+     "yaw": 0.0,
+     "kind": "chochin"
+    },
+    {
+     "name": "anchor_lantern_1",
+     "pos": [
+      0.25,
+      2.85,
+      5.05
+     ],
+     "yaw": 0.0,
+     "kind": "chochin"
+    },
+    {
+     "name": "anchor_kanban_0",
+     "pos": [
+      0.0,
+      3.35,
+      4.62
+     ],
+     "yaw": 0.0,
+     "w": 2.2,
+     "h": 0.6,
+     "kind": "horizontal"
+    },
+    {
+     "name": "anchor_kanban_1",
+     "pos": [
+      3.75,
+      1.9,
+      5.1
+     ],
+     "yaw": 0.0,
+     "w": 0.45,
+     "h": 1.6,
+     "kind": "vertical"
+    },
+    {
+     "name": "smoke_kitchen_0",
+     "pos": [
+      2.0,
+      6.689,
+      -2.25
+     ],
+     "yaw": 0.0
+    }
+   ],
+   "colliders": [
+    {
+     "x": 0,
+     "z": 0,
+     "w": 8,
+     "d": 9,
+     "y0": -0.5,
+     "y1": 3.65
+    }
+   ]
+  },
+  "w6": {
+   "id": "w6",
+   "type": "minka",
+   "name": "Maison",
+   "variant": "a",
+   "file": "w6.glb",
+   "w": 8,
+   "d": 8,
+   "floors": 1,
+   "height": 6.32,
+   "lod": [
+    "w6_lod0",
+    "w6_lod1",
+    "w6_lod2"
+   ],
+   "triangles": [
+    6519,
+    1503,
+    170
+   ],
+   "bytes": 166620,
+   "anchors": [
+    {
+     "name": "anchor_noren_0",
+     "pos": [
+      2.944,
+      2.3,
+      3.095
+     ],
+     "yaw": 0.0,
+     "w": 1.81,
+     "h": 0.83
+    },
+    {
+     "name": "anchor_lantern_0",
+     "pos": [
+      3.694,
+      2.65,
+      4.35
+     ],
+     "yaw": 0.0,
+     "kind": "andon"
+    },
+    {
+     "name": "anchor_nameplate_0",
+     "pos": [
+      2.194,
+      1.95,
+      3.15
+     ],
+     "yaw": 0.0
+    },
+    {
+     "name": "light_room_0",
+     "pos": [
+      0.0,
+      1.85,
+      2.05
+     ],
+     "yaw": 0.0,
+     "color": "#ffb868",
+     "intensity": 0.8
+    },
+    {
+     "name": "smoke_hearth_0",
+     "pos": [
+      0.0,
+      6.42,
+      0.0
+     ],
+     "yaw": 0.0
+    }
+   ],
+   "colliders": [
+    {
+     "x": 0.0,
+     "z": -0.48,
+     "w": 8.0,
+     "d": 7.05,
+     "y0": -0.5,
+     "y1": 3.4
+    },
+    {
+     "x": 0,
+     "z": 3.52,
+     "w": 8,
+     "d": 0.95,
+     "y0": -0.5,
+     "y1": 0.45,
+     "walk": true
+    }
+   ]
+  },
+  "w7": {
+   "id": "w7",
+   "type": "minka",
+   "name": "Maison",
+   "variant": "b",
+   "file": "w7.glb",
+   "w": 9,
+   "d": 8,
+   "floors": 1,
+   "height": 6.08,
+   "lod": [
+    "w7_lod0",
+    "w7_lod1",
+    "w7_lod2"
+   ],
+   "triangles": [
+    12955,
+    2745,
+    318
+   ],
+   "bytes": 317472,
+   "anchors": [
+    {
+     "name": "anchor_noren_0",
+     "pos": [
+      -1.463,
+      2.3,
+      4.045
+     ],
+     "yaw": 0.0,
+     "w": 1.82,
+     "h": 0.83
+    },
+    {
+     "name": "anchor_lantern_0",
+     "pos": [
+      -0.712,
+      2.65,
+      4.35
+     ],
+     "yaw": 0.0,
+     "kind": "chochin"
+    },
+    {
+     "name": "anchor_nameplate_0",
+     "pos": [
+      -2.213,
+      1.95,
+      4.1
+     ],
+     "yaw": 0.0
+    },
+    {
+     "name": "light_room_0",
+     "pos": [
+      -0.475,
+      1.85,
+      3.0
+     ],
+     "yaw": 0.0,
+     "color": "#ffb868",
+     "intensity": 0.8
+    },
+    {
+     "name": "smoke_hearth_0",
+     "pos": [
+      0.0,
+      6.177,
+      0.0
+     ],
+     "yaw": 0.0
+    }
+   ],
+   "colliders": [
+    {
+     "x": -0.48,
+     "z": 0.0,
+     "w": 8.05,
+     "d": 8.0,
+     "y0": -0.5,
+     "y1": 3.4
+    },
+    {
+     "x": 4.03,
+     "z": 0,
+     "w": 0.95,
+     "d": 8,
+     "y0": -0.5,
+     "y1": 0.45,
+     "walk": true
+    }
+   ]
+  },
+  "w8": {
+   "id": "w8",
+   "type": "minka",
+   "name": "Maison du gardien du torii",
+   "variant": "c",
+   "file": "w8.glb",
+   "w": 7,
+   "d": 7,
+   "floors": 1,
+   "height": 6.04,
+   "lod": [
+    "w8_lod0",
+    "w8_lod1",
+    "w8_lod2"
+   ],
+   "triangles": [
+    6796,
+    1406,
+    170
+   ],
+   "bytes": 176840,
+   "anchors": [
+    {
+     "name": "anchor_noren_0",
+     "pos": [
+      0.856,
+      2.3,
+      3.545
+     ],
+     "yaw": 0.0,
+     "w": 1.56,
+     "h": 0.83
+    },
+    {
+     "name": "anchor_lantern_0",
+     "pos": [
+      1.606,
+      2.65,
+      3.85
+     ],
+     "yaw": 0.0,
+     "kind": "chochin"
+    },
+    {
+     "name": "anchor_nameplate_0",
+     "pos": [
+      0.106,
+      1.95,
+      3.6
+     ],
+     "yaw": 0.0
+    },
+    {
+     "name": "light_room_0",
+     "pos": [
+      0.0,
+      1.85,
+      2.5
+     ],
+     "yaw": 0.0,
+     "color": "#ffb868",
+     "intensity": 0.8
+    },
+    {
+     "name": "smoke_hearth_0",
+     "pos": [
+      0.0,
+      6.138,
+      0.0
+     ],
+     "yaw": 0.0
+    }
+   ],
+   "colliders": [
+    {
+     "x": 0.0,
+     "z": 0.0,
+     "w": 7.0,
+     "d": 7.0,
+     "y0": -0.5,
+     "y1": 3.4
+    }
+   ]
+  },
+  "n1": {
+   "id": "n1",
+   "type": "machiya",
+   "name": "Chapellerie de Basile",
+   "variant": "c",
+   "file": "n1.glb",
+   "w": 9,
+   "d": 9,
+   "floors": 2,
+   "height": 9.09,
+   "lod": [
+    "n1_lod0",
+    "n1_lod1",
+    "n1_lod2"
+   ],
+   "triangles": [
+    13534,
+    2266,
+    182
+   ],
+   "bytes": 289564,
+   "anchors": [
+    {
+     "name": "anchor_noren_0",
+     "pos": [
+      -1.77,
+      2.5,
+      4.505
+     ],
+     "yaw": 0.0,
+     "w": 1.62,
+     "h": 0.92
+    },
+    {
+     "name": "light_shop_0",
+     "pos": [
+      -1.77,
+      2.05,
+      3.225
+     ],
+     "yaw": 0.0,
+     "color": "#ffb060",
+     "intensity": 1.0
+    },
+    {
+     "name": "anchor_noren_1",
+     "pos": [
+      1.77,
+      2.5,
+      4.545
+     ],
+     "yaw": 0.0,
+     "w": 1.62,
+     "h": 0.92
+    },
+    {
+     "name": "anchor_lantern_0",
+     "pos": [
+      -2.405,
+      2.85,
+      5.05
+     ],
+     "yaw": 0.0,
+     "kind": "chochin"
+    },
+    {
+     "name": "anchor_lantern_1",
+     "pos": [
+      1.135,
+      2.85,
+      5.05
+     ],
+     "yaw": 0.0,
+     "kind": "chochin"
+    },
+    {
+     "name": "anchor_kanban_0",
+     "pos": [
+      0.0,
+      5.225,
+      4.62
+     ],
+     "yaw": 0.0,
+     "w": 2.2,
+     "h": 0.6,
+     "kind": "horizontal"
+    },
+    {
+     "name": "anchor_kanban_1",
+     "pos": [
+      4.25,
+      1.9,
+      5.1
+     ],
+     "yaw": 0.0,
+     "w": 0.45,
+     "h": 1.6,
+     "kind": "vertical"
+    },
+    {
+     "name": "light_room_0",
+     "pos": [
+      0.0,
+      4.95,
+      3.3
+     ],
+     "yaw": 0.0,
+     "color": "#ffb868",
+     "intensity": 0.8
+    },
+    {
+     "name": "smoke_kitchen_0",
+     "pos": [
+      2.25,
+      9.189,
+      -2.25
+     ],
+     "yaw": 0.0
+    }
+   ],
+   "colliders": [
+    {
+     "x": 0,
+     "z": 0,
+     "w": 9,
+     "d": 9,
+     "y0": -0.5,
+     "y1": 6.15
+    }
+   ]
+  },
+  "n9": {
+   "id": "n9",
+   "type": "minka",
+   "name": "Maison du veilleur de la porte",
+   "variant": "b",
+   "file": "n9.glb",
+   "w": 9,
+   "d": 8,
+   "floors": 1,
+   "height": 6.08,
+   "lod": [
+    "n9_lod0",
+    "n9_lod1",
+    "n9_lod2"
+   ],
+   "triangles": [
+    12955,
+    2745,
+    318
+   ],
+   "bytes": 306504,
+   "anchors": [
+    {
+     "name": "anchor_noren_0",
+     "pos": [
+      -1.463,
+      2.3,
+      4.045
+     ],
+     "yaw": 0.0,
+     "w": 1.82,
+     "h": 0.83
+    },
+    {
+     "name": "anchor_lantern_0",
+     "pos": [
+      -0.712,
+      2.65,
+      4.35
+     ],
+     "yaw": 0.0,
+     "kind": "chochin"
+    },
+    {
+     "name": "anchor_nameplate_0",
+     "pos": [
+      -2.213,
+      1.95,
+      4.1
+     ],
+     "yaw": 0.0
+    },
+    {
+     "name": "light_room_0",
+     "pos": [
+      -0.475,
+      1.85,
+      3.0
+     ],
+     "yaw": 0.0,
+     "color": "#ffb868",
+     "intensity": 0.8
+    },
+    {
+     "name": "smoke_hearth_0",
+     "pos": [
+      0.0,
+      6.177,
+      0.0
+     ],
+     "yaw": 0.0
+    }
+   ],
+   "colliders": [
+    {
+     "x": -0.48,
+     "z": 0.0,
+     "w": 8.05,
+     "d": 8.0,
+     "y0": -0.5,
+     "y1": 3.4
+    },
+    {
+     "x": 4.03,
+     "z": 0,
+     "w": 0.95,
+     "d": 8,
+     "y0": -0.5,
+     "y1": 0.45,
+     "walk": true
+    }
+   ]
+  },
+  "n5": {
+   "id": "n5",
+   "type": "machiya",
+   "name": "Studio de Léo le photographe",
+   "variant": "a",
+   "file": "n5.glb",
+   "w": 9,
+   "d": 9,
+   "floors": 2,
+   "height": 8.79,
+   "lod": [
+    "n5_lod0",
+    "n5_lod1",
+    "n5_lod2"
+   ],
+   "triangles": [
+    13096,
+    2074,
+    182
+   ],
+   "bytes": 294124,
+   "anchors": [
+    {
+     "name": "anchor_noren_0",
+     "pos": [
+      -3.54,
+      2.5,
+      4.505
+     ],
+     "yaw": 0.0,
+     "w": 1.62,
+     "h": 0.92
+    },
+    {
+     "name": "light_shop_0",
+     "pos": [
+      -3.54,
+      2.05,
+      3.225
+     ],
+     "yaw": 0.0,
+     "color": "#ffb060",
+     "intensity": 1.0
+    },
+    {
+     "name": "anchor_noren_1",
+     "pos": [
+      3.54,
+      2.5,
+      4.545
+     ],
+     "yaw": 0.0,
+     "w": 1.62,
+     "h": 0.92
+    },
+    {
+     "name": "anchor_lantern_0",
+     "pos": [
+      -4.175,
+      2.85,
+      5.05
+     ],
+     "yaw": 0.0,
+     "kind": "chochin"
+    },
+    {
+     "name": "anchor_lantern_1",
+     "pos": [
+      2.905,
+      2.85,
+      5.05
+     ],
+     "yaw": 0.0,
+     "kind": "chochin"
+    },
+    {
+     "name": "anchor_kanban_0",
+     "pos": [
+      0.0,
+      5.075,
+      4.62
+     ],
+     "yaw": 0.0,
+     "w": 2.2,
+     "h": 0.6,
+     "kind": "horizontal"
+    },
+    {
+     "name": "anchor_kanban_1",
+     "pos": [
+      4.25,
+      1.9,
+      5.1
+     ],
+     "yaw": 0.0,
+     "w": 0.45,
+     "h": 1.6,
+     "kind": "vertical"
+    },
+    {
+     "name": "light_room_0",
+     "pos": [
+      0.0,
+      4.95,
+      3.3
+     ],
+     "yaw": 0.0,
+     "color": "#ffb868",
+     "intensity": 0.8
+    },
+    {
+     "name": "smoke_kitchen_0",
+     "pos": [
+      2.25,
+      8.889,
+      -2.25
+     ],
+     "yaw": 0.0
+    }
+   ],
+   "colliders": [
+    {
+     "x": 0,
+     "z": 0,
+     "w": 9,
+     "d": 9,
+     "y0": -0.5,
+     "y1": 5.85
+    }
+   ]
+  },
+  "n6": {
+   "id": "n6",
+   "type": "minka",
+   "name": "Maison",
+   "variant": "c",
+   "file": "n6.glb",
+   "w": 10,
+   "d": 8,
+   "floors": 1,
+   "height": 6.88,
+   "lod": [
+    "n6_lod0",
+    "n6_lod1",
+    "n6_lod2"
+   ],
+   "triangles": [
+    8128,
+    1550,
+    170
+   ],
+   "bytes": 202008,
+   "anchors": [
+    {
+     "name": "anchor_noren_0",
+     "pos": [
+      -1.97,
+      2.3,
+      4.045
+     ],
+     "yaw": 0.0,
+     "w": 1.82,
+     "h": 0.83
+    },
+    {
+     "name": "anchor_lantern_0",
+     "pos": [
+      -1.22,
+      2.65,
+      4.35
+     ],
+     "yaw": 0.0,
+     "kind": "chochin"
+    },
+    {
+     "name": "anchor_nameplate_0",
+     "pos": [
+      -2.72,
+      1.95,
+      4.1
+     ],
+     "yaw": 0.0
+    },
+    {
+     "name": "light_room_0",
+     "pos": [
+      0.0,
+      1.85,
+      3.0
+     ],
+     "yaw": 0.0,
+     "color": "#ffb868",
+     "intensity": 0.8
+    },
+    {
+     "name": "smoke_hearth_0",
+     "pos": [
+      0.0,
+      6.983,
+      0.0
+     ],
+     "yaw": 0.0
+    }
+   ],
+   "colliders": [
+    {
+     "x": 0.0,
+     "z": 0.0,
+     "w": 10.0,
+     "d": 8.0,
+     "y0": -0.5,
+     "y1": 3.4
+    }
+   ]
+  },
+  "n7": {
+   "id": "n7",
+   "type": "machiya",
+   "name": "Atelier du charpentier",
+   "variant": "b",
+   "file": "n7.glb",
+   "w": 9,
+   "d": 9,
+   "floors": 1,
+   "height": 6.59,
+   "lod": [
+    "n7_lod0",
+    "n7_lod1",
+    "n7_lod2"
+   ],
+   "triangles": [
+    9430,
+    1352,
+    172
+   ],
+   "bytes": 211896,
+   "anchors": [
+    {
+     "name": "anchor_noren_0",
+     "pos": [
+      -1.77,
+      2.5,
+      4.545
+     ],
+     "yaw": 0.0,
+     "w": 1.62,
+     "h": 0.92
+    },
+    {
+     "name": "anchor_noren_1",
+     "pos": [
+      1.77,
+      2.5,
+      4.505
+     ],
+     "yaw": 0.0,
+     "w": 1.62,
+     "h": 0.92
+    },
+    {
+     "name": "light_shop_0",
+     "pos": [
+      1.77,
+      2.05,
+      3.225
+     ],
+     "yaw": 0.0,
+     "color": "#ffb060",
+     "intensity": 1.0
+    },
+    {
+     "name": "anchor_noren_2",
+     "pos": [
+      3.54,
+      2.5,
+      4.505
+     ],
+     "yaw": 0.0,
+     "w": 1.62,
+     "h": 0.92
+    },
+    {
+     "name": "light_shop_1",
+     "pos": [
+      3.54,
+      2.05,
+      3.225
+     ],
+     "yaw": 0.0,
+     "color": "#ffb060",
+     "intensity": 1.0
+    },
+    {
+     "name": "anchor_lantern_0",
+     "pos": [
+      -2.405,
+      2.85,
+      5.05
+     ],
+     "yaw": 0.0,
+     "kind": "chochin"
+    },
+    {
+     "name": "anchor_lantern_1",
+     "pos": [
+      1.135,
+      2.85,
+      5.05
+     ],
+     "yaw": 0.0,
+     "kind": "chochin"
+    },
+    {
+     "name": "anchor_lantern_2",
+     "pos": [
+      2.905,
+      2.85,
+      5.05
+     ],
+     "yaw": 0.0,
+     "kind": "chochin"
+    },
+    {
+     "name": "anchor_kanban_0",
+     "pos": [
+      0.0,
+      3.35,
+      4.62
+     ],
+     "yaw": 0.0,
+     "w": 2.2,
+     "h": 0.6,
+     "kind": "horizontal"
+    },
+    {
+     "name": "anchor_kanban_1",
+     "pos": [
+      4.25,
+      1.9,
+      5.1
+     ],
+     "yaw": 0.0,
+     "w": 0.45,
+     "h": 1.6,
+     "kind": "vertical"
+    },
+    {
+     "name": "smoke_kitchen_0",
+     "pos": [
+      2.25,
+      6.689,
+      -2.25
+     ],
+     "yaw": 0.0
+    }
+   ],
+   "colliders": [
+    {
+     "x": 0,
+     "z": 0,
+     "w": 9,
+     "d": 9,
+     "y0": -0.5,
+     "y1": 3.65
+    }
+   ]
+  },
+  "n8": {
+   "id": "n8",
+   "type": "minka",
+   "name": "Maison",
+   "variant": "a",
+   "file": "n8.glb",
+   "w": 8,
+   "d": 8,
+   "floors": 1,
+   "height": 6.32,
+   "lod": [
+    "n8_lod0",
+    "n8_lod1",
+    "n8_lod2"
+   ],
+   "triangles": [
+    6519,
+    1503,
+    170
+   ],
+   "bytes": 168268,
+   "anchors": [
+    {
+     "name": "anchor_noren_0",
+     "pos": [
+      2.944,
+      2.3,
+      3.095
+     ],
+     "yaw": 0.0,
+     "w": 1.81,
+     "h": 0.83
+    },
+    {
+     "name": "anchor_lantern_0",
+     "pos": [
+      3.694,
+      2.65,
+      4.35
+     ],
+     "yaw": 0.0,
+     "kind": "andon"
+    },
+    {
+     "name": "anchor_nameplate_0",
+     "pos": [
+      2.194,
+      1.95,
+      3.15
+     ],
+     "yaw": 0.0
+    },
+    {
+     "name": "light_room_0",
+     "pos": [
+      0.0,
+      1.85,
+      2.05
+     ],
+     "yaw": 0.0,
+     "color": "#ffb868",
+     "intensity": 0.8
+    },
+    {
+     "name": "smoke_hearth_0",
+     "pos": [
+      0.0,
+      6.42,
+      0.0
+     ],
+     "yaw": 0.0
+    }
+   ],
+   "colliders": [
+    {
+     "x": 0.0,
+     "z": -0.48,
+     "w": 8.0,
+     "d": 7.05,
+     "y0": -0.5,
+     "y1": 3.4
+    },
+    {
+     "x": 0,
+     "z": 3.52,
+     "w": 8,
+     "d": 0.95,
+     "y0": -0.5,
+     "y1": 0.45,
+     "walk": true
+    }
+   ]
+  },
+  "l1": {
+   "id": "l1",
+   "type": "minka",
+   "name": "Maison",
+   "variant": "b",
+   "file": "l1.glb",
+   "w": 9,
+   "d": 8,
+   "floors": 1,
+   "height": 6.08,
+   "lod": [
+    "l1_lod0",
+    "l1_lod1",
+    "l1_lod2"
+   ],
+   "triangles": [
+    12955,
+    2745,
+    318
+   ],
+   "bytes": 319360,
+   "anchors": [
+    {
+     "name": "anchor_noren_0",
+     "pos": [
+      -1.463,
+      2.3,
+      4.045
+     ],
+     "yaw": 0.0,
+     "w": 1.82,
+     "h": 0.83
+    },
+    {
+     "name": "anchor_lantern_0",
+     "pos": [
+      -0.712,
+      2.65,
+      4.35
+     ],
+     "yaw": 0.0,
+     "kind": "chochin"
+    },
+    {
+     "name": "anchor_nameplate_0",
+     "pos": [
+      -2.213,
+      1.95,
+      4.1
+     ],
+     "yaw": 0.0
+    },
+    {
+     "name": "light_room_0",
+     "pos": [
+      -0.475,
+      1.85,
+      3.0
+     ],
+     "yaw": 0.0,
+     "color": "#ffb868",
+     "intensity": 0.8
+    },
+    {
+     "name": "smoke_hearth_0",
+     "pos": [
+      0.0,
+      6.177,
+      0.0
+     ],
+     "yaw": 0.0
+    }
+   ],
+   "colliders": [
+    {
+     "x": -0.48,
+     "z": 0.0,
+     "w": 8.05,
+     "d": 8.0,
+     "y0": -0.5,
+     "y1": 3.4
+    },
+    {
+     "x": 4.03,
+     "z": 0,
+     "w": 0.95,
+     "d": 8,
+     "y0": -0.5,
+     "y1": 0.45,
+     "walk": true
+    }
+   ]
+  },
+  "l2": {
+   "id": "l2",
+   "type": "minka",
+   "name": "Maison",
+   "variant": "c",
+   "file": "l2.glb",
+   "w": 9,
+   "d": 8,
+   "floors": 1,
+   "height": 6.6,
+   "lod": [
+    "l2_lod0",
+    "l2_lod1",
+    "l2_lod2"
+   ],
+   "triangles": [
+    7866,
+    1534,
+    170
+   ],
+   "bytes": 194692,
+   "anchors": [
+    {
+     "name": "anchor_noren_0",
+     "pos": [
+      1.77,
+      2.3,
+      4.045
+     ],
+     "yaw": 0.0,
+     "w": 1.62,
+     "h": 0.83
+    },
+    {
+     "name": "anchor_lantern_0",
+     "pos": [
+      2.52,
+      2.65,
+      4.35
+     ],
+     "yaw": 0.0,
+     "kind": "chochin"
+    },
+    {
+     "name": "anchor_nameplate_0",
+     "pos": [
+      1.02,
+      1.95,
+      4.1
+     ],
+     "yaw": 0.0
+    },
+    {
+     "name": "light_room_0",
+     "pos": [
+      0.0,
+      1.85,
+      3.0
+     ],
+     "yaw": 0.0,
+     "color": "#ffb868",
+     "intensity": 0.8
+    },
+    {
+     "name": "smoke_hearth_0",
+     "pos": [
+      0.0,
+      6.701,
+      0.0
+     ],
+     "yaw": 0.0
+    }
+   ],
+   "colliders": [
+    {
+     "x": 0.0,
+     "z": 0.0,
+     "w": 9.0,
+     "d": 8.0,
+     "y0": -0.5,
+     "y1": 3.4
+    }
+   ]
+  },
+  "l3": {
+   "id": "l3",
+   "type": "minka",
+   "name": "Maison du forgeron",
+   "variant": "a",
+   "file": "l3.glb",
+   "w": 10,
+   "d": 8,
+   "floors": 1,
+   "height": 6.32,
+   "lod": [
+    "l3_lod0",
+    "l3_lod1",
+    "l3_lod2"
+   ],
+   "triangles": [
+    7473,
+    1633,
+    170
+   ],
+   "bytes": 180072,
+   "anchors": [
+    {
+     "name": "anchor_noren_0",
+     "pos": [
+      3.94,
+      2.3,
+      3.095
+     ],
+     "yaw": 0.0,
+     "w": 1.82,
+     "h": 0.83
+    },
+    {
+     "name": "anchor_lantern_0",
+     "pos": [
+      4.69,
+      2.65,
+      4.35
+     ],
+     "yaw": 0.0,
+     "kind": "andon"
+    },
+    {
+     "name": "anchor_nameplate_0",
+     "pos": [
+      3.19,
+      1.95,
+      3.15
+     ],
+     "yaw": 0.0
+    },
+    {
+     "name": "light_room_0",
+     "pos": [
+      0.0,
+      1.85,
+      2.05
+     ],
+     "yaw": 0.0,
+     "color": "#ffb868",
+     "intensity": 0.8
+    },
+    {
+     "name": "smoke_hearth_0",
+     "pos": [
+      0.0,
+      6.42,
+      0.0
+     ],
+     "yaw": 0.0
+    }
+   ],
+   "colliders": [
+    {
+     "x": 0.0,
+     "z": -0.48,
+     "w": 10.0,
+     "d": 7.05,
+     "y0": -0.5,
+     "y1": 3.4
+    },
+    {
+     "x": 0,
+     "z": 3.52,
+     "w": 10,
+     "d": 0.95,
+     "y0": -0.5,
+     "y1": 0.45,
+     "walk": true
+    }
+   ]
+  },
+  "l7": {
+   "id": "l7",
+   "type": "minka",
+   "name": "Maison",
+   "variant": "a",
+   "file": "l7.glb",
+   "w": 9,
+   "d": 8,
+   "floors": 1,
+   "height": 6.32,
+   "lod": [
+    "l7_lod0",
+    "l7_lod1",
+    "l7_lod2"
+   ],
+   "triangles": [
+    7121,
+    1621,
+    170
+   ],
+   "bytes": 178228,
+   "anchors": [
+    {
+     "name": "anchor_noren_0",
+     "pos": [
+      -3.54,
+      2.3,
+      3.095
+     ],
+     "yaw": 0.0,
+     "w": 1.62,
+     "h": 0.83
+    },
+    {
+     "name": "anchor_lantern_0",
+     "pos": [
+      -2.79,
+      2.65,
+      4.35
+     ],
+     "yaw": 0.0,
+     "kind": "andon"
+    },
+    {
+     "name": "anchor_nameplate_0",
+     "pos": [
+      -4.29,
+      1.95,
+      3.15
+     ],
+     "yaw": 0.0
+    },
+    {
+     "name": "light_room_0",
+     "pos": [
+      0.0,
+      1.85,
+      2.05
+     ],
+     "yaw": 0.0,
+     "color": "#ffb868",
+     "intensity": 0.8
+    },
+    {
+     "name": "smoke_hearth_0",
+     "pos": [
+      0.0,
+      6.42,
+      0.0
+     ],
+     "yaw": 0.0
+    }
+   ],
+   "colliders": [
+    {
+     "x": 0.0,
+     "z": -0.48,
+     "w": 9.0,
+     "d": 7.05,
+     "y0": -0.5,
+     "y1": 3.4
+    },
+    {
+     "x": 0,
+     "z": 3.52,
+     "w": 9,
+     "d": 0.95,
+     "y0": -0.5,
+     "y1": 0.45,
+     "walk": true
+    }
+   ]
+  },
+  "l4": {
+   "id": "l4",
+   "type": "minka",
+   "name": "Maison",
+   "variant": "b",
+   "file": "l4.glb",
+   "w": 9,
+   "d": 8,
+   "floors": 1,
+   "height": 6.08,
+   "lod": [
+    "l4_lod0",
+    "l4_lod1",
+    "l4_lod2"
+   ],
+   "triangles": [
+    12955,
+    2745,
+    318
+   ],
+   "bytes": 321404,
+   "anchors": [
+    {
+     "name": "anchor_noren_0",
+     "pos": [
+      -1.463,
+      2.3,
+      4.045
+     ],
+     "yaw": 0.0,
+     "w": 1.82,
+     "h": 0.83
+    },
+    {
+     "name": "anchor_lantern_0",
+     "pos": [
+      -0.712,
+      2.65,
+      4.35
+     ],
+     "yaw": 0.0,
+     "kind": "chochin"
+    },
+    {
+     "name": "anchor_nameplate_0",
+     "pos": [
+      -2.213,
+      1.95,
+      4.1
+     ],
+     "yaw": 0.0
+    },
+    {
+     "name": "light_room_0",
+     "pos": [
+      -0.475,
+      1.85,
+      3.0
+     ],
+     "yaw": 0.0,
+     "color": "#ffb868",
+     "intensity": 0.8
+    },
+    {
+     "name": "smoke_hearth_0",
+     "pos": [
+      0.0,
+      6.177,
+      0.0
+     ],
+     "yaw": 0.0
+    }
+   ],
+   "colliders": [
+    {
+     "x": -0.48,
+     "z": 0.0,
+     "w": 8.05,
+     "d": 8.0,
+     "y0": -0.5,
+     "y1": 3.4
+    },
+    {
+     "x": 4.03,
+     "z": 0,
+     "w": 0.95,
+     "d": 8,
+     "y0": -0.5,
+     "y1": 0.45,
+     "walk": true
+    }
+   ]
+  },
+  "l6": {
+   "id": "l6",
+   "type": "minka",
+   "name": "Maison",
+   "variant": "c",
+   "file": "l6.glb",
+   "w": 10,
+   "d": 8,
+   "floors": 1,
+   "height": 6.88,
+   "lod": [
+    "l6_lod0",
+    "l6_lod1",
+    "l6_lod2"
+   ],
+   "triangles": [
+    8128,
+    1550,
+    170
+   ],
+   "bytes": 196452,
+   "anchors": [
+    {
+     "name": "anchor_noren_0",
+     "pos": [
+      -1.97,
+      2.3,
+      4.045
+     ],
+     "yaw": 0.0,
+     "w": 1.82,
+     "h": 0.83
+    },
+    {
+     "name": "anchor_lantern_0",
+     "pos": [
+      -1.22,
+      2.65,
+      4.35
+     ],
+     "yaw": 0.0,
+     "kind": "chochin"
+    },
+    {
+     "name": "anchor_nameplate_0",
+     "pos": [
+      -2.72,
+      1.95,
+      4.1
+     ],
+     "yaw": 0.0
+    },
+    {
+     "name": "light_room_0",
+     "pos": [
+      0.0,
+      1.85,
+      3.0
+     ],
+     "yaw": 0.0,
+     "color": "#ffb868",
+     "intensity": 0.8
+    },
+    {
+     "name": "smoke_hearth_0",
+     "pos": [
+      0.0,
+      6.983,
+      0.0
+     ],
+     "yaw": 0.0
+    }
+   ],
+   "colliders": [
+    {
+     "x": 0.0,
+     "z": 0.0,
+     "w": 10.0,
+     "d": 8.0,
+     "y0": -0.5,
+     "y1": 3.4
+    }
+   ]
+  },
+  "p1": {
+   "id": "p1",
+   "type": "minka",
+   "name": "Maison",
+   "variant": "b",
+   "file": "p1.glb",
+   "w": 9,
+   "d": 8,
+   "floors": 1,
+   "height": 6.08,
+   "lod": [
+    "p1_lod0",
+    "p1_lod1",
+    "p1_lod2"
+   ],
+   "triangles": [
+    12955,
+    2745,
+    318
+   ],
+   "bytes": 293700,
+   "anchors": [
+    {
+     "name": "anchor_noren_0",
+     "pos": [
+      0.512,
+      2.3,
+      4.045
+     ],
+     "yaw": 0.0,
+     "w": 1.83,
+     "h": 0.83
+    },
+    {
+     "name": "anchor_lantern_0",
+     "pos": [
+      1.263,
+      2.65,
+      4.35
+     ],
+     "yaw": 0.0,
+     "kind": "chochin"
+    },
+    {
+     "name": "anchor_nameplate_0",
+     "pos": [
+      -0.237,
+      1.95,
+      4.1
+     ],
+     "yaw": 0.0
+    },
+    {
+     "name": "light_room_0",
+     "pos": [
+      -0.475,
+      1.85,
+      3.0
+     ],
+     "yaw": 0.0,
+     "color": "#ffb868",
+     "intensity": 0.8
+    },
+    {
+     "name": "smoke_hearth_0",
+     "pos": [
+      0.0,
+      6.177,
+      0.0
+     ],
+     "yaw": 0.0
+    }
+   ],
+   "colliders": [
+    {
+     "x": -0.48,
+     "z": 0.0,
+     "w": 8.05,
+     "d": 8.0,
+     "y0": -0.5,
+     "y1": 3.4
+    },
+    {
+     "x": 4.03,
+     "z": 0,
+     "w": 0.95,
+     "d": 8,
+     "y0": -0.5,
+     "y1": 0.45,
+     "walk": true
+    }
+   ]
+  },
+  "p2": {
+   "id": "p2",
+   "type": "minka",
+   "name": "Maison",
+   "variant": "c",
+   "file": "p2.glb",
+   "w": 9,
+   "d": 8,
+   "floors": 1,
+   "height": 6.6,
+   "lod": [
+    "p2_lod0",
+    "p2_lod1",
+    "p2_lod2"
+   ],
+   "triangles": [
+    7866,
+    1534,
+    170
+   ],
+   "bytes": 198724,
+   "anchors": [
+    {
+     "name": "anchor_noren_0",
+     "pos": [
+      -1.77,
+      2.3,
+      4.045
+     ],
+     "yaw": 0.0,
+     "w": 1.62,
+     "h": 0.83
+    },
+    {
+     "name": "anchor_lantern_0",
+     "pos": [
+      -1.02,
+      2.65,
+      4.35
+     ],
+     "yaw": 0.0,
+     "kind": "chochin"
+    },
+    {
+     "name": "anchor_nameplate_0",
+     "pos": [
+      -2.52,
+      1.95,
+      4.1
+     ],
+     "yaw": 0.0
+    },
+    {
+     "name": "light_room_0",
+     "pos": [
+      0.0,
+      1.85,
+      3.0
+     ],
+     "yaw": 0.0,
+     "color": "#ffb868",
+     "intensity": 0.8
+    },
+    {
+     "name": "smoke_hearth_0",
+     "pos": [
+      0.0,
+      6.701,
+      0.0
+     ],
+     "yaw": 0.0
+    }
+   ],
+   "colliders": [
+    {
+     "x": 0.0,
+     "z": 0.0,
+     "w": 9.0,
+     "d": 8.0,
+     "y0": -0.5,
+     "y1": 3.4
+    }
+   ]
+  },
+  "p3": {
+   "id": "p3",
+   "type": "minka",
+   "name": "Maison du pêcheur",
+   "variant": "a",
+   "file": "p3.glb",
+   "w": 10,
+   "d": 8,
+   "floors": 1,
+   "height": 6.32,
+   "lod": [
+    "p3_lod0",
+    "p3_lod1",
+    "p3_lod2"
+   ],
+   "triangles": [
+    7473,
+    1633,
+    170
+   ],
+   "bytes": 182820,
+   "anchors": [
+    {
+     "name": "anchor_noren_0",
+     "pos": [
+      3.94,
+      2.3,
+      3.095
+     ],
+     "yaw": 0.0,
+     "w": 1.82,
+     "h": 0.83
+    },
+    {
+     "name": "anchor_lantern_0",
+     "pos": [
+      4.69,
+      2.65,
+      4.35
+     ],
+     "yaw": 0.0,
+     "kind": "andon"
+    },
+    {
+     "name": "anchor_nameplate_0",
+     "pos": [
+      3.19,
+      1.95,
+      3.15
+     ],
+     "yaw": 0.0
+    },
+    {
+     "name": "light_room_0",
+     "pos": [
+      0.0,
+      1.85,
+      2.05
+     ],
+     "yaw": 0.0,
+     "color": "#ffb868",
+     "intensity": 0.8
+    },
+    {
+     "name": "smoke_hearth_0",
+     "pos": [
+      0.0,
+      6.42,
+      0.0
+     ],
+     "yaw": 0.0
+    }
+   ],
+   "colliders": [
+    {
+     "x": 0.0,
+     "z": -0.48,
+     "w": 10.0,
+     "d": 7.05,
+     "y0": -0.5,
+     "y1": 3.4
+    },
+    {
+     "x": 0,
+     "z": 3.52,
+     "w": 10,
+     "d": 0.95,
+     "y0": -0.5,
+     "y1": 0.45,
+     "walk": true
+    }
+   ]
+  },
+  "p7": {
+   "id": "p7",
+   "type": "minka",
+   "name": "Maison",
+   "variant": "b",
+   "file": "p7.glb",
+   "w": 9,
+   "d": 8,
+   "floors": 1,
+   "height": 6.08,
+   "lod": [
+    "p7_lod0",
+    "p7_lod1",
+    "p7_lod2"
+   ],
+   "triangles": [
+    12955,
+    2745,
+    318
+   ],
+   "bytes": 313764,
+   "anchors": [
+    {
+     "name": "anchor_noren_0",
+     "pos": [
+      0.512,
+      2.3,
+      4.045
+     ],
+     "yaw": 0.0,
+     "w": 1.83,
+     "h": 0.83
+    },
+    {
+     "name": "anchor_lantern_0",
+     "pos": [
+      1.263,
+      2.65,
+      4.35
+     ],
+     "yaw": 0.0,
+     "kind": "chochin"
+    },
+    {
+     "name": "anchor_nameplate_0",
+     "pos": [
+      -0.237,
+      1.95,
+      4.1
+     ],
+     "yaw": 0.0
+    },
+    {
+     "name": "light_room_0",
+     "pos": [
+      -0.475,
+      1.85,
+      3.0
+     ],
+     "yaw": 0.0,
+     "color": "#ffb868",
+     "intensity": 0.8
+    },
+    {
+     "name": "smoke_hearth_0",
+     "pos": [
+      0.0,
+      6.177,
+      0.0
+     ],
+     "yaw": 0.0
+    }
+   ],
+   "colliders": [
+    {
+     "x": -0.48,
+     "z": 0.0,
+     "w": 8.05,
+     "d": 8.0,
+     "y0": -0.5,
+     "y1": 3.4
+    },
+    {
+     "x": 4.03,
+     "z": 0,
+     "w": 0.95,
+     "d": 8,
+     "y0": -0.5,
+     "y1": 0.45,
+     "walk": true
+    }
+   ]
+  },
+  "p4": {
+   "id": "p4",
+   "type": "minka",
+   "name": "Maison",
+   "variant": "b",
+   "file": "p4.glb",
+   "w": 9,
+   "d": 8,
+   "floors": 1,
+   "height": 6.08,
+   "lod": [
+    "p4_lod0",
+    "p4_lod1",
+    "p4_lod2"
+   ],
+   "triangles": [
+    12955,
+    2745,
+    318
+   ],
+   "bytes": 320808,
+   "anchors": [
+    {
+     "name": "anchor_noren_0",
+     "pos": [
+      -1.463,
+      2.3,
+      4.045
+     ],
+     "yaw": 0.0,
+     "w": 1.82,
+     "h": 0.83
+    },
+    {
+     "name": "anchor_lantern_0",
+     "pos": [
+      -0.712,
+      2.65,
+      4.35
+     ],
+     "yaw": 0.0,
+     "kind": "chochin"
+    },
+    {
+     "name": "anchor_nameplate_0",
+     "pos": [
+      -2.213,
+      1.95,
+      4.1
+     ],
+     "yaw": 0.0
+    },
+    {
+     "name": "light_room_0",
+     "pos": [
+      -0.475,
+      1.85,
+      3.0
+     ],
+     "yaw": 0.0,
+     "color": "#ffb868",
+     "intensity": 0.8
+    },
+    {
+     "name": "smoke_hearth_0",
+     "pos": [
+      0.0,
+      6.177,
+      0.0
+     ],
+     "yaw": 0.0
+    }
+   ],
+   "colliders": [
+    {
+     "x": -0.48,
+     "z": 0.0,
+     "w": 8.05,
+     "d": 8.0,
+     "y0": -0.5,
+     "y1": 3.4
+    },
+    {
+     "x": 4.03,
+     "z": 0,
+     "w": 0.95,
+     "d": 8,
+     "y0": -0.5,
+     "y1": 0.45,
+     "walk": true
+    }
+   ]
+  },
+  "p5": {
+   "id": "p5",
+   "type": "minka",
+   "name": "Maison",
+   "variant": "c",
+   "file": "p5.glb",
+   "w": 9,
+   "d": 8,
+   "floors": 1,
+   "height": 6.6,
+   "lod": [
+    "p5_lod0",
+    "p5_lod1",
+    "p5_lod2"
+   ],
+   "triangles": [
+    7866,
+    1534,
+    170
+   ],
+   "bytes": 192720,
+   "anchors": [
+    {
+     "name": "anchor_noren_0",
+     "pos": [
+      -1.77,
+      2.3,
+      4.045
+     ],
+     "yaw": 0.0,
+     "w": 1.62,
+     "h": 0.83
+    },
+    {
+     "name": "anchor_lantern_0",
+     "pos": [
+      -1.02,
+      2.65,
+      4.35
+     ],
+     "yaw": 0.0,
+     "kind": "chochin"
+    },
+    {
+     "name": "anchor_nameplate_0",
+     "pos": [
+      -2.52,
+      1.95,
+      4.1
+     ],
+     "yaw": 0.0
+    },
+    {
+     "name": "light_room_0",
+     "pos": [
+      0.0,
+      1.85,
+      3.0
+     ],
+     "yaw": 0.0,
+     "color": "#ffb868",
+     "intensity": 0.8
+    },
+    {
+     "name": "smoke_hearth_0",
+     "pos": [
+      0.0,
+      6.701,
+      0.0
+     ],
+     "yaw": 0.0
+    }
+   ],
+   "colliders": [
+    {
+     "x": 0.0,
+     "z": 0.0,
+     "w": 9.0,
+     "d": 8.0,
+     "y0": -0.5,
+     "y1": 3.4
+    }
+   ]
+  },
+  "p6": {
+   "id": "p6",
+   "type": "minka",
+   "name": "Maison",
+   "variant": "a",
+   "file": "p6.glb",
+   "w": 9,
+   "d": 8,
+   "floors": 1,
+   "height": 6.32,
+   "lod": [
+    "p6_lod0",
+    "p6_lod1",
+    "p6_lod2"
+   ],
+   "triangles": [
+    7121,
+    1621,
+    170
+   ],
+   "bytes": 181452,
+   "anchors": [
+    {
+     "name": "anchor_noren_0",
+     "pos": [
+      3.54,
+      2.3,
+      3.095
+     ],
+     "yaw": 0.0,
+     "w": 1.62,
+     "h": 0.83
+    },
+    {
+     "name": "anchor_lantern_0",
+     "pos": [
+      4.29,
+      2.65,
+      4.35
+     ],
+     "yaw": 0.0,
+     "kind": "andon"
+    },
+    {
+     "name": "anchor_nameplate_0",
+     "pos": [
+      2.79,
+      1.95,
+      3.15
+     ],
+     "yaw": 0.0
+    },
+    {
+     "name": "light_room_0",
+     "pos": [
+      0.0,
+      1.85,
+      2.05
+     ],
+     "yaw": 0.0,
+     "color": "#ffb868",
+     "intensity": 0.8
+    },
+    {
+     "name": "smoke_hearth_0",
+     "pos": [
+      0.0,
+      6.42,
+      0.0
+     ],
+     "yaw": 0.0
+    }
+   ],
+   "colliders": [
+    {
+     "x": 0.0,
+     "z": -0.48,
+     "w": 9.0,
+     "d": 7.05,
+     "y0": -0.5,
+     "y1": 3.4
+    },
+    {
+     "x": 0,
+     "z": 3.52,
+     "w": 9,
+     "d": 0.95,
+     "y0": -0.5,
+     "y1": 0.45,
+     "walk": true
+    }
+   ]
+  },
+  "y1": {
+   "id": "y1",
+   "type": "minka",
+   "name": "Maison du masseur",
+   "variant": "c",
+   "file": "y1.glb",
+   "w": 9,
+   "d": 8,
+   "floors": 1,
+   "height": 6.6,
+   "lod": [
+    "y1_lod0",
+    "y1_lod1",
+    "y1_lod2"
+   ],
+   "triangles": [
+    7866,
+    1534,
+    170
+   ],
+   "bytes": 200220,
+   "anchors": [
+    {
+     "name": "anchor_noren_0",
+     "pos": [
+      1.77,
+      2.3,
+      4.045
+     ],
+     "yaw": 0.0,
+     "w": 1.62,
+     "h": 0.83
+    },
+    {
+     "name": "anchor_lantern_0",
+     "pos": [
+      2.52,
+      2.65,
+      4.35
+     ],
+     "yaw": 0.0,
+     "kind": "chochin"
+    },
+    {
+     "name": "anchor_nameplate_0",
+     "pos": [
+      1.02,
+      1.95,
+      4.1
+     ],
+     "yaw": 0.0
+    },
+    {
+     "name": "light_room_0",
+     "pos": [
+      0.0,
+      1.85,
+      3.0
+     ],
+     "yaw": 0.0,
+     "color": "#ffb868",
+     "intensity": 0.8
+    },
+    {
+     "name": "smoke_hearth_0",
+     "pos": [
+      0.0,
+      6.701,
+      0.0
+     ],
+     "yaw": 0.0
+    }
+   ],
+   "colliders": [
+    {
+     "x": 0.0,
+     "z": 0.0,
+     "w": 9.0,
+     "d": 8.0,
+     "y0": -0.5,
+     "y1": 3.4
+    }
+   ]
+  },
+  "y2": {
+   "id": "y2",
+   "type": "machiya",
+   "name": "Boutique de serviettes et de savons",
+   "variant": "c",
+   "file": "y2.glb",
+   "w": 8,
+   "d": 8,
+   "floors": 1,
+   "height": 6.34,
+   "lod": [
+    "y2_lod0",
+    "y2_lod1",
+    "y2_lod2"
+   ],
+   "triangles": [
+    8624,
+    1248,
+    172
+   ],
+   "bytes": 202064,
+   "anchors": [
+    {
+     "name": "anchor_noren_0",
+     "pos": [
+      -0.981,
+      2.5,
+      4.005
+     ],
+     "yaw": 0.0,
+     "w": 1.81,
+     "h": 0.92
+    },
+    {
+     "name": "light_shop_0",
+     "pos": [
+      -0.981,
+      2.05,
+      2.725
+     ],
+     "yaw": 0.0,
+     "color": "#ffb060",
+     "intensity": 1.0
+    },
+    {
+     "name": "anchor_noren_1",
+     "pos": [
+      0.981,
+      2.5,
+      4.045
+     ],
+     "yaw": 0.0,
+     "w": 1.81,
+     "h": 0.92
+    },
+    {
+     "name": "anchor_lantern_0",
+     "pos": [
+      -1.712,
+      2.85,
+      4.55
+     ],
+     "yaw": 0.0,
+     "kind": "chochin"
+    },
+    {
+     "name": "anchor_lantern_1",
+     "pos": [
+      0.25,
+      2.85,
+      4.55
+     ],
+     "yaw": 0.0,
+     "kind": "chochin"
+    },
+    {
+     "name": "anchor_kanban_0",
+     "pos": [
+      0.0,
+      3.35,
+      4.12
+     ],
+     "yaw": 0.0,
+     "w": 2.2,
+     "h": 0.6,
+     "kind": "horizontal"
+    },
+    {
+     "name": "anchor_kanban_1",
+     "pos": [
+      3.75,
+      1.9,
+      4.6
+     ],
+     "yaw": 0.0,
+     "w": 0.45,
+     "h": 1.6,
+     "kind": "vertical"
+    },
+    {
+     "name": "smoke_kitchen_0",
+     "pos": [
+      2.0,
+      6.437,
+      -2.0
+     ],
+     "yaw": 0.0
+    }
+   ],
+   "colliders": [
+    {
+     "x": 0,
+     "z": 0,
+     "w": 8,
+     "d": 8,
+     "y0": -0.5,
+     "y1": 3.65
+    }
+   ]
+  },
+  "v2": {
+   "id": "v2",
+   "type": "minka",
+   "name": "Maison du baigneur",
+   "variant": "a",
+   "file": "v2.glb",
+   "w": 9,
+   "d": 8,
+   "floors": 1,
+   "height": 6.32,
+   "lod": [
+    "v2_lod0",
+    "v2_lod1",
+    "v2_lod2"
+   ],
+   "triangles": [
+    7121,
+    1621,
+    170
+   ],
+   "bytes": 183492,
+   "anchors": [
+    {
+     "name": "anchor_noren_0",
+     "pos": [
+      3.54,
+      2.3,
+      3.095
+     ],
+     "yaw": 0.0,
+     "w": 1.62,
+     "h": 0.83
+    },
+    {
+     "name": "anchor_lantern_0",
+     "pos": [
+      4.29,
+      2.65,
+      4.35
+     ],
+     "yaw": 0.0,
+     "kind": "andon"
+    },
+    {
+     "name": "anchor_nameplate_0",
+     "pos": [
+      2.79,
+      1.95,
+      3.15
+     ],
+     "yaw": 0.0
+    },
+    {
+     "name": "light_room_0",
+     "pos": [
+      0.0,
+      1.85,
+      2.05
+     ],
+     "yaw": 0.0,
+     "color": "#ffb868",
+     "intensity": 0.8
+    },
+    {
+     "name": "smoke_hearth_0",
+     "pos": [
+      0.0,
+      6.42,
+      0.0
+     ],
+     "yaw": 0.0
+    }
+   ],
+   "colliders": [
+    {
+     "x": 0.0,
+     "z": -0.48,
+     "w": 9.0,
+     "d": 7.05,
+     "y0": -0.5,
+     "y1": 3.4
+    },
+    {
+     "x": 0,
+     "z": 3.52,
+     "w": 9,
+     "d": 0.95,
+     "y0": -0.5,
+     "y1": 0.45,
+     "walk": true
+    }
+   ]
+  },
+  "k1": {
+   "id": "k1",
+   "type": "minka",
+   "name": "Maison du gardien des sources",
+   "variant": "c",
+   "file": "k1.glb",
+   "w": 9,
+   "d": 8,
+   "floors": 1,
+   "height": 6.6,
+   "lod": [
+    "k1_lod0",
+    "k1_lod1",
+    "k1_lod2"
+   ],
+   "triangles": [
+    7866,
+    1534,
+    170
+   ],
+   "bytes": 189464,
+   "anchors": [
+    {
+     "name": "anchor_noren_0",
+     "pos": [
+      -1.77,
+      2.3,
+      4.045
+     ],
+     "yaw": 0.0,
+     "w": 1.62,
+     "h": 0.83
+    },
+    {
+     "name": "anchor_lantern_0",
+     "pos": [
+      -1.02,
+      2.65,
+      4.35
+     ],
+     "yaw": 0.0,
+     "kind": "chochin"
+    },
+    {
+     "name": "anchor_nameplate_0",
+     "pos": [
+      -2.52,
+      1.95,
+      4.1
+     ],
+     "yaw": 0.0
+    },
+    {
+     "name": "light_room_0",
+     "pos": [
+      0.0,
+      1.85,
+      3.0
+     ],
+     "yaw": 0.0,
+     "color": "#ffb868",
+     "intensity": 0.8
+    },
+    {
+     "name": "smoke_hearth_0",
+     "pos": [
+      0.0,
+      6.701,
+      0.0
+     ],
+     "yaw": 0.0
+    }
+   ],
+   "colliders": [
+    {
+     "x": 0.0,
+     "z": 0.0,
+     "w": 9.0,
+     "d": 8.0,
+     "y0": -0.5,
+     "y1": 3.4
+    }
+   ]
+  },
+  "j1": {
+   "id": "j1",
+   "type": "minka",
+   "name": "Maison",
+   "variant": "c",
+   "file": "j1.glb",
+   "w": 9,
+   "d": 8,
+   "floors": 1,
+   "height": 6.6,
+   "lod": [
+    "j1_lod0",
+    "j1_lod1",
+    "j1_lod2"
+   ],
+   "triangles": [
+    7866,
+    1534,
+    170
+   ],
+   "bytes": 199484,
+   "anchors": [
+    {
+     "name": "anchor_noren_0",
+     "pos": [
+      1.77,
+      2.3,
+      4.045
+     ],
+     "yaw": 0.0,
+     "w": 1.62,
+     "h": 0.83
+    },
+    {
+     "name": "anchor_lantern_0",
+     "pos": [
+      2.52,
+      2.65,
+      4.35
+     ],
+     "yaw": 0.0,
+     "kind": "chochin"
+    },
+    {
+     "name": "anchor_nameplate_0",
+     "pos": [
+      1.02,
+      1.95,
+      4.1
+     ],
+     "yaw": 0.0
+    },
+    {
+     "name": "light_room_0",
+     "pos": [
+      0.0,
+      1.85,
+      3.0
+     ],
+     "yaw": 0.0,
+     "color": "#ffb868",
+     "intensity": 0.8
+    },
+    {
+     "name": "smoke_hearth_0",
+     "pos": [
+      0.0,
+      6.701,
+      0.0
+     ],
+     "yaw": 0.0
+    }
+   ],
+   "colliders": [
+    {
+     "x": 0.0,
+     "z": 0.0,
+     "w": 9.0,
+     "d": 8.0,
+     "y0": -0.5,
+     "y1": 3.4
+    }
+   ]
+  },
+  "j2": {
+   "id": "j2",
+   "type": "minka",
+   "name": "Maison de la tisserande",
+   "variant": "a",
+   "file": "j2.glb",
+   "w": 9,
+   "d": 8,
+   "floors": 1,
+   "height": 6.32,
+   "lod": [
+    "j2_lod0",
+    "j2_lod1",
+    "j2_lod2"
+   ],
+   "triangles": [
+    7121,
+    1621,
+    170
+   ],
+   "bytes": 176164,
+   "anchors": [
+    {
+     "name": "anchor_noren_0",
+     "pos": [
+      3.54,
+      2.3,
+      3.095
+     ],
+     "yaw": 0.0,
+     "w": 1.62,
+     "h": 0.83
+    },
+    {
+     "name": "anchor_lantern_0",
+     "pos": [
+      4.29,
+      2.65,
+      4.35
+     ],
+     "yaw": 0.0,
+     "kind": "andon"
+    },
+    {
+     "name": "anchor_nameplate_0",
+     "pos": [
+      2.79,
+      1.95,
+      3.15
+     ],
+     "yaw": 0.0
+    },
+    {
+     "name": "light_room_0",
+     "pos": [
+      0.0,
+      1.85,
+      2.05
+     ],
+     "yaw": 0.0,
+     "color": "#ffb868",
+     "intensity": 0.8
+    },
+    {
+     "name": "smoke_hearth_0",
+     "pos": [
+      0.0,
+      6.42,
+      0.0
+     ],
+     "yaw": 0.0
+    }
+   ],
+   "colliders": [
+    {
+     "x": 0.0,
+     "z": -0.48,
+     "w": 9.0,
+     "d": 7.05,
+     "y0": -0.5,
+     "y1": 3.4
+    },
+    {
+     "x": 0,
+     "z": 3.52,
+     "w": 9,
+     "d": 0.95,
+     "y0": -0.5,
+     "y1": 0.45,
+     "walk": true
+    }
+   ]
+  },
+  "pagode": {
+   "id": "pagode",
+   "type": "pagode",
+   "name": "Pagode rouge à cinq étages",
+   "variant": "a",
+   "file": "pagode.glb",
+   "w": 8,
+   "d": 8,
+   "floors": 5,
+   "height": 26.48,
+   "lod": [
+    "pagode_lod0",
+    "pagode_lod1",
+    "pagode_lod2"
+   ],
+   "triangles": [
+    49222,
+    13782,
+    1934
+   ],
+   "bytes": 1157176,
+   "anchors": [
+    {
+     "name": "anchor_noren_0",
+     "pos": [
+      0.0,
+      3.65,
+      4.045
+     ],
+     "yaw": 0.0,
+     "w": 2.87,
+     "h": 1.0
+    },
+    {
+     "name": "anchor_noren_1",
+     "pos": [
+      0.0,
+      3.65,
+      -4.045
+     ],
+     "yaw": 3.1416,
+     "w": 2.87,
+     "h": 1.0
+    },
+    {
+     "name": "anchor_noren_2",
+     "pos": [
+      -4.045,
+      3.65,
+      0.0
+     ],
+     "yaw": -1.5708,
+     "w": 2.87,
+     "h": 1.0
+    },
+    {
+     "name": "anchor_noren_3",
+     "pos": [
+      4.045,
+      3.65,
+      0.0
+     ],
+     "yaw": 1.5708,
+     "w": 2.87,
+     "h": 1.0
+    },
+    {
+     "name": "anchor_bell_0",
+     "pos": [
+      -6.2,
+      4.589,
+      6.2
+     ],
+     "yaw": 0.0,
+     "kind": "futaku"
+    },
+    {
+     "name": "anchor_bell_1",
+     "pos": [
+      6.2,
+      4.589,
+      6.2
+     ],
+     "yaw": 0.0,
+     "kind": "futaku"
+    },
+    {
+     "name": "anchor_bell_2",
+     "pos": [
+      6.2,
+      4.589,
+      -6.2
+     ],
+     "yaw": 0.0,
+     "kind": "futaku"
+    },
+    {
+     "name": "anchor_bell_3",
+     "pos": [
+      -6.2,
+      4.589,
+      -6.2
+     ],
+     "yaw": 0.0,
+     "kind": "futaku"
+    },
+    {
+     "name": "light_tier_0",
+     "pos": [
+      0.0,
+      6.434,
+      4.2
+     ],
+     "yaw": 0.0,
+     "color": "#ffb060",
+     "intensity": 0.6
+    },
+    {
+     "name": "anchor_noren_4",
+     "pos": [
+      0.0,
+      7.034,
+      3.645
+     ],
+     "yaw": 0.0,
+     "w": 2.56,
+     "h": 0.81
+    },
+    {
+     "name": "anchor_noren_5",
+     "pos": [
+      0.0,
+      7.034,
+      -3.645
+     ],
+     "yaw": 3.1416,
+     "w": 2.56,
+     "h": 0.81
+    },
+    {
+     "name": "anchor_noren_6",
+     "pos": [
+      -3.645,
+      7.034,
+      0.0
+     ],
+     "yaw": -1.5708,
+     "w": 2.56,
+     "h": 0.81
+    },
+    {
+     "name": "anchor_noren_7",
+     "pos": [
+      3.645,
+      7.034,
+      0.0
+     ],
+     "yaw": 1.5708,
+     "w": 2.56,
+     "h": 0.81
+    },
+    {
+     "name": "anchor_bell_4",
+     "pos": [
+      -5.8,
+      7.973,
+      5.8
+     ],
+     "yaw": 0.0,
+     "kind": "futaku"
+    },
+    {
+     "name": "anchor_bell_5",
+     "pos": [
+      5.8,
+      7.973,
+      5.8
+     ],
+     "yaw": 0.0,
+     "kind": "futaku"
+    },
+    {
+     "name": "anchor_bell_6",
+     "pos": [
+      5.8,
+      7.973,
+      -5.8
+     ],
+     "yaw": 0.0,
+     "kind": "futaku"
+    },
+    {
+     "name": "anchor_bell_7",
+     "pos": [
+      -5.8,
+      7.973,
+      -5.8
+     ],
+     "yaw": 0.0,
+     "kind": "futaku"
+    },
+    {
+     "name": "light_tier_1",
+     "pos": [
+      0.0,
+      9.819,
+      3.8
+     ],
+     "yaw": 0.0,
+     "color": "#ffb060",
+     "intensity": 0.6
+    },
+    {
+     "name": "anchor_noren_8",
+     "pos": [
+      0.0,
+      10.419,
+      3.245
+     ],
+     "yaw": 0.0,
+     "w": 2.25,
+     "h": 0.81
+    },
+    {
+     "name": "anchor_noren_9",
+     "pos": [
+      0.0,
+      10.419,
+      -3.245
+     ],
+     "yaw": 3.1416,
+     "w": 2.25,
+     "h": 0.81
+    },
+    {
+     "name": "anchor_noren_10",
+     "pos": [
+      -3.245,
+      10.419,
+      0.0
+     ],
+     "yaw": -1.5708,
+     "w": 2.25,
+     "h": 0.81
+    },
+    {
+     "name": "anchor_noren_11",
+     "pos": [
+      3.245,
+      10.419,
+      0.0
+     ],
+     "yaw": 1.5708,
+     "w": 2.25,
+     "h": 0.81
+    },
+    {
+     "name": "anchor_bell_8",
+     "pos": [
+      -5.4,
+      11.358,
+      5.4
+     ],
+     "yaw": 0.0,
+     "kind": "futaku"
+    },
+    {
+     "name": "anchor_bell_9",
+     "pos": [
+      5.4,
+      11.358,
+      5.4
+     ],
+     "yaw": 0.0,
+     "kind": "futaku"
+    },
+    {
+     "name": "anchor_bell_10",
+     "pos": [
+      5.4,
+      11.358,
+      -5.4
+     ],
+     "yaw": 0.0,
+     "kind": "futaku"
+    },
+    {
+     "name": "anchor_bell_11",
+     "pos": [
+      -5.4,
+      11.358,
+      -5.4
+     ],
+     "yaw": 0.0,
+     "kind": "futaku"
+    },
+    {
+     "name": "light_tier_2",
+     "pos": [
+      0.0,
+      13.204,
+      3.4
+     ],
+     "yaw": 0.0,
+     "color": "#ffb060",
+     "intensity": 0.6
+    },
+    {
+     "name": "anchor_noren_12",
+     "pos": [
+      0.0,
+      13.804,
+      2.845
+     ],
+     "yaw": 0.0,
+     "w": 1.95,
+     "h": 0.81
+    },
+    {
+     "name": "anchor_noren_13",
+     "pos": [
+      0.0,
+      13.804,
+      -2.845
+     ],
+     "yaw": 3.1416,
+     "w": 1.95,
+     "h": 0.81
+    },
+    {
+     "name": "anchor_noren_14",
+     "pos": [
+      -2.845,
+      13.804,
+      0.0
+     ],
+     "yaw": -1.5708,
+     "w": 1.95,
+     "h": 0.81
+    },
+    {
+     "name": "anchor_noren_15",
+     "pos": [
+      2.845,
+      13.804,
+      0.0
+     ],
+     "yaw": 1.5708,
+     "w": 1.95,
+     "h": 0.81
+    },
+    {
+     "name": "anchor_bell_12",
+     "pos": [
+      -5.0,
+      14.743,
+      5.0
+     ],
+     "yaw": 0.0,
+     "kind": "futaku"
+    },
+    {
+     "name": "anchor_bell_13",
+     "pos": [
+      5.0,
+      14.743,
+      5.0
+     ],
+     "yaw": 0.0,
+     "kind": "futaku"
+    },
+    {
+     "name": "anchor_bell_14",
+     "pos": [
+      5.0,
+      14.743,
+      -5.0
+     ],
+     "yaw": 0.0,
+     "kind": "futaku"
+    },
+    {
+     "name": "anchor_bell_15",
+     "pos": [
+      -5.0,
+      14.743,
+      -5.0
+     ],
+     "yaw": 0.0,
+     "kind": "futaku"
+    },
+    {
+     "name": "light_tier_3",
+     "pos": [
+      0.0,
+      16.602,
+      3.0
+     ],
+     "yaw": 0.0,
+     "color": "#ffb060",
+     "intensity": 0.6
+    },
+    {
+     "name": "anchor_noren_16",
+     "pos": [
+      0.0,
+      17.202,
+      2.445
+     ],
+     "yaw": 0.0,
+     "w": 1.64,
+     "h": 0.81
+    },
+    {
+     "name": "anchor_noren_17",
+     "pos": [
+      0.0,
+      17.202,
+      -2.445
+     ],
+     "yaw": 3.1416,
+     "w": 1.64,
+     "h": 0.81
+    },
+    {
+     "name": "anchor_noren_18",
+     "pos": [
+      -2.445,
+      17.202,
+      0.0
+     ],
+     "yaw": -1.5708,
+     "w": 1.64,
+     "h": 0.81
+    },
+    {
+     "name": "anchor_noren_19",
+     "pos": [
+      2.445,
+      17.202,
+      0.0
+     ],
+     "yaw": 1.5708,
+     "w": 1.64,
+     "h": 0.81
+    },
+    {
+     "name": "anchor_bell_16",
+     "pos": [
+      -4.6,
+      18.163,
+      4.6
+     ],
+     "yaw": 0.0,
+     "kind": "futaku"
+    },
+    {
+     "name": "anchor_bell_17",
+     "pos": [
+      4.6,
+      18.163,
+      4.6
+     ],
+     "yaw": 0.0,
+     "kind": "futaku"
+    },
+    {
+     "name": "anchor_bell_18",
+     "pos": [
+      4.6,
+      18.163,
+      -4.6
+     ],
+     "yaw": 0.0,
+     "kind": "futaku"
+    },
+    {
+     "name": "anchor_bell_19",
+     "pos": [
+      -4.6,
+      18.163,
+      -4.6
+     ],
+     "yaw": 0.0,
+     "kind": "futaku"
+    },
+    {
+     "name": "light_tier_4",
+     "pos": [
+      0.0,
+      16.602,
+      2.6
+     ],
+     "yaw": 0.0,
+     "color": "#ffb060",
+     "intensity": 0.6
+    },
+    {
+     "name": "anchor_lantern_0",
+     "pos": [
+      -3.2,
+      1.0,
+      4.6
+     ],
+     "yaw": 0.0,
+     "kind": "toro"
+    },
+    {
+     "name": "anchor_lantern_1",
+     "pos": [
+      3.2,
+      1.0,
+      4.6
+     ],
+     "yaw": 0.0,
+     "kind": "toro"
+    }
+   ],
+   "colliders": [
+    {
+     "x": 0,
+     "z": 0,
+     "w": 10,
+     "d": 10,
+     "y0": -1.2,
+     "y1": 1.0,
+     "walk": true
+    },
+    {
+     "x": 0,
+     "z": 0,
+     "w": 8,
+     "d": 8,
+     "y0": 1.0,
+     "y1": 19.48
+    }
+   ]
+  },
+  "shoro": {
+   "id": "shoro",
+   "type": "shoro",
+   "name": "Pavillon de la cloche",
+   "variant": "a",
+   "file": "shoro.glb",
+   "w": 4,
+   "d": 4,
+   "floors": 1,
+   "height": 6.33,
+   "lod": [
+    "shoro_lod0",
+    "shoro_lod1",
+    "shoro_lod2"
+   ],
+   "triangles": [
+    6668,
+    1710,
+    604
+   ],
+   "bytes": 175048,
+   "anchors": [],
+   "colliders": [
+    {
+     "x": 0,
+     "z": 0,
+     "w": 4,
+     "d": 4,
+     "y0": -0.9,
+     "y1": 1.1,
+     "walk": true
+    }
+   ]
+  },
+  "torii-sando-1": {
+   "id": "torii-sando-1",
+   "type": "torii",
+   "name": "Torii sando-1 (myojin, 6.5 m)",
+   "variant": "a",
+   "file": "torii-sando-1.glb",
+   "w": 5.56,
+   "d": 0.49,
+   "floors": 1,
+   "height": 6.99,
+   "lod": [
+    "torii-sando-1_lod0",
+    "torii-sando-1_lod1",
+    "torii-sando-1_lod2"
+   ],
+   "triangles": [
+    444,
+    252,
+    188
+   ],
+   "bytes": 27240,
+   "anchors": [
+    {
+     "name": "anchor_plaque_0",
+     "pos": [
+      0.0,
+      5.281,
+      0.151
+     ],
+     "yaw": 0.0,
+     "w": 0.58,
+     "h": 0.75
+    }
+   ],
+   "colliders": [
+    {
+     "x": -2.535,
+     "z": 0,
+     "w": 0.585,
+     "d": 0.585,
+     "y0": 0,
+     "y1": 6.5
+    },
+    {
+     "x": 2.535,
+     "z": 0,
+     "w": 0.585,
+     "d": 0.585,
+     "y0": 0,
+     "y1": 6.5
+    }
+   ],
+   "span": 5.07,
+   "torii": {
+    "h": 6.5,
+    "kind": "myojin"
+   }
+  },
+  "torii-etang": {
+   "id": "torii-etang",
+   "type": "torii",
+   "name": "Torii etang (shinmei, 2.6 m)",
+   "variant": "a",
+   "file": "torii-etang.glb",
+   "w": 2.33,
+   "d": 0.2,
+   "floors": 1,
+   "height": 2.79,
+   "lod": [
+    "torii-etang_lod0",
+    "torii-etang_lod1",
+    "torii-etang_lod2"
+   ],
+   "triangles": [
+    140,
+    92,
+    56
+   ],
+   "bytes": 11820,
+   "anchors": [],
+   "colliders": [
+    {
+     "x": -1.066,
+     "z": 0,
+     "w": 0.23399999999999999,
+     "d": 0.23399999999999999,
+     "y0": 0,
+     "y1": 2.6
+    },
+    {
+     "x": 1.066,
+     "z": 0,
+     "w": 0.23399999999999999,
+     "d": 0.23399999999999999,
+     "y0": 0,
+     "y1": 2.6
+    }
+   ],
+   "span": 2.13,
+   "torii": {
+    "h": 2.6,
+    "kind": "shinmei"
+   }
+  },
+  "haiden": {
+   "id": "haiden",
+   "type": "haiden",
+   "name": "Oratoire du sanctuaire",
+   "variant": "a",
+   "file": "haiden.glb",
+   "w": 10,
+   "d": 8,
+   "floors": 1,
+   "height": 7.36,
+   "lod": [
+    "haiden_lod0",
+    "haiden_lod1",
+    "haiden_lod2"
+   ],
+   "triangles": [
+    7398,
+    3926,
+    2516
+   ],
+   "bytes": 275836,
+   "anchors": [
+    {
+     "name": "anchor_noren_0",
+     "pos": [
+      0.0,
+      3.3,
+      3.005
+     ],
+     "yaw": 0.0,
+     "w": 3.08,
+     "h": 1.0
+    },
+    {
+     "name": "light_shop_0",
+     "pos": [
+      0.0,
+      2.6,
+      1.825
+     ],
+     "yaw": 0.0,
+     "color": "#ffb060",
+     "intensity": 1.0
+    },
+    {
+     "name": "anchor_noren_1",
+     "pos": [
+      0.0,
+      3.2,
+      -3.045
+     ],
+     "yaw": 3.1416,
+     "w": 2.47,
+     "h": 0.99
+    },
+    {
+     "name": "anchor_guardian_0",
+     "pos": [
+      -2.2,
+      0.0,
+      6.8
+     ],
+     "yaw": 1.5708,
+     "kind": "capybara-pierre"
+    },
+    {
+     "name": "anchor_guardian_1",
+     "pos": [
+      2.2,
+      0.0,
+      6.8
+     ],
+     "yaw": -1.5708,
+     "kind": "capybara-pierre"
+    },
+    {
+     "name": "anchor_lantern_0",
+     "pos": [
+      -4.4,
+      3.8,
+      3.6
+     ],
+     "yaw": 0.0,
+     "kind": "kasuga-bronze"
+    },
+    {
+     "name": "anchor_lantern_1",
+     "pos": [
+      4.4,
+      3.8,
+      3.6
+     ],
+     "yaw": 0.0,
+     "kind": "kasuga-bronze"
+    },
+    {
+     "name": "light_hall_0",
+     "pos": [
+      0.0,
+      2.4,
+      2.0
+     ],
+     "yaw": 0.0,
+     "color": "#ffb060",
+     "intensity": 1.0
+    }
+   ],
+   "colliders": [
+    {
+     "x": 0,
+     "z": 0,
+     "w": 10,
+     "d": 8,
+     "y0": -0.5,
+     "y1": 1.0,
+     "walk": true
+    },
+    {
+     "x": 0,
+     "z": 0,
+     "w": 8.0,
+     "d": 6.0,
+     "y0": 1.0,
+     "y1": 4.2
+    }
+   ]
+  },
+  "honden": {
+   "id": "honden",
+   "type": "honden",
+   "name": "Sanctuaire principal",
+   "variant": "a",
+   "file": "honden.glb",
+   "w": 6,
+   "d": 6,
+   "floors": 1,
+   "height": 7.02,
+   "lod": [
+    "honden_lod0",
+    "honden_lod1",
+    "honden_lod2"
+   ],
+   "triangles": [
+    2478,
+    1674,
+    1468
+   ],
+   "bytes": 119640,
+   "anchors": [
+    {
+     "name": "anchor_noren_0",
+     "pos": [
+      0.0,
+      3.2,
+      2.295
+     ],
+     "yaw": 0.0,
+     "w": 1.56,
+     "h": 0.9
+    },
+    {
+     "name": "light_hall_0",
+     "pos": [
+      0.0,
+      2.4,
+      0.0
+     ],
+     "yaw": 0.0,
+     "color": "#ffb060",
+     "intensity": 0.6
+    }
+   ],
+   "colliders": [
+    {
+     "x": 0,
+     "z": 0,
+     "w": 6,
+     "d": 6,
+     "y0": -0.5,
+     "y1": 4.0
+    }
+   ]
+  },
+  "temizuya": {
+   "id": "temizuya",
+   "type": "temizuya",
+   "name": "Fontaine aux ablutions",
+   "variant": "a",
+   "file": "temizuya.glb",
+   "w": 3,
+   "d": 2,
+   "floors": 1,
+   "height": 3.96,
+   "lod": [
+    "temizuya_lod0",
+    "temizuya_lod1",
+    "temizuya_lod2"
+   ],
+   "triangles": [
+    742,
+    338,
+    268
+   ],
+   "bytes": 40928,
+   "anchors": [
+    {
+     "name": "anchor_water_0",
+     "pos": [
+      0.0,
+      0.69,
+      0.0
+     ],
+     "yaw": 0.0,
+     "w": 1.66,
+     "d": 0.6
+    },
+    {
+     "name": "anchor_ladle_0",
+     "pos": [
+      0.0,
+      0.75,
+      0.35
+     ],
+     "yaw": 0.0,
+     "kind": "hishaku"
+    }
+   ],
+   "colliders": [
+    {
+     "x": 0,
+     "z": 0,
+     "w": 1.86,
+     "d": 0.8,
+     "y0": 0,
+     "y1": 0.75
+    },
+    {
+     "x": -1.35,
+     "z": -0.85,
+     "w": 0.2,
+     "d": 0.2,
+     "y0": 0,
+     "y1": 2.6
+    },
+    {
+     "x": -1.35,
+     "z": 0.85,
+     "w": 0.2,
+     "d": 0.2,
+     "y0": 0,
+     "y1": 2.6
+    },
+    {
+     "x": 1.35,
+     "z": -0.85,
+     "w": 0.2,
+     "d": 0.2,
+     "y0": 0,
+     "y1": 2.6
+    },
+    {
+     "x": 1.35,
+     "z": 0.85,
+     "w": 0.2,
+     "d": 0.2,
+     "y0": 0,
+     "y1": 2.6
+    }
+   ]
+  },
+  "torii-sando-2": {
+   "id": "torii-sando-2",
+   "type": "torii",
+   "name": "Torii sando-2 (myojin, 5 m)",
+   "variant": "a",
+   "file": "torii-sando-2.glb",
+   "w": 4.28,
+   "d": 0.38,
+   "floors": 1,
+   "height": 5.38,
+   "lod": [
+    "torii-sando-2_lod0",
+    "torii-sando-2_lod1",
+    "torii-sando-2_lod2"
+   ],
+   "triangles": [
+    444,
+    252,
+    188
+   ],
+   "bytes": 26808,
+   "anchors": [
+    {
+     "name": "anchor_plaque_0",
+     "pos": [
+      0.0,
+      4.062,
+      0.116
+     ],
+     "yaw": 0.0,
+     "w": 0.45,
+     "h": 0.58
+    }
+   ],
+   "colliders": [
+    {
+     "x": -1.9500000000000002,
+     "z": 0,
+     "w": 0.44999999999999996,
+     "d": 0.44999999999999996,
+     "y0": 0,
+     "y1": 5
+    },
+    {
+     "x": 1.9500000000000002,
+     "z": 0,
+     "w": 0.44999999999999996,
+     "d": 0.44999999999999996,
+     "y0": 0,
+     "y1": 5
+    }
+   ],
+   "span": 3.9,
+   "torii": {
+    "h": 5,
+    "kind": "myojin"
+   }
+  },
+  "torii-grand-torii": {
+   "id": "torii-grand-torii",
+   "type": "torii",
+   "name": "Torii grand-torii (myojin, 9 m)",
+   "variant": "a",
+   "file": "torii-grand-torii.glb",
+   "w": 7.7,
+   "d": 0.67,
+   "floors": 1,
+   "height": 9.68,
+   "lod": [
+    "torii-grand-torii_lod0",
+    "torii-grand-torii_lod1",
+    "torii-grand-torii_lod2"
+   ],
+   "triangles": [
+    444,
+    252,
+    188
+   ],
+   "bytes": 27080,
+   "anchors": [
+    {
+     "name": "anchor_plaque_0",
+     "pos": [
+      0.0,
+      7.312,
+      0.209
+     ],
+     "yaw": 0.0,
+     "w": 0.81,
+     "h": 1.04
+    }
+   ],
+   "colliders": [
+    {
+     "x": -3.5100000000000002,
+     "z": 0,
+     "w": 0.8099999999999999,
+     "d": 0.8099999999999999,
+     "y0": 0,
+     "y1": 9
+    },
+    {
+     "x": 3.5100000000000002,
+     "z": 0,
+     "w": 0.8099999999999999,
+     "d": 0.8099999999999999,
+     "y0": 0,
+     "y1": 9
+    }
+   ],
+   "span": 7.02,
+   "torii": {
+    "h": 9,
+    "kind": "myojin"
+   }
+  },
+  "torii-belvedere": {
+   "id": "torii-belvedere",
+   "type": "torii",
+   "name": "Torii belvedere (shinmei, 3 m)",
+   "variant": "a",
+   "file": "torii-belvedere.glb",
+   "w": 2.69,
+   "d": 0.22,
+   "floors": 1,
+   "height": 3.23,
+   "lod": [
+    "torii-belvedere_lod0",
+    "torii-belvedere_lod1",
+    "torii-belvedere_lod2"
+   ],
+   "triangles": [
+    140,
+    92,
+    56
+   ],
+   "bytes": 11716,
+   "anchors": [],
+   "colliders": [
+    {
+     "x": -1.23,
+     "z": 0,
+     "w": 0.26999999999999996,
+     "d": 0.26999999999999996,
+     "y0": 0,
+     "y1": 3
+    },
+    {
+     "x": 1.23,
+     "z": 0,
+     "w": 0.26999999999999996,
+     "d": 0.26999999999999996,
+     "y0": 0,
+     "y1": 3
+    }
+   ],
+   "span": 2.46,
+   "torii": {
+    "h": 3,
+    "kind": "shinmei"
+   }
+  },
+  "torii-tunnel": {
+   "id": "torii-tunnel",
+   "type": "torii",
+   "name": "Torii de l’escalier aux mille torii",
+   "variant": "a",
+   "file": "torii-tunnel.glb",
+   "w": 2.8,
+   "d": 0.24,
+   "floors": 1,
+   "height": 3.44,
+   "lod": [
+    "torii-tunnel_lod0",
+    "torii-tunnel_lod1",
+    "torii-tunnel_lod2"
+   ],
+   "triangles": [
+    444,
+    252,
+    188
+   ],
+   "bytes": 27112,
+   "anchors": [
+    {
+     "name": "anchor_plaque_0",
+     "pos": [
+      0.0,
+      2.6,
+      0.074
+     ],
+     "yaw": 0.0,
+     "w": 0.29,
+     "h": 0.37
+    }
+   ],
+   "colliders": [
+    {
+     "x": -1.2799999999999998,
+     "z": 0,
+     "w": 0.288,
+     "d": 0.288,
+     "y0": 0,
+     "y1": 3.2
+    },
+    {
+     "x": 1.2799999999999998,
+     "z": 0,
+     "w": 0.288,
+     "d": 0.288,
+     "y0": 0,
+     "y1": 3.2
+    }
+   ],
+   "span": 2.56,
+   "torii": {
+    "h": 3.2,
+    "kind": "myojin"
+   }
   }
  },
  "conventions": {

@@ -23,17 +23,19 @@ MATERIALS = {
                         extras={'night': True, 'emissiveBoost': 1.0}),
     # fond sombre des boutiques ouvertes et des portes entrouvertes
     'interior': dict(color=(0.035, 0.026, 0.02), rough=1.0),
+    # eau immobile (vasque du temizuya) ; l'équipe Eau peut la remplacer par son matériau
+    'water': dict(color=(0.03, 0.07, 0.07), rough=0.04),
     # fer, bronze (chaînes de pluie, flèche de la pagode, clous)
     'metal': dict(color=(0.30, 0.24, 0.17), rough=0.45, metal=0.85),
 }
 
 # Couleurs cibles (sRGB) de la charte (docs/QUALITE-CAPYVILLE.md)
 C = {
-    'wood_dark': '#4b3020',
-    'wood_mid': '#5c3e28',
-    'wood_old': '#684630',
+    'wood_dark': '#463426',
+    'wood_mid': '#56412f',
+    'wood_old': '#604b38',
     'wood_grey': '#6b6058',     # bois très patiné, gris
-    'wood_light': '#a08060',    # kumiko et cadres des shōji
+    'wood_light': '#9c8668',    # kumiko et cadres des shōji
     'wood_black': '#2a211c',    # yakisugi (bois brûlé)
     'plaster_cream': '#f1e4c6',
     'plaster_white': '#f4f0e6',
@@ -41,4 +43,7 @@ C = {
     'plaster_ochre': '#d9bf92',
     'lacquer_red': '#b8342a',
     'lacquer_black': '#1c1a19',
+    'ochre': '#c8902e',
+    'bronze': '#6b5a3a',
+    'wood_raw': '#a58a68',     # bois brut (torii shinmei, hinoki)
 }
