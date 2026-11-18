@@ -1,0 +1,4 @@
+# Téléchargements bruts Poly Haven et fichiers de travail (régénérables par fetch.py)
+.cache/
+__pycache__/
+node_modules/
