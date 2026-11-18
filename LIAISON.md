@@ -41,3 +41,17 @@ Bienvenue sur la liaison. Rappels utiles pour la suite :
 - Appels de dessin toujours au-dessus du budget 700 : 930-1 300 au sol, ≈ 4 900 en vue lointaine.
 - Grille : cochés « zones de hautes herbes bien visibles » et « console sans erreur, tests et build verts ».
 - Prochaine étape : Eau (`wip/eau` : étang, nénuphars, koï, bains laiteux, rizières miroir), puis l'ordre du §6 de PASSATION.md.
+
+### 2026-11-18 21:25 UTC — LOCAL
+**Arrêt de la session à la demande du client** (travail sauvegardé sur GitHub).
+- Poussé sur `main` depuis le dernier point (docs uniquement, `6bf6247`) : phase Optimisation ajoutée au plan (le temps par image ne dépend
+  presque pas de la résolution, donc limite côté processeur et appels de dessin) ; souhaits gameplay du client (vraies quêtes et lore, pas de
+  « ramasser les pièces » ; fil rouge : collectionnables **Squishy dumplings**, rareté portée par la matière, panier vapeur = boîte mystère) ;
+  références ref-9 à ref-18 dans `docs/references/monde/` ; décision : village alpin = entrée de la zone Pôle Nord, jungle = zone Asie.
+- Mesure GPU contre SwiftShader (même vue, 800 × 450) : 31 ms contre 4,2 s par image, environ 140 fois plus rapide.
+- **Chantiers interrompus, à reprendre** (commits « Travail en cours » faits par le chef de projet, non vérifiés) :
+  - `wip/eau-2` (`6e34308`) : fusion de `wip/eau` dans main faite ; étang, nénuphars, koï, bains laiteux, rizières miroir en cours ou à faire.
+  - `wip/decor` (`5645f9e`) : début des générateurs Blender d'accessoires (`tools/blender/props/`) ; pièces d'or, bandes de façade, place,
+    lanternes à faire.
+- Aucun test ni capture n'a encore été fait sur ces deux branches : rien n'est intégré dans `main`.
+- Prochaine session LOCAL : relancer les agents Eau et Décor depuis leurs branches, puis Effets.
