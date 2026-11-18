@@ -16,6 +16,7 @@ import { FloraLayer } from './field';
 import { FloraSpecies, SPECIES, bakeImposter, floraTex, getSpecies, loadSpecies } from './species';
 import { floraMaterial, updateFloraWind } from './materials';
 import { capyLegacyTrees } from './legacy';
+import { ATMO } from '../../world/sky';
 
 // =============================================================================================== MASQUE D'OCCUPATION
 /** Grille de 1 m sur [-HALF, HALF]² : bits d'interdiction. */
@@ -547,49 +548,62 @@ export class CapyFlora {
       const L = f.w - 2, PROF = 9, seg = 0.5;
       const ctr = (t: number) => new THREE.Vector3(f.x, 0, f.z).addScaledVector(ax, -L / 2 + t);
       const ns = Math.round(L / seg);
-      const rows: number[][] = [];
+      // la haie s'interrompt là où un sentier traverse la terrasse
+      const free = (t: number) => { const p = ctr(t); return !PATHS.some((q) => distPoly(p.x, p.z, q.pts) < q.width / 2 + 0.9); };
+      const runs: [number, number][] = [];
+      let r0 = -1;
       for (let i = 0; i <= ns; i++) {
-        const t = i * seg;
-        const p = ctr(t);
-        const gy = heightAt(p.x, p.z);
-        const endT = Math.min(t, L - t);
-        const taper = Math.sqrt(clamp(endT / 0.7, 0.05, 1));
-        const bump = 0.88 + 0.12 * Math.abs(Math.sin(t * 2.4 + f.x));
-        const row: number[] = [];
-        for (let k = 0; k <= PROF; k++) {
-          const a = (k / PROF) * Math.PI;
-          const ca = Math.cos(a), sa = Math.sin(a);
-          const rx = 0.6 * taper * bump, ry = 0.9 * taper * bump;
-          const q = p.clone().addScaledVector(az, ca * rx);
-          pos.push(q.x, gy - 0.05 + sa * ry, q.z);
-          const n = az.clone().multiplyScalar(ca / rx).add(new THREE.Vector3(0, sa / ry, 0)).normalize();
-          nor.push(n.x, n.y, n.z);
-          // moitié gauche de l'atlas (raccordable) : u le long (0..0,5 tous les 1,5 m), v autour
-          uv.push(((t / 1.5) % 1) * 0.5, k / PROF);
-          wind.push(0, 0.15, 0.55 + 0.45 * sa);
-          row.push(pos.length / 3 - 1);
-        }
-        rows.push(row);
+        const ok = free(i * seg);
+        if (ok && r0 < 0) r0 = i;
+        if ((!ok || i === ns) && r0 >= 0) { const r1 = ok ? i : i - 1; if (r1 - r0 >= 3) runs.push([r0 * seg, r1 * seg]); r0 = -1; }
       }
-      for (let i = 0; i < ns; i++) {
-        // le raccord de l'u tous les 1,5 m : on duplique les sommets de la rangée de départ si l'u repart à 0
-        const A = rows[i], B = rows[i + 1];
-        const uA = uv[A[0] * 2], uB = uv[B[0] * 2];
-        let Bi = B;
-        if (uB < uA) {
-          Bi = B.map((vi) => {
-            pos.push(pos[vi * 3], pos[vi * 3 + 1], pos[vi * 3 + 2]);
-            nor.push(nor[vi * 3], nor[vi * 3 + 1], nor[vi * 3 + 2]);
-            uv.push(0.5, uv[vi * 2 + 1]);
-            wind.push(wind[vi * 3], wind[vi * 3 + 1], wind[vi * 3 + 2]);
-            return pos.length / 3 - 1;
-          });
+      for (const [ta, tb] of runs) {
+        const rows: number[][] = [];
+        const nr = Math.round((tb - ta) / seg);
+        for (let i = 0; i <= nr; i++) {
+          const t = ta + i * seg;
+          const p = ctr(t);
+          const gy = heightAt(p.x, p.z);
+          const endT = Math.min(t - ta, tb - t);
+          const taper = Math.sqrt(clamp(endT / 0.7, 0.05, 1));
+          const bump = 0.88 + 0.12 * Math.abs(Math.sin(t * 2.4 + f.x));
+          const row: number[] = [];
+          for (let k = 0; k <= PROF; k++) {
+            const a = (k / PROF) * Math.PI;
+            const ca = Math.cos(a), sa = Math.sin(a);
+            const rx = 0.6 * taper * bump, ry = 0.9 * taper * bump;
+            const q = p.clone().addScaledVector(az, ca * rx);
+            pos.push(q.x, gy - 0.05 + sa * ry, q.z);
+            const n = az.clone().multiplyScalar(ca / rx).add(new THREE.Vector3(0, sa / ry, 0)).normalize();
+            nor.push(n.x, n.y, n.z);
+            // moitié gauche de l'atlas (raccordable) : u le long (0..0,5 tous les 1,5 m), v autour
+            uv.push(((t / 1.5) % 1) * 0.5, k / PROF);
+            wind.push(0, 0.15, 0.55 + 0.45 * sa);
+            row.push(pos.length / 3 - 1);
+          }
+          rows.push(row);
         }
-        for (let k = 0; k < PROF; k++) idx.push(A[k], Bi[k], A[k + 1], A[k + 1], Bi[k], Bi[k + 1]);
+        for (let i = 0; i < nr; i++) {
+          // raccord de l'u tous les 1,5 m : on duplique la rangée d'arrivée si l'u repart à 0
+          const A = rows[i], B = rows[i + 1];
+          const uA = uv[A[0] * 2], uB = uv[B[0] * 2];
+          let Bi = B;
+          if (uB < uA) {
+            Bi = B.map((vi) => {
+              pos.push(pos[vi * 3], pos[vi * 3 + 1], pos[vi * 3 + 2]);
+              nor.push(nor[vi * 3], nor[vi * 3 + 1], nor[vi * 3 + 2]);
+              uv.push(0.5, uv[vi * 2 + 1]);
+              wind.push(wind[vi * 3], wind[vi * 3 + 1], wind[vi * 3 + 2]);
+              return pos.length / 3 - 1;
+            });
+          }
+          for (let k = 0; k < PROF; k++) idx.push(A[k], Bi[k], A[k + 1], A[k + 1], Bi[k], Bi[k + 1]);
+        }
       }
       // cartes de feuilles sur le dessus : silhouette ébouriffée
       const rng = new Rng(Math.round(f.x * 13));
       for (let t = 0.3; t < L - 0.3; t += 0.35) {
+        if (!runs.some(([a, b]) => t > a + 0.3 && t < b - 0.3)) continue;
         for (let k = 0; k < 2; k++) {
           const a = rng.range(0.25, Math.PI - 0.25);
           const p = ctr(t).addScaledVector(az, Math.cos(a) * 0.55);
@@ -741,7 +755,7 @@ export class CapyFlora {
   // ------------------------------------------------------------------------------------------ mise à jour
   /** Une fois par image : vent, cuisson des imposteurs (première fois), choix des LOD et élimination hors champ. */
   update(camera: THREE.Camera, renderer: THREE.WebGLRenderer, time: number) {
-    updateFloraWind(time);
+    updateFloraWind(time, ATMO.night);
     if (!this.baked) {
       this.baked = true;
       for (const l of this.layers.values()) bakeImposter(renderer, l.sp);

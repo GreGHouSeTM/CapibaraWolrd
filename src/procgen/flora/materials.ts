@@ -12,10 +12,13 @@ export const FLORA_WIND = { dir: new THREE.Vector2(0.82, 0.57), strength: 0.55, 
 export const floraUniforms = {
   uFTime: { value: 0 },
   uFWind: { value: new THREE.Vector4(0.82, 0.57, 0.55, 0) },
+  /** 0 le jour … 1 la nuit (atténue la translucidité au clair de lune) */
+  uFNight: { value: 0 },
 };
 
-export function updateFloraWind(time: number) {
+export function updateFloraWind(time: number, night = 0) {
   floraUniforms.uFTime.value = time;
+  floraUniforms.uFNight.value = night;
   const g = 0.5 + 0.5 * Math.sin(time * 0.21) * Math.sin(time * 0.083 + 1.3);
   FLORA_WIND.gust = g;
   const a = Math.atan2(0.57, 0.82) + 0.25 * Math.sin(time * 0.017);
@@ -123,9 +126,10 @@ export function floraMaterial(o: FloraMatOpts) {
   m.onBeforeCompile = (s) => {
     injectWind(s, wu);
     s.uniforms.uFTrans = trans;
+    s.uniforms.uFNight = floraUniforms.uFNight;
     s.uniforms.uFAOs = aos;
     s.fragmentShader = s.fragmentShader
-      .replace('#include <common>', '#include <common>\nvarying float vFAO;\nuniform float uFTrans, uFAOs;')
+      .replace('#include <common>', '#include <common>\nvarying float vFAO;\nuniform float uFTrans, uFAOs, uFNight;')
       .replace('#include <map_fragment>', '#include <map_fragment>\n  diffuseColor.rgb *= mix(1.0, vFAO, uFAOs);')
       .replace(
         '#include <lights_fragment_end>',
@@ -134,7 +138,7 @@ export function floraMaterial(o: FloraMatOpts) {
           {
             float fBl = pow(max(0.0, dot(-geometryViewDir, directionalLights[0].direction)), 3.0);
             float fWrap = 0.5 + 0.5 * dot(geometryNormal, directionalLights[0].direction);
-            reflectedLight.directDiffuse += diffuseColor.rgb * directionalLights[0].color * (fBl * 0.9 + fWrap * 0.25) * uFTrans * vFAO;
+            reflectedLight.directDiffuse += diffuseColor.rgb * directionalLights[0].color * (fBl * 0.9 + fWrap * 0.15) * uFTrans * vFAO * (1.0 - 0.85 * uFNight);
           }
         #endif`,
       );
