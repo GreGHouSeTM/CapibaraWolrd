@@ -23,6 +23,7 @@ from lib import town                  # noqa: E402
 from lib import sacred                # noqa: E402
 from lib import bath                  # noqa: E402
 from lib import misc                  # noqa: E402
+from lib import bridges               # noqa: E402
 import math as _m                     # noqa: E402
 
 ROOT = os.path.abspath(os.path.join(HERE, '../..', '..'))
@@ -69,6 +70,7 @@ BUILDERS = {
     'chaya': lambda b, v: bath.ryokan(b['w'], b['d'], b['floors'], seed_of(b['id']), kind='chaya'),
     'moulin': lambda b, v: bath.moulin(b['w'], b['d'], seed_of(b['id']), b['wheel_local']),
     'roue': lambda b, v: bath.wheel(b['diameter'], b['width']),
+    'pont': lambda b, v: bridges.bridge(b['kind'], b['w'], b['d'], b['arch'], seed_of(b['id'])),
     'kura': lambda b, v: misc.kura(b['w'], b['d'], b['floors'], seed_of(b['id'])),
     'gassho': lambda b, v: misc.gassho(b['w'], b['d'], seed_of(b['id'])),
     'azumaya': lambda b, v: misc.azumaya(b['w'], b['d'], seed_of(b['id']), 'yosemune' if b['roof'] == 'yosemune' else 'irimoya'),
@@ -100,6 +102,12 @@ def extras(z):
     mill['wheel_local'] = (round(dx * c - dz * s_, 3), 1.9, round(dx * s_ + dz * c, 3))
     out.append(dict(id='moulin-roue', type='roue', name='Roue à augets du moulin (animable)', w=mw['width'], d=mw['diameter'], floors=1,
                     diameter=mw['diameter'], width=mw['width']))
+    for br in z['BRIDGES']:
+        (ax, az), (bx, bz) = br['a'], br['b']
+        L = _m.hypot(bx - ax, bz - az)
+        out.append(dict(id='pont-' + br['id'], type='pont', name=br['name'], kind=br['type'], w=round(L, 3), d=br['width'], floors=1,
+                        arch=br['arch'], placement=dict(x=round((ax + bx) / 2, 3), z=round((az + bz) / 2, 3),
+                                                        yaw=round(_m.atan2(-(bz - az), bx - ax), 4))))
     tt = z['TORII_TUNNEL']
     d = max(0.18, tt['h'] * 0.075)
     out.append(dict(id='torii-tunnel', type='torii', name='Torii de l’escalier aux mille torii', w=tt['w'], d=round(d, 2), floors=1,
@@ -132,6 +140,11 @@ def build_one(bdef, variant, do_render=False, night=False, render_only=False):
         )
         if 'span' in meta:
             info['span'] = meta['span']
+        if 'walk' in meta:
+            info['walk'] = meta['walk']
+        if 'placement' in bdef:
+            info['placement'] = bdef['placement']
+            info['bridge'] = dict(kind=bdef['kind'], arch=bdef['arch'])
         if bdef['type'] == 'torii':
             info['torii'] = dict(h=bdef['h'], kind=bdef['kind'])
         print(f"  {bid:14s} {bdef['type']:8s} {variant}  tris {info['triangles']}  {info['bytes'] // 1024} Ko  {time.time() - t0:.1f}s")

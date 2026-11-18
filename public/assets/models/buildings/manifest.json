@@ -7987,6 +7987,911 @@
      "y1": 3.4
     }
    ]
+  },
+  "pont-levant": {
+   "id": "pont-levant",
+   "type": "pont",
+   "name": "Pont du Levant",
+   "variant": "a",
+   "file": "pont-levant.glb",
+   "w": 14.866,
+   "d": 6.5,
+   "floors": 1,
+   "height": 1.7,
+   "lod": [
+    "pont-levant_lod0",
+    "pont-levant_lod1",
+    "pont-levant_lod2"
+   ],
+   "triangles": [
+    1414,
+    768,
+    768
+   ],
+   "bytes": 51432,
+   "anchors": [
+    {
+     "name": "anchor_lantern_0",
+     "pos": [
+      -7.433,
+      1.25,
+      -3.15
+     ],
+     "yaw": 0.0,
+     "kind": "giboshi"
+    },
+    {
+     "name": "anchor_lantern_1",
+     "pos": [
+      -7.433,
+      1.25,
+      3.15
+     ],
+     "yaw": 0.0,
+     "kind": "giboshi"
+    },
+    {
+     "name": "anchor_lantern_2",
+     "pos": [
+      7.433,
+      1.25,
+      -3.15
+     ],
+     "yaw": 0.0,
+     "kind": "giboshi"
+    },
+    {
+     "name": "anchor_lantern_3",
+     "pos": [
+      7.433,
+      1.25,
+      3.15
+     ],
+     "yaw": 0.0,
+     "kind": "giboshi"
+    }
+   ],
+   "colliders": [],
+   "walk": {
+    "path": [
+     [
+      -7.43,
+      0.0
+     ],
+     [
+      -5.57,
+      0.175
+     ],
+     [
+      -3.72,
+      0.3
+     ],
+     [
+      -1.86,
+      0.375
+     ],
+     [
+      0.0,
+      0.4
+     ],
+     [
+      1.86,
+      0.375
+     ],
+     [
+      3.72,
+      0.3
+     ],
+     [
+      5.57,
+      0.175
+     ],
+     [
+      7.43,
+      0.0
+     ]
+    ],
+    "width": 6.5
+   },
+   "placement": {
+    "x": 63.0,
+    "z": -28.0,
+    "yaw": 0.343
+   },
+   "bridge": {
+    "kind": "pont-route-bois",
+    "arch": 0.4
+   }
+  },
+  "pont-vapeur": {
+   "id": "pont-vapeur",
+   "type": "pont",
+   "name": "Pont de la Vapeur",
+   "variant": "a",
+   "file": "pont-vapeur.glb",
+   "w": 14.56,
+   "d": 6.5,
+   "floors": 1,
+   "height": 1.7,
+   "lod": [
+    "pont-vapeur_lod0",
+    "pont-vapeur_lod1",
+    "pont-vapeur_lod2"
+   ],
+   "triangles": [
+    1414,
+    768,
+    768
+   ],
+   "bytes": 51916,
+   "anchors": [
+    {
+     "name": "anchor_lantern_0",
+     "pos": [
+      -7.28,
+      1.25,
+      -3.15
+     ],
+     "yaw": 0.0,
+     "kind": "giboshi"
+    },
+    {
+     "name": "anchor_lantern_1",
+     "pos": [
+      -7.28,
+      1.25,
+      3.15
+     ],
+     "yaw": 0.0,
+     "kind": "giboshi"
+    },
+    {
+     "name": "anchor_lantern_2",
+     "pos": [
+      7.28,
+      1.25,
+      -3.15
+     ],
+     "yaw": 0.0,
+     "kind": "giboshi"
+    },
+    {
+     "name": "anchor_lantern_3",
+     "pos": [
+      7.28,
+      1.25,
+      3.15
+     ],
+     "yaw": 0.0,
+     "kind": "giboshi"
+    }
+   ],
+   "colliders": [],
+   "walk": {
+    "path": [
+     [
+      -7.28,
+      0.0
+     ],
+     [
+      -5.46,
+      0.175
+     ],
+     [
+      -3.64,
+      0.3
+     ],
+     [
+      -1.82,
+      0.375
+     ],
+     [
+      0.0,
+      0.4
+     ],
+     [
+      1.82,
+      0.375
+     ],
+     [
+      3.64,
+      0.3
+     ],
+     [
+      5.46,
+      0.175
+     ],
+     [
+      7.28,
+      0.0
+     ]
+    ],
+    "width": 6.5
+   },
+   "placement": {
+    "x": 70.0,
+    "z": 28.0,
+    "yaw": -0.2783
+   },
+   "bridge": {
+    "kind": "pont-route-bois",
+    "arch": 0.4
+   }
+  },
+  "pont-fuji": {
+   "id": "pont-fuji",
+   "type": "pont",
+   "name": "Pont de Fuji",
+   "variant": "a",
+   "file": "pont-fuji.glb",
+   "w": 17.088,
+   "d": 7.5,
+   "floors": 1,
+   "height": 1.8,
+   "lod": [
+    "pont-fuji_lod0",
+    "pont-fuji_lod1",
+    "pont-fuji_lod2"
+   ],
+   "triangles": [
+    1478,
+    792,
+    792
+   ],
+   "bytes": 53060,
+   "anchors": [
+    {
+     "name": "anchor_lantern_0",
+     "pos": [
+      -8.544,
+      1.25,
+      -3.65
+     ],
+     "yaw": 0.0,
+     "kind": "giboshi"
+    },
+    {
+     "name": "anchor_lantern_1",
+     "pos": [
+      -8.544,
+      1.25,
+      3.65
+     ],
+     "yaw": 0.0,
+     "kind": "giboshi"
+    },
+    {
+     "name": "anchor_lantern_2",
+     "pos": [
+      8.544,
+      1.25,
+      -3.65
+     ],
+     "yaw": 0.0,
+     "kind": "giboshi"
+    },
+    {
+     "name": "anchor_lantern_3",
+     "pos": [
+      8.544,
+      1.25,
+      3.65
+     ],
+     "yaw": 0.0,
+     "kind": "giboshi"
+    }
+   ],
+   "colliders": [],
+   "walk": {
+    "path": [
+     [
+      -8.54,
+      0.0
+     ],
+     [
+      -6.41,
+      0.219
+     ],
+     [
+      -4.27,
+      0.375
+     ],
+     [
+      -2.14,
+      0.469
+     ],
+     [
+      0.0,
+      0.5
+     ],
+     [
+      2.14,
+      0.469
+     ],
+     [
+      4.27,
+      0.375
+     ],
+     [
+      6.41,
+      0.219
+     ],
+     [
+      8.54,
+      0.0
+     ]
+    ],
+    "width": 7.5
+   },
+   "placement": {
+    "x": -12.0,
+    "z": 139.0,
+    "yaw": -1.9296
+   },
+   "bridge": {
+    "kind": "pont-route-bois",
+    "arch": 0.5
+   }
+  },
+  "pont-lanternes": {
+   "id": "pont-lanternes",
+   "type": "pont",
+   "name": "Pont des Lanternes",
+   "variant": "a",
+   "file": "pont-lanternes.glb",
+   "w": 17.0,
+   "d": 2.4,
+   "floors": 1,
+   "height": 2.8,
+   "lod": [
+    "pont-lanternes_lod0",
+    "pont-lanternes_lod1",
+    "pont-lanternes_lod2"
+   ],
+   "triangles": [
+    1506,
+    692,
+    692
+   ],
+   "bytes": 50588,
+   "anchors": [
+    {
+     "name": "anchor_lantern_0",
+     "pos": [
+      -8.5,
+      1.0,
+      1.2
+     ],
+     "yaw": 0.0,
+     "kind": "chochin"
+    },
+    {
+     "name": "anchor_lantern_1",
+     "pos": [
+      8.5,
+      1.0,
+      -1.2
+     ],
+     "yaw": 0.0,
+     "kind": "chochin"
+    }
+   ],
+   "colliders": [],
+   "walk": {
+    "path": [
+     [
+      -8.5,
+      0.0
+     ],
+     [
+      -6.38,
+      0.656
+     ],
+     [
+      -4.25,
+      1.125
+     ],
+     [
+      -2.12,
+      1.406
+     ],
+     [
+      0.0,
+      1.5
+     ],
+     [
+      2.12,
+      1.406
+     ],
+     [
+      4.25,
+      1.125
+     ],
+     [
+      6.38,
+      0.656
+     ],
+     [
+      8.5,
+      0.0
+     ]
+    ],
+    "width": 2.4
+   },
+   "placement": {
+    "x": 66.5,
+    "z": 6.0,
+    "yaw": 0.0
+   },
+   "bridge": {
+    "kind": "arche-bois",
+    "arch": 1.5
+   }
+  },
+  "pont-bain": {
+   "id": "pont-bain",
+   "type": "pont",
+   "name": "Pont du Bain",
+   "variant": "a",
+   "file": "pont-bain.glb",
+   "w": 18.439,
+   "d": 2.2,
+   "floors": 1,
+   "height": 2.6,
+   "lod": [
+    "pont-bain_lod0",
+    "pont-bain_lod1",
+    "pont-bain_lod2"
+   ],
+   "triangles": [
+    1550,
+    716,
+    716
+   ],
+   "bytes": 51228,
+   "anchors": [
+    {
+     "name": "anchor_lantern_0",
+     "pos": [
+      -9.219,
+      1.0,
+      1.1
+     ],
+     "yaw": 0.0,
+     "kind": "chochin"
+    },
+    {
+     "name": "anchor_lantern_1",
+     "pos": [
+      9.219,
+      1.0,
+      -1.1
+     ],
+     "yaw": 0.0,
+     "kind": "chochin"
+    }
+   ],
+   "colliders": [],
+   "walk": {
+    "path": [
+     [
+      -9.22,
+      0.0
+     ],
+     [
+      -6.91,
+      0.569
+     ],
+     [
+      -4.61,
+      0.975
+     ],
+     [
+      -2.3,
+      1.219
+     ],
+     [
+      0.0,
+      1.3
+     ],
+     [
+      2.3,
+      1.219
+     ],
+     [
+      4.61,
+      0.975
+     ],
+     [
+      6.91,
+      0.569
+     ],
+     [
+      9.22,
+      0.0
+     ]
+    ],
+    "width": 2.2
+   },
+   "placement": {
+    "x": 78.0,
+    "z": 81.0,
+    "yaw": -0.2187
+   },
+   "bridge": {
+    "kind": "arche-bois",
+    "arch": 1.3
+   }
+  },
+  "pont-vermillon": {
+   "id": "pont-vermillon",
+   "type": "pont",
+   "name": "Pont Vermillon",
+   "variant": "a",
+   "file": "pont-vermillon.glb",
+   "w": 12.0,
+   "d": 2.2,
+   "floors": 1,
+   "height": 3.3,
+   "lod": [
+    "pont-vermillon_lod0",
+    "pont-vermillon_lod1",
+    "pont-vermillon_lod2"
+   ],
+   "triangles": [
+    2358,
+    1538,
+    706
+   ],
+   "bytes": 58136,
+   "anchors": [],
+   "colliders": [],
+   "walk": {
+    "path": [
+     [
+      -6.0,
+      0.0
+     ],
+     [
+      -4.5,
+      0.875
+     ],
+     [
+      -3.0,
+      1.5
+     ],
+     [
+      -1.5,
+      1.875
+     ],
+     [
+      0.0,
+      2.0
+     ],
+     [
+      1.5,
+      1.875
+     ],
+     [
+      3.0,
+      1.5
+     ],
+     [
+      4.5,
+      0.875
+     ],
+     [
+      6.0,
+      0.0
+     ]
+    ],
+    "width": 2.2
+   },
+   "placement": {
+    "x": -138.0,
+    "z": 68.0,
+    "yaw": -1.5708
+   },
+   "bridge": {
+    "kind": "taikobashi-vermillon",
+    "arch": 2
+   }
+  },
+  "pont-zigzag": {
+   "id": "pont-zigzag",
+   "type": "pont",
+   "name": "Planches aux iris",
+   "variant": "a",
+   "file": "pont-zigzag.glb",
+   "w": 16.763,
+   "d": 1.2,
+   "floors": 1,
+   "height": 1.3,
+   "lod": [
+    "pont-zigzag_lod0",
+    "pont-zigzag_lod1",
+    "pont-zigzag_lod2"
+   ],
+   "triangles": [
+    240,
+    240,
+    240
+   ],
+   "bytes": 9104,
+   "anchors": [],
+   "colliders": [],
+   "walk": {
+    "path": [
+     [
+      -8.38,
+      0.0
+     ],
+     [
+      -6.29,
+      0.0
+     ],
+     [
+      -4.19,
+      0.0
+     ],
+     [
+      -2.1,
+      0.0
+     ],
+     [
+      0.0,
+      0.0
+     ],
+     [
+      2.1,
+      0.0
+     ],
+     [
+      4.19,
+      0.0
+     ],
+     [
+      6.29,
+      0.0
+     ],
+     [
+      8.38,
+      0.0
+     ]
+    ],
+    "width": 1.2
+   },
+   "placement": {
+    "x": -151.0,
+    "z": 82.5,
+    "yaw": -2.8387
+   },
+   "bridge": {
+    "kind": "planches-zigzag",
+    "arch": 0
+   }
+  },
+  "pont-saut": {
+   "id": "pont-saut",
+   "type": "pont",
+   "name": "Dalle du Saut (au-dessus de la cascade aux Koï)",
+   "variant": "a",
+   "file": "pont-saut.glb",
+   "w": 12.207,
+   "d": 1.6,
+   "floors": 1,
+   "height": 1.3,
+   "lod": [
+    "pont-saut_lod0",
+    "pont-saut_lod1",
+    "pont-saut_lod2"
+   ],
+   "triangles": [
+    32,
+    32,
+    32
+   ],
+   "bytes": 4012,
+   "anchors": [],
+   "colliders": [],
+   "walk": {
+    "path": [
+     [
+      -6.1,
+      0.0
+     ],
+     [
+      -4.58,
+      0.0
+     ],
+     [
+      -3.05,
+      0.0
+     ],
+     [
+      -1.53,
+      0.0
+     ],
+     [
+      0.0,
+      0.0
+     ],
+     [
+      1.53,
+      0.0
+     ],
+     [
+      3.05,
+      0.0
+     ],
+     [
+      4.58,
+      0.0
+     ],
+     [
+      6.1,
+      0.0
+     ]
+    ],
+    "width": 1.6
+   },
+   "placement": {
+    "x": -94.0,
+    "z": 111.5,
+    "yaw": 0.6107
+   },
+   "bridge": {
+    "kind": "dalle-pierre",
+    "arch": 0
+   }
+  },
+  "pont-gue": {
+   "id": "pont-gue",
+   "type": "pont",
+   "name": "Gué de pierres",
+   "variant": "a",
+   "file": "pont-gue.glb",
+   "w": 13.342,
+   "d": 1.2,
+   "floors": 1,
+   "height": 1.3,
+   "lod": [
+    "pont-gue_lod0",
+    "pont-gue_lod1",
+    "pont-gue_lod2"
+   ],
+   "triangles": [
+    1224,
+    816,
+    816
+   ],
+   "bytes": 69012,
+   "anchors": [],
+   "colliders": [],
+   "walk": {
+    "path": [
+     [
+      -6.67,
+      0.17
+     ],
+     [
+      -5.0,
+      0.17
+     ],
+     [
+      -3.34,
+      0.17
+     ],
+     [
+      -1.67,
+      0.17
+     ],
+     [
+      0.0,
+      0.17
+     ],
+     [
+      1.67,
+      0.17
+     ],
+     [
+      3.34,
+      0.17
+     ],
+     [
+      5.0,
+      0.17
+     ],
+     [
+      6.67,
+      0.17
+     ]
+    ],
+    "width": 1.2
+   },
+   "placement": {
+    "x": 25.5,
+    "z": 139.5,
+    "yaw": -1.344
+   },
+   "bridge": {
+    "kind": "gue-pierres",
+    "arch": 0
+   }
+  },
+  "pont-brumes": {
+   "id": "pont-brumes",
+   "type": "pont",
+   "name": "Passerelle des Brumes",
+   "variant": "a",
+   "file": "pont-brumes.glb",
+   "w": 14.765,
+   "d": 1.4,
+   "floors": 1,
+   "height": 1.3,
+   "lod": [
+    "pont-brumes_lod0",
+    "pont-brumes_lod1",
+    "pont-brumes_lod2"
+   ],
+   "triangles": [
+    1236,
+    1236,
+    1032
+   ],
+   "bytes": 40036,
+   "anchors": [],
+   "colliders": [],
+   "walk": {
+    "path": [
+     [
+      -7.38,
+      -0.0
+     ],
+     [
+      -5.54,
+      -0.263
+     ],
+     [
+      -3.69,
+      -0.45
+     ],
+     [
+      -1.85,
+      -0.562
+     ],
+     [
+      0.0,
+      -0.6
+     ],
+     [
+      1.85,
+      -0.562
+     ],
+     [
+      3.69,
+      -0.45
+     ],
+     [
+      5.54,
+      -0.263
+     ],
+     [
+      7.38,
+      -0.0
+     ]
+    ],
+    "width": 1.4
+   },
+   "placement": {
+    "x": 103.5,
+    "z": -187.5,
+    "yaw": 0.4939
+   },
+   "bridge": {
+    "kind": "passerelle-cordes",
+    "arch": -0.6
+   }
   }
  },
  "conventions": {
@@ -7998,5 +8903,27 @@
   "nuit": "Matière 'paper_shoji' (userData.night = true, emissiveBoost) : l'ajouter à nightMaterials ; emissiveIntensity = 0 le jour.",
   "accroches": "Nœuds vides : anchor_noren_* (haut de l'ouverture, userData.w/h), anchor_lantern_* (userData.kind), anchor_kanban_* (enseigne, userData.w/h/kind), anchor_nameplate_*, light_* (userData.color/intensity -> addLightSpot), smoke_* (-> addSmokeSpot). Rotation y du nœud = orientation de la face.",
   "collisions": "colliders : boîtes locales (x, z centre ; w, d ; y0, y1) à tourner avec le bâtiment ; walk = dessus marchable."
+ },
+ "kit": {
+  "file": "kit.glb",
+  "bytes": 95060,
+  "pieces": {
+   "kit_poteau": 22,
+   "kit_panneau_enduit": 2,
+   "kit_shoji_1820": 158,
+   "kit_koshi_1820": 246,
+   "kit_amado_1820": 64,
+   "kit_porte_koshido": 274,
+   "kit_mushiko": 88,
+   "kit_garde_corps_1820": 152,
+   "kit_soubassement_2x2": 10,
+   "kit_marches_3": 30,
+   "kit_engawa_1820": 66,
+   "kit_chaine_de_pluie": 362,
+   "kit_auvent_hisashi_3m": 366,
+   "kit_toit_kirizuma_4x3": 1884,
+   "kit_onigawara": 66
+  },
+  "note": "Pièces en grille de 4 m : remettre la position du nœud à 0 pour l'utiliser."
  }
 }
