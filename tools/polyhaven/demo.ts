@@ -12,7 +12,8 @@ type M4 = THREE.Matrix4;
 let rng = 12345;
 const rand = () => ((rng = (rng * 16807) % 2147483647) / 2147483647);
 
-export const DEMO_CENTER = { x: 0, z: 0 };
+// Au sud-ouest de la place actuelle, entre les routes et hors de l'anneau de maisons (à ~60 m de (0, 6, 0)).
+export const DEMO_CENTER = { x: -30, z: 55 };
 
 export async function setupDemo(g: { scene: THREE.Scene }, cx = DEMO_CENTER.x, cz = DEMO_CENTER.z) {
   const man = await Models.manifest();
@@ -43,25 +44,22 @@ export async function setupDemo(g: { scene: THREE.Scene }, cx = DEMO_CENTER.x, c
   put('rock_face_01', -4, -13, 0.2, 1.0);
   put('rock_face_02', 6, -14, -0.4, 1.1);
   put('mountainside', -16, -18, 0.9, 1.0);
-  put('moss_01', -7.5, 1.0, 0.3, 1.4);
-  put('moss_01', -4.2, -2.6, 1.9, 1.2);
-  put('moss_01', -8.8, -2.2, 2.6, 1.6);
   // sous-bois
   for (let i = 0; i < 14; i++) {
     const a = rand() * Math.PI * 2, r = 3.8 + rand() * 3;
-    put('fern_02', -6 + Math.cos(a) * r, -2 + Math.sin(a) * r * 0.8, rand() * 6, 0.5 + rand() * 0.4);
+    put(['fern_02_a', 'fern_02_b', 'fern_02_c', 'fern_02_d'][i % 4], -6 + Math.cos(a) * r, -2 + Math.sin(a) * r * 0.8, rand() * 6, 1.1 + rand() * 0.6);
   }
   put('root_cluster_01', -12, -2, 1.2, 0.9);
-  put('pine_roots', -2.5, -6, 0.4, 1.0);
+  put('pine_roots_a', -2.5, -6, 0.4, 1.0);
   put('tree_stump_02', -10.5, 1.5, 0.3, 1.0);
   put('tree_stump_01', 1.5, -8, 2.0, 0.9);
   put('dead_tree_trunk_02', -1, -9.5, 1.4, 1.0);
   put('dead_tree_trunk', -13, 3.5, 0.2, 1.0);
-  put('dry_branches_medium_01', -3, 2.8, 0.9, 0.8);
+  put('dry_branches_medium_01_a', -3, 2.8, 0.9, 0.8);
   put('single_root', -1.5, -3.6, 2.2, 1.0);
-  put('root_cluster_02', -9, 4.2, 0.5, 0.8);
+  put('root_cluster_02_a', -9, 4.2, 0.5, 0.8);
   for (const [id, x, z, s] of [['shrub_02_a', -14, -7, 1], ['shrub_02_b', -8, -8.5, 1.1], ['shrub_02_c', 2.5, -11, 1], ['shrub_02_d', 9, -9, 0.9],
-    ['shrub_03_a', -2.2, 1.6, 1.2], ['shrub_03_b', 0.5, -4.8, 1.3], ['shrub_01_a', -11.5, 5.5, 1], ['shrub_01_b', -4.5, 4.6, 1], ['shrub_04_a', -0.5, 3.4, 1.4],
+    ['shrub_03_a', -2.2, 1.6, 1.2], ['shrub_03_b', 0.5, -4.8, 1.3], ['shrub_01', -11.5, 5.5, 1], ['shrub_01', -4.5, 4.6, 1], ['shrub_04', -0.5, 3.4, 1.4],
     ['shrub_sorrel_01', -5.2, 3.2, 1.2]] as [string, number, number, number][])
     put(id, x, z, rand() * 6, s);
   // pierres et galets en bordure d'un chemin (instanciés)
