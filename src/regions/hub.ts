@@ -28,6 +28,8 @@ import { Instancer, Signs, andon, chochin, noren, toro, woodenGate, mats as fmat
 import { SCATTER_IDS, scatterVillageDecor } from '../procgen/village/scatter';
 import { villageWalkPoints } from '../procgen/village/walk';
 import type { CellLod } from '../procgen/village/lod';
+// --- EAU ---
+import { bathWater, replaceModelWater } from '../world/rivers';
 
 let lodRef: CellLod | null = null;
 /** Choix des LOD des bâtiments du village (appelé avant chaque rendu, cf. world.ts). */
@@ -224,8 +226,12 @@ export async function buildHub(ctx: BuildCtx, progress: (p: number, label?: stri
   // ------------------------------------------------------------------ rotenburo (bassin de la mission), ponton de Nina
   {
     const P = HOT_SPRING_POOL;
-    const water = new THREE.MeshStandardMaterial({ color: 0x9adcd4, roughness: 0.08, metalness: 0, transparent: true, opacity: 0.82 });
-    b.addAt(new THREE.CircleGeometry(P.r + 0.2, 40).rotateX(-Math.PI / 2), water, P.x, P.waterY, P.z, 0, false);
+    // --- EAU --- : eau laiteuse du rotenburo et des bassins des modèles (ashiyu fumant, temizuya clair), spécialité Eau
+    out.group.add(bathWater());
+    out.group.add(replaceModelWater(vb.lod, vb.anchors, (owner) => {
+      const a = vb.manifest.buildings[owner]?.anchors?.find((q) => q.name.startsWith('anchor_water')) as { w?: number; d?: number } | undefined;
+      return a ? { w: a.w ?? 1, d: a.d ?? 1 } : null;
+    }));
     // vapeur légère (une seule InstancedMesh)
     const steamMat = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.08, depthWrite: false });
     const n = 16;

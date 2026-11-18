@@ -9,7 +9,18 @@ const VIEWS = {
   maison: { pos: [30, 28], yaw: 0.9, pitch: 0.18, hour: 11, dist: 4 },
   prairie: { pos: [120, 30], yaw: 1.4, pitch: 0.15, hour: 17.5, dist: 7 },
   nuit: { pos: [0, 30], yaw: Math.PI, pitch: 0.2, hour: 22, dist: 8 },
-  ruisseau: { pos: [112, 60], yaw: 2.6, pitch: 0.2, hour: 9, dist: 8 },
+  // --- Eau : le torrent sur ses galets (tronçon sud), vue depuis la berge
+  ruisseau: { cam: [36, 7.5, 147], look: [20, 3.6, 132], hour: 9 },
+  'torrent-haut': { cam: [64, 9.5, -2], look: [66, 4.9, 14], hour: 10.5 },
+  torrent: { cam: [57.5, 8.2, -14], look: [66, 4.6, 8], hour: 9.5 },
+  cascade: { cam: [-112, 2.2, 100], look: [-94, 1.6, 110.5], hour: 16.5 },
+  'cascade-gorge': { cam: [78, 21, -138], look: [92, 17, -157], hour: 11 },
+  'etang-proche': { cam: [-110, 2.3, 72.5], look: [-117, -0.6, 83], hour: 10.5 },
+  'etang-reflets': { cam: [-160, 3.2, 104], look: [-112, 2, 80], hour: 17.8 },
+  yubatake: { cam: [29, 9.5, -27], look: [40, 6.2, -37], hour: 8.2 },
+  ashiyu: { cam: [18.5, 7.6, 7.5], look: [22, 6.2, 2], hour: 10 },
+  rizieres: { cam: [-130, 13, -40], look: [-170, 9, -4], hour: 17.6 },
+  eaunuit: { cam: [64, 7.6, -9], look: [67, 4.8, 14], hour: 21.5 },
   vueaerienne: { cam: [70, 60, 90], look: [0, 6, 0], hour: 16 },
   // --- Assets Poly Haven : scène de démonstration (tools/polyhaven/demo.ts) autour de (0, 6, 0), lumière dorée.
   // `ground` : la hauteur y de cam et look est comptée au-dessus du terrain ; x et z sont relatifs au centre de la démo (DEMO_CENTER).
