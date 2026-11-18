@@ -13,8 +13,9 @@
 // pour la spécialité Effets), `buildRivers(root)` (construit tout ; renvoie `update(t, dt)`), `bathWater()`,
 // `replaceModelWater()`, `waterDetailTexture()` (texture de détail partagée : normales, écume, bruit).
 import * as THREE from 'three';
-import { CASCADES, FIELDS, HOT_SPRING_POOL, POND, STREAM, STREAM_WATER_Y, STREAM_WIDTHS, YUBATAKE } from './zones';
-import { streamInfo, streamWaterAt, rectSdf } from './valley';
+import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
+import { CASCADES, FIELDS, HOT_SPRING_POOL, STREAM, STREAM_WATER_Y, STREAM_WIDTHS, YUBATAKE } from './zones';
+import { streamInfo, streamWaterAt } from './valley';
 import { heightAt } from './heightmap';
 import { addBox } from './physics';
 import { addSmokeSpot } from './registry';
@@ -860,10 +861,23 @@ export function buildRivers(village?: THREE.Object3D): Rivers {
   const mist = mistMesh(cg.mist);
   group.add(sheet, foam, mist.mesh);
   weirStones(group);
+  // --- yubatake, rizières, brume rasante des eaux chaudes (le rotenburo et l'ashiyu s'y ajoutent via bathWater / replaceModelWater)
+  buildYubatake(group);
+  buildRice(group);
   const stats = { rocks: rocks.length, triangles: (stream.geometry.index!.count + cg.sheet.index!.count + cg.foam.index!.count) / 3, ms: Math.round(performance.now() - t0) };
 
+  let steam: { mesh: THREE.Mesh; mat: THREE.ShaderMaterial } | null = null;
   const update = (t: number) => {
     riverUniforms.uTime.value = t;
+    // la brume rasante se construit au premier passage (les bains du village se sont ajoutés entre-temps)
+    if (!steam && steamParts.length) {
+      steam = steamMesh();
+      if (steam) group.add(steam.mesh);
+    }
+    if (steam) {
+      const sc = steam.mat.uniforms.uCol.value as THREE.Color;
+      sc.copy(ATMO.ambientSky).multiplyScalar(1.1).add(ATMO.sunColor.clone().multiplyScalar(ATMO.sunIntensity * 0.15 * (1 - ATMO.night)));
+    }
     riverUniforms.uNight.value = ATMO.night;
     // brume : lumière du ciel + une part du soleil
     const c = mist.mat.uniforms.uCol.value as THREE.Color;
@@ -872,4 +886,264 @@ export function buildRivers(village?: THREE.Object3D): Rivers {
   return { group, update, stats };
 }
 
-void FIELDS; void YUBATAKE; void POND; void rectSdf; void addBox; void addSmokeSpot;
+// =============================================================================================== EAUX CALMES
+export type CalmKind = 'bain' | 'source' | 'bassin' | 'riziere';
+const CALM: Record<CalmKind, { color: [number, number, number]; alpha: number; rough: number; ripple: number; milky: number }> = {
+  // eau de source laiteuse (#9adcd4) : diffusion forte, peu de transparence
+  bain: { color: [0.3, 0.66, 0.6], alpha: 0.93, rough: 0.07, ripple: 0.05, milky: 1 },
+  // yubatake : turquoise plus saturé, eau qui court dans les canaux
+  source: { color: [0.12, 0.55, 0.5], alpha: 0.9, rough: 0.05, ripple: 0.08, milky: 0.8 },
+  // bassin d'ablutions : eau claire et froide
+  bassin: { color: [0.03, 0.08, 0.07], alpha: 0.55, rough: 0.03, ripple: 0.04, milky: 0 },
+  // rizière : eau boueuse, miroir du ciel
+  riziere: { color: [0.035, 0.045, 0.03], alpha: 0.86, rough: 0.02, ripple: 0.025, milky: 0 },
+};
+const calmMats = new Map<CalmKind, THREE.MeshStandardMaterial>();
+
+/** Matière d'eau calme partagée (bains, canaux, rizières) : rides fines (et courant si aFlow), reflets du ciel. */
+export function calmWaterMaterial(kind: CalmKind) {
+  const got = calmMats.get(kind);
+  if (got) return got;
+  riverUniforms.uDet.value = waterDetailTexture();
+  const P = CALM[kind];
+  const mat = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: P.rough, metalness: 0, transparent: true, envMapIntensity: 1 });
+  mat.onBeforeCompile = (sh) => {
+    Object.assign(sh.uniforms, riverUniforms);
+    sh.vertexShader = sh.vertexShader
+      .replace('#include <common>', '#include <common>\nattribute vec3 aFlow; varying vec3 vWPosC; varying vec3 vFlowC;')
+      .replace('#include <worldpos_vertex>', '#include <worldpos_vertex>\nvWPosC = (modelMatrix * vec4(transformed, 1.0)).xyz; vFlowC = aFlow;');
+    sh.fragmentShader = sh.fragmentShader
+      .replace('#include <common>', `#include <common>
+        ${WATER_GLSL}
+        uniform float uNight;
+        varying vec3 vWPosC; varying vec3 vFlowC; vec3 gWNc;`)
+      .replace('#include <map_fragment>', `
+        {
+          vec2 fd = length(vFlowC.xy) > 0.01 ? normalize(vFlowC.xy) : vec2(1.0, 0.0);
+          vec2 q = wRot(vWPosC.xz, fd);
+          vec4 A = wFlow(q * vec2(0.6, 1.0), vFlowC.z, 1.6, 0.9, 0.11);
+          vec4 B = texture2D(uDet, vWPosC.xz * 0.23 + vec2(uTime * 0.01, -uTime * 0.013));
+          vec2 nq = (A.rg * 2.0 - 1.0) * (0.6 + vFlowC.z) + (B.rg * 2.0 - 1.0) * 0.5;
+          nq *= ${P.ripple.toFixed(3)} * (1.0 + vFlowC.z * 2.0);
+          vec2 nW = fd * nq.x + vec2(-fd.y, fd.x) * nq.y;
+          gWNc = normalize(vec3(-nW.x, 1.0, -nW.y));
+          vec3 col = vec3(${P.color.map((c) => c.toFixed(3)).join(', ')});
+          // eau laiteuse : nuages de minéraux en suspension qui dérivent lentement
+          col *= 1.0 + ${P.milky.toFixed(2)} * (0.22 * (B.a - 0.5) + 0.12 * (A.a - 0.5));
+          vec3 V = normalize(cameraPosition - vWPosC);
+          float fres = 0.02 + 0.98 * pow(1.0 - clamp(dot(gWNc, V), 0.0, 1.0), 5.0);
+          diffuseColor.rgb = col;
+          diffuseColor.a = mix(${P.alpha.toFixed(2)}, 1.0, fres * 0.7);
+        }`)
+      .replace('#include <normal_fragment_maps>', '#include <normal_fragment_maps>\nnormal = normalize((viewMatrix * vec4(gWNc, 0.0)).xyz);');
+  };
+  mat.customProgramCacheKey = () => 'eau-calme-' + kind;
+  calmMats.set(kind, mat);
+  return mat;
+}
+
+/** Ajoute un attribut aFlow (direction x, z et vitesse) constant à une géométrie. */
+function withFlow(g: THREE.BufferGeometry, fx = 0, fz = 0, speed = 0) {
+  const n = g.getAttribute('position').count;
+  const a = new Float32Array(n * 3);
+  for (let i = 0; i < n; i++) a.set([fx, fz, speed], i * 3);
+  g.setAttribute('aFlow', new THREE.BufferAttribute(a, 3));
+  return g;
+}
+
+/** Brume rasante au-dessus des eaux chaudes (nappes superposées, bruit animé ; 1 appel de dessin). */
+const steamParts: THREE.BufferGeometry[] = [];
+function addSteamSheet(g: THREE.BufferGeometry, y: number, strength: number) {
+  const p = g.getAttribute('position') as THREE.BufferAttribute;
+  for (let k = 0; k < 3; k++) {
+    const c = g.clone();
+    const cp = c.getAttribute('position') as THREE.BufferAttribute;
+    for (let i = 0; i < cp.count; i++) cp.setY(i, y + 0.12 + k * 0.28);
+    const a = new Float32Array(cp.count * 2);
+    for (let i = 0; i < cp.count; i++) a.set([k / 2, strength], i * 2);
+    c.setAttribute('aSteam', new THREE.BufferAttribute(a, 2));
+    c.deleteAttribute('normal');
+    c.deleteAttribute('aFlow');
+    if (c.getAttribute('uv')) c.deleteAttribute('uv');
+    steamParts.push(c.index ? c.toNonIndexed() : c);
+  }
+  void p;
+}
+function steamMesh() {
+  if (!steamParts.length) return null;
+  const g = mergeGeometries(steamParts, false);
+  if (!g) return null;
+  const mat = new THREE.ShaderMaterial({
+    transparent: true,
+    depthWrite: false,
+    side: THREE.DoubleSide,
+    fog: true,
+    uniforms: { ...THREE.UniformsUtils.clone(THREE.UniformsLib.fog), ...riverUniforms, uCol: { value: new THREE.Color(0.9, 0.9, 0.9) } },
+    vertexShader: /* glsl */ `
+      #include <fog_pars_vertex>
+      attribute vec2 aSteam; varying vec2 vSteam; varying vec3 vW;
+      void main() {
+        vSteam = aSteam;
+        vW = (modelMatrix * vec4(position, 1.0)).xyz;
+        vec4 mvPosition = viewMatrix * vec4(vW, 1.0);
+        gl_Position = projectionMatrix * mvPosition;
+        #include <fog_vertex>
+      }`,
+    fragmentShader: /* glsl */ `
+      #include <fog_pars_fragment>
+      uniform sampler2D uDet; uniform float uTime; uniform vec3 uCol;
+      varying vec2 vSteam; varying vec3 vW;
+      void main() {
+        float lvl = vSteam.x;
+        vec2 p = vW.xz * (0.11 - lvl * 0.03) + vec2(uTime * 0.018, uTime * 0.011) * (1.0 + lvl);
+        float n = texture2D(uDet, p).a * 0.6 + texture2D(uDet, p * 2.3 - uTime * 0.02).a * 0.4;
+        float a = smoothstep(0.42, 0.85, n) * vSteam.y * (1.0 - lvl * 0.55) * 0.32;
+        gl_FragColor = vec4(uCol, a);
+        #include <fog_fragment>
+      }`,
+  });
+  const m = new THREE.Mesh(g, mat);
+  m.name = 'eau-brume-bains';
+  m.renderOrder = 3;
+  return { mesh: m, mat };
+}
+
+/** Eau laiteuse du rotenburo (remplace le disque provisoire du village). */
+export function bathWater() {
+  const P = HOT_SPRING_POOL;
+  const g = withFlow(new THREE.CircleGeometry(P.r + 0.35, 72).rotateX(-Math.PI / 2).translate(P.x, P.waterY, P.z), 0.3, 1, 0.04);
+  const m = new THREE.Mesh(g, calmWaterMaterial('bain'));
+  m.name = 'eau-rotenburo';
+  m.renderOrder = 1;
+  m.receiveShadow = true;
+  addSteamSheet(new THREE.CircleGeometry(P.r - 0.6, 40).rotateX(-Math.PI / 2).translate(P.x, 0, P.z), P.waterY, 1);
+  return m;
+}
+
+/**
+ * Remplace l'eau des modèles Blender (matière « water » : ashiyu, temizuya) par l'eau du module :
+ * laiteuse et fumante pour le bain de pieds, claire pour le bassin d'ablutions.
+ * `anchors` : accroches monde du village (villageInfo.anchors) ; `sizes` : w et d des accroches « anchor_water ».
+ */
+export function replaceModelWater(root: THREE.Object3D, anchors: { owner: string; name: string; pos: THREE.Vector3; yaw: number; w?: number }[], sizes: (owner: string) => { w: number; d: number } | null) {
+  root.traverse((o) => {
+    const m = o as THREE.Mesh;
+    if (!m.isMesh) return;
+    for (const mt of Array.isArray(m.material) ? m.material : [m.material]) if (mt && mt.name === 'water') mt.visible = false;
+  });
+  const out = new THREE.Group();
+  out.name = 'eau-bassins-modeles';
+  for (const a of anchors) {
+    if (!a.name.startsWith('anchor_water')) continue;
+    const sz = sizes(a.owner) ?? { w: a.w ?? 1, d: 1 };
+    const hot = a.owner.startsWith('ashiyu');
+    const g = withFlow(new THREE.PlaneGeometry(sz.w + 0.5, sz.d + 0.5).rotateX(-Math.PI / 2).rotateY(a.yaw).translate(a.pos.x, a.pos.y + 0.006, a.pos.z), 1, 0, hot ? 0.05 : 0);
+    const m = new THREE.Mesh(g, calmWaterMaterial(hot ? 'bain' : 'bassin'));
+    m.name = 'eau-' + a.owner;
+    m.renderOrder = 1;
+    out.add(m);
+    if (hot) addSteamSheet(new THREE.PlaneGeometry(sz.w, sz.d).rotateX(-Math.PI / 2).rotateY(a.yaw).translate(a.pos.x, 0, a.pos.z), a.pos.y, 0.8);
+  }
+  return out;
+}
+
+/** Yubatake : canaux de bois en serpentin où l'eau de source turquoise fume et refroidit (bible §2.6). */
+function buildYubatake(group: THREE.Group) {
+  const Y = YUBATAKE;
+  const rng = new Rng(61);
+  const wood: THREE.BufferGeometry[] = [], crust: THREE.BufferGeometry[] = [], water: THREE.BufferGeometry[] = [];
+  const c = Math.cos(Y.yaw), s = Math.sin(Y.yaw);
+  // repère local : u le long des canaux (x), v en travers (z)
+  const place = (g: THREE.BufferGeometry, u: number, y: number, v: number, rot = 0) =>
+    g.rotateY(Y.yaw + rot).translate(Y.x + u * c + v * s, y, Y.z - u * s + v * c);
+  const box = (w: number, h: number, d: number, u: number, y: number, v: number, list = wood, rot = 0) => list.push(place(new THREE.BoxGeometry(w, h, d), u, y, v, rot));
+  const N = 6, L = Y.w - 0.8, pitch = Y.d / N, inner = 0.78, wall = 0.07;
+  const lvl = (k: number) => Y.y + 0.55 - k * 0.075;
+  for (let k = 0; k < N; k++) {
+    const v = -Y.d / 2 + pitch * (k + 0.5);
+    const yw = lvl(k), floor = yw - 0.16;
+    const dir = k % 2 === 0 ? 1 : -1;
+    // fond, parois, têtes
+    box(L, 0.05, inner + 2 * wall, 0, floor - 0.025, v);
+    for (const sd of [-1, 1]) {
+      box(L, 0.3, wall, 0, floor + 0.12, v + sd * (inner / 2 + wall / 2));
+      // dépôts minéraux (jaunes et blancs) sur la paroi, au ras de l'eau
+      box(L - 0.1, 0.045, 0.012, 0, yw + 0.012, v + sd * (inner / 2 - 0.004), crust);
+    }
+    for (const e of [-1, 1]) box(wall, 0.3, inner + 2 * wall, e * (L / 2 - wall / 2), floor + 0.12, v);
+    // pieds tous les 2 m
+    for (let u = -L / 2 + 0.4; u <= L / 2; u += 2) for (const sd of [-1, 1]) {
+      const h = floor - 0.05 - Y.y;
+      if (h > 0.03) box(0.09, h, 0.09, u, Y.y + h / 2, v + sd * (inner / 2 + wall));
+    }
+    // eau du canal (légère pente dans le sens du courant)
+    const wg = new THREE.PlaneGeometry(L - 2 * wall, inner, 24, 1).rotateX(-Math.PI / 2);
+    const wp = wg.getAttribute('position') as THREE.BufferAttribute;
+    for (let i = 0; i < wp.count; i++) wp.setY(i, -dir * wp.getX(i) * 0.002);
+    water.push(withFlow(place(wg, 0, yw, v), dir * c, -dir * s, 0.45 + rng.range(-0.08, 0.1)));
+    // dépôt au fond (croûte jaune sous l'eau turquoise)
+    box(L - 0.2, 0.01, inner - 0.05, 0, floor + 0.005, v, crust);
+    // goulotte vers le canal suivant, au bout aval
+    if (k < N - 1) {
+      const ue = dir * (L / 2 - 0.25), v2 = v + pitch;
+      const yy = lvl(k + 1) + 0.04;
+      box(0.36, 0.04, pitch - inner, ue, yy - 0.05, v + pitch / 2);
+      const sg = new THREE.PlaneGeometry(0.26, pitch - inner + 0.1).rotateX(-Math.PI / 2);
+      water.push(withFlow(place(sg, ue, yy, (v + v2) / 2), s * 0, 1 * c, 0.9));
+      box(0.3, 0.06, pitch - inner, ue, yy - 0.01, v + pitch / 2, crust);
+    }
+  }
+  // bac de source à l'amont et bac de sortie
+  const v0 = -Y.d / 2 + pitch * 0.5;
+  box(1.1, 0.9, 1.2, -L / 2 - 0.65, Y.y + 0.45, v0);
+  water.push(withFlow(place(new THREE.PlaneGeometry(0.95, 1.05).rotateX(-Math.PI / 2), -L / 2 - 0.65, Y.y + 0.86, v0), 1, 0, 0.1));
+  // barrière basse autour (poteaux et deux lisses)
+  const mx = Y.w / 2 + 0.9, mz = Y.d / 2 + 0.5;
+  for (const [ax, az, bx, bz] of [[-mx, -mz, mx, -mz], [mx, -mz, mx, mz], [mx, mz, -mx, mz], [-mx, mz, -mx, -mz]]) {
+    const len = Math.hypot(bx - ax, bz - az), n = Math.ceil(len / 1.6);
+    const rot = Math.atan2(-(bz - az), bx - ax);
+    for (let i = 0; i <= n; i++) box(0.08, 0.95, 0.08, lerp(ax, bx, i / n), Y.y + 0.47, lerp(az, bz, i / n));
+    for (const h of [0.45, 0.85]) box(len, 0.06, 0.05, (ax + bx) / 2, Y.y + h, (az + bz) / 2, wood, rot);
+  }
+  addBox(Y.x, Y.z, Y.w + 1.8, Y.d + 1.0, Y.y - 0.5, Y.y + 0.95, -Y.yaw, false);
+  // vapeur (registre partagé, lu par les Effets) et brume rasante
+  for (let k = 0; k < 5; k++) addSmokeSpot(Y.x + (k - 2) * 3.6, Y.y + 0.6, Y.z + rng.range(-2, 2), 'steam');
+  addSteamSheet(place(new THREE.PlaneGeometry(Y.w, Y.d).rotateX(-Math.PI / 2), 0, 0, 0), Y.y + 0.35, 1.2);
+  // assemblage
+  const woodMat = typeof document === 'undefined' ? new THREE.MeshStandardMaterial() : pbr('roughwood', { scale: 1.5, color: 0x8a735a, roughness: 0.85 });
+  const crustCol = (g: THREE.BufferGeometry) => {
+    const n = g.getAttribute('position').count, a = new Float32Array(n * 3);
+    const yel = rng.chance(0.6);
+    for (let i = 0; i < n; i++) a.set(yel ? [0.86, 0.78, 0.42] : [0.92, 0.9, 0.82], i * 3);
+    g.setAttribute('color', new THREE.BufferAttribute(a, 3));
+    if (g.getAttribute('uv')) g.deleteAttribute('uv');
+    return g;
+  };
+  const wg = mergeGeometries(wood, false)!, cg = mergeGeometries(crust.map(crustCol), false)!, ag = mergeGeometries(water, false)!;
+  const wm = new THREE.Mesh(wg, woodMat);
+  wm.name = 'yubatake-bois';
+  wm.castShadow = wm.receiveShadow = true;
+  const cm = new THREE.Mesh(cg, new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.92 }));
+  cm.name = 'yubatake-depots';
+  cm.receiveShadow = true;
+  const am = new THREE.Mesh(ag, calmWaterMaterial('source'));
+  am.name = 'yubatake-eau';
+  am.renderOrder = 1;
+  group.add(wm, cm, am);
+}
+
+/** Rizières en terrasses : eau miroir à y + 0,15 dans chaque gradin, en retrait des diguettes (bible §2.8). */
+function buildRice(group: THREE.Group) {
+  const parts: THREE.BufferGeometry[] = [];
+  for (const f of FIELDS) {
+    if (f.kind !== 'riziere' || f.y === undefined) continue;
+    const g = new THREE.PlaneGeometry(f.w - 1.4, f.d - 1.4).rotateX(-Math.PI / 2).rotateY(f.yaw).translate(f.x, f.y + 0.15, f.z);
+    parts.push(withFlow(g));
+  }
+  if (!parts.length) return;
+  const m = new THREE.Mesh(mergeGeometries(parts, false)!, calmWaterMaterial('riziere'));
+  m.name = 'eau-rizieres';
+  m.renderOrder = 1;
+  m.receiveShadow = true;
+  group.add(m);
+}

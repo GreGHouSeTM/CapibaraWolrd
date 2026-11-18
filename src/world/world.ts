@@ -57,7 +57,7 @@ export async function buildWorld(scene: THREE.Scene, q: QualityPreset, ctx: Omit
     beforeRender(scene, updateVillage);
     Models.autoUpdate(scene);
     // --- EAU --- : torrent, cascades et bassins (après le village : l'écume se cuit autour des rochers du lit)
-    water.buildLocal(scene, c.group);
+    water.buildLocal(scene, c.group, q);
   }
   const builders: [RegionId, string, (c: BuildCtx) => RegionContent][] = [
     ['paris', 'Construction de Paris et de la tour Eiffel…', buildParis],
