@@ -468,16 +468,17 @@ export function stampDetail(g: Grid) {
       const esc = smoothstep(-0.65, -0.3, phi) * smoothstep(1.65, 1.3, phi);
       let h = g.h[idx];
       if (e < 1) {
-        const soft = -POND.depth + POND.depth * smoothstep(0.5, 0.985, e);
+        const soft = -POND.depth + (POND.depth - 0.05) * smoothstep(0.45, 1.0, e);
         const steep = -POND.depth - 0.4 + (POND.depth + 0.4) * smoothstep(0.86, 0.995, e);
         h = lerp(soft, steep, esc) - 0.06;
       } else if (e < 1.7) {
-        const rim = Math.max(h, 0.55 + (e - 1) * 3);
+        const beach = Math.min(0.55, (e - 1) * 9) + Math.max(0, e - 1.06) * 3; // plage en pente douce
+        const rim = Math.max(h, beach);
         const cliff = lerp(0.55, 5.6 + 0.6 * noise2(x / 6, z / 6), smoothstep(1.0, 1.05, e));
         const t = smoothstep(1.7, 1.25, e);
         h = lerp(h, Math.max(lerp(rim, cliff, esc), h * (1 - esc) + 0 * esc), t);
         if (esc > 0.01) h = Math.max(h, lerp(h, cliff, esc * smoothstep(1.3, 1.08, e)));
-        h = Math.max(h, 0.55);
+        h = Math.max(h, e > 1.06 ? 0.55 : beach);
       }
       // îlot à la lanterne
       const di = Math.hypot(x - isl.x, z - isl.z);
