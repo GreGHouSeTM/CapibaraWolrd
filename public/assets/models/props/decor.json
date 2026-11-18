@@ -1,0 +1,4738 @@
+{
+ "version": 1,
+ "file": "decor.glb",
+ "atlas": {
+  "diff": "tex/decor_diff.jpg",
+  "nor": "tex/decor_nor.jpg",
+  "orm": "tex/decor_orm.jpg"
+ },
+ "props": {
+  "toro_kasuga_0": {
+   "id": "toro_kasuga",
+   "variant": 0,
+   "cat": "eclairage",
+   "min": [
+    -0.53,
+    0.0,
+    -0.53
+   ],
+   "max": [
+    0.53,
+    1.981,
+    0.53
+   ],
+   "dims": [
+    1.06,
+    1.981,
+    1.06
+   ],
+   "tris": [
+    2006,
+    225
+   ],
+   "light": 1.305,
+   "collide": [
+    "cercle",
+    0.3999202974211723
+   ],
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "toro_kasuga_1": {
+   "id": "toro_kasuga",
+   "variant": 1,
+   "cat": "eclairage",
+   "min": [
+    -0.55,
+    0.0,
+    -0.55
+   ],
+   "max": [
+    0.55,
+    2.055,
+    0.55
+   ],
+   "dims": [
+    1.099,
+    2.055,
+    1.099
+   ],
+   "tris": [
+    2006,
+    225
+   ],
+   "light": 1.354,
+   "collide": [
+    "cercle",
+    0.4149554344513125
+   ],
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "toro_kasuga_2": {
+   "id": "toro_kasuga",
+   "variant": 2,
+   "cat": "eclairage",
+   "min": [
+    -0.504,
+    0.0,
+    -0.582
+   ],
+   "max": [
+    0.504,
+    2.175,
+    0.582
+   ],
+   "dims": [
+    1.008,
+    2.175,
+    1.164
+   ],
+   "tris": [
+    2744,
+    293
+   ],
+   "light": 1.433,
+   "collide": [
+    "cercle",
+    0.43916736313651444
+   ],
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "toro_kasuga_3": {
+   "id": "toro_kasuga",
+   "variant": 3,
+   "cat": "eclairage",
+   "min": [
+    -0.457,
+    0.0,
+    -0.457
+   ],
+   "max": [
+    0.457,
+    1.71,
+    0.457
+   ],
+   "dims": [
+    0.915,
+    1.71,
+    0.915
+   ],
+   "tris": [
+    2006,
+    224
+   ],
+   "light": 1.126,
+   "collide": [
+    "cercle",
+    0.34534070554457885
+   ],
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "toro_yukimi_0": {
+   "id": "toro_yukimi",
+   "variant": 0,
+   "cat": "eclairage",
+   "min": [
+    -0.693,
+    -0.006,
+    -0.6
+   ],
+   "max": [
+    0.693,
+    1.047,
+    0.6
+   ],
+   "dims": [
+    1.386,
+    1.052,
+    1.2
+   ],
+   "tris": [
+    1856,
+    131
+   ],
+   "light": 0.556,
+   "collide": [
+    "cercle",
+    0.45
+   ],
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "toro_yukimi_1": {
+   "id": "toro_yukimi",
+   "variant": 1,
+   "cat": "eclairage",
+   "min": [
+    -0.759,
+    -0.005,
+    -0.657
+   ],
+   "max": [
+    0.759,
+    1.116,
+    0.657
+   ],
+   "dims": [
+    1.518,
+    1.121,
+    1.315
+   ],
+   "tris": [
+    1856,
+    131
+   ],
+   "light": 0.611,
+   "collide": [
+    "cercle",
+    0.45
+   ],
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "toro_oki_0": {
+   "id": "toro_oki",
+   "variant": 0,
+   "cat": "eclairage",
+   "min": [
+    -0.115,
+    -0.004,
+    -0.115
+   ],
+   "max": [
+    0.115,
+    0.398,
+    0.115
+   ],
+   "dims": [
+    0.23,
+    0.402,
+    0.23
+   ],
+   "tris": [
+    870,
+    53
+   ],
+   "light": 0.151,
+   "collide": null,
+   "cast": false,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "toro_oki_1": {
+   "id": "toro_oki",
+   "variant": 1,
+   "cat": "eclairage",
+   "min": [
+    -0.15,
+    -0.004,
+    -0.15
+   ],
+   "max": [
+    0.15,
+    0.519,
+    0.15
+   ],
+   "dims": [
+    0.3,
+    0.523,
+    0.3
+   ],
+   "tris": [
+    870,
+    53
+   ],
+   "light": 0.197,
+   "collide": null,
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "toro_oki_2": {
+   "id": "toro_oki",
+   "variant": 2,
+   "cat": "eclairage",
+   "min": [
+    -0.128,
+    0.002,
+    -0.128
+   ],
+   "max": [
+    0.128,
+    0.442,
+    0.128
+   ],
+   "dims": [
+    0.255,
+    0.44,
+    0.255
+   ],
+   "tris": [
+    870,
+    52
+   ],
+   "light": 0.168,
+   "collide": null,
+   "cast": false,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "chochin_0": {
+   "id": "chochin",
+   "variant": 0,
+   "cat": "eclairage",
+   "min": [
+    -0.207,
+    -0.664,
+    -0.207
+   ],
+   "max": [
+    0.207,
+    0.0,
+    0.207
+   ],
+   "dims": [
+    0.415,
+    0.664,
+    0.415
+   ],
+   "tris": [
+    1108,
+    387
+   ],
+   "light": -0.312,
+   "collide": null,
+   "cast": true,
+   "hang": true,
+   "steam": null,
+   "length": null
+  },
+  "chochin_1": {
+   "id": "chochin",
+   "variant": 1,
+   "cat": "eclairage",
+   "min": [
+    -0.208,
+    -0.649,
+    -0.208
+   ],
+   "max": [
+    0.208,
+    0.0,
+    0.208
+   ],
+   "dims": [
+    0.416,
+    0.649,
+    0.416
+   ],
+   "tris": [
+    1088,
+    380
+   ],
+   "light": -0.367,
+   "collide": null,
+   "cast": true,
+   "hang": true,
+   "steam": null,
+   "length": null
+  },
+  "chochin_2": {
+   "id": "chochin",
+   "variant": 2,
+   "cat": "eclairage",
+   "min": [
+    -0.198,
+    -0.719,
+    -0.198
+   ],
+   "max": [
+    0.198,
+    0.0,
+    0.198
+   ],
+   "dims": [
+    0.395,
+    0.719,
+    0.395
+   ],
+   "tris": [
+    1108,
+    386
+   ],
+   "light": -0.34,
+   "collide": null,
+   "cast": true,
+   "hang": true,
+   "steam": null,
+   "length": null
+  },
+  "chochin_3": {
+   "id": "chochin",
+   "variant": 3,
+   "cat": "eclairage",
+   "min": [
+    -0.193,
+    -0.616,
+    -0.193
+   ],
+   "max": [
+    0.193,
+    0.0,
+    0.193
+   ],
+   "dims": [
+    0.386,
+    0.616,
+    0.386
+   ],
+   "tris": [
+    1088,
+    380
+   ],
+   "light": -0.351,
+   "collide": null,
+   "cast": true,
+   "hang": true,
+   "steam": null,
+   "length": null
+  },
+  "chochin_4": {
+   "id": "chochin",
+   "variant": 4,
+   "cat": "eclairage",
+   "min": [
+    -0.188,
+    -0.506,
+    -0.188
+   ],
+   "max": [
+    0.188,
+    0.0,
+    0.188
+   ],
+   "dims": [
+    0.376,
+    0.506,
+    0.376
+   ],
+   "tris": [
+    1088,
+    380
+   ],
+   "light": -0.296,
+   "collide": null,
+   "cast": true,
+   "hang": true,
+   "steam": null,
+   "length": null
+  },
+  "chochin_5": {
+   "id": "chochin",
+   "variant": 5,
+   "cat": "eclairage",
+   "min": [
+    -0.175,
+    -0.954,
+    -0.175
+   ],
+   "max": [
+    0.175,
+    0.0,
+    0.175
+   ],
+   "dims": [
+    0.349,
+    0.954,
+    0.349
+   ],
+   "tris": [
+    1108,
+    386
+   ],
+   "light": -0.457,
+   "collide": null,
+   "cast": true,
+   "hang": true,
+   "steam": null,
+   "length": null
+  },
+  "andon_0": {
+   "id": "andon",
+   "variant": 0,
+   "cat": "eclairage",
+   "min": [
+    -0.182,
+    0.0,
+    -0.182
+   ],
+   "max": [
+    0.182,
+    1.274,
+    0.182
+   ],
+   "dims": [
+    0.364,
+    1.274,
+    0.364
+   ],
+   "tris": [
+    2374,
+    94
+   ],
+   "light": 0.822,
+   "collide": [
+    "cercle",
+    0.3
+   ],
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "andon_1": {
+   "id": "andon",
+   "variant": 1,
+   "cat": "eclairage",
+   "min": [
+    -0.201,
+    0.0,
+    -0.201
+   ],
+   "max": [
+    0.201,
+    1.281,
+    0.201
+   ],
+   "dims": [
+    0.403,
+    1.281,
+    0.403
+   ],
+   "tris": [
+    2374,
+    94
+   ],
+   "light": 0.827,
+   "collide": [
+    "cercle",
+    0.3
+   ],
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "andon_2": {
+   "id": "andon",
+   "variant": 2,
+   "cat": "eclairage",
+   "min": [
+    -0.201,
+    0.0,
+    -0.201
+   ],
+   "max": [
+    0.201,
+    1.284,
+    0.201
+   ],
+   "dims": [
+    0.402,
+    1.284,
+    0.402
+   ],
+   "tris": [
+    2374,
+    94
+   ],
+   "light": 0.83,
+   "collide": [
+    "cercle",
+    0.3
+   ],
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "banc_0": {
+   "id": "banc",
+   "variant": 0,
+   "cat": "mobilier",
+   "min": [
+    -0.875,
+    0.0,
+    -0.341
+   ],
+   "max": [
+    0.877,
+    0.474,
+    0.341
+   ],
+   "dims": [
+    1.752,
+    0.474,
+    0.682
+   ],
+   "tris": [
+    1728,
+    66
+   ],
+   "light": null,
+   "collide": [
+    "boite",
+    1.7342646376143462,
+    0.6380724284559169
+   ],
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "banc_1": {
+   "id": "banc",
+   "variant": 1,
+   "cat": "mobilier",
+   "min": [
+    -0.972,
+    0.0,
+    -0.277
+   ],
+   "max": [
+    0.974,
+    0.412,
+    0.277
+   ],
+   "dims": [
+    1.946,
+    0.412,
+    0.554
+   ],
+   "tris": [
+    1404,
+    54
+   ],
+   "light": null,
+   "collide": [
+    "boite",
+    1.9348758069581162,
+    0.5660156313087947
+   ],
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "banc_2": {
+   "id": "banc",
+   "variant": 2,
+   "cat": "mobilier",
+   "min": [
+    -0.821,
+    0.0,
+    -0.311
+   ],
+   "max": [
+    0.819,
+    0.452,
+    0.311
+   ],
+   "dims": [
+    1.64,
+    0.452,
+    0.623
+   ],
+   "tris": [
+    1404,
+    54
+   ],
+   "light": null,
+   "collide": [
+    "boite",
+    1.6254464400786839,
+    0.6349741499857895
+   ],
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "banc_3": {
+   "id": "banc",
+   "variant": 3,
+   "cat": "mobilier",
+   "min": [
+    -1.006,
+    0.0,
+    -0.257
+   ],
+   "max": [
+    1.0,
+    0.45,
+    0.257
+   ],
+   "dims": [
+    2.006,
+    0.45,
+    0.515
+   ],
+   "tris": [
+    1404,
+    54
+   ],
+   "light": null,
+   "collide": [
+    "boite",
+    1.9977066248094157,
+    0.5266685433649727
+   ],
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "kosatsu_0": {
+   "id": "kosatsu",
+   "variant": 0,
+   "cat": "mobilier",
+   "min": [
+    -1.675,
+    -0.008,
+    -0.553
+   ],
+   "max": [
+    1.675,
+    2.995,
+    0.553
+   ],
+   "dims": [
+    3.35,
+    3.003,
+    1.107
+   ],
+   "tris": [
+    2592,
+    100
+   ],
+   "light": null,
+   "collide": [
+    "boite",
+    2.9,
+    0.45
+   ],
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "nobori_0": {
+   "id": "nobori",
+   "variant": 0,
+   "cat": "mobilier",
+   "min": [
+    -0.17,
+    0.0,
+    -0.17
+   ],
+   "max": [
+    0.5,
+    3.186,
+    0.17
+   ],
+   "dims": [
+    0.67,
+    3.186,
+    0.34
+   ],
+   "tris": [
+    224,
+    77
+   ],
+   "light": null,
+   "collide": [
+    "cercle",
+    0.18
+   ],
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "nobori_1": {
+   "id": "nobori",
+   "variant": 1,
+   "cat": "mobilier",
+   "min": [
+    -0.17,
+    0.0,
+    -0.17
+   ],
+   "max": [
+    0.5,
+    3.385,
+    0.17
+   ],
+   "dims": [
+    0.67,
+    3.385,
+    0.34
+   ],
+   "tris": [
+    224,
+    78
+   ],
+   "light": null,
+   "collide": [
+    "cercle",
+    0.18
+   ],
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "nobori_2": {
+   "id": "nobori",
+   "variant": 2,
+   "cat": "mobilier",
+   "min": [
+    -0.17,
+    0.0,
+    -0.17
+   ],
+   "max": [
+    0.5,
+    3.154,
+    0.17
+   ],
+   "dims": [
+    0.67,
+    3.154,
+    0.34
+   ],
+   "tris": [
+    224,
+    78
+   ],
+   "light": null,
+   "collide": [
+    "cercle",
+    0.18
+   ],
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "nobori_3": {
+   "id": "nobori",
+   "variant": 3,
+   "cat": "mobilier",
+   "min": [
+    -0.17,
+    0.0,
+    -0.17
+   ],
+   "max": [
+    0.5,
+    3.332,
+    0.17
+   ],
+   "dims": [
+    0.67,
+    3.332,
+    0.34
+   ],
+   "tris": [
+    224,
+    77
+   ],
+   "light": null,
+   "collide": [
+    "cercle",
+    0.18
+   ],
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "daisha_0": {
+   "id": "daisha",
+   "variant": 0,
+   "cat": "mobilier",
+   "min": [
+    -1.641,
+    0.0,
+    -0.571
+   ],
+   "max": [
+    1.241,
+    0.738,
+    0.571
+   ],
+   "dims": [
+    2.882,
+    0.738,
+    1.141
+   ],
+   "tris": [
+    4668,
+    465
+   ],
+   "light": null,
+   "collide": [
+    "boite",
+    2.68173000737926,
+    1.1614430976583197
+   ],
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "daisha_1": {
+   "id": "daisha",
+   "variant": 1,
+   "cat": "mobilier",
+   "min": [
+    -1.616,
+    0.0,
+    -0.587
+   ],
+   "max": [
+    1.216,
+    0.823,
+    0.587
+   ],
+   "dims": [
+    2.832,
+    0.823,
+    1.175
+   ],
+   "tris": [
+    4668,
+    465
+   ],
+   "light": null,
+   "collide": [
+    "boite",
+    2.631740317238837,
+    1.1949456141168853
+   ],
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "kanban_0": {
+   "id": "kanban",
+   "variant": 0,
+   "cat": "mobilier",
+   "min": [
+    -0.25,
+    0.0,
+    -0.17
+   ],
+   "max": [
+    0.25,
+    1.465,
+    0.17
+   ],
+   "dims": [
+    0.5,
+    1.465,
+    0.34
+   ],
+   "tris": [
+    540,
+    20
+   ],
+   "light": null,
+   "collide": [
+    "cercle",
+    0.25
+   ],
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "kanban_1": {
+   "id": "kanban",
+   "variant": 1,
+   "cat": "mobilier",
+   "min": [
+    -0.25,
+    0.0,
+    -0.17
+   ],
+   "max": [
+    0.25,
+    1.238,
+    0.17
+   ],
+   "dims": [
+    0.5,
+    1.238,
+    0.34
+   ],
+   "tris": [
+    540,
+    20
+   ],
+   "light": null,
+   "collide": [
+    "cercle",
+    0.25
+   ],
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "kanban_2": {
+   "id": "kanban",
+   "variant": 2,
+   "cat": "mobilier",
+   "min": [
+    -0.25,
+    0.0,
+    -0.17
+   ],
+   "max": [
+    0.25,
+    1.291,
+    0.17
+   ],
+   "dims": [
+    0.5,
+    1.291,
+    0.34
+   ],
+   "tris": [
+    540,
+    20
+   ],
+   "light": null,
+   "collide": [
+    "cercle",
+    0.25
+   ],
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "taru_0": {
+   "id": "taru",
+   "variant": 0,
+   "cat": "contenant",
+   "min": [
+    -0.302,
+    0.0,
+    -0.302
+   ],
+   "max": [
+    0.302,
+    0.799,
+    0.302
+   ],
+   "dims": [
+    0.604,
+    0.799,
+    0.604
+   ],
+   "tris": [
+    704,
+    246
+   ],
+   "light": null,
+   "collide": [
+    "cercle",
+    0.3157320187624558
+   ],
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "taru_1": {
+   "id": "taru",
+   "variant": 1,
+   "cat": "contenant",
+   "min": [
+    -0.308,
+    0.0,
+    -0.308
+   ],
+   "max": [
+    0.308,
+    0.655,
+    0.308
+   ],
+   "dims": [
+    0.616,
+    0.655,
+    0.616
+   ],
+   "tris": [
+    692,
+    242
+   ],
+   "light": null,
+   "collide": [
+    "cercle",
+    0.32139315514262945
+   ],
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "taru_2": {
+   "id": "taru",
+   "variant": 2,
+   "cat": "contenant",
+   "min": [
+    -0.345,
+    0.0,
+    -0.345
+   ],
+   "max": [
+    0.345,
+    0.769,
+    0.345
+   ],
+   "dims": [
+    0.69,
+    0.769,
+    0.69
+   ],
+   "tris": [
+    876,
+    306
+   ],
+   "light": null,
+   "collide": [
+    "cercle",
+    0.35889902674145613
+   ],
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "taru_3": {
+   "id": "taru",
+   "variant": 3,
+   "cat": "contenant",
+   "min": [
+    -0.268,
+    0.0,
+    -0.268
+   ],
+   "max": [
+    0.268,
+    0.736,
+    0.268
+   ],
+   "dims": [
+    0.537,
+    0.736,
+    0.537
+   ],
+   "tris": [
+    864,
+    301
+   ],
+   "light": null,
+   "collide": [
+    "cercle",
+    0.28153210611064095
+   ],
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "oke_0": {
+   "id": "oke",
+   "variant": 0,
+   "cat": "contenant",
+   "min": [
+    -0.19,
+    0.0,
+    -0.19
+   ],
+   "max": [
+    0.19,
+    0.317,
+    0.19
+   ],
+   "dims": [
+    0.38,
+    0.317,
+    0.38
+   ],
+   "tris": [
+    196,
+    68
+   ],
+   "light": null,
+   "collide": null,
+   "cast": false,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "oke_1": {
+   "id": "oke",
+   "variant": 1,
+   "cat": "contenant",
+   "min": [
+    -0.212,
+    0.0,
+    -0.21
+   ],
+   "max": [
+    0.212,
+    0.428,
+    0.21
+   ],
+   "dims": [
+    0.424,
+    0.428,
+    0.419
+   ],
+   "tris": [
+    232,
+    81
+   ],
+   "light": null,
+   "collide": null,
+   "cast": false,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "oke_2": {
+   "id": "oke",
+   "variant": 2,
+   "cat": "contenant",
+   "min": [
+    -0.208,
+    0.0,
+    -0.208
+   ],
+   "max": [
+    0.208,
+    0.296,
+    0.208
+   ],
+   "dims": [
+    0.416,
+    0.296,
+    0.416
+   ],
+   "tris": [
+    196,
+    68
+   ],
+   "light": null,
+   "collide": null,
+   "cast": false,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "oke_3": {
+   "id": "oke",
+   "variant": 3,
+   "cat": "contenant",
+   "min": [
+    -0.184,
+    0.0,
+    -0.184
+   ],
+   "max": [
+    0.257,
+    0.574,
+    0.184
+   ],
+   "dims": [
+    0.441,
+    0.574,
+    0.367
+   ],
+   "tris": [
+    286,
+    100
+   ],
+   "light": null,
+   "collide": null,
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "oke_pile_0": {
+   "id": "oke_pile",
+   "variant": 0,
+   "cat": "contenant",
+   "min": [
+    -0.535,
+    0.0,
+    -0.13
+   ],
+   "max": [
+    0.535,
+    0.52,
+    0.13
+   ],
+   "dims": [
+    1.07,
+    0.52,
+    0.26
+   ],
+   "tris": [
+    736,
+    256
+   ],
+   "light": null,
+   "collide": [
+    "boite",
+    1.12,
+    0.3
+   ],
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "oke_pile_1": {
+   "id": "oke_pile",
+   "variant": 1,
+   "cat": "contenant",
+   "min": [
+    -0.535,
+    0.0,
+    -0.13
+   ],
+   "max": [
+    0.535,
+    0.52,
+    0.13
+   ],
+   "dims": [
+    1.07,
+    0.52,
+    0.26
+   ],
+   "tris": [
+    736,
+    256
+   ],
+   "light": null,
+   "collide": [
+    "boite",
+    1.12,
+    0.3
+   ],
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "kame_0": {
+   "id": "kame",
+   "variant": 0,
+   "cat": "contenant",
+   "min": [
+    -0.109,
+    0.0,
+    -0.108
+   ],
+   "max": [
+    0.109,
+    0.457,
+    0.108
+   ],
+   "dims": [
+    0.219,
+    0.457,
+    0.217
+   ],
+   "tris": [
+    380,
+    133
+   ],
+   "light": null,
+   "collide": null,
+   "cast": false,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "kame_1": {
+   "id": "kame",
+   "variant": 1,
+   "cat": "contenant",
+   "min": [
+    -0.211,
+    0.0,
+    -0.209
+   ],
+   "max": [
+    0.211,
+    0.126,
+    0.209
+   ],
+   "dims": [
+    0.422,
+    0.126,
+    0.417
+   ],
+   "tris": [
+    240,
+    84
+   ],
+   "light": null,
+   "collide": null,
+   "cast": false,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "kame_2": {
+   "id": "kame",
+   "variant": 2,
+   "cat": "contenant",
+   "min": [
+    -0.135,
+    0.0,
+    -0.134
+   ],
+   "max": [
+    0.135,
+    0.566,
+    0.134
+   ],
+   "dims": [
+    0.271,
+    0.566,
+    0.268
+   ],
+   "tris": [
+    380,
+    132
+   ],
+   "light": null,
+   "collide": [
+    "cercle",
+    0.1353377621144871
+   ],
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "kame_3": {
+   "id": "kame",
+   "variant": 3,
+   "cat": "contenant",
+   "min": [
+    -0.136,
+    0.0,
+    -0.134
+   ],
+   "max": [
+    0.136,
+    0.567,
+    0.134
+   ],
+   "dims": [
+    0.271,
+    0.567,
+    0.269
+   ],
+   "tris": [
+    380,
+    132
+   ],
+   "light": null,
+   "collide": [
+    "cercle",
+    0.13568239327918163
+   ],
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "kame_4": {
+   "id": "kame",
+   "variant": 4,
+   "cat": "contenant",
+   "min": [
+    -0.233,
+    0.0,
+    -0.23
+   ],
+   "max": [
+    0.233,
+    0.5,
+    0.23
+   ],
+   "dims": [
+    0.465,
+    0.5,
+    0.46
+   ],
+   "tris": [
+    424,
+    148
+   ],
+   "light": null,
+   "collide": [
+    "cercle",
+    0.23256990415040235
+   ],
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "kame_5": {
+   "id": "kame",
+   "variant": 5,
+   "cat": "contenant",
+   "min": [
+    -0.097,
+    0.0,
+    -0.096
+   ],
+   "max": [
+    0.097,
+    0.405,
+    0.096
+   ],
+   "dims": [
+    0.194,
+    0.405,
+    0.192
+   ],
+   "tris": [
+    380,
+    133
+   ],
+   "light": null,
+   "collide": null,
+   "cast": false,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "kame_6": {
+   "id": "kame",
+   "variant": 6,
+   "cat": "contenant",
+   "min": [
+    -0.183,
+    0.0,
+    -0.181
+   ],
+   "max": [
+    0.183,
+    0.394,
+    0.181
+   ],
+   "dims": [
+    0.366,
+    0.394,
+    0.363
+   ],
+   "tris": [
+    424,
+    148
+   ],
+   "light": null,
+   "collide": null,
+   "cast": false,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "kame_7": {
+   "id": "kame",
+   "variant": 7,
+   "cat": "contenant",
+   "min": [
+    -0.187,
+    0.0,
+    -0.185
+   ],
+   "max": [
+    0.187,
+    0.403,
+    0.185
+   ],
+   "dims": [
+    0.375,
+    0.403,
+    0.371
+   ],
+   "tris": [
+    424,
+    148
+   ],
+   "light": null,
+   "collide": null,
+   "cast": false,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "cagette_0": {
+   "id": "cagette",
+   "variant": 0,
+   "cat": "etal",
+   "min": [
+    -0.307,
+    0.0,
+    -0.186
+   ],
+   "max": [
+    0.307,
+    0.295,
+    0.186
+   ],
+   "dims": [
+    0.614,
+    0.295,
+    0.372
+   ],
+   "tris": [
+    784,
+    274
+   ],
+   "light": null,
+   "collide": null,
+   "cast": false,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "cagette_1": {
+   "id": "cagette",
+   "variant": 1,
+   "cat": "etal",
+   "min": [
+    -0.262,
+    0.0,
+    -0.215
+   ],
+   "max": [
+    0.266,
+    0.279,
+    0.215
+   ],
+   "dims": [
+    0.528,
+    0.279,
+    0.43
+   ],
+   "tris": [
+    2934,
+    1026
+   ],
+   "light": null,
+   "collide": null,
+   "cast": false,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "cagette_2": {
+   "id": "cagette",
+   "variant": 2,
+   "cat": "etal",
+   "min": [
+    -0.305,
+    0.0,
+    -0.205
+   ],
+   "max": [
+    0.309,
+    0.266,
+    0.205
+   ],
+   "dims": [
+    0.613,
+    0.266,
+    0.41
+   ],
+   "tris": [
+    3074,
+    1075
+   ],
+   "light": null,
+   "collide": null,
+   "cast": false,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "cagette_3": {
+   "id": "cagette",
+   "variant": 3,
+   "cat": "etal",
+   "min": [
+    -0.28,
+    0.0,
+    -0.201
+   ],
+   "max": [
+    0.28,
+    0.247,
+    0.201
+   ],
+   "dims": [
+    0.559,
+    0.247,
+    0.402
+   ],
+   "tris": [
+    2864,
+    1002
+   ],
+   "light": null,
+   "collide": null,
+   "cast": false,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "cagette_4": {
+   "id": "cagette",
+   "variant": 4,
+   "cat": "etal",
+   "min": [
+    -0.264,
+    0.0,
+    -0.201
+   ],
+   "max": [
+    0.264,
+    0.286,
+    0.201
+   ],
+   "dims": [
+    0.527,
+    0.286,
+    0.402
+   ],
+   "tris": [
+    784,
+    274
+   ],
+   "light": null,
+   "collide": null,
+   "cast": false,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "cagette_5": {
+   "id": "cagette",
+   "variant": 5,
+   "cat": "etal",
+   "min": [
+    -0.313,
+    0.0,
+    -0.193
+   ],
+   "max": [
+    0.314,
+    0.291,
+    0.193
+   ],
+   "dims": [
+    0.627,
+    0.291,
+    0.387
+   ],
+   "tris": [
+    3074,
+    1075
+   ],
+   "light": null,
+   "collide": null,
+   "cast": false,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "tawara_0": {
+   "id": "tawara",
+   "variant": 0,
+   "cat": "contenant",
+   "min": [
+    -0.312,
+    -0.006,
+    -0.352
+   ],
+   "max": [
+    0.312,
+    0.646,
+    0.354
+   ],
+   "dims": [
+    0.623,
+    0.652,
+    0.706
+   ],
+   "tris": [
+    744,
+    260
+   ],
+   "light": null,
+   "collide": [
+    "boite",
+    0.7,
+    0.7
+   ],
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "tawara_1": {
+   "id": "tawara",
+   "variant": 1,
+   "cat": "contenant",
+   "min": [
+    -0.315,
+    -0.006,
+    -0.363
+   ],
+   "max": [
+    0.315,
+    0.346,
+    0.366
+   ],
+   "dims": [
+    0.631,
+    0.352,
+    0.729
+   ],
+   "tris": [
+    496,
+    173
+   ],
+   "light": null,
+   "collide": null,
+   "cast": false,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "tawara_2": {
+   "id": "tawara",
+   "variant": 2,
+   "cat": "contenant",
+   "min": [
+    -0.314,
+    -0.006,
+    -0.361
+   ],
+   "max": [
+    0.314,
+    0.346,
+    0.36
+   ],
+   "dims": [
+    0.627,
+    0.352,
+    0.721
+   ],
+   "tris": [
+    496,
+    172
+   ],
+   "light": null,
+   "collide": null,
+   "cast": false,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "maki_0": {
+   "id": "maki",
+   "variant": 0,
+   "cat": "outil",
+   "min": [
+    -0.589,
+    0.0,
+    -0.26
+   ],
+   "max": [
+    0.619,
+    0.496,
+    0.26
+   ],
+   "dims": [
+    1.208,
+    0.496,
+    0.52
+   ],
+   "tris": [
+    664,
+    232
+   ],
+   "light": null,
+   "collide": null,
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "maki_1": {
+   "id": "maki",
+   "variant": 1,
+   "cat": "outil",
+   "min": [
+    -0.533,
+    0.0,
+    -0.26
+   ],
+   "max": [
+    0.566,
+    0.599,
+    0.26
+   ],
+   "dims": [
+    1.1,
+    0.599,
+    0.52
+   ],
+   "tris": [
+    824,
+    287
+   ],
+   "light": null,
+   "collide": [
+    "boite",
+    1.062628942459503,
+    0.52
+   ],
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "maki_2": {
+   "id": "maki",
+   "variant": 2,
+   "cat": "outil",
+   "min": [
+    -0.579,
+    0.0,
+    -0.26
+   ],
+   "max": [
+    0.596,
+    0.399,
+    0.26
+   ],
+   "dims": [
+    1.175,
+    0.399,
+    0.52
+   ],
+   "tris": [
+    504,
+    176
+   ],
+   "light": null,
+   "collide": null,
+   "cast": false,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "seiro_0": {
+   "id": "seiro",
+   "variant": 0,
+   "cat": "etal",
+   "min": [
+    -0.389,
+    0.0,
+    -0.383
+   ],
+   "max": [
+    0.389,
+    1.241,
+    0.389
+   ],
+   "dims": [
+    0.778,
+    1.241,
+    0.773
+   ],
+   "tris": [
+    896,
+    313
+   ],
+   "light": null,
+   "collide": [
+    "cercle",
+    0.3992239476944809
+   ],
+   "cast": true,
+   "hang": false,
+   "steam": 1.1557741638061219,
+   "length": null
+  },
+  "seiro_1": {
+   "id": "seiro",
+   "variant": 1,
+   "cat": "etal",
+   "min": [
+    -0.376,
+    0.0,
+    -0.37
+   ],
+   "max": [
+    0.376,
+    1.236,
+    0.376
+   ],
+   "dims": [
+    0.752,
+    1.236,
+    0.746
+   ],
+   "tris": [
+    1640,
+    574
+   ],
+   "light": null,
+   "collide": [
+    "cercle",
+    0.38591584973705473
+   ],
+   "cast": true,
+   "hang": false,
+   "steam": 1.170591392785469,
+   "length": null
+  },
+  "seiro_2": {
+   "id": "seiro",
+   "variant": 2,
+   "cat": "etal",
+   "min": [
+    -0.38,
+    0.0,
+    -0.375
+   ],
+   "max": [
+    0.38,
+    1.223,
+    0.38
+   ],
+   "dims": [
+    0.761,
+    1.223,
+    0.755
+   ],
+   "tris": [
+    764,
+    267
+   ],
+   "light": null,
+   "collide": [
+    "cercle",
+    0.3904184370426669
+   ],
+   "cast": true,
+   "hang": false,
+   "steam": 1.137953042506407,
+   "length": null
+  },
+  "seiro_3": {
+   "id": "seiro",
+   "variant": 3,
+   "cat": "etal",
+   "min": [
+    -0.365,
+    0.0,
+    -0.36
+   ],
+   "max": [
+    0.365,
+    1.214,
+    0.365
+   ],
+   "dims": [
+    0.731,
+    1.214,
+    0.725
+   ],
+   "tris": [
+    1640,
+    574
+   ],
+   "light": null,
+   "collide": [
+    "cercle",
+    0.375272812866415
+   ],
+   "cast": true,
+   "hang": false,
+   "steam": 1.1492262551897312,
+   "length": null
+  },
+  "etal_manju_0": {
+   "id": "etal_manju",
+   "variant": 0,
+   "cat": "etal",
+   "min": [
+    -0.654,
+    0.0,
+    -0.3
+   ],
+   "max": [
+    0.654,
+    1.083,
+    0.3
+   ],
+   "dims": [
+    1.307,
+    1.083,
+    0.6
+   ],
+   "tris": [
+    9604,
+    932
+   ],
+   "light": null,
+   "collide": [
+    "boite",
+    1.3072165782809901,
+    0.6
+   ],
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "etal_manju_1": {
+   "id": "etal_manju",
+   "variant": 1,
+   "cat": "etal",
+   "min": [
+    -0.746,
+    0.0,
+    -0.3
+   ],
+   "max": [
+    0.746,
+    0.811,
+    0.3
+   ],
+   "dims": [
+    1.491,
+    0.811,
+    0.6
+   ],
+   "tris": [
+    5452,
+    554
+   ],
+   "light": null,
+   "collide": [
+    "boite",
+    1.491102841840344,
+    0.6
+   ],
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "etal_manju_2": {
+   "id": "etal_manju",
+   "variant": 2,
+   "cat": "etal",
+   "min": [
+    -0.68,
+    0.0,
+    -0.3
+   ],
+   "max": [
+    0.68,
+    0.853,
+    0.3
+   ],
+   "dims": [
+    1.36,
+    0.853,
+    0.6
+   ],
+   "tris": [
+    3979,
+    348
+   ],
+   "light": null,
+   "collide": [
+    "boite",
+    1.3595115883228086,
+    0.6
+   ],
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "etal_lanternes_0": {
+   "id": "etal_lanternes",
+   "variant": 0,
+   "cat": "etal",
+   "min": [
+    -0.748,
+    0.0,
+    -0.2
+   ],
+   "max": [
+    0.748,
+    2.05,
+    0.374
+   ],
+   "dims": [
+    1.497,
+    2.05,
+    0.574
+   ],
+   "tris": [
+    3128,
+    1094
+   ],
+   "light": 1.6,
+   "collide": [
+    "boite",
+    1.3367854273997597,
+    0.5
+   ],
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "etal_lanternes_1": {
+   "id": "etal_lanternes",
+   "variant": 1,
+   "cat": "etal",
+   "min": [
+    -0.773,
+    0.0,
+    -0.2
+   ],
+   "max": [
+    0.773,
+    2.05,
+    0.356
+   ],
+   "dims": [
+    1.546,
+    2.05,
+    0.556
+   ],
+   "tris": [
+    2648,
+    926
+   ],
+   "light": 1.6,
+   "collide": [
+    "boite",
+    1.3858184684456414,
+    0.5
+   ],
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "etal_lanternes_2": {
+   "id": "etal_lanternes",
+   "variant": 2,
+   "cat": "etal",
+   "min": [
+    -0.738,
+    0.0,
+    -0.2
+   ],
+   "max": [
+    0.738,
+    2.05,
+    0.365
+   ],
+   "dims": [
+    1.477,
+    2.05,
+    0.565
+   ],
+   "tris": [
+    2648,
+    926
+   ],
+   "light": 1.6,
+   "collide": [
+    "boite",
+    1.3169358283756427,
+    0.5
+   ],
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "etal_yuzu_0": {
+   "id": "etal_yuzu",
+   "variant": 0,
+   "cat": "etal",
+   "min": [
+    -0.644,
+    0.0,
+    -0.35
+   ],
+   "max": [
+    0.644,
+    0.894,
+    0.35
+   ],
+   "dims": [
+    1.289,
+    0.894,
+    0.7
+   ],
+   "tris": [
+    24654,
+    1435
+   ],
+   "light": null,
+   "collide": [
+    "boite",
+    1.2888217304628187,
+    0.7
+   ],
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "etal_yuzu_1": {
+   "id": "etal_yuzu",
+   "variant": 1,
+   "cat": "etal",
+   "min": [
+    -0.691,
+    0.0,
+    -0.35
+   ],
+   "max": [
+    0.691,
+    0.893,
+    0.35
+   ],
+   "dims": [
+    1.381,
+    0.893,
+    0.7
+   ],
+   "tris": [
+    24658,
+    1435
+   ],
+   "light": null,
+   "collide": [
+    "boite",
+    1.3813981581964294,
+    0.7
+   ],
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "etal_yuzu_2": {
+   "id": "etal_yuzu",
+   "variant": 2,
+   "cat": "etal",
+   "min": [
+    -0.628,
+    0.0,
+    -0.35
+   ],
+   "max": [
+    0.628,
+    0.895,
+    0.35
+   ],
+   "dims": [
+    1.256,
+    0.895,
+    0.7
+   ],
+   "tris": [
+    26036,
+    1508
+   ],
+   "light": null,
+   "collide": [
+    "boite",
+    1.255635054719694,
+    0.7
+   ],
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "etal_jouets_0": {
+   "id": "etal_jouets",
+   "variant": 0,
+   "cat": "etal",
+   "min": [
+    -0.626,
+    0.0,
+    -0.33
+   ],
+   "max": [
+    0.626,
+    1.327,
+    0.33
+   ],
+   "dims": [
+    1.252,
+    1.327,
+    0.66
+   ],
+   "tris": [
+    19148,
+    2356
+   ],
+   "light": null,
+   "collide": [
+    "boite",
+    1.2518781580023925,
+    0.66
+   ],
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "etal_jouets_1": {
+   "id": "etal_jouets",
+   "variant": 1,
+   "cat": "etal",
+   "min": [
+    -0.641,
+    0.0,
+    -0.33
+   ],
+   "max": [
+    0.641,
+    1.373,
+    0.33
+   ],
+   "dims": [
+    1.283,
+    1.373,
+    0.66
+   ],
+   "tris": [
+    17820,
+    2237
+   ],
+   "light": null,
+   "collide": [
+    "boite",
+    1.2825621111251275,
+    0.66
+   ],
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "etal_jouets_2": {
+   "id": "etal_jouets",
+   "variant": 2,
+   "cat": "etal",
+   "min": [
+    -0.666,
+    0.0,
+    -0.33
+   ],
+   "max": [
+    0.666,
+    1.35,
+    0.33
+   ],
+   "dims": [
+    1.332,
+    1.35,
+    0.66
+   ],
+   "tris": [
+    18000,
+    2301
+   ],
+   "light": null,
+   "collide": [
+    "boite",
+    1.3319742104826826,
+    0.66
+   ],
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "etal_poterie_0": {
+   "id": "etal_poterie",
+   "variant": 0,
+   "cat": "etal",
+   "min": [
+    -0.622,
+    -0.005,
+    -0.24
+   ],
+   "max": [
+    0.622,
+    0.615,
+    0.26
+   ],
+   "dims": [
+    1.243,
+    0.62,
+    0.5
+   ],
+   "tris": [
+    2694,
+    474
+   ],
+   "light": null,
+   "collide": [
+    "boite",
+    1.2434297425478167,
+    0.55
+   ],
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "etal_poterie_1": {
+   "id": "etal_poterie",
+   "variant": 1,
+   "cat": "etal",
+   "min": [
+    -0.689,
+    -0.006,
+    -0.24
+   ],
+   "max": [
+    0.689,
+    0.628,
+    0.26
+   ],
+   "dims": [
+    1.377,
+    0.634,
+    0.5
+   ],
+   "tris": [
+    2983,
+    530
+   ],
+   "light": null,
+   "collide": [
+    "boite",
+    1.3771197843157292,
+    0.55
+   ],
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "etal_poterie_2": {
+   "id": "etal_poterie",
+   "variant": 2,
+   "cat": "etal",
+   "min": [
+    -0.744,
+    -0.006,
+    -0.24
+   ],
+   "max": [
+    0.744,
+    0.618,
+    0.26
+   ],
+   "dims": [
+    1.488,
+    0.624,
+    0.5
+   ],
+   "tris": [
+    3457,
+    608
+   ],
+   "light": null,
+   "collide": [
+    "boite",
+    1.4883242953725258,
+    0.55
+   ],
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "etal_herbes_0": {
+   "id": "etal_herbes",
+   "variant": 0,
+   "cat": "etal",
+   "min": [
+    -0.669,
+    0.0,
+    -0.21
+   ],
+   "max": [
+    0.669,
+    1.47,
+    0.272
+   ],
+   "dims": [
+    1.339,
+    1.47,
+    0.482
+   ],
+   "tris": [
+    8836,
+    883
+   ],
+   "light": null,
+   "collide": [
+    "boite",
+    1.3386999881220045,
+    0.42
+   ],
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "etal_herbes_1": {
+   "id": "etal_herbes",
+   "variant": 1,
+   "cat": "etal",
+   "min": [
+    -0.672,
+    0.0,
+    -0.21
+   ],
+   "max": [
+    0.672,
+    1.47,
+    0.272
+   ],
+   "dims": [
+    1.345,
+    1.47,
+    0.482
+   ],
+   "tris": [
+    7182,
+    562
+   ],
+   "light": null,
+   "collide": [
+    "boite",
+    1.3448743249580513,
+    0.42
+   ],
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "etal_herbes_2": {
+   "id": "etal_herbes",
+   "variant": 2,
+   "cat": "etal",
+   "min": [
+    -0.612,
+    0.0,
+    -0.21
+   ],
+   "max": [
+    0.662,
+    1.47,
+    0.272
+   ],
+   "dims": [
+    1.274,
+    1.47,
+    0.482
+   ],
+   "tris": [
+    7305,
+    634
+   ],
+   "light": null,
+   "collide": [
+    "boite",
+    1.2230333300109972,
+    0.42
+   ],
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "soba_sechoir_0": {
+   "id": "soba_sechoir",
+   "variant": 0,
+   "cat": "etal",
+   "min": [
+    -0.745,
+    -0.002,
+    -0.172
+   ],
+   "max": [
+    0.745,
+    1.502,
+    0.172
+   ],
+   "dims": [
+    1.489,
+    1.504,
+    0.344
+   ],
+   "tris": [
+    424,
+    148
+   ],
+   "light": null,
+   "collide": [
+    "boite",
+    1.3893108738826954,
+    0.35
+   ],
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "soba_sechoir_1": {
+   "id": "soba_sechoir",
+   "variant": 1,
+   "cat": "etal",
+   "min": [
+    -0.784,
+    -0.002,
+    -0.172
+   ],
+   "max": [
+    0.784,
+    1.502,
+    0.172
+   ],
+   "dims": [
+    1.568,
+    1.504,
+    0.344
+   ],
+   "tris": [
+    424,
+    148
+   ],
+   "light": null,
+   "collide": [
+    "boite",
+    1.4680151183180006,
+    0.35
+   ],
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "etal_dango_0": {
+   "id": "etal_dango",
+   "variant": 0,
+   "cat": "etal",
+   "min": [
+    -0.7,
+    0.0,
+    -0.285
+   ],
+   "max": [
+    0.7,
+    0.74,
+    0.29
+   ],
+   "dims": [
+    1.4,
+    0.74,
+    0.575
+   ],
+   "tris": [
+    12735,
+    1122
+   ],
+   "light": null,
+   "collide": [
+    "boite",
+    1.4,
+    0.55
+   ],
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "etal_dango_1": {
+   "id": "etal_dango",
+   "variant": 1,
+   "cat": "etal",
+   "min": [
+    -0.7,
+    0.0,
+    -0.285
+   ],
+   "max": [
+    0.7,
+    0.74,
+    0.29
+   ],
+   "dims": [
+    1.4,
+    0.74,
+    0.575
+   ],
+   "tris": [
+    12735,
+    1122
+   ],
+   "light": null,
+   "collide": [
+    "boite",
+    1.4,
+    0.55
+   ],
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "etal_serviettes_0": {
+   "id": "etal_serviettes",
+   "variant": 0,
+   "cat": "etal",
+   "min": [
+    -0.73,
+    0.0,
+    -0.2
+   ],
+   "max": [
+    0.73,
+    1.35,
+    0.2
+   ],
+   "dims": [
+    1.461,
+    1.35,
+    0.4
+   ],
+   "tris": [
+    396,
+    138
+   ],
+   "light": null,
+   "collide": [
+    "boite",
+    1.3808712523126705,
+    0.42
+   ],
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "etal_serviettes_1": {
+   "id": "etal_serviettes",
+   "variant": 1,
+   "cat": "etal",
+   "min": [
+    -0.688,
+    0.0,
+    -0.2
+   ],
+   "max": [
+    0.688,
+    1.35,
+    0.2
+   ],
+   "dims": [
+    1.377,
+    1.35,
+    0.4
+   ],
+   "tris": [
+    396,
+    138
+   ],
+   "light": null,
+   "collide": [
+    "boite",
+    1.296651637361074,
+    0.42
+   ],
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "etal_chapeaux_0": {
+   "id": "etal_chapeaux",
+   "variant": 0,
+   "cat": "etal",
+   "min": [
+    -0.664,
+    0.0,
+    -0.25
+   ],
+   "max": [
+    0.664,
+    0.776,
+    0.25
+   ],
+   "dims": [
+    1.328,
+    0.776,
+    0.5
+   ],
+   "tris": [
+    1692,
+    323
+   ],
+   "light": null,
+   "collide": [
+    "boite",
+    1.3277841909528698,
+    0.5
+   ],
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "etal_chapeaux_1": {
+   "id": "etal_chapeaux",
+   "variant": 1,
+   "cat": "etal",
+   "min": [
+    -0.568,
+    0.0,
+    -0.25
+   ],
+   "max": [
+    0.568,
+    0.771,
+    0.25
+   ],
+   "dims": [
+    1.135,
+    0.771,
+    0.5
+   ],
+   "tris": [
+    1332,
+    196
+   ],
+   "light": null,
+   "collide": [
+    "boite",
+    1.1351933811021058,
+    0.5
+   ],
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "planches_0": {
+   "id": "planches",
+   "variant": 0,
+   "cat": "outil",
+   "min": [
+    -0.969,
+    0.0,
+    -0.25
+   ],
+   "max": [
+    1.021,
+    0.268,
+    0.25
+   ],
+   "dims": [
+    1.989,
+    0.268,
+    0.5
+   ],
+   "tris": [
+    1296,
+    50
+   ],
+   "light": null,
+   "collide": null,
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "planches_1": {
+   "id": "planches",
+   "variant": 1,
+   "cat": "outil",
+   "min": [
+    -0.99,
+    0.0,
+    -0.25
+   ],
+   "max": [
+    0.985,
+    0.268,
+    0.25
+   ],
+   "dims": [
+    1.975,
+    0.268,
+    0.5
+   ],
+   "tris": [
+    1296,
+    50
+   ],
+   "light": null,
+   "collide": null,
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "chevalet_0": {
+   "id": "chevalet",
+   "variant": 0,
+   "cat": "outil",
+   "min": [
+    -0.7,
+    -0.034,
+    -0.262
+   ],
+   "max": [
+    0.816,
+    0.89,
+    0.262
+   ],
+   "dims": [
+    1.516,
+    0.924,
+    0.523
+   ],
+   "tris": [
+    888,
+    36
+   ],
+   "light": null,
+   "collide": [
+    "boite",
+    1.0,
+    0.4
+   ],
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "kasa_seche_0": {
+   "id": "kasa_seche",
+   "variant": 0,
+   "cat": "etal",
+   "min": [
+    -0.455,
+    -0.003,
+    -0.228
+   ],
+   "max": [
+    0.455,
+    0.851,
+    0.344
+   ],
+   "dims": [
+    0.911,
+    0.854,
+    0.572
+   ],
+   "tris": [
+    1476,
+    516
+   ],
+   "light": null,
+   "collide": null,
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "kasa_seche_1": {
+   "id": "kasa_seche",
+   "variant": 1,
+   "cat": "etal",
+   "min": [
+    -0.332,
+    -0.002,
+    -0.357
+   ],
+   "max": [
+    0.328,
+    0.843,
+    0.36
+   ],
+   "dims": [
+    0.661,
+    0.845,
+    0.717
+   ],
+   "tris": [
+    1476,
+    516
+   ],
+   "light": null,
+   "collide": null,
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "kasa_seche_2": {
+   "id": "kasa_seche",
+   "variant": 2,
+   "cat": "etal",
+   "min": [
+    -0.456,
+    -0.003,
+    -0.324
+   ],
+   "max": [
+    0.457,
+    0.872,
+    0.319
+   ],
+   "dims": [
+    0.913,
+    0.875,
+    0.643
+   ],
+   "tris": [
+    1476,
+    516
+   ],
+   "light": null,
+   "collide": null,
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "kasa_seche_3": {
+   "id": "kasa_seche",
+   "variant": 3,
+   "cat": "etal",
+   "min": [
+    -0.447,
+    -0.002,
+    -0.344
+   ],
+   "max": [
+    0.447,
+    0.831,
+    0.217
+   ],
+   "dims": [
+    0.895,
+    0.833,
+    0.561
+   ],
+   "tris": [
+    1476,
+    516
+   ],
+   "light": null,
+   "collide": null,
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "kasa_seche_4": {
+   "id": "kasa_seche",
+   "variant": 4,
+   "cat": "etal",
+   "min": [
+    -0.249,
+    -0.003,
+    -0.479
+   ],
+   "max": [
+    0.344,
+    0.83,
+    0.479
+   ],
+   "dims": [
+    0.593,
+    0.833,
+    0.959
+   ],
+   "tris": [
+    1476,
+    516
+   ],
+   "light": null,
+   "collide": null,
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "kasa_seche_5": {
+   "id": "kasa_seche",
+   "variant": 5,
+   "cat": "etal",
+   "min": [
+    -0.452,
+    -0.002,
+    -0.217
+   ],
+   "max": [
+    0.452,
+    0.837,
+    0.345
+   ],
+   "dims": [
+    0.904,
+    0.839,
+    0.563
+   ],
+   "tris": [
+    1476,
+    516
+   ],
+   "light": null,
+   "collide": null,
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "nodategasa_0": {
+   "id": "nodategasa",
+   "variant": 0,
+   "cat": "mobilier",
+   "min": [
+    -1.223,
+    0.0,
+    -1.223
+   ],
+   "max": [
+    1.223,
+    2.549,
+    1.223
+   ],
+   "dims": [
+    2.445,
+    2.549,
+    2.445
+   ],
+   "tris": [
+    1896,
+    663
+   ],
+   "light": null,
+   "collide": [
+    "cercle",
+    0.22
+   ],
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "nodategasa_1": {
+   "id": "nodategasa",
+   "variant": 1,
+   "cat": "mobilier",
+   "min": [
+    -1.315,
+    0.0,
+    -1.315
+   ],
+   "max": [
+    1.315,
+    2.587,
+    1.315
+   ],
+   "dims": [
+    2.631,
+    2.587,
+    2.631
+   ],
+   "tris": [
+    1896,
+    663
+   ],
+   "light": null,
+   "collide": [
+    "cercle",
+    0.22
+   ],
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "kasa_porte_0": {
+   "id": "kasa_porte",
+   "variant": 0,
+   "cat": "etal",
+   "min": [
+    -0.242,
+    0.0,
+    -0.253
+   ],
+   "max": [
+    0.278,
+    1.12,
+    0.202
+   ],
+   "dims": [
+    0.52,
+    1.12,
+    0.455
+   ],
+   "tris": [
+    436,
+    152
+   ],
+   "light": null,
+   "collide": null,
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "kasa_porte_1": {
+   "id": "kasa_porte",
+   "variant": 1,
+   "cat": "etal",
+   "min": [
+    -0.248,
+    0.0,
+    -0.202
+   ],
+   "max": [
+    0.228,
+    1.165,
+    0.202
+   ],
+   "dims": [
+    0.476,
+    1.165,
+    0.404
+   ],
+   "tris": [
+    436,
+    151
+   ],
+   "light": null,
+   "collide": null,
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "bonsai_0": {
+   "id": "bonsai",
+   "variant": 0,
+   "cat": "plante",
+   "min": [
+    -0.412,
+    0.0,
+    -0.363
+   ],
+   "max": [
+    0.302,
+    0.885,
+    0.205
+   ],
+   "dims": [
+    0.714,
+    0.885,
+    0.569
+   ],
+   "tris": [
+    1760,
+    615
+   ],
+   "light": null,
+   "collide": null,
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "bonsai_1": {
+   "id": "bonsai",
+   "variant": 1,
+   "cat": "plante",
+   "min": [
+    -0.254,
+    0.0,
+    -0.17
+   ],
+   "max": [
+    0.313,
+    0.697,
+    0.177
+   ],
+   "dims": [
+    0.567,
+    0.697,
+    0.347
+   ],
+   "tris": [
+    1760,
+    616
+   ],
+   "light": null,
+   "collide": null,
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "bonsai_2": {
+   "id": "bonsai",
+   "variant": 2,
+   "cat": "plante",
+   "min": [
+    -0.27,
+    0.0,
+    -0.288
+   ],
+   "max": [
+    0.327,
+    0.842,
+    0.274
+   ],
+   "dims": [
+    0.597,
+    0.842,
+    0.562
+   ],
+   "tris": [
+    1412,
+    493
+   ],
+   "light": null,
+   "collide": null,
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "bonsai_3": {
+   "id": "bonsai",
+   "variant": 3,
+   "cat": "plante",
+   "min": [
+    -0.298,
+    0.0,
+    -0.209
+   ],
+   "max": [
+    0.212,
+    0.687,
+    0.209
+   ],
+   "dims": [
+    0.51,
+    0.687,
+    0.417
+   ],
+   "tris": [
+    1412,
+    493
+   ],
+   "light": null,
+   "collide": null,
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "pot_fleurs_0": {
+   "id": "pot_fleurs",
+   "variant": 0,
+   "cat": "plante",
+   "min": [
+    -0.346,
+    0.0,
+    -0.318
+   ],
+   "max": [
+    0.385,
+    0.562,
+    0.279
+   ],
+   "dims": [
+    0.73,
+    0.562,
+    0.597
+   ],
+   "tris": [
+    1668,
+    582
+   ],
+   "light": null,
+   "collide": null,
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "pot_fleurs_1": {
+   "id": "pot_fleurs",
+   "variant": 1,
+   "cat": "plante",
+   "min": [
+    -0.422,
+    0.0,
+    -0.427
+   ],
+   "max": [
+    0.491,
+    0.716,
+    0.449
+   ],
+   "dims": [
+    0.913,
+    0.716,
+    0.876
+   ],
+   "tris": [
+    1908,
+    667
+   ],
+   "light": null,
+   "collide": null,
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "pot_fleurs_2": {
+   "id": "pot_fleurs",
+   "variant": 2,
+   "cat": "plante",
+   "min": [
+    -0.202,
+    0.0,
+    -0.217
+   ],
+   "max": [
+    0.2,
+    0.538,
+    0.197
+   ],
+   "dims": [
+    0.401,
+    0.538,
+    0.414
+   ],
+   "tris": [
+    1492,
+    521
+   ],
+   "light": null,
+   "collide": null,
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "pot_fleurs_3": {
+   "id": "pot_fleurs",
+   "variant": 3,
+   "cat": "plante",
+   "min": [
+    -0.512,
+    0.0,
+    -0.342
+   ],
+   "max": [
+    0.417,
+    0.681,
+    0.27
+   ],
+   "dims": [
+    0.929,
+    0.681,
+    0.612
+   ],
+   "tris": [
+    1380,
+    483
+   ],
+   "light": null,
+   "collide": null,
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "pot_fleurs_4": {
+   "id": "pot_fleurs",
+   "variant": 4,
+   "cat": "plante",
+   "min": [
+    -0.191,
+    0.0,
+    -0.216
+   ],
+   "max": [
+    0.168,
+    0.488,
+    0.169
+   ],
+   "dims": [
+    0.359,
+    0.488,
+    0.385
+   ],
+   "tris": [
+    1132,
+    396
+   ],
+   "light": null,
+   "collide": null,
+   "cast": false,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "pot_fleurs_5": {
+   "id": "pot_fleurs",
+   "variant": 5,
+   "cat": "plante",
+   "min": [
+    -0.399,
+    0.0,
+    -0.356
+   ],
+   "max": [
+    0.55,
+    0.636,
+    0.302
+   ],
+   "dims": [
+    0.95,
+    0.636,
+    0.658
+   ],
+   "tris": [
+    1908,
+    667
+   ],
+   "light": null,
+   "collide": null,
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "jardiniere_0": {
+   "id": "jardiniere",
+   "variant": 0,
+   "cat": "plante",
+   "min": [
+    -0.494,
+    -0.16,
+    -0.126
+   ],
+   "max": [
+    0.471,
+    0.338,
+    0.159
+   ],
+   "dims": [
+    0.965,
+    0.498,
+    0.284
+   ],
+   "tris": [
+    2684,
+    939
+   ],
+   "light": null,
+   "collide": null,
+   "cast": false,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "jardiniere_1": {
+   "id": "jardiniere",
+   "variant": 1,
+   "cat": "plante",
+   "min": [
+    -0.573,
+    -0.16,
+    -0.121
+   ],
+   "max": [
+    0.573,
+    0.333,
+    0.154
+   ],
+   "dims": [
+    1.146,
+    0.493,
+    0.274
+   ],
+   "tris": [
+    3238,
+    1133
+   ],
+   "light": null,
+   "collide": null,
+   "cast": false,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "jardiniere_2": {
+   "id": "jardiniere",
+   "variant": 2,
+   "cat": "plante",
+   "min": [
+    -0.68,
+    -0.16,
+    -0.119
+   ],
+   "max": [
+    0.68,
+    0.338,
+    0.154
+   ],
+   "dims": [
+    1.361,
+    0.498,
+    0.272
+   ],
+   "tris": [
+    3792,
+    1327
+   ],
+   "light": null,
+   "collide": null,
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "jardiniere_3": {
+   "id": "jardiniere",
+   "variant": 3,
+   "cat": "plante",
+   "min": [
+    -0.462,
+    -0.16,
+    -0.12
+   ],
+   "max": [
+    0.456,
+    0.337,
+    0.154
+   ],
+   "dims": [
+    0.918,
+    0.497,
+    0.274
+   ],
+   "tris": [
+    2636,
+    922
+   ],
+   "light": null,
+   "collide": null,
+   "cast": false,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "potager_rang_0": {
+   "id": "potager_rang",
+   "variant": 0,
+   "cat": "plante",
+   "min": [
+    -1.504,
+    -0.009,
+    -0.282
+   ],
+   "max": [
+    1.508,
+    0.34,
+    0.284
+   ],
+   "dims": [
+    3.012,
+    0.349,
+    0.566
+   ],
+   "tris": [
+    984,
+    343
+   ],
+   "light": null,
+   "collide": null,
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "potager_rang_1": {
+   "id": "potager_rang",
+   "variant": 1,
+   "cat": "plante",
+   "min": [
+    -1.509,
+    -0.007,
+    -0.282
+   ],
+   "max": [
+    1.502,
+    0.34,
+    0.283
+   ],
+   "dims": [
+    3.012,
+    0.347,
+    0.565
+   ],
+   "tris": [
+    984,
+    343
+   ],
+   "light": null,
+   "collide": null,
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "potager_rang_2": {
+   "id": "potager_rang",
+   "variant": 2,
+   "cat": "plante",
+   "min": [
+    -1.502,
+    0.002,
+    -0.284
+   ],
+   "max": [
+    1.508,
+    0.34,
+    0.284
+   ],
+   "dims": [
+    3.009,
+    0.338,
+    0.568
+   ],
+   "tris": [
+    984,
+    343
+   ],
+   "light": null,
+   "collide": null,
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "inuyarai_0": {
+   "id": "inuyarai",
+   "variant": 0,
+   "cat": "cloture",
+   "min": [
+    -0.9,
+    -0.001,
+    -0.366
+   ],
+   "max": [
+    0.9,
+    0.786,
+    0.013
+   ],
+   "dims": [
+    1.8,
+    0.786,
+    0.38
+   ],
+   "tris": [
+    956,
+    334
+   ],
+   "light": null,
+   "collide": null,
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": 1.8
+  },
+  "inuyarai_1": {
+   "id": "inuyarai",
+   "variant": 1,
+   "cat": "cloture",
+   "min": [
+    -0.9,
+    -0.001,
+    -0.433
+   ],
+   "max": [
+    0.9,
+    0.891,
+    0.013
+   ],
+   "dims": [
+    1.8,
+    0.891,
+    0.446
+   ],
+   "tris": [
+    956,
+    334
+   ],
+   "light": null,
+   "collide": null,
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": 1.8
+  },
+  "inuyarai_2": {
+   "id": "inuyarai",
+   "variant": 2,
+   "cat": "cloture",
+   "min": [
+    -0.9,
+    -0.001,
+    -0.436
+   ],
+   "max": [
+    0.9,
+    0.838,
+    0.013
+   ],
+   "dims": [
+    1.8,
+    0.839,
+    0.449
+   ],
+   "tris": [
+    956,
+    334
+   ],
+   "light": null,
+   "collide": null,
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": 1.8
+  },
+  "kenninji_0": {
+   "id": "kenninji",
+   "variant": 0,
+   "cat": "cloture",
+   "min": [
+    -0.955,
+    0.0,
+    -0.045
+   ],
+   "max": [
+    0.955,
+    1.793,
+    0.045
+   ],
+   "dims": [
+    1.91,
+    1.793,
+    0.09
+   ],
+   "tris": [
+    668,
+    232
+   ],
+   "light": null,
+   "collide": null,
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": 1.82
+  },
+  "kenninji_1": {
+   "id": "kenninji",
+   "variant": 1,
+   "cat": "cloture",
+   "min": [
+    -0.955,
+    0.0,
+    -0.045
+   ],
+   "max": [
+    0.955,
+    1.615,
+    0.045
+   ],
+   "dims": [
+    1.91,
+    1.615,
+    0.09
+   ],
+   "tris": [
+    668,
+    232
+   ],
+   "light": null,
+   "collide": null,
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": 1.82
+  },
+  "kenninji_2": {
+   "id": "kenninji",
+   "variant": 2,
+   "cat": "cloture",
+   "min": [
+    -0.955,
+    0.0,
+    -0.045
+   ],
+   "max": [
+    0.955,
+    1.614,
+    0.045
+   ],
+   "dims": [
+    1.91,
+    1.614,
+    0.09
+   ],
+   "tris": [
+    668,
+    232
+   ],
+   "light": null,
+   "collide": null,
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": 1.82
+  },
+  "yotsume_0": {
+   "id": "yotsume",
+   "variant": 0,
+   "cat": "cloture",
+   "min": [
+    -0.95,
+    0.0,
+    -0.04
+   ],
+   "max": [
+    0.95,
+    1.128,
+    0.042
+   ],
+   "dims": [
+    1.9,
+    1.128,
+    0.082
+   ],
+   "tris": [
+    396,
+    137
+   ],
+   "light": null,
+   "collide": null,
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": 1.82
+  },
+  "yotsume_1": {
+   "id": "yotsume",
+   "variant": 1,
+   "cat": "cloture",
+   "min": [
+    -0.95,
+    0.0,
+    -0.04
+   ],
+   "max": [
+    0.95,
+    0.954,
+    0.042
+   ],
+   "dims": [
+    1.9,
+    0.954,
+    0.082
+   ],
+   "tris": [
+    396,
+    137
+   ],
+   "light": null,
+   "collide": null,
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": 1.82
+  },
+  "yotsume_2": {
+   "id": "yotsume",
+   "variant": 2,
+   "cat": "cloture",
+   "min": [
+    -0.95,
+    0.0,
+    -0.04
+   ],
+   "max": [
+    0.95,
+    1.159,
+    0.042
+   ],
+   "dims": [
+    1.9,
+    1.159,
+    0.082
+   ],
+   "tris": [
+    396,
+    137
+   ],
+   "light": null,
+   "collide": null,
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": 1.82
+  },
+  "hoki_0": {
+   "id": "hoki",
+   "variant": 0,
+   "cat": "outil",
+   "min": [
+    -0.17,
+    -0.014,
+    -0.392
+   ],
+   "max": [
+    0.17,
+    1.454,
+    0.063
+   ],
+   "dims": [
+    0.34,
+    1.468,
+    0.456
+   ],
+   "tris": [
+    112,
+    38
+   ],
+   "light": null,
+   "collide": null,
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "hoki_1": {
+   "id": "hoki",
+   "variant": 1,
+   "cat": "outil",
+   "min": [
+    -0.17,
+    -0.013,
+    -0.364
+   ],
+   "max": [
+    0.17,
+    1.461,
+    0.064
+   ],
+   "dims": [
+    0.34,
+    1.474,
+    0.428
+   ],
+   "tris": [
+    112,
+    39
+   ],
+   "light": null,
+   "collide": null,
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "joro_0": {
+   "id": "joro",
+   "variant": 0,
+   "cat": "outil",
+   "min": [
+    -0.13,
+    0.0,
+    -0.128
+   ],
+   "max": [
+    0.376,
+    0.409,
+    0.128
+   ],
+   "dims": [
+    0.506,
+    0.409,
+    0.256
+   ],
+   "tris": [
+    244,
+    85
+   ],
+   "light": null,
+   "collide": null,
+   "cast": false,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "joro_1": {
+   "id": "joro",
+   "variant": 1,
+   "cat": "outil",
+   "min": [
+    -0.13,
+    0.0,
+    -0.128
+   ],
+   "max": [
+    0.376,
+    0.409,
+    0.128
+   ],
+   "dims": [
+    0.506,
+    0.409,
+    0.256
+   ],
+   "tris": [
+    244,
+    85
+   ],
+   "light": null,
+   "collide": null,
+   "cast": false,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "geta_0": {
+   "id": "geta",
+   "variant": 0,
+   "cat": "outil",
+   "min": [
+    -0.618,
+    -0.008,
+    -0.215
+   ],
+   "max": [
+    0.618,
+    0.196,
+    0.218
+   ],
+   "dims": [
+    1.237,
+    0.204,
+    0.433
+   ],
+   "tris": [
+    4148,
+    186
+   ],
+   "light": null,
+   "collide": null,
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "geta_1": {
+   "id": "geta",
+   "variant": 1,
+   "cat": "outil",
+   "min": [
+    -0.536,
+    -0.003,
+    -0.213
+   ],
+   "max": [
+    0.535,
+    0.196,
+    0.217
+   ],
+   "dims": [
+    1.07,
+    0.199,
+    0.43
+   ],
+   "tris": [
+    3340,
+    148
+   ],
+   "light": null,
+   "collide": null,
+   "cast": false,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "jizo_0": {
+   "id": "jizo",
+   "variant": 0,
+   "cat": "statue",
+   "min": [
+    -0.184,
+    -0.007,
+    -0.165
+   ],
+   "max": [
+    0.175,
+    0.64,
+    0.162
+   ],
+   "dims": [
+    0.359,
+    0.647,
+    0.327
+   ],
+   "tris": [
+    396,
+    138
+   ],
+   "light": null,
+   "collide": null,
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "jizo_1": {
+   "id": "jizo",
+   "variant": 1,
+   "cat": "statue",
+   "min": [
+    -0.201,
+    -0.009,
+    -0.177
+   ],
+   "max": [
+    0.2,
+    0.701,
+    0.174
+   ],
+   "dims": [
+    0.402,
+    0.71,
+    0.351
+   ],
+   "tris": [
+    396,
+    138
+   ],
+   "light": null,
+   "collide": null,
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "jizo_2": {
+   "id": "jizo",
+   "variant": 2,
+   "cat": "statue",
+   "min": [
+    -0.213,
+    -0.004,
+    -0.19
+   ],
+   "max": [
+    0.203,
+    0.707,
+    0.19
+   ],
+   "dims": [
+    0.417,
+    0.711,
+    0.38
+   ],
+   "tris": [
+    324,
+    113
+   ],
+   "light": null,
+   "collide": null,
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "hokora_0": {
+   "id": "hokora",
+   "variant": 0,
+   "cat": "statue",
+   "min": [
+    -0.317,
+    -0.013,
+    -0.293
+   ],
+   "max": [
+    0.324,
+    0.962,
+    0.293
+   ],
+   "dims": [
+    0.641,
+    0.974,
+    0.586
+   ],
+   "tris": [
+    1764,
+    82
+   ],
+   "light": null,
+   "collide": [
+    "cercle",
+    0.4
+   ],
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "hokora_1": {
+   "id": "hokora",
+   "variant": 1,
+   "cat": "statue",
+   "min": [
+    -0.317,
+    -0.01,
+    -0.293
+   ],
+   "max": [
+    0.315,
+    0.962,
+    0.293
+   ],
+   "dims": [
+    0.632,
+    0.971,
+    0.586
+   ],
+   "tris": [
+    1764,
+    82
+   ],
+   "light": null,
+   "collide": [
+    "cercle",
+    0.4
+   ],
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "borne_pierre_0": {
+   "id": "borne_pierre",
+   "variant": 0,
+   "cat": "statue",
+   "min": [
+    -0.264,
+    -0.011,
+    -0.2
+   ],
+   "max": [
+    0.253,
+    1.141,
+    0.204
+   ],
+   "dims": [
+    0.517,
+    1.152,
+    0.404
+   ],
+   "tris": [
+    668,
+    28
+   ],
+   "light": null,
+   "collide": [
+    "cercle",
+    0.22
+   ],
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "borne_pierre_1": {
+   "id": "borne_pierre",
+   "variant": 1,
+   "cat": "statue",
+   "min": [
+    -0.263,
+    -0.014,
+    -0.204
+   ],
+   "max": [
+    0.259,
+    1.302,
+    0.206
+   ],
+   "dims": [
+    0.523,
+    1.316,
+    0.409
+   ],
+   "tris": [
+    668,
+    28
+   ],
+   "light": null,
+   "collide": [
+    "cercle",
+    0.22
+   ],
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "borne_pierre_2": {
+   "id": "borne_pierre",
+   "variant": 2,
+   "cat": "statue",
+   "min": [
+    -0.258,
+    -0.01,
+    -0.206
+   ],
+   "max": [
+    0.258,
+    1.048,
+    0.21
+   ],
+   "dims": [
+    0.516,
+    1.058,
+    0.416
+   ],
+   "tris": [
+    668,
+    28
+   ],
+   "light": null,
+   "collide": [
+    "cercle",
+    0.22
+   ],
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "pierres_jardin_0": {
+   "id": "pierres_jardin",
+   "variant": 0,
+   "cat": "statue",
+   "min": [
+    -0.938,
+    -0.136,
+    -0.841
+   ],
+   "max": [
+    0.938,
+    0.347,
+    0.954
+   ],
+   "dims": [
+    1.875,
+    0.483,
+    1.794
+   ],
+   "tris": [
+    476,
+    166
+   ],
+   "light": null,
+   "collide": null,
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "pierres_jardin_1": {
+   "id": "pierres_jardin",
+   "variant": 1,
+   "cat": "statue",
+   "min": [
+    -0.938,
+    -0.171,
+    -0.841
+   ],
+   "max": [
+    0.938,
+    0.437,
+    0.954
+   ],
+   "dims": [
+    1.875,
+    0.608,
+    1.794
+   ],
+   "tris": [
+    616,
+    214
+   ],
+   "light": null,
+   "collide": null,
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "pierres_jardin_2": {
+   "id": "pierres_jardin",
+   "variant": 2,
+   "cat": "statue",
+   "min": [
+    -0.938,
+    -0.097,
+    -0.841
+   ],
+   "max": [
+    0.938,
+    0.248,
+    0.954
+   ],
+   "dims": [
+    1.875,
+    0.345,
+    1.794
+   ],
+   "tris": [
+    476,
+    166
+   ],
+   "light": null,
+   "collide": null,
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  },
+  "panneau_grignoteurs_0": {
+   "id": "panneau_grignoteurs",
+   "variant": 0,
+   "cat": "mobilier",
+   "min": [
+    -0.356,
+    0.0,
+    -0.04
+   ],
+   "max": [
+    0.356,
+    1.224,
+    0.065
+   ],
+   "dims": [
+    0.712,
+    1.224,
+    0.105
+   ],
+   "tris": [
+    216,
+    8
+   ],
+   "light": null,
+   "collide": [
+    "cercle",
+    0.12
+   ],
+   "cast": true,
+   "hang": false,
+   "steam": null,
+   "length": null
+  }
+ }
+}

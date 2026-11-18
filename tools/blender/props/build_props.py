@@ -74,6 +74,10 @@ def main():
             }
             roots.append(root)
             print(f'{vid:22s} {t0n:6d} / {t1n:5d} tris  dims {dims}')
+    if only:
+        # planche partielle : on n'écrase pas le glb complet
+        render_preview(roots, meta)
+        return
     os.makedirs(OUT, exist_ok=True)
     out = export(os.path.join(OUT, 'decor.glb'), GLTFPACK, os.path.join(CACHE, 'gltf'))
     json.dump({'version': 1, 'file': 'decor.glb', 'atlas': {'diff': 'tex/decor_diff.jpg', 'nor': 'tex/decor_nor.jpg', 'orm': 'tex/decor_orm.jpg'},
@@ -83,34 +87,60 @@ def main():
         render_preview(roots, meta)
 
 
-def render_preview(roots, meta):
-    """Planche de contrôle : toutes les variantes en grille, rendu Workbench (couleurs de sommets)."""
+def render_preview(roots, meta, elev=28):
+    """Planche de contrôle : toutes les variantes en grille (avec étiquettes), rendu Workbench (couleurs de sommets).
+    La pas de la grille s'adapte au plus grand objet affiché : `--only` donne donc une planche agrandie."""
     n = len(roots)
+    big = max(max(m['dims'][0], m['dims'][2], m['dims'][1] * 0.8) for m in meta.values())
+    step = max(1.6, min(3.6, big * 1.15))
     cols = int(math.ceil(math.sqrt(n * 1.6)))
-    for i, r in enumerate(roots):
-        cx, cz = (i % cols) * 2.4, (i // cols) * 2.4
+    sc = bpy.context.scene
+    for i, (r, (vid, m)) in enumerate(zip(roots, meta.items())):
+        cx, cz = (i % cols) * step, (i // cols) * step
         r.location = (cx, -cz, 0)
         for ch in r.children:
             ch.hide_render = ch.name.endswith('_lod1')
-    sc = bpy.context.scene
+        if m.get('hang'):
+            r.location.z = -m['min'][1] + 0.05   # objets suspendus : remontés au-dessus du sol
+        cu = bpy.data.curves.new('t' + vid, 'FONT')
+        cu.body = vid
+        cu.size = step * 0.075
+        cu.align_x = 'CENTER'
+        tx = bpy.data.objects.new('t' + vid, cu)
+        sc.collection.objects.link(tx)
+        tx.location = (cx, -cz - step * 0.42, 0.01)
+    # sol clair et fond gris : on juge les silhouettes et les teintes
+    bpy.ops.mesh.primitive_plane_add(size=1, location=((cols - 1) * step / 2, -(n // cols) * step / 2, 0))
+    gp = bpy.context.active_object
+    gp.scale = (cols * step + 4, (n // cols + 1) * step + 4, 1)
+    ca = gp.data.color_attributes.new('Col', 'FLOAT_COLOR', 'CORNER')
+    for d_ in ca.data:
+        d_.color = (0.12, 0.13, 0.12, 1)
     sc.render.engine = 'BLENDER_WORKBENCH'
     sc.display.shading.light = 'STUDIO'
     sc.display.shading.color_type = 'VERTEX'
     sc.display.shading.show_cavity = True
     sc.display.shading.show_shadows = True
+    sc.display.shading.shadow_intensity = 0.35
+    sc.view_settings.view_transform = 'Standard'
+    if sc.world is None:
+        sc.world = bpy.data.worlds.new('w')
+    sc.world.color = (0.35, 0.36, 0.38)
     sc.render.resolution_x, sc.render.resolution_y = 2400, 1500
     rows = (n + cols - 1) // cols
     cam = bpy.data.objects.new('cam', bpy.data.cameras.new('cam'))
     sc.collection.objects.link(cam)
     sc.camera = cam
-    w, h = cols * 2.4, rows * 2.4
+    w, h = cols * step, rows * step
     cam.data.type = 'ORTHO'
-    cam.data.ortho_scale = max(w, h * 1.6) * 1.05
-    cam.location = (w / 2 - 1.2, -h / 2 - 14, 14)
-    cam.rotation_euler = (math.radians(45), 0, 0)
-    sc.render.filepath = os.path.join(CACHE, 'preview.png')
+    e = math.radians(elev)
+    cam.data.ortho_scale = max(w, h * math.sin(e) * 1.6 + step) * 1.04
+    d = 40
+    cam.location = ((cols - 1) * step / 2, -(rows - 1) * step / 2 - d * math.cos(e), d * math.sin(e) + 0.5)
+    cam.rotation_euler = (math.pi / 2 - e, 0, 0)
+    cam.data.clip_end = 200
+    sc.render.filepath = os.path.join(CACHE, 'preview.png' if len(sys.argv) < 4 else 'preview_only.png')
     bpy.ops.render.render(write_still=True)
     print('aperçu :', sc.render.filepath)
-
 
 main()

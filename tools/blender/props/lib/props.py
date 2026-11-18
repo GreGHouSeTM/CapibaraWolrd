@@ -78,12 +78,23 @@ def toro_kasuga(rng):
         a = ph + 2 * math.pi * i / sides
         m.box((math.cos(a) * rr, y2 + hh / 2, math.sin(a) * rr), (0.075 * k, hh, 0.075 * k), 'stone', st, rot=rotY(-a), tex=0.4)
     m.lathe([(rr * 0.86, y2), (rr * 0.86, y2 + hh)], sides, 'paper', srgb('#f6e8c8'), mat=1, smooth=False, phase=0, cap_top=True, cap_bot=True)
-    # toit (kasa) : pyramide à rebord épais et coins relevés (warabite)
+    # toit (kasa) : sous-face plate, rebord mince, pente concave (douce au bord, raide vers le sommet) et coins
+    # relevés (warabite) : les deux rangées du rebord sont soulevées et élargies aux angles du polygone.
     y3 = y2 + hh
     R = 0.52 * k
-    roof_rad = lambda a, y: 1 + (0.09 if abs(y - (y3 + 0.05 * k)) < 1e-6 else 0) * max(0, math.cos(sides * (a - ph)))
-    m.lathe([(rad(0.26 * k), y3), (rad(R), y3 + 0.0), (rad(R), y3 + 0.05 * k), (rad(0.34 * k), y3 + 0.2 * k), (rad(0.12 * k), y3 + 0.3 * k), (0.07 * k, y3 + 0.33 * k)],
-            sides, 'stone', st, cap_bot=True, smooth=False, phase=ph, radial=roof_rad, tex=0.8)
+    prof = [(rad(0.25 * k), y3), (rad(R), y3 + 0.0), (rad(R), y3 + 0.035 * k), (rad(0.43 * k), y3 + 0.07 * k), (rad(0.33 * k), y3 + 0.12 * k),
+            (rad(0.23 * k), y3 + 0.19 * k), (rad(0.15 * k), y3 + 0.26 * k), (0.1 * k, y3 + 0.3 * k), (0.07 * k, y3 + 0.33 * k)]
+    seg_a = 2 * math.pi / sides
+    poly = lambda a, y: math.cos(math.pi / sides) / math.cos(((a - ph) % seg_a) - math.pi / sides)   # polygone à 4 sommets par côté
+    rows = m.lathe(prof, sides * 4, 'stone', st, cap_bot=True, smooth=False, phase=ph, tex=0.8, radial=poly)
+    for j, (lift, grow) in ((1, (0.07, 0.07)), (2, (0.075, 0.07)), (3, (0.03, 0.03))):
+        for i, vi in enumerate(rows[j]):
+            a = ph + 2 * math.pi * i / (sides * 4)
+            c = abs(math.cos((a - ph) * sides / 2)) ** 6
+            p = m.co[vi]
+            p.x *= 1 + grow * c
+            p.z *= 1 + grow * c
+            p.y += lift * k * c
     # bouton (hōju) en forme d'oignon
     y4 = y3 + 0.33 * k
     m.lathe([(0.06 * k, y4), (0.09 * k, y4 + 0.03 * k), (0.06 * k, y4 + 0.06 * k), (0.085 * k, y4 + 0.1 * k), (0.07 * k, y4 + 0.15 * k), (0.0, y4 + 0.21 * k)], 10, 'stone', st, tex=0.4)
