@@ -1,13 +1,13 @@
-// Régions « nature » : Japon, Désert, Pôle Nord et Capyville (village central).
+// Régions « nature » : Japon, Désert et Pôle Nord (Capyville est dans regions/hub.ts).
 import * as THREE from 'three';
 import { Rng, lerp } from '../core/math';
-import { regionById, REGIONS } from '../world/layout';
-import { buildCity, CityStyle, building, addLamp } from '../procgen/city';
+import { regionById } from '../world/layout';
+import { buildCity, CityStyle, building } from '../procgen/city';
 import { machiya, tokyoModern, adobe, cottage, roofTexture } from '../procgen/facades';
-import { Batch, hipRoof, gableRoof, std, facadeMaterial, facadeBox, slab, planarUV } from '../procgen/kit';
-import { torii, pagoda, stoneLantern, pyramid, sphinxCapy, igloo, christmasTree, windmill, glowMat, makeSignMesh } from '../procgen/monuments';
-import { BuildCtx, RegionContent, emptyContent, rock, signpost, fountain, bench } from './common';
-import { FUJI_POS, JP_LAKE, OASIS_POS, PYRAMIDS, HOT_SPRING, HUB_POND, heightAt } from '../world/heightmap';
+import { Batch, hipRoof, gableRoof, std, facadeMaterial, facadeBox, slab } from '../procgen/kit';
+import { torii, pagoda, stoneLantern, pyramid, sphinxCapy, igloo, christmasTree, glowMat, makeSignMesh } from '../procgen/monuments';
+import { BuildCtx, RegionContent, emptyContent, rock } from './common';
+import { FUJI_POS, JP_LAKE, OASIS_POS, PYRAMIDS, heightAt } from '../world/heightmap';
 import { paveCircle, paveRect } from '../world/grass';
 import { addBox, addCircle } from '../world/physics';
 import { pbr } from '../core/assets';
@@ -285,136 +285,5 @@ export function buildPole(ctx: BuildCtx): RegionContent {
     { type: 'snowmobile', pos: new THREE.Vector3(c.x + 16, groundY(c.x + 16, c.z - 30), c.z - 30), rot: 0 },
   );
   out.group.add(b.build('pole-props'));
-  return out;
-}
-
-// =============================================================================== CAPYVILLE
-export function buildHub(ctx: BuildCtx): RegionContent {
-  const R = regionById('hub');
-  const out = emptyContent('hub');
-  const rng = new Rng(3);
-  const b = new Batch(120);
-  const tiles = roofTexture('tiles');
-  const tileMat = new THREE.MeshStandardMaterial({ map: tiles.map, normalMap: tiles.normalMap, roughness: 0.8, color: 0xffffff });
-  const sets = [cottage(1), cottage(2), cottage(3), cottage(4)];
-  const gableMat = std(0xf2e6cf, 0.95);
-  const plaza = pbr('cobble', { scale: 3.5, color: 0xf0e4cc });
-  // place centrale pavée et fontaine
-  b.addAt(planarUV(new THREE.CylinderGeometry(26, 26, 0.3, 48), 1), plaza, 0, R.ground, 0, 0, false);
-  addCircle(0, 0, 26, R.ground - 1, R.ground + 0.15, true);
-  paveCircle(0, 0, 27);
-  fountain(b, 0, R.ground + 0.15, 0, 5);
-  // maisons en couronne
-  const houses: THREE.Vector3[] = [];
-  for (let i = 0; i < 14; i++) {
-    const a = (i / 14) * Math.PI * 2 + 0.11;
-    const d = 46 + (i % 2) * 14;
-    const x = Math.cos(a) * d, z = Math.sin(a) * d;
-    const ang = Math.atan2(-x, -z);
-    // on évite les routes (directions des régions)
-    if (REGIONS.slice(1).some((r) => Math.abs(Math.atan2(r.x, r.z) - Math.atan2(x, z)) < 0.3)) continue;
-    const y = groundY(x, z);
-    const w = rng.range(8, 11), dd = rng.range(7, 9);
-    const set = rng.pick(sets);
-    const m = new THREE.Matrix4().makeRotationY(ang).setPosition(x, y - 0.3, z);
-    b.add(facadeBox(w, dd, 0, 6.4, set, 3, 3.2, rng.int(0, 3) * 0.25, 0), facadeMaterial(set), m);
-    const gr = gableRoof(w, dd, 6.4, 3.4, 0.7);
-    b.add(gr.roof, tileMat, m);
-    b.add(gr.gable, gableMat, m);
-    // porte
-    const door = new THREE.BoxGeometry(1.3, 2.2, 0.2).translate(0, 1.1, dd / 2);
-    b.add(door, std(0x6a3a1c, 0.7), m);
-    const cs = Math.cos(ang), sn = Math.sin(ang);
-    void cs; void sn;
-    addBox(x, z, w, dd, y - 1, y + 9, -ang, true);
-    paveRect(x, z, w + 2, dd + 2, -ang);
-    houses.push(new THREE.Vector3(x, y, z));
-    addLamp(b, 'paris', x * 0.82, groundY(x * 0.82, z * 0.82), z * 0.82);
-  }
-  out.spots.home = houses[0].clone().multiplyScalar(0.84).setY(R.ground + 0.2);
-  // source chaude
-  const hs = new THREE.Vector3(HOT_SPRING[0], 0, HOT_SPRING[1]);
-  hs.y = groundY(hs.x, hs.z);
-  const rockMat = pbr('rock', { scale: 3, color: 0xb8b0a8 });
-  for (let i = 0; i < 14; i++) {
-    const a = (i / 14) * Math.PI * 2;
-    rock(b, rockMat, hs.x + Math.cos(a) * 10.5, hs.y + 0.2, hs.z + Math.sin(a) * 10.5, rng.range(1.2, 2), i);
-  }
-  const spring = new THREE.MeshStandardMaterial({ color: 0x7fd8d0, roughness: 0.05, transparent: true, opacity: 0.85 });
-  b.addAt(new THREE.CircleGeometry(10, 32).rotateX(-Math.PI / 2), spring, hs.x, hs.y + 0.55, hs.z, 0, false);
-  paveCircle(hs.x, hs.z, 12);
-  out.spots.spring = hs.clone().setY(hs.y + 0.6);
-  // vapeur
-  const steam = new THREE.Group();
-  const steamMat = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.12, depthWrite: false });
-  for (let i = 0; i < 14; i++) {
-    const s = new THREE.Mesh(new THREE.SphereGeometry(1.6, 10, 8), steamMat);
-    s.position.set(hs.x + rng.range(-6, 6), hs.y + 1, hs.z + rng.range(-6, 6));
-    s.userData.base = s.position.clone();
-    s.userData.ph = rng.range(0, 6);
-    steam.add(s);
-  }
-  out.group.add(steam);
-  out.update.push((t) => steam.children.forEach((s) => {
-    const k = (t * 0.25 + s.userData.ph) % 1;
-    s.position.set(s.userData.base.x, s.userData.base.y + k * 6, s.userData.base.z);
-    s.scale.setScalar(0.6 + k * 1.4);
-    (s as THREE.Mesh).visible = true;
-  }));
-  // capybaras qui se prélassent dans l'eau chaude
-  out.npcs.push(
-    { id: 'mamie', name: 'Mamie Capy', pos: new THREE.Vector3(6, R.ground + 0.2, 8), fur: 0xa88a6a, hat: 'flower', scarf: 0x9a5ac8, size: 1.05 },
-    { id: 'shop', name: 'Basile le chapelier', pos: new THREE.Vector3(-14, R.ground + 0.2, -20), fur: 0x8a6040, hat: 'tophat', scarf: 0x3a8a4a },
-    { id: 'onsen1', name: 'Capy zen', pos: new THREE.Vector3(hs.x + 3, hs.y + 0.1, hs.z - 2), fur: 0x9a6a43, hat: 'yuzu' },
-    { id: 'onsen2', name: 'Capy zen', pos: new THREE.Vector3(hs.x - 3, hs.y + 0.1, hs.z + 3), fur: 0x8a5a33, hat: 'yuzu' },
-  );
-  // boutique de chapeaux
-  const kiosk = new THREE.Vector3(-14, R.ground, -24);
-  b.addAt(new THREE.BoxGeometry(6, 3, 3).translate(0, 1.5, 0), std(0xe8d8b8, 0.8), kiosk.x, kiosk.y, kiosk.z);
-  b.addAt(new THREE.ConeGeometry(4.6, 2, 4).rotateY(Math.PI / 4).translate(0, 4, 0), std(0xc83a4a, 0.8), kiosk.x, kiosk.y, kiosk.z);
-  const ks = makeSignMesh(['CHAPEAUX'], '#2a5a3a', '#ffe9b0', 4, 1);
-  ks.position.set(kiosk.x, kiosk.y + 2.6, kiosk.z + 1.55);
-  out.group.add(ks);
-  addBox(kiosk.x, kiosk.z, 6, 3, kiosk.y, kiosk.y + 4);
-  out.spots.shop = new THREE.Vector3(-14, R.ground + 0.2, -20);
-  // moulin
-  const wm = windmill(-75, groundY(-75, -70), -70);
-  out.group.add(wm.group);
-  out.update.push((t) => wm.update(t));
-  out.photos.push({ id: 'windmill', name: 'Le moulin de Capyville', region: 'hub', target: new THREE.Vector3(-75, groundY(-75, -70) + 10, -70), radius: 120 });
-  // étang avec ponton
-  const pond = new THREE.Vector3(HUB_POND[0], 0, HUB_POND[1]);
-  out.spots.pond = pond.clone();
-  out.spots.windmill = new THREE.Vector3(-75, groundY(-75, -70), -70);
-  b.addAt(slab(3, 14, -0.3, 0.4, 2), std(0x8a6a48, 0.9), pond.x + 24, 0.9, pond.z, 0.6);
-  // panneaux vers les régions
-  const arrows = REGIONS.slice(1).map((r) => ({ text: r.name.replace('Le Désert des Dunes', 'Désert').replace('Le ', ''), angle: Math.atan2(r.x, r.z) - Math.PI / 2 }));
-  signpost(b, 14, R.ground + 0.15, 14, arrows.slice(0, 3));
-  signpost(b, -14, R.ground + 0.15, 14, arrows.slice(3));
-  for (let i = 0; i < 8; i++) bench(b, Math.cos(i * 0.785 + 0.4) * 22, R.ground + 0.15, Math.sin(i * 0.785 + 0.4) * 22, -i * 0.785 - 0.4 + Math.PI / 2);
-  // vergers de yuzus
-  const yuzus: THREE.Vector3[] = [];
-  for (let i = 0; i < 5; i++) {
-    const a = i * 1.3 + 0.5, d = 80 + i * 10;
-    const x = Math.cos(a) * d, z = Math.sin(a) * d;
-    yuzus.push(new THREE.Vector3(x, groundY(x, z) + 0.6, z));
-    ctx.forest.add('oak', x + 2.5, z + 2.5, 0.8);
-  }
-  (out.spots as any).yuzuList = yuzus;
-  out.vehicles.push(
-    { type: 'car', pos: new THREE.Vector3(30, R.ground, -12), rot: 0.6 },
-    { type: 'scooter', pos: new THREE.Vector3(-28, R.ground, 6), rot: -0.4 },
-  );
-  out.spots.start = new THREE.Vector3(0, R.ground + 0.3, 16);
-  // moniteurs des mini-missions de test
-  const sw = new THREE.Vector3(HUB_POND[0] + 34, 0, HUB_POND[1] - 6);
-  sw.y = groundY(sw.x, sw.z);
-  out.npcs.push(
-    { id: 'coach', name: 'Coach Capy', pos: new THREE.Vector3(24, R.ground + 0.2, -6), fur: 0x8a5a33, hat: 'cap', scarf: 0x1e4fa8 },
-    { id: 'swimmer', name: 'Nina la nageuse', pos: sw, fur: 0xa87a52, hat: 'flower', scarf: 0x3fd0ff },
-    { id: 'photographer', name: 'Léo le photographe', pos: new THREE.Vector3(-22, R.ground + 0.2, 8), fur: 0x9b6a43, hat: 'beret', scarf: 0xffc83a },
-  );
-  out.group.add(b.build('hub-props'));
-  void bench;
   return out;
 }
