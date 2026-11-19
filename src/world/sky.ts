@@ -5,7 +5,13 @@
 // - Nuages en deux couches (cumulus éclairés par le soleil rasant, cirrus en filaments), étoiles, lune, aurores.
 // API pour les autres spécialités : `ATMO` (état courant, voir SkyState), `sunDirectionAt(h)`, `lanternLevelAt(h)`.
 import * as THREE from 'three';
+import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js';
 import { clamp, damp, lerp, smoothstep } from '../core/math';
+import { configureShadowCamera, patchCascadeChunks, placeShadowLight } from '../fx/shadows';
+
+patchCascadeChunks();
+/** HDRI Poly Haven (CC0) « Lakeside Dawn » : sol, arbres et ciel réels, recolorés selon le moment, pour l'environnement. */
+const HDRI_URL = 'assets/hdri/lakeside_dawn_1k.hdr';
 
 /** Heure de départ d'une nouvelle partie : 6 h 45, l'aube dorée des références. */
 export const START_HOUR = 6.75;
@@ -30,6 +36,11 @@ uniform vec3 uSunDir, uMoonDir;
 uniform vec3 uZenith, uHorizon, uHorizonSun, uBelt, uGround, uSunColor, uCloudLit, uCloudShade;
 uniform float uTime, uNight, uAurora, uCloudCover, uCirrus, uSunDisk, uStars;
 varying vec3 vDir;
+#ifdef ENV_HDRI
+uniform sampler2D uHdri;
+uniform vec3 uHdriTint;
+uniform float uHdriRot, uHdriMix, uHdriClamp;
+#endif
 
 float hash(vec2 p){ return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
 float vnoise(vec2 p){
@@ -123,6 +134,14 @@ void main(){
     cloudCol = mix(cloudCol, hor, (1.0 - fade) * 0.6);
     col = mix(col, cloudCol, cov * fade * 0.94);
   }
+#ifdef ENV_HDRI
+  // environnement : la photo HDRI (tournée pour que son soleil suive le nôtre, soleil écrêté : la lumière directe s'en charge)
+  // apporte le sol, les arbres et les nuances du ciel ; recolorée par la palette du moment
+  float ePhi = atan(d.z, d.x) + uHdriRot;
+  vec2 euv = vec2(fract(ePhi * 0.15915494 + 0.5), asin(clamp(d.y, -1.0, 1.0)) * 0.31830989 + 0.5);
+  vec3 hd = min(texture2D(uHdri, euv).rgb, vec3(uHdriClamp)) * uHdriTint;
+  col = mix(col, hd, uHdriMix);
+#endif
   gl_FragColor = vec4(max(col, 0.0), 1.0);
   #include <colorspace_fragment>
 }`;
@@ -328,6 +347,7 @@ export class SkySystem {
   private envTimer = 999;
   private lastEnvHour = -10;
   private camFwd = new THREE.Vector3();
+  private camPos = new THREE.Vector3();
   aurora = 0;
 
   constructor(private renderer: THREE.WebGLRenderer, private scene: THREE.Scene) {
@@ -364,31 +384,99 @@ export class SkySystem {
     this.mesh.renderOrder = -1000;
     scene.add(this.mesh);
 
-    this.envMesh = new THREE.Mesh(new THREE.SphereGeometry(100, 32, 16), mat);
+    this.envUniforms = {
+      ...this.uniforms,
+      uHdri: { value: null },
+      uHdriTint: { value: new THREE.Vector3(1, 1, 1) },
+      uHdriRot: { value: 0 },
+      uHdriMix: { value: 0 },
+      uHdriClamp: { value: 4 },
+    };
+    this.envMat = new THREE.ShaderMaterial({
+      uniforms: this.envUniforms, vertexShader: skyVert, fragmentShader: skyFrag,
+      side: THREE.BackSide, depthWrite: false, fog: false, defines: { ENV_HDRI: '' },
+    });
+    this.envMesh = new THREE.Mesh(new THREE.SphereGeometry(100, 48, 24), mat);
     this.envScene.add(this.envMesh);
     this.pmrem = new THREE.PMREMGenerator(renderer);
 
+    // cascade proche (index 0 : c'est elle qui éclaire), puis cascade lointaine (index 1 : carte d'ombre seule)
     this.sun = new THREE.DirectionalLight(0xffffff, 3);
     this.sun.castShadow = true;
-    this.sun.shadow.bias = -0.0003;
-    this.sun.shadow.normalBias = 0.035;
+    this.sun.shadow.bias = -0.0002;
+    this.sun.shadow.normalBias = 0.02;
     scene.add(this.sun);
     scene.add(this.sun.target);
+    this.sunFar = new THREE.DirectionalLight(0x000000, 0);
+    this.sunFar.castShadow = false;
+    this.sunFar.shadow.bias = -0.0004;
+    this.sunFar.shadow.normalBias = 0.05;
+    scene.add(this.sunFar);
+    scene.add(this.sunFar.target);
     this.hemi = new THREE.HemisphereLight(0xbcd7ff, 0x6b5a3a, 0.25);
     scene.add(this.hemi);
   }
 
-  setShadowQuality(size: number, extent: number) {
-    this.sun.shadow.mapSize.set(size, size);
-    const c = this.sun.shadow.camera;
-    c.left = -extent; c.right = extent; c.top = extent; c.bottom = -extent;
-    c.near = 1; c.far = 700;
-    c.updateProjectionMatrix();
-    this.sun.shadow.map?.dispose();
-    (this.sun.shadow as any).map = null;
+  /**
+   * Ombres : `size` × `extent` = carte lointaine (ou unique) ; `near` > 0 ajoute la cascade proche nette (`nearSize`),
+   * la lointaine n'étant alors recalculée qu'une image sur `farEvery`.
+   */
+  setShadowQuality(size: number, extent: number, near = 0, nearSize = 2048, farEvery = 1) {
     this.shadowExtent = extent;
+    this.shadowNear = near;
+    this.farEvery = Math.max(1, farEvery);
+    if (near > 0) {
+      configureShadowCamera(this.sun, nearSize, near);
+      configureShadowCamera(this.sunFar, size, extent);
+      this.sunFar.castShadow = true;
+      this.sunFar.shadow.autoUpdate = false;
+    } else {
+      configureShadowCamera(this.sun, size, extent);
+      this.sunFar.castShadow = false;
+    }
   }
   private shadowExtent = 80;
+  private shadowNear = 0;
+  private farEvery = 1;
+  private farFrame = 0;
+  sunFar: THREE.DirectionalLight;
+  private envMat: THREE.ShaderMaterial;
+  private envUniforms: Record<string, THREE.IUniform>;
+  /** Couleur moyenne du ciel de la photo HDRI (hémisphère haut) et cap de son soleil (rad, repère atan(z, x)). */
+  private hdriAvg = new THREE.Vector3(1, 1, 1);
+  private hdriSunPhi = 0;
+  private hdriReady = false;
+
+  /** Charge l'HDRI (asynchrone ; l'environnement procédural sert en attendant). */
+  loadHdri() {
+    new RGBELoader().load(import.meta.env.BASE_URL + HDRI_URL, (tex) => {
+      const img = tex.image as unknown as { data: Uint16Array | Float32Array; width: number; height: number };
+      const W = img.width, H = img.height, D = img.data;
+      const f = D instanceof Uint16Array ? (v: number) => THREE.DataUtils.fromHalfFloat(v) : (v: number) => v;
+      // soleil = pixel le plus lumineux ; moyenne du ciel (hémisphère haut, pondérée par le cosinus de la latitude)
+      let best = -1, bi = 0, sr = 0, sg = 0, sb = 0, sw = 0;
+      for (let j = 0; j < H / 2; j++) {
+        const lat = (0.5 - (j + 0.5) / H) * Math.PI, w = Math.cos(lat);
+        for (let i = 0; i < W; i += 2) {
+          const k = (j * W + i) * 4;
+          const r = f(D[k]), g = f(D[k + 1]), b = f(D[k + 2]);
+          const l = r * 0.2126 + g * 0.7152 + b * 0.0722;
+          if (l > best) { best = l; bi = i; }
+          sr += Math.min(r, 4) * w; sg += Math.min(g, 4) * w; sb += Math.min(b, 4) * w; sw += w;
+        }
+      }
+      this.hdriAvg.set(sr / sw, sg / sw, sb / sw);
+      this.hdriSunPhi = ((bi + 0.5) / W - 0.5) * Math.PI * 2;
+      tex.minFilter = THREE.LinearFilter;
+      tex.magFilter = THREE.LinearFilter;
+      tex.generateMipmaps = false;
+      this.envUniforms.uHdri.value = tex;
+      this.envUniforms.uHdriClamp.value = Math.max(1.5, ((this.hdriAvg.x + this.hdriAvg.y + this.hdriAvg.z) / 3) * 3.5);
+      this.envMesh.material = this.envMat;
+      this.hdriReady = true;
+      this.forceEnvUpdate();
+    }, undefined, () => console.warn('HDRI introuvable : ' + HDRI_URL));
+  }
 
   /** Vitesse du temps : les heures dorées (aube, fin d'après-midi) passent deux fois moins vite. */
   private timeRate(h: number) {
@@ -467,20 +555,29 @@ export class SkySystem {
     if (ld.y < 0.035) { ld.y = 0.035; ld.normalize(); }
     this.sun.color.copy(p.sun);
     this.sun.intensity = p.sunI;
-    // ombres stabilisées : zone avancée dans la direction du regard, alignée sur la grille des texels
-    const ext = this.shadowExtent;
-    let cx = focus.x, cz = focus.z;
+    // ombres stabilisées : zones centrées sur la caméra (ou le joueur), avancées dans le regard, alignées sur les texels
+    let ox = focus.x, oy = focus.y, oz = focus.z, fx = 0, fz = 0;
     if (camera) {
+      this.camPos.setFromMatrixPosition(camera.matrixWorld);
+      ox = this.camPos.x; oy = this.camPos.y; oz = this.camPos.z;
       camera.getWorldDirection(this.camFwd);
       const l = Math.hypot(this.camFwd.x, this.camFwd.z) || 1;
-      cx += (this.camFwd.x / l) * ext * 0.35;
-      cz += (this.camFwd.z / l) * ext * 0.35;
+      fx = this.camFwd.x / l; fz = this.camFwd.z / l;
     }
-    const texel = (ext * 2) / this.sun.shadow.mapSize.x;
-    const fx = Math.round(cx / texel) * texel;
-    const fz = Math.round(cz / texel) * texel;
-    this.sun.target.position.set(fx, focus.y, fz);
-    this.sun.position.set(fx + ld.x * 320, focus.y + ld.y * 320, fz + ld.z * 320);
+    if (this.shadowNear > 0) {
+      const n = this.shadowNear;
+      placeShadowLight(this.sun, ld, ox + fx * n * 0.55, oy, oz + fz * n * 0.55, n);
+      // cascade lointaine : déplacée seulement quand on la recalcule (sa matrice reste ainsi cohérente avec sa carte)
+      if (++this.farFrame >= this.farEvery || !this.sunFar.shadow.map) {
+        this.farFrame = 0;
+        const e = this.shadowExtent;
+        placeShadowLight(this.sunFar, ld, ox + fx * e * 0.4, oy, oz + fz * e * 0.4, e);
+        this.sunFar.shadow.needsUpdate = true;
+      }
+    } else {
+      const e = this.shadowExtent;
+      placeShadowLight(this.sun, ld, ox + fx * e * 0.35, oy, oz + fz * e * 0.35, e);
+    }
     this.hemi.color.copy(p.aSky);
     this.hemi.groundColor.copy(p.aGnd);
     this.hemi.intensity = p.hemi;
@@ -492,6 +589,17 @@ export class SkySystem {
     if (this.envTimer > 3 && Math.abs(this.hour - this.lastEnvHour) > 0.12) {
       this.envTimer = 0;
       this.lastEnvHour = this.hour;
+      if (this.hdriReady) {
+        const eu = this.envUniforms;
+        // soleil de la photo aligné sur le nôtre (cap dans le repère atan(z, x))
+        eu.uHdriRot.value = this.hdriSunPhi - Math.atan2(st.sunDir.z, st.sunDir.x);
+        // recoloration : moyenne du ciel de la photo → moyenne du ciel procédural du moment (en bonne partie par canal)
+        const tr = (p.zen.r + p.hor.r) * 0.5, tg = (p.zen.g + p.hor.g) * 0.5, tb = (p.zen.b + p.hor.b) * 0.5;
+        const a = this.hdriAvg, la = (a.x + a.y + a.z) / 3, lt = (tr + tg + tb) / 3;
+        const k = 0.75;
+        (eu.uHdriTint.value as THREE.Vector3).set(lerp(lt / la, tr / a.x, k), lerp(lt / la, tg / a.y, k), lerp(lt / la, tb / a.z, k));
+        eu.uHdriMix.value = lerp(0.8, 0.45, night);
+      }
       const old = this.envRT;
       this.envRT = this.pmrem.fromScene(this.envScene, 0, 0.1, 500);
       this.scene.environment = this.envRT.texture;

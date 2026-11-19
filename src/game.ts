@@ -144,7 +144,8 @@ export class Game {
     this.ui.setLoading(0.02, 'Chargement des textures…');
     await loadAssets((p) => this.ui.setLoading(0.02 + p * 0.18));
     this.sky = new SkySystem(this.renderer, this.scene);
-    this.sky.setShadowQuality(q.shadowSize, q.shadowExtent);
+    this.sky.setShadowQuality(q.shadowSize, q.shadowExtent, q.shadowNear, q.shadowNearSize, q.shadowFarEvery);
+    if (q.hdri) this.sky.loadHdri(); // --- RENDU HD --- environnement HDRI Poly Haven
     // --- LUMIÈRE --- nouvelle partie à 6 h 45 (aube dorée), sinon l'heure sauvegardée
     this.sky.hour = this.save.pos ? this.save.hour : START_HOUR;
     this.scene.fog = new THREE.FogExp2(0xbcd0e0, 0.0012);
