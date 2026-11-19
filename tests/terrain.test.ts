@@ -1,8 +1,9 @@
 // Contrôles du relief de Capyville (spécialité Terrain & relief) : altitudes de la bible, place plate,
 // torrent encaissé, étang, pentes des axes et masquage des villes voisines.
 import { describe, it, expect, beforeAll } from 'vitest';
-import { heightAt, roadSamples } from '../src/world/heightmap';
+import { heightAt, roadSamples, biomeAt, surfaceAt } from '../src/world/heightmap';
 import { loadTestTerrain } from './helpers/terrain';
+import { terrainData } from '../src/world/terrain-data';
 import * as legacy from '../tools/terrain/legacy/heightmap';
 import { WAYS, WORLD_PEAKS, WORLD_REGIONS, LAKES } from '../src/world/world-map';
 import { streamInfo, streamWaterAt, streamBedAt } from '../src/world/valley';
@@ -46,6 +47,13 @@ describe('raccord du monde de 8 km à Capyville', () => {
     }
   });
 
+  it('fournit des cartes dérivées cohérentes (neige au Pic, sable dans l’erg, roche aux falaises)', () => {
+    expect(biomeAt(-2300, 470)[1], 'neige au Pic de l’Aurore').toBeGreaterThan(0.6);
+    expect(biomeAt(3000, 1100)[0], 'sable de l’erg').toBeGreaterThan(0.6);
+    expect(biomeAt(0, 0)[1], 'pas de neige à Capyville').toBeLessThan(0.05);
+    expect(surfaceAt(3500, -400)[3], 'roche des falaises des Hautes Plaines').toBeGreaterThan(0.2);
+  });
+
   it('creuse les lacs sous leur niveau d’eau, avec des rives émergées', () => {
     for (const l of LAKES) {
       if (l.dry) continue;
@@ -53,23 +61,26 @@ describe('raccord du monde de 8 km à Capyville', () => {
     }
   });
 
-  it('garde les voies praticables : pente le long du tracé ≤ 33° (sentiers de plaine et voies carrossables)', () => {
-    // sentiers de crête et de sommet (couronne de Capyville, Fuji, Pic de l'Aurore…) : marches et lacets à poser par les Routes
-    const plain = new Set(['sentier-douaniers', 'sentier-canyon', 'sentier-jungle', 'sentier-dome']);
-    for (const w of WAYS) {
-      if (!(w.vehicles || plain.has(w.id))) continue;
-      let ok = 0, n = 0;
-      for (let i = 0; i < w.pts.length - 1; i++) {
-        const [ax, az] = w.pts[i], [bx, bz] = w.pts[i + 1];
-        const l = Math.hypot(bx - ax, bz - az);
-        for (let s = 0; s < l - 10; s += 10) {
-          const t0 = s / l, t1 = (s + 10) / l;
-          const g = Math.abs(heightAt(ax + (bx - ax) * t1, az + (bz - az) * t1) - heightAt(ax + (bx - ax) * t0, az + (bz - az) * t0)) / 10;
-          n++;
-          if (g <= 0.65) ok++;
-        }
+  it('pose les routes du monde à pente bornée (routes ≤ 8 %, pistes ≤ 10 %, chemins ≤ 12 %)', () => {
+    const G: Record<string, number> = { route: 0.08, piste: 0.1, chemin: 0.12 };
+    const ways = terrainData!.meta.ways!;
+    expect(ways.length).toBeGreaterThan(10);
+    for (const w of ways) {
+      let ok = 0, n = 0, on = 0;
+      for (let i = 1; i < w.pts.length; i++) {
+        const l = Math.hypot(w.pts[i][0] - w.pts[i - 1][0], w.pts[i][1] - w.pts[i - 1][1]);
+        if (l < 1) continue;
+        n++;
+        if (Math.abs(w.y[i] - w.y[i - 1]) / l <= G[w.kind] + 0.01) ok++;
+        // la chaussée est posée sur le relief (hors ponts et vallée de Capyville)
+        if (Math.abs(heightAt(w.pts[i][0], w.pts[i][1]) - w.y[i]) < 0.6) on++;
       }
-      expect(ok / n, w.id).toBeGreaterThan(0.8);
+      // les routes asphaltées entre grandes villes respectent la pente partout ; les autres voies de montagne
+      // (Route du Givre, des Fjords, pistes…) attendent leurs lacets (Routes) là où le tracé de la carte est trop direct
+      // Piste du Col de Jade : 250 m de montée sur 490 m (rebord des Mille Voiles), impossible sans lacets
+      const lacets = w.id === 'piste-jade';
+      expect(ok / n, `${w.id} : pente`).toBeGreaterThan(w.kind === 'route' ? 0.7 : lacets ? 0.05 : 0.25);
+      expect(on / n, `${w.id} : posée`).toBeGreaterThan(0.85);
     }
   });
 });

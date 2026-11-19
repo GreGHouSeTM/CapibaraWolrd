@@ -53,6 +53,10 @@ def stage_forms():
     np.save(os.path.join(CACHE, 'rivers.npy'), np.array([dense], dtype=object), allow_pickle=True)
     h = carve.rivers(h, W, X, Z, cell, n, dense=dense)
     h = forms.apply_coast(h, d, cslope, cliffH, W, X, Z)
+    # les plats des villes reprennent la main sur les levées des rivières (hors du lit et des lacs)
+    wmask = carve.water_mask(W, X, Z, cell, n, margin=3, dense=dense)
+    hf = carve.flats(h.copy(), W, X, Z)
+    h = h + (hf - h) * (1 - wmask) * (d > 15)
     log('plats, lacs, rivières, côte')
     m = carve.valley_mask(X, Z, routes)
     old = carve.sample_ref(ref, meta, X, Z)
@@ -135,7 +139,7 @@ def restore_peaks(h, forms_h, W, X, Z, cell, n, shrink=1.0, keep=None):
         if K is None:
             continue
         K = K * shrink
-        R = pk['y'] / K * 0.6 + 50
+        R = pk['y'] / K * 0.8 + 60
         sj, si = bbox_slices([[pk['x'], pk['z']]], R, cell, n)
         dx, dz = X[sj, si] - pk['x'], Z[sj, si] - pk['z']
         r = np.hypot(dx, dz)
@@ -148,6 +152,9 @@ def restore_peaks(h, forms_h, W, X, Z, cell, n, shrink=1.0, keep=None):
         cone = y - kk * np.maximum(r - top, 0) - (0 if pk['shape'] == 'mesa' else 0.004 * np.minimum(r, top) ** 2)
         if pk['shape'] == 'volcan':
             cone = cone - 42 * smoothstep(70, 40, r)
+            # barrancos rayonnants : ravines sur le cône, plus profondes à mi-pente
+            u = np.clip(r / (pk['y'] / K), 0, 1)
+            cone = cone - 14 * np.abs(np.sin(th * 23 + 3.0 * fbm(dx / 220, dz / 220, 3, 98))) ** 0.6 * smoothstep(0.08, 0.3, u)
         # le cône ne remplace que le haut du relief (au-dessus des deux tiers de la hauteur)
         hh = h[sj, si]
         w = smoothstep(pk['y'] * 0.3, pk['y'] * 0.55, cone)
@@ -291,16 +298,34 @@ def stage_fine():
     # microrelief (0,3 à 1 m, longueurs d'onde 4 à 20 m) hors plats, lits et vallée
     mic = W['TERRAIN_RULES']['microRelief']['amplitude']
     h2 += E2 * (0.35 * mic * fbm(X2 / 9, Z2 / 9, 2, 91) + 0.3 * mic * fbm(X2 / 22, Z2 / 22, 2, 92))
+    np.save(os.path.join(CACHE, 'preroutes2.npy'), h2.astype(np.float32))
+    np.save(os.path.join(CACHE, 'scree2.npy'), (sc2 + resample(scree.astype(np.float32), 2.0)).astype(np.float32))
+    np.save(os.path.join(CACHE, 'dep2.npy'), (d2 + resample(np.load(os.path.join(CACHE, 'dep4.npy')), 2.0)).astype(np.float32))
+    stage_routes(h2, W, X2, Z2, n2, dense)
+
+
+def stage_routes(h2=None, W=None, X2=None, Z2=None, n2=None, dense=None):
+    """Voies posées sur le relief puis vallée de Capyville imposée (relançable seule : étape « routes »)."""
+    if h2 is None:
+        W = load_world()
+        h2 = np.load(os.path.join(CACHE, 'preroutes2.npy')).astype(np.float64)
+        X2, Z2, n2 = grid(2.0)
+        dense = np.load(os.path.join(CACHE, 'rivers.npy'), allow_pickle=True)[0]
     # vallée de Capyville : relief d'origine exact (masque), raccord doux au-delà de la couronne
     meta, routes, ref, det = carve.load_valley()
     m2 = carve.valley_mask(X2, Z2, routes)
+    # voies du monde : profil à pente bornée, plateforme et talus (hors de l'eau et de la vallée)
+    import roads as RD
+    import json
+    wat = carve.water_mask(W, X2, Z2, 2.0, n2, margin=2, dense=dense, lake_edge=1.04)
+    keep = np.clip(np.maximum(m2, wat), 0, 1)
+    h2, ways = RD.stamp_ways(h2, W, 2.0, keep, log, water=wat)
+    json.dump(ways, open(os.path.join(CACHE, 'ways.json'), 'w'))
     sl = (slice(int((-1000 + 4096) / 2), int((1000 + 4096) / 2) + 1),) * 2
     old = carve.sample_ref(ref, meta, X2[sl], Z2[sl])
     h2[sl] = h2[sl] + (old - h2[sl]) * m2[sl]
     np.save(os.path.join(CACHE, 'final2.npy'), h2.astype(np.float32))
     np.save(os.path.join(CACHE, 'valleym2.npy'), m2[sl].astype(np.float32))
-    np.save(os.path.join(CACHE, 'scree2.npy'), (sc2 + resample(scree.astype(np.float32), 2.0)).astype(np.float32))
-    np.save(os.path.join(CACHE, 'dep2.npy'), (d2 + resample(np.load(os.path.join(CACHE, 'dep4.npy')), 2.0)).astype(np.float32))
     log('vallée imposée (2 m)')
     h4f = h2[::2, ::2].astype(np.float32)
     report(h4f, 4.0, 'final')
@@ -331,6 +356,8 @@ if __name__ == '__main__':
         stage_erosion()
     if 'fin' in steps:
         stage_fine()
+    elif 'routes' in steps:
+        stage_routes()
     if 'export' in steps:
         import export
         export.run(log)

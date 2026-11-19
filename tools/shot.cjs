@@ -64,6 +64,10 @@ const VIEWS = {
   'monde-givre': { cam: [-2050, 1.6, 1320], look: [-2600, -10, 1900], hour: 16.5, ground: true, tp: [-2050, 1315] },
   'monde-desert': { cam: [2450, 2, 1150], look: [3000, 0, 1300], hour: 17, ground: true, tp: [2450, 1145] },
   'monde-pano': { cam: [900, 1500, 4300], look: [-200, 0, -300], hour: 9, tp: [700, 3000] },
+  'monde-paris': { cam: [250, 60, -2350], look: [-150, 0, -2650], hour: 11, ground: true, tp: [240, -2360] },
+  'monde-japon': { cam: [-1150, 25, 2250], look: [305, -260, 2899], hour: 8, ground: true, tp: [-1150, 2255] },
+  'monde-route': { cam: [-150, 2.2, 1200], look: [-663, 30, 2609], hour: 6.9, ground: true, tp: [-150, 1195] },
+  'monde-dormeur': { cam: [176, 2, -168], look: [1300, 150, 100], hour: 9, ground: true },
   'monde-givre-air': { cam: [-1200, 700, 1500], look: [-2300, 300, 500], hour: 9, tp: [-1250, 1450] },
 };
 module.exports = { VIEWS };

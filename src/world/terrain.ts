@@ -343,9 +343,12 @@ export function createTerrainMaterial(): THREE.MeshStandardMaterial {
         float rockW = max(smoothstep(0.86, 0.72, slopeY + 0.06 * (n1 - 0.5)), rockM * 0.9);
         float snowW = snow * smoothstep(0.55, 0.75, slopeY + 0.1 * n2);
         float sandW = sand * (1.0 - rockW);
-        float bedW = smoothstep(0.62, 0.8, flow) * (0.6 + 0.4 * wet) * (1.0 - sand);
-        float screeW = smoothstep(0.25, 0.7, depo) * smoothstep(0.97, 0.8, slopeY);
-        float dirtW = dry * 0.55 * smoothstep(0.35, 0.75, n1 + 0.3 * depo) + 0.25 * depo;
+        // galets seulement dans les vrais lits (bassin versant de plus de 5 ha) et les éboulis frais
+        float bedW = smoothstep(0.78, 0.9, flow) * (0.6 + 0.4 * wet) * (1.0 - sand);
+        // éboulis : roche claire en pied de pente plutôt que galets (texture trop petite pour de grandes surfaces)
+        float screeW = smoothstep(0.35, 0.8, depo) * smoothstep(0.97, 0.85, slopeY);
+        rockW = max(rockW, screeW * 0.7);
+        float dirtW = dry * 0.45 * smoothstep(0.45, 0.8, n1 + 0.3 * depo) + 0.15 * depo * (1.0 - lush);
         float mossW = lush * smoothstep(0.3, 0.8, wet + 0.3 * (n2 - 0.5));
         float wl = 1.0 - inD;
         float r0 = 1.0;
@@ -353,7 +356,7 @@ export function createTerrainMaterial(): THREE.MeshStandardMaterial {
         tW[6] = r0 * rockW * (1.0 - 0.6 * lush);
         tW[5] = r0 * rockW * 0.6 * lush; r0 -= tW[6] + tW[5];
         tW[7] = r0 * sandW; r0 -= tW[7];
-        tW[4] = r0 * clamp(bedW + screeW, 0.0, 1.0); r0 -= tW[4];
+        tW[4] = r0 * clamp(bedW, 0.0, 1.0); r0 -= tW[4];
         tW[3] = r0 * clamp(dirtW, 0.0, 1.0); r0 -= tW[3];
         tW[2] = r0 * mossW; r0 -= tW[2];
         tW[0] = max(r0, 0.0);
@@ -379,7 +382,8 @@ export function createTerrainMaterial(): THREE.MeshStandardMaterial {
           vec4 a; vec3 nt;
           if (i == 5 || i == 6) {
             vec2 px = vWPos.zy, pz = vWPos.xy;
-            a = tAlb(i, wp) * tri.y + texture(uAlb, vec3(px / LSC[i], float(i))) * tri.x + texture(uAlb, vec3(pz / LSC[i], float(i))) * tri.z;
+            // faces verticales : deux échelles mélangées aussi (pas de motif répété sur les grandes parois)
+            a = tAlb(i, wp) * tri.y + tAlb(i, px) * tri.x + tAlb(i, pz) * tri.z;
             nt = (texture(uNor, vec3(wp / LSC[i], float(i))).xyz * 2.0 - 1.0) * tri.y
                + (texture(uNor, vec3(px / LSC[i], float(i))).xyz * 2.0 - 1.0) * tri.x
                + (texture(uNor, vec3(pz / LSC[i], float(i))).xyz * 2.0 - 1.0) * tri.z;

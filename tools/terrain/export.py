@@ -169,6 +169,8 @@ def run(log):
         'surface': {'x0': X0, 'z0': X0, 'cell': 4.0, 'n': n, 'path': 'surface.bin', 'channels': ['ecoulement', 'humidite', 'depots', 'roche']},
         'biome': {'x0': X0, 'z0': X0, 'cell': 8.0, 'n': n8, 'path': 'biome.bin', 'channels': ['sable', 'neige', 'sec', 'mousse']},
         'rivers': rivers,
+        # voies posées par le générateur : tracé dense lissé et altitude de la plateforme (pour les Routes)
+        'ways': json.load(open(os.path.join(CACHE, 'ways.json'))),
         'bytes': total,
     }
     json.dump(meta_out, open(os.path.join(OUT, 'meta.json'), 'w'), separators=(',', ':'))

@@ -65,6 +65,15 @@ def flats(h, W, X, Z, strength=1.0):
         Wd = np.clip(3.0 * np.abs(h - g), 120, 320)
         w = smoothstep(R + 10 + Wd, R + 10, d) * strength
         h = h + (g - h) * w
+    # plats des pyramides (même calcul que PYRAMIDS de heightmap.ts)
+    de = next(r for r in W['WORLD_REGIONS'] if r['id'] == 'desert')
+    l = np.hypot(de['x'], de['z'])
+    ox, oz = de['x'] / l, de['z'] / l
+    for a, bx, bz, sz in ((230, -60, 70, 70), (300, 40, -10, 55), (200, 110, -90, 38)):
+        px, pz = de['x'] + ox * a + bx, de['z'] + oz * a + bz
+        d = np.hypot(X - px, Z - pz)
+        w = smoothstep(sz * 1.6 + 60, sz * 1.15, d) * strength
+        h = h + (de['ground'] - h) * w
     for s in W['SETTLEMENTS']:
         d = np.hypot(X - s['x'], Z - s['z']) + 8 * fbm(X / 60, Z / 60, 2, 43)
         Wd = np.clip(3.0 * np.abs(h - s['y']), 40, 220)
@@ -175,7 +184,7 @@ def rivers(h, W, X, Z, cell, n, keep_banks=True, dense=None):
     return h
 
 
-def water_mask(W, X, Z, cell, n, margin=6.0, dense=None):
+def water_mask(W, X, Z, cell, n, margin=6.0, dense=None, lake_edge=1.25):
     """1 sur les lits des rivières et les lacs (protégés de l'érosion)."""
     m = np.zeros(X.shape, dtype=np.float32)
     for rv in W['RIVERS']:
@@ -189,7 +198,7 @@ def water_mask(W, X, Z, cell, n, margin=6.0, dense=None):
         lx = dx * np.cos(a) + dz * np.sin(a)
         lz = -dx * np.sin(a) + dz * np.cos(a)
         e = np.hypot(lx / lk['rx'], lz / lk['rz'])
-        m = np.maximum(m, smoothstep(1.25, 1.05, e))
+        m = np.maximum(m, smoothstep(lake_edge, lake_edge - 0.2, e))
     return m
 
 

@@ -96,8 +96,9 @@ describe('outils', () => {
   });
   it('monde : 7 régions et des routes', () => {
     expect(REGIONS.length).toBe(7);
-    expect(nearestRegion(0, -800).id).toBe('paris');
-    expect(ROADS.length).toBe(12);
+    // TERRAIN & RELIEF : monde de 8 km (régions à 2,5-3,4 km, voies de WAYS en plus des six couloirs des cols)
+    expect(nearestRegion(-150, -2500).id).toBe('paris');
+    expect(ROADS.length).toBeGreaterThanOrEqual(12);
     expect(sampleRoad(ROADS[0]).length).toBeGreaterThan(50);
   });
 });

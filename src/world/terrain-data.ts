@@ -14,6 +14,8 @@ export interface TerrainMeta {
   biome: { x0: number; z0: number; cell: number; n: number; path: string; channels: string[] };
   /** tracés denses des rivières (méandres compris) : niveau d'eau y et largeur w à chaque point */
   rivers: { id: string; pts: [number, number][]; y: number[]; w: number[] }[];
+  /** voies de WAYS posées sur le relief : tracé lissé (tous les 8 m) et altitude de la plateforme */
+  ways?: { id: string; kind: string; surface: string; width: number; vehicles: boolean; pts: [number, number][]; y: number[] }[];
   bytes: number;
 }
 

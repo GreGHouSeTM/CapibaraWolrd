@@ -76,10 +76,10 @@ const inDetail = (x: number, z: number, m = 0) => x > DETAIL.x0 + m && x < DETAI
 
 function buildRoadSamples() {
   roadSamples.length = 0;
-  for (const road of ROADS) {
+  // 1. les six couloirs des cols de Capyville (ROADS[0..5] de layout.ts) : profil en long du couloir (pente ≤ 8 %)
+  for (const road of ROADS.slice(0, COL_ROUTES.length)) {
     const pts = sampleRoad(road, 5);
     let hs = pts.map(([x, z]) => Math.max(0.3, heightAt(x, z)));
-    // axes de Capyville : profil en long du couloir du col (pente ≤ 8 %), porté par le relief cuit
     const rt = COL_ROUTES.find((r) => Math.hypot(r.pts[0][0] - pts[0][0], r.pts[0][1] - pts[0][1]) < 1);
     if (rt) {
       for (let i = 0; i < pts.length; i++) {
@@ -87,7 +87,7 @@ function buildRoadSamples() {
         if (nn.d < 12) hs[i] = lerp(rt.y[nn.i], rt.y[nn.i + 1], nn.t) - 0.15;
       }
     }
-    // profil lissé (moyenne glissante sur 65 m) : la chaussée ne suit pas les bosses de 2 m du relief
+    // profil lissé (moyenne glissante sur 65 m)
     for (let pass = 0; pass < 3; pass++) {
       const n = hs.slice();
       for (let i = 0; i < hs.length; i++) {
@@ -98,6 +98,11 @@ function buildRoadSamples() {
       hs = n;
     }
     roadSamples.push({ pts, h: hs, width: road.width });
+  }
+  // 2. voies carrossables du monde, posées par le générateur (plateforme à pente bornée, meta.ways)
+  for (const w of terrainData!.meta.ways ?? []) {
+    if (!w.vehicles || w.width < 5) continue;
+    roadSamples.push({ pts: w.pts, h: w.y.map((y) => y - 0.05), width: w.kind === 'route' ? 9 : w.width + 1 });
   }
 }
 
