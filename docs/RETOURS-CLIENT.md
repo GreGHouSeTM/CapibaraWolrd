@@ -69,3 +69,14 @@ et surtout la qualité des assets et de la lumière (voir `docs/TRANCHE-HD.md`).
 ## 8. Menu (retour du 2026-11-19)
 « Nouvelle partie » donne l'impression de relancer tout le chargement. À vérifier : ne pas reconstruire le monde, seulement remettre
 la sauvegarde et le joueur à zéro ; sinon un écran de transition court. Petite tâche, à glisser dans la phase gameplay (ou avant si rapide).
+
+## 9. Ajouts souhaités par le client (2026-11-19, « pour le moment venu »)
+| Souhait | Phase prévue |
+| --- | --- |
+| **Lens flare** de certaines lumières : phares et feux de voitures, lanternes, soleil | 3 (graphismes) |
+| **Panneaux de signalisation** et **marquage au sol** des routes | 1 (routes du monde) pour le tracé, 3 pour le détail |
+| **Simulation de conduite** : boîte manuelle (mode au choix), **compteur de vitesse** en vue 3e personne, **mode 4x4**, franchissement d'obstacles, **dégâts de collision** (adaptés à l'âge : bosses, pare-chocs, pas de violence) | 2 (gameplay, avec la physique et la vue POV de `wip/conduite`) |
+| **Météo** : pluie, flaques, éclaboussures, boue, brouillard volumétrique, ombres des nuages, vent qui fait bouger arbres et herbe selon sa force | 3 (le vent des arbres et de l'herbe existe déjà, à piloter par la météo) |
+| **PNJ bipèdes** (debout, comme le héros) | 2 (avec le rig du capybara) |
+| **Mode survie** (option) : barres de faim, de soif et de vie, inventaire, magasins, cueillette | 2 (gameplay) |
+| **Traces de pas** dans le sable, la neige et la boue (et traces de roues) | 3 (effets) |
