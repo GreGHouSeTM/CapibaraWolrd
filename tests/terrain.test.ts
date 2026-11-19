@@ -1,12 +1,78 @@
 // Contrôles du relief de Capyville (spécialité Terrain & relief) : altitudes de la bible, place plate,
 // torrent encaissé, étang, pentes des axes et masquage des villes voisines.
 import { describe, it, expect, beforeAll } from 'vitest';
-import { bakeWorld, heightAt, roadSamples } from '../src/world/heightmap';
+import { heightAt, roadSamples } from '../src/world/heightmap';
+import { loadTestTerrain } from './helpers/terrain';
+import * as legacy from '../tools/terrain/legacy/heightmap';
+import { WAYS, WORLD_PEAKS, WORLD_REGIONS, LAKES } from '../src/world/world-map';
 import { streamInfo, streamWaterAt, streamBedAt } from '../src/world/valley';
 import { ALTITUDES, POND, STREAM, HOT_SPRING_POOL } from '../src/world/zones';
 import { REGIONS } from '../src/world/layout';
 
-beforeAll(() => bakeWorld(), 120000);
+beforeAll(async () => { await loadTestTerrain(); legacy.bakeWorld(); }, 180000);
+
+describe('raccord du monde de 8 km à Capyville', () => {
+  it('garde la vallée de Capyville identique au relief d’origine (grille de 2 m, r < 420 m)', () => {
+    let worst = 0, sum = 0, n = 0, wx = 0, wz = 0;
+    for (let x = -440; x <= 440; x += 2)
+      for (let z = -440; z <= 440; z += 2) {
+        if (Math.hypot(x, z) > 420) continue;
+        const d = Math.abs(heightAt(x, z) - legacy.heightAt(x, z));
+        sum += d; n++;
+        if (d > worst) { worst = d; wx = x; wz = z; }
+      }
+    // « au mètre près » ; en pratique quelques millimètres (quantification des tuiles de 2 m à l'est de x = 200)
+    expect(worst, `écart max en (${wx}, ${wz})`).toBeLessThan(1);
+    expect(sum / n).toBeLessThan(0.02);
+  });
+
+  it('pose les régions sur leur sol (cœur bâti à l’altitude de world-map.ts, ±1 m)', () => {
+    for (const r of WORLD_REGIONS) {
+      if (r.id === 'hub') continue;
+      // le centre peut tomber dans un lit de rivière (Paris, Londres) : on regarde la médiane d'un anneau de 120 m
+      const hs: number[] = [];
+      for (let a = 0; a < 6.28; a += 0.2) hs.push(heightAt(r.x + Math.cos(a) * 120, r.z + Math.sin(a) * 120));
+      hs.sort((a, b) => a - b);
+      expect(Math.abs(hs[hs.length >> 1] - r.ground), r.id).toBeLessThan(1.5);
+    }
+  });
+
+  it('atteint les grands repères (sommets à ±8 %)', () => {
+    for (const id of ['aurore', 'neiges', 'fuji', 'dormeur', 'dome-guetteur', 'butte-arbre']) {
+      const p = WORLD_PEAKS.find((q) => q.id === id)!;
+      let top = -Infinity;
+      for (let dx = -60; dx <= 60; dx += 4) for (let dz = -60; dz <= 60; dz += 4) top = Math.max(top, heightAt(p.x + dx, p.z + dz));
+      expect(Math.abs(top - p.y) / p.y, `${id} : ${top.toFixed(0)} m pour ${p.y} m`).toBeLessThan(0.08);
+    }
+  });
+
+  it('creuse les lacs sous leur niveau d’eau, avec des rives émergées', () => {
+    for (const l of LAKES) {
+      if (l.dry) continue;
+      expect(heightAt(l.x, l.z), l.id).toBeLessThan(l.y - 0.5);
+    }
+  });
+
+  it('garde les voies praticables : pente le long du tracé ≤ 33° (sentiers de plaine et voies carrossables)', () => {
+    // sentiers de crête et de sommet (couronne de Capyville, Fuji, Pic de l'Aurore…) : marches et lacets à poser par les Routes
+    const plain = new Set(['sentier-douaniers', 'sentier-canyon', 'sentier-jungle', 'sentier-dome']);
+    for (const w of WAYS) {
+      if (!(w.vehicles || plain.has(w.id))) continue;
+      let ok = 0, n = 0;
+      for (let i = 0; i < w.pts.length - 1; i++) {
+        const [ax, az] = w.pts[i], [bx, bz] = w.pts[i + 1];
+        const l = Math.hypot(bx - ax, bz - az);
+        for (let s = 0; s < l - 10; s += 10) {
+          const t0 = s / l, t1 = (s + 10) / l;
+          const g = Math.abs(heightAt(ax + (bx - ax) * t1, az + (bz - az) * t1) - heightAt(ax + (bx - ax) * t0, az + (bz - az) * t0)) / 10;
+          n++;
+          if (g <= 0.65) ok++;
+        }
+      }
+      expect(ok / n, w.id).toBeGreaterThan(0.8);
+    }
+  });
+});
 
 describe('relief de Capyville', () => {
   it('respecte les altitudes de contrôle (±0,3 m)', () => {

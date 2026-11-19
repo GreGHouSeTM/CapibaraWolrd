@@ -1,6 +1,7 @@
 // Assemblage du monde : relief, terrain, eau, végétation, routes et régions.
 import * as THREE from 'three';
 import { bakeWorld, heightAt } from './heightmap';
+import { loadTerrainData } from './terrain-data';
 import { groundAt, resolveCircle } from './physics';
 import { bakeGrassMask, Grass } from './grass';
 import { createTerrain, createTerrainMaterial } from './terrain';
@@ -34,6 +35,9 @@ export interface World {
 const frame = () => new Promise<void>((r) => setTimeout(r, 0));
 
 export async function buildWorld(scene: THREE.Scene, q: QualityPreset, ctx: Omit<BuildCtx, 'forest'>, progress: (p: number, label: string) => void): Promise<World> {
+  // --- TERRAIN & RELIEF : relief cuit hors ligne (tuiles de 2 m), chargé avant tout le reste
+  progress(0.16, 'Chargement des montagnes et des vallées…');
+  await loadTerrainData(undefined, (p) => progress(0.16 + p * 0.06, 'Chargement des montagnes et des vallées…'));
   progress(0.22, 'Sculpture des montagnes et des dunes…');
   await frame();
   bakeWorld();

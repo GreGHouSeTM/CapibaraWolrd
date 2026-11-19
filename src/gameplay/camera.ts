@@ -22,7 +22,8 @@ export class CameraRig {
   override: { pos: THREE.Vector3; look: THREE.Vector3 } | null = null;
 
   constructor(aspect: number) {
-    this.camera = new THREE.PerspectiveCamera(this.baseFov, aspect, 0.15, 3200);
+    // TERRAIN & RELIEF : monde de 8 km, l'horizon est à plus de 5 km (la brume fond le lointain)
+    this.camera = new THREE.PerspectiveCamera(this.baseFov, aspect, 0.15, 9000);
   }
 
   addShake(a: number) {

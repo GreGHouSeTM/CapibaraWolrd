@@ -56,6 +56,15 @@ const VIEWS = {
   'hd-ensemble': { cam: [42, 4, 84], look: [64, 1, 66], hour: 6.75, ground: true },
   'hd-detail': { cam: [53.5, 1.1, 41], look: [51, 0.8, 44], hour: 9.5, ground: true },
   'hd-nuit': { cam: [48, 1.5, 63], look: [62, 0.4, 71], hour: 21.5, ground: true },
+  // --- TERRAIN & RELIEF : monde de 8 km (ground = hauteurs comptées au-dessus du relief)
+  'monde-fuji': { cam: [0, 1.6, 12], look: [305, -160, 2899], hour: 7.5, ground: true },
+  'monde-lucioles': { cam: [300, 1.6, 520], look: [-218, -8, 2452], hour: 7.5, ground: true, tp: [300, 515] },
+  'monde-pente': { cam: [-1650, 1.4, 760], look: [-1950, 40, 620], hour: 10, ground: true, tp: [-1650, 755] },
+  'monde-transition': { cam: [1650, 30, 800], look: [2350, 0, 1350], hour: 16, ground: true, tp: [1650, 795] },
+  'monde-givre': { cam: [-2050, 1.6, 1320], look: [-2600, -10, 1900], hour: 16.5, ground: true, tp: [-2050, 1315] },
+  'monde-desert': { cam: [2450, 2, 1150], look: [3000, 0, 1300], hour: 17, ground: true, tp: [2450, 1145] },
+  'monde-pano': { cam: [900, 1500, 4300], look: [-200, 0, -300], hour: 9, tp: [700, 3000] },
+  'monde-givre-air': { cam: [-1200, 700, 1500], look: [-2300, 300, 500], hour: 9, tp: [-1250, 1450] },
 };
 module.exports = { VIEWS };
 if (require.main === module) (async () => {
@@ -108,6 +117,7 @@ if (require.main === module) (async () => {
       await page.evaluate((v) => {
         const g = window.__game; const P = g.player.pos.constructor;
         g.rig.override = null;
+        if (v.cam && v.tp) g.teleport(new P(v.tp[0], 9, v.tp[1]), '');
         if (v.cam) { g.rig.override = { pos: new P(...v.cam), look: new P(...v.look) }; g.rig.camera.position.set(...v.cam); }
         else { g.teleport(new P(v.pos[0], 9, v.pos[1]), ''); g.player.yaw = v.yaw; g.rig.yaw = v.yaw; g.rig.pitch = v.pitch; g.rig.dist = v.dist; }
         if (v.testLights && !g.__testLights && g.lights) {
