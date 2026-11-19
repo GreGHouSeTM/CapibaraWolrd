@@ -114,3 +114,18 @@ Rien ne demande l'arbitrage du client pour l'instant. Prochaine vérification da
 - En pause, sauvegardés : `wip/hd-modelisation` (pipeline Blender HD, façade très réussie), `wip/hd-rendu` (ombres 2 cascades + HDRI ; **erreur GPU 1282
   intermittente non diagnostiquée**, ne pas fusionner avant), `wip/eau-2` (torrent corrigé), `wip/decor`.
 - En cours : le Lead écrit la bible du monde 8 km (`wip/bible-monde`), avec terrain en clipmaps GPU, érosion hors ligne et triplanar.
+
+### 2026-11-19 22:10 UTC — LOCAL
+- **Bible du monde validée en bloc par le client** (6 décisions, dans PASSATION.md §2) et fusionnée (`2171281`).
+- **Poussé sur `main` (`06ae26c`) : terrain 8 km** (`wip/terrain-8km`). Île de 8 × 8 km cuite hors ligne (`tools/terrain/gen_terrain.py` : érosion par gouttes
+  + thermique, numpy/numba), 256 tuiles 16 bits de 512 m + cartes dérivées (21 Mo dans `public/assets/terrain/`, chemins relatifs, compatibles Pages),
+  rendu en clipmaps GPU (1 appel), matériau triplanaire 9 couches. Capyville recopiée à l'identique (test vitest, écart moyen < 2 cm ; captures
+  identiques). 83,8 % des terres praticables (≤ 33°). Régions replacées, 13 voies posées par le générateur.
+- Tests : tsc, vitest 43/43, build, combat, village, accès (0 blocage) verts, aucune erreur console.
+- FPS Moyenne 1600 × 900, main et terrain mesurés côte à côte : place 29,2 → 29,1 ; departaube 30,5 → 30,1 ; hd-rotenburo 35,1 → 33,2 ;
+  lointain 15,8 → 16,2 ; monde-japon 42,9 ; monde-sommet 24,2. Pas de régression, pas de gain (chiffres plus bas qu'hier : deux serveurs Vite tournaient).
+- Limites connues : rivières et lacs en lits secs (l'eau ne connaît que la mer) ; voies de montagne sans lacets (10 à 50 % sous 8 %) ; brume 5 à 7 fois
+  plus légère (le Fuji visible à 2,9 km, mais l'aube du village a perdu du mystère et les flancs lointains bruns nus se voient) ; dunes trop régulières ;
+  Paris et Londres en grille ; hors Capyville le monde est encore vide (pas de végétation posée).
+- Prochaines spécialités phase 1 : Végétation (via `surfaceAt` / `biomeAt`), Eau (rubans et lacs depuis `meta.json`), Routes (lacets, ponts).
+- Grille qualité : rien de nouveau coché (le monde extérieur n'est pas encore au niveau).
