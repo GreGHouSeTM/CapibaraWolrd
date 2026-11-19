@@ -70,7 +70,17 @@ const VIEWS = {
   'monde-dormeur': { cam: [176, 2, -168], look: [1300, 150, 100], hour: 9, ground: true },
   'monde-sommet': { cam: [-2290, 4, 455], look: [-300, 150, 600], hour: 9.5, ground: true, tp: [-2280, 460] },
   'monde-givre-air': { cam: [-1200, 700, 1500], look: [-2300, 300, 500], hour: 9, tp: [-1250, 1450] },
+  // --- TERRAIN & RELIEF v2 : cas signalés par le client (captures bug-7 à bug-14), de jour ; copies « -nuit » ajoutées plus bas
+  'qa-pole-route': { cam: [-2440, 3, 1900], look: [-2620, 0, 2120], hour: 10, ground: true, tp: [-2440, 1895] },
+  'qa-pole-col': { cam: [-2330, 3, 1560], look: [-2420, 0, 1800], hour: 10, ground: true, tp: [-2330, 1555] },
+  'qa-pole-air': { cam: [-2200, 260, 1650], look: [-2450, 0, 1900], hour: 10, tp: [-2250, 1700] },
+  'qa-fuji': { cam: [120, 2, 2450], look: [305, 200, 2899], hour: 10, ground: true, tp: [120, 2445] },
+  'qa-fuji-flanc': { cam: [470, 2, 2560], look: [330, 120, 2860], hour: 10, ground: true, tp: [470, 2555] },
+  'qa-canyon': { cam: [1560, 6, 2060], look: [1700, -40, 2300], hour: 10, ground: true, tp: [1560, 2055] },
+  'qa-givre': { cam: [-1880, 2, 900], look: [-2300, 300, 450], hour: 10, ground: true, tp: [-1880, 895] },
+  'qa-givre-air': { cam: [-1600, 420, 1050], look: [-2300, 350, 450], hour: 10, tp: [-1650, 1000] },
 };
+for (const k of Object.keys(VIEWS)) if (k.startsWith('qa-')) VIEWS[k + '-nuit'] = { ...VIEWS[k], hour: 22.5 };
 module.exports = { VIEWS };
 if (require.main === module) (async () => {
   const [port, out, q, list] = process.argv.slice(2);
