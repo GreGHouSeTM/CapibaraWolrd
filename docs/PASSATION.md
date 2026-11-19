@@ -56,28 +56,30 @@ arbres provisoires dans le village tant que la végétation n'est pas fusionnée
 sur les vues larges (budget 700 ; ~1 000 au sol, plus en vue aérienne) ; escalier des mille torii : la pente du terrain est à reprendre ;
 plus de texture de dalles dédiée (on utilise `stonewall`).
 
-## 6. Prochaines étapes (ordre prévu)
-0. **Tranche verticale niveau PS5** (`docs/TRANCHE-HD.md`), prioritaire : elle fixe les outils et la qualité appliqués ensuite partout.
-   Les chantiers Eau (`wip/eau-2`, torrent corrigé) et Décor (`wip/decor`, générateur d'accessoires) reprendront à ce nouveau niveau.
-   **Ordre décidé par le client (2026-11-19) après la tranche HD : 1) Optimisation (occlusion, HLOD, streaming…), 2) Relief.**
-   Retours de test du client (2026-11-19) : voir `docs/RETOURS-CLIENT.md` (voiture, vue POV, barrières, montagnes, transitions, villes, interior mapping, optimisation AAA).
-1. ~~Corriger le voile blanc puis pousser la végétation~~ (fait) ; finir et intégrer l'Eau.
-2. Décor (bande devant les façades, place, enseignes ; pièces d'or), Effets (fumée, vapeur, pétales, lucioles ; brancher `setHitFxHandler` du combat), Routes (chemins de terre en campagne), Ennemis & faune.
-3. **Rig & animation Blender du capybara** (postures debout / quatre pattes).
-4. **Phase Optimisation** (demandée par le client le 2026-11-18) : gagner en FPS et en fluidité sans perte visuelle. Constat des
-   mesures (`tools/perf.cjs`) : ~25-30 ms par image en Moyenne quelle que soit la résolution, donc limite côté processeur
-   (≈ 950 appels de dessin au sol, ≈ 4 900 en vue lointaine, simulation) plutôt que côté carte graphique. Pistes : fusion du décor
-   statique par cellule et par matériau, instanciation, LOD et imposteurs du décor lointain, ombres limitées aux objets proches.
-5. Audio, **passe dédiée Lumière & ombres** (ombres de la vallée et des montagnes, AO cuite, ombres de contact, reflets).
-6. **Gameplay, quêtes et histoire** (souhait du client, 2026-11-18) : **pas de missions basiques** du type « ramasser les pièces » ;
-   un vrai système de quêtes intéressantes (chaînes de quêtes, choix, énigmes, personnages attachants) porté par une histoire et un lore
-   cohérents avec la bible (§1). **Fil rouge du jeu : les collectionnables « Squishy dumplings »** : tendance actuelle chez les enfants, des squishies
-   en forme de brioches vapeur asiatiques (bao / manjū) aux plis du dessus, petit visage kawaii (yeux noirs, joues roses), vendus dans
-   un **panier vapeur en bambou** et souvent en **boîte mystère**. Variantes de matière qui font naturellement la rareté : mat pastel
-   (basique), nacré ou pailleté (rare), arc-en-ciel (épique), doré ou spécial (légendaire)… Designs **originaux** à créer (aucun emballage,
-   logo ni personnage de marque copié). Lien naturel avec Capyville : les paniers vapeur de manjū de la Grand-Rue (bible §8.1).
-   À préciser avec le client : liste exacte des raretés, obtention (quêtes, cachettes, échanges, paniers mystère), album, récompenses. Le Lead écrira une bible gameplay avant toute production.
-7. Chantier **Monde 8 km** (Lead → Terrain → Végétation et points d'intérêt → Routes → Eau → Lumière).
+## 6. Feuille de route (décidée par le lead le 2026-11-19, sur l'avis du client)
+Principe des grands open worlds : **d'abord le monde et la sensation de liberté, puis ce qu'on y fait, puis le rendu final, puis le
+peaufinage zone par zone.** On garde à chaque étape une discipline de performance (mesures `tools/perf.cjs`), mais pas de travail de finition
+avant que le monde et le gameplay soient en place.
+
+**Phase 1 — Le monde (prioritaire).** Cible ressentie : « se promener librement » comme dans les grands westerns open world, sans rien copier.
+1. **Bible du monde** par le Lead : carte de 8 × 8 km (régions, terres sauvages, biomes et transitions progressives de 300 à 800 m,
+   grands repères visibles de loin, réseau de routes et de sentiers, rivières et lacs, points d'intérêt, rythme découverte → point de vue → récompense),
+   à valider par le client.
+2. **Terrain 8 km** : relief à grande échelle avec érosion (pentes praticables, falaises lisibles, ravines, replats), **streaming** par morceaux,
+   LOD du terrain, occlusion et culling (l'optimisation nécessaire à un monde de cette taille se fait ici).
+3. Harmonisation : végétation écologique (pente, altitude, humidité), routes et sentiers, rivières, hameaux et points d'intérêt ;
+   villes moins « carrées » ; Capyville raccordée au monde.
+**Phase 2 — Le gameplay.** Bible gameplay et lore ; système de quêtes (pas de « ramasser les pièces ») ; collectionnables Squishy dumplings
+(voir plus bas) ; mini-jeux ; véhicules agréables (physique, vue POV — `docs/RETOURS-CLIENT.md`) ; rig et animations du capybara ; faune et ennemis.
+**Phase 3 — Effets et graphismes.** Reprise de la tranche HD (`docs/TRANCHE-HD.md`, branches `wip/hd-modelisation`, `wip/hd-rendu`),
+eau (`wip/eau-2`), décor (`wip/decor`), effets, interior mapping et intérieurs explorables, audio, passe lumière et ombres.
+**Phase 4 — Peaufinage zone par zone** (Capyville d'abord, puis chaque région).
+
+Rappels utiles des souhaits du client pour la phase 2 : **Collectionnables « Squishy dumplings »** : squishies en forme de brioches vapeur (bao / manjū)
+aux plis du dessus, visage kawaii, vendus dans un **panier vapeur en bambou**, souvent en **boîte mystère** ; rareté portée par la matière
+(mat pastel basique, nacré ou pailleté rare, arc-en-ciel épique, doré légendaire…) ; designs **originaux** (aucune marque copiée) ;
+lien avec les paniers de manjū de la Grand-Rue (bible §8.1). À préciser avec le client : raretés, obtention, album, récompenses.
+Historique : la végétation est intégrée (2026-11-18) ; la tranche HD, l'eau, le décor et la conduite ont été mis en pause le 2026-11-19 au profit du monde.
 
 ## 7. Méthode et outils
 - Lancer le jeu : `npm install`, `npm run dev` (http://localhost:5173). Tests : `npx tsc --noEmit -p .`, `npx vitest run`, `npm run build`.
