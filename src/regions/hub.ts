@@ -85,6 +85,7 @@ export async function buildHub(ctx: BuildCtx, progress: (p: number, label?: stri
   await frame();
 
   // ------------------------------------------------------------------ ponts franchissables (walk.path du manifeste)
+  const stepMat = std(0x8a8478, 0.9);
   for (const br of BRIDGES) {
     const info = vb.manifest.buildings['pont-' + br.id];
     if (!info?.walk || !info.placement) continue;
@@ -103,12 +104,44 @@ export async function buildHub(ctx: BuildCtx, progress: (p: number, label?: stri
       const top = base + Math.max(yAt(lx), yAt(Math.min(x1, lx + sl))) + 0.02;
       const [wx, wz] = localToWorld(px, pz, yaw, mx, 0);
       addBox(wx, wz, sl + 0.05, w, top - 0.6, top, -yaw, true);
-      if (rails && lx > x0 + 0.6 && lx < x1 - 1) for (const s of [-1, 1]) {
+      // --- CONDUITE & ACCÈS --- garde-corps interrompus sur 1,6 m à chaque tête de pont (entrée dégagée)
+      if (rails && lx > x0 + 1.6 && lx < x1 - 1.6) for (const s of [-1, 1]) {
         const [rx, rz] = localToWorld(px, pz, yaw, mx, s * (w / 2 + 0.08));
         addBox(rx, rz, sl + 0.05, 0.14, top - 0.3, top + 1.0, -yaw, false, 'thin');
       }
+      // --- CONDUITE & ACCÈS --- près des têtes (sans garde-corps), une marche de pierre de chaque côté du tablier
+      // quand il dépasse la berge de 0,4 à 1,1 m : on peut y monter depuis un chemin de rive qui longe le pont
+      if (lx < x0 + 1.6 || lx > x1 - 1.6) for (const s of [-1, 1]) {
+        const [ox, oz] = localToWorld(px, pz, yaw, mx, s * (w / 2 + 1.4));
+        const gnd = heightAt(ox, oz), dh = top - gnd;
+        if (dh < 0.4 || dh > 1.1) continue;
+        // deux marches (≤ 0,37 m chacune) : la plus basse à l'extérieur
+        for (const [off, f] of [[w / 2 + 0.4, 2 / 3], [w / 2 + 1.2, 1 / 3]] as const) {
+          const [sx, sz] = localToWorld(px, pz, yaw, mx, s * off);
+          const st = gnd + dh * f;
+          addBox(sx, sz, sl + 0.05, 0.8, gnd - 0.4, st, -yaw, true);
+          b.addAt(new THREE.BoxGeometry(sl + 0.05, st - gnd + 0.4, 0.8).translate(0, (st + gnd - 0.4) / 2, 0), stepMat, sx, 0, sz, yaw);
+        }
+      }
     }
     paveRect(px, pz, x1 - x0 + 2, w + 1, -yaw);
+    // --- CONDUITE & ACCÈS --- marches d'accès en pierre quand le tablier dépasse la berge de plus de 0,4 m
+    // (Dalle du Saut, Gué, Passerelle des Brumes…) : marches de 0,28 m au plus, jusqu'au terrain
+    for (const end of [0, 1]) {
+      const ex = end ? x1 : x0, dir = end ? 1 : -1;
+      let top = base + yAt(ex) + 0.02;
+      for (let k = 0; k < 12; k++) {
+        const lx = ex + dir * (0.2 + k * 0.4);
+        const [wx, wz] = localToWorld(px, pz, yaw, lx, 0);
+        // terrain le plus bas sous la marche (on peut arriver de biais, depuis une berge plus basse)
+        let ground = heightAt(wx, wz);
+        for (const s of [-1, 1]) { const [qx, qz] = localToWorld(px, pz, yaw, lx, s * (w / 2 + 0.3)); ground = Math.min(ground, heightAt(qx, qz)); }
+        if (top - ground < 0.4) break;
+        top = Math.max(ground + 0.05, top - 0.28);
+        addBox(wx, wz, 0.42, w + 0.6, ground - 0.5, top, -yaw, true);
+        b.addAt(new THREE.BoxGeometry(0.42, top - ground + 0.5, w + 0.6).translate(0, (top + ground - 0.5) / 2, 0), stepMat, wx, 0, wz, yaw);
+      }
+    }
   }
 
   // ------------------------------------------------------------------ lanternes, noren et accroches des bâtiments

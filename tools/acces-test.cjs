@@ -59,7 +59,7 @@ const { launch } = require('./browser.cjs');
       };
       /**
        * Marche le long de `pts`. Renvoie les blocages { at, culprits }.
-       * Un point est « atteint » à moins de 1,2 m ; s'il ne se rapproche plus pendant 1,2 s, c'est un blocage.
+       * Un point est « atteint » à moins de 0,7 m ; s'il ne se rapproche plus pendant 1,2 s, c'est un blocage.
        */
       T.walk = (pts, opts = {}) => {
         const g = window.__game; const V = g.player.pos.constructor;
@@ -78,7 +78,7 @@ const { launch } = require('./browser.cjs');
           const p = g.player.pos;
           const [x, z] = P[k];
           const d = Math.hypot(x - p.x, z - p.z);
-          if (d < 1.2) { k++; best = Infinity; stall = 0; continue; }
+          if (d < 0.7) { k++; best = Infinity; stall = 0; continue; }
           if (d < best - 0.05) { best = d; stall = 0; } else stall += dt;
           if (stall > 1.2) {
             const y = g.player.pos.y;
@@ -162,10 +162,36 @@ const { launch } = require('./browser.cjs');
       }
       return out;
     });
+    // Un tracé de PATHS est une polyligne grossière : là où il emprunte un pont (à moins de 1,5 m de son axe, entre
+    // ses deux têtes), on suit l'axe du pont et on y entre par sa tête (point à 2 m dans l'axe), comme le ferait un joueur.
+    await page.evaluate(() => {
+      const T = window.__acces;
+      const hit = (x, z) => {
+        for (const b of T.Z.BRIDGES) {
+          const dx = b.b[0] - b.a[0], dz = b.b[1] - b.a[1], l = Math.hypot(dx, dz);
+          const t = ((x - b.a[0]) * dx + (z - b.a[1]) * dz) / (l * l);
+          if (t < 0.05 || t > 0.95) continue;
+          const px = b.a[0] + dx * t, pz = b.a[1] + dz * t;
+          if (Math.hypot(x - px, z - pz) < 1.5) return { b, t, p: [px, pz], out: (s) => [s ? b.b[0] + (dx / l) * 2 : b.a[0] - (dx / l) * 2, s ? b.b[1] + (dz / l) * 2 : b.a[1] - (dz / l) * 2] };
+        }
+        return null;
+      };
+      T.onBridges = (pts) => {
+        const out = [];
+        let cur = null;
+        for (const [x, z] of T.sample(pts, 1)) {
+          const h = hit(x, z);
+          if (h && (!cur || cur.b !== h.b)) { if (cur) out.push(cur.out(cur.t > 0.5)); out.push(h.out(h.t > 0.5)); cur = h; }
+          if (!h && cur) { out.push(cur.out(cur.t > 0.5)); cur = null; }
+          if (h) { cur.t = h.t; out.push(h.p); } else out.push([x, z]);
+        }
+        return out;
+      };
+    });
     let total = 0;
     for (const it of items) {
       if (filter && !it.id.includes(filter)) continue;
-      const r = await page.evaluate((it) => window.__acces.walk(it.pts), it);
+      const r = await page.evaluate((it) => window.__acces.walk(it.kind === 'chemin' ? window.__acces.onBridges(it.pts) : it.pts), it);
       total += r.blocks.length;
       const swim = it.kind === 'pont' && r.swim > 0.3 ? ` — NAGE ${r.swim} s` : r.swim > 0 ? ` (nage ${r.swim} s)` : '';
       ok(!r.blocks.length && !(it.kind === 'pont' && r.swim > 0.3), `${it.kind} ${it.id} (${it.name}) : ${r.blocks.length} blocage(s) en ${r.time} s${swim}`);
