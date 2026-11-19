@@ -1,5 +1,8 @@
 // Préréglages graphiques.
-export type Quality = 'low' | 'medium' | 'high';
+// « max » (preuve next-gen) : au-dessus de « high ». Sur le monde principal, max = high + réglages sans risque
+// (occlusion ambiante pleine résolution, brume et rayons plus fins) ; la zone ?demo=foret y active tout son rendu coûteux.
+export type Quality = 'low' | 'medium' | 'high' | 'max';
+export const QUALITIES: Quality[] = ['low', 'medium', 'high', 'max'];
 
 export interface QualityPreset {
   pixelRatio: number;
@@ -39,5 +42,9 @@ export const PRESETS: Record<Quality, QualityPreset> = {
   high: {
     pixelRatio: Math.min(2, window.devicePixelRatio || 1), shadowSize: 4096, shadowExtent: 95, ao: true, bloom: true, grass: 130000, grassPatch: 90, lodDist: 520, treeDensity: 1, smaa: true,
     dynLights: 8, fogSteps: 14, godRays: 56, lightPools: 1, maxPools: 320, aoMode: 'Medium',
+  },
+  max: {
+    pixelRatio: Math.min(2, window.devicePixelRatio || 1), shadowSize: 4096, shadowExtent: 95, ao: true, bloom: true, grass: 130000, grassPatch: 90, lodDist: 520, treeDensity: 1, smaa: true,
+    dynLights: 8, fogSteps: 16, godRays: 64, lightPools: 1, maxPools: 320, aoMode: 'High',
   },
 };

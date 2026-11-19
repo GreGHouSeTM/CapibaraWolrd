@@ -251,12 +251,12 @@ export class UI {
     const s = { ...save.settings };
     const p = this.open('settings', `<h2>Réglages</h2>
       <div class="row"><span>Qualité graphique</span><span>
-        <button class="btn small" data-q="low">Basse</button> <button class="btn small" data-q="medium">Moyenne</button> <button class="btn small" data-q="high">Haute</button></span></div>
+        <button class="btn small" data-q="low">Basse</button> <button class="btn small" data-q="medium">Moyenne</button> <button class="btn small" data-q="high">Haute</button> <button class="btn small" data-q="max">Max</button></span></div>
       <div class="row"><span>Musique</span><input type="range" min="0" max="1" step="0.05" id="mus" value="${s.music}"></div>
       <div class="row"><span>Effets sonores</span><input type="range" min="0" max="1" step="0.05" id="sfx" value="${s.sfx}"></div>
       <div class="row"><span>Sensibilité de la souris</span><input type="range" min="0.3" max="2.5" step="0.05" id="sens" value="${s.sensitivity}"></div>
       <div class="row"><span>Inverser l’axe vertical</span><input type="checkbox" id="inv" ${s.invertY ? 'checked' : ''}></div>
-      <div class="muted" style="font-size:15px">La qualité « Haute » est plus belle mais demande un ordinateur puissant. Le changement de qualité recharge la page.</div>
+      <div class="muted" style="font-size:15px">La qualité « Haute » est plus belle mais demande un ordinateur puissant ; « Max » pousse tous les effets (carte graphique récente). Le changement de qualité recharge la page.</div>
       <div style="margin-top:16px;text-align:right"><button class="btn" id="back">Retour</button></div>`);
     const mark = () => p.querySelectorAll<HTMLButtonElement>('[data-q]').forEach((b) => (b.style.background = b.dataset.q === s.quality ? 'var(--gold)' : ''));
     mark();

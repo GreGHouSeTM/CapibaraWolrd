@@ -20,13 +20,16 @@ const { VIEWS } = require('./shot.cjs');
       const errs = [];
       page.on('pageerror', (e) => errs.push('PAGEERROR ' + e.message));
       page.on('console', (m) => { if (m.type() === 'error') errs.push('console.error ' + m.text()); });
-      await page.goto(`http://localhost:${port}/?manual&q=${q}`, { waitUntil: 'load' });
+      // les vues d'une même page partagent la même requête (ex. `demo=foret`, voir shot.cjs) : la première fait foi
+      const v0 = VIEWS[(list || 'departaube').split(',')[0]] || {};
+      await page.goto(`http://localhost:${port}/?manual&q=${q}${v0.query ? '&' + v0.query : ''}`, { waitUntil: 'load' });
       if (!rows.length) console.log('rendu :', await rendererName(page), `· ${W}×${H} · ${N} images par vue`);
       await page.waitForFunction(() => window.__game && window.__game.state === 'title', null, { timeout: 300000 });
       await page.evaluate(() => { localStorage.clear(); window.__game.startPlay(); });
       for (const k of (list || 'departaube').split(',')) {
         const v = VIEWS[k];
         if (!v || v.demo) { console.log('vue inconnue ou démo', k); continue; }
+        if ((v.query || '') !== (v0.query || '')) { console.log('vue', k, ': requête différente de la première vue, ignorée'); continue; }
         if (v.ground) {
           // vue posée sur le relief (voir shot.cjs)
           const r = await page.evaluate(async (v) => {
