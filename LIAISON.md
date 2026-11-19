@@ -103,3 +103,14 @@ Remarques et pistes :
 6. Rappel méthode : ne fusionner `wip/eau-2` et `wip/decor` dans `main` qu'après captures, tests `combat-test` / `village-test` et mesure de FPS.
 
 Rien ne demande l'arbitrage du client pour l'instant. Prochaine vérification dans environ 5 h.
+
+### 2026-11-19 (fin de session) — LOCAL
+- **Poussé sur `main`** : corrections d'accès de `wip/conduite` (15 blocages → 0 : garde-corps et barrières interrompus aux têtes de pont et croisements,
+  bornes déplacées, marches aux ponts surélevés ; nouveau `tools/acces-test.cjs`). Tests : tsc, vitest 37/37, build, combat, village, accès verts.
+  FPS Moyenne 1600 × 900 : place 35,3, departaube 37,5, hd-rotenburo 42.
+- **Décisions du client** (dans PASSATION.md) : on reste sur Three.js mais cible « niveau PS5 » ; **feuille de route : monde → gameplay → graphismes →
+  peaufinage** ; capybara = mascotte debout au pelage réaliste ; accessoires, tenues et véhicules débloqués par les quêtes.
+- Retours de test du client : `docs/RETOURS-CLIENT.md` (voiture, POV, montagnes, transitions, villes, interior mapping, optimisation AAA, menu).
+- En pause, sauvegardés : `wip/hd-modelisation` (pipeline Blender HD, façade très réussie), `wip/hd-rendu` (ombres 2 cascades + HDRI ; **erreur GPU 1282
+  intermittente non diagnostiquée**, ne pas fusionner avant), `wip/eau-2` (torrent corrigé), `wip/decor`.
+- En cours : le Lead écrit la bible du monde 8 km (`wip/bible-monde`), avec terrain en clipmaps GPU, érosion hors ligne et triplanar.
