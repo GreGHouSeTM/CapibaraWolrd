@@ -59,6 +59,7 @@ plus de texture de dalles dédiée (on utilise `stonewall`).
 ## 6. Prochaines étapes (ordre prévu)
 0. **Tranche verticale niveau PS5** (`docs/TRANCHE-HD.md`), prioritaire : elle fixe les outils et la qualité appliqués ensuite partout.
    Les chantiers Eau (`wip/eau-2`, torrent corrigé) et Décor (`wip/decor`, générateur d'accessoires) reprendront à ce nouveau niveau.
+   Retours de test du client (2026-11-19) : voir `docs/RETOURS-CLIENT.md` (voiture, vue POV, barrières, montagnes, transitions, villes, interior mapping, optimisation AAA).
 1. ~~Corriger le voile blanc puis pousser la végétation~~ (fait) ; finir et intégrer l'Eau.
 2. Décor (bande devant les façades, place, enseignes ; pièces d'or), Effets (fumée, vapeur, pétales, lucioles ; brancher `setHitFxHandler` du combat), Routes (chemins de terre en campagne), Ennemis & faune.
 3. **Rig & animation Blender du capybara** (postures debout / quatre pattes).
