@@ -52,3 +52,16 @@ au sol, ≈ 4 900 sur la vue lointaine). Plan, par gain attendu :
 7. Plus tard : **WebGPU** (le nouveau moteur de rendu de Three.js) qui permet le dessin indirect et le culling sur la carte graphique,
    comme les moteurs AAA récents.
 Chantier : **Optimisation** (prévu au plan, étape 4 de PASSATION.md), à lancer dès la tranche HD validée, car le niveau PS5 en a besoin.
+
+## 7. Conseils techniques transmis par le client (proposition d'une autre IA, 2026-11-19) et décision du chef de projet
+| Proposition | Où on en est | Décision |
+| --- | --- | --- |
+| Terrain en clipmaps ou quadtree LOD sur GPU, heightmap lue dans le vertex shader | morceaux CPU de 200 m à 2 niveaux + tuiles détaillées au village | **adopté pour le terrain 8 km** (clipmaps GPU, heightmap 16 bits streamée par tuiles) |
+| Triplanar mapping + splatting selon pente et altitude | splat par pente sans triplanar : textures étirées sur les pentes fortes | **adopté** (roche triplanar, mélange par hauteur des matières PBR) |
+| Heightmap avec érosion générée dans Gaea ou Blender | relief procédural calculé en JS, sans érosion | **adopté sur le principe**, avec notre propre simulation d'érosion hors ligne (pas de logiciel à installer, relançable, paramétrée) |
+| Végétation massive en InstancedMesh, vent, frustum culling | déjà en place (11 347 arbres, herbe, susuki) | gardé ; ajouter culling par cellule et imposteurs plus loin |
+| Ciel procédural, brouillard d'altitude, ombres en cascade, ACES, SSAO, bloom | déjà en place ; ombres en cascade faites sur `wip/hd-rendu` | gardé |
+| Assets Poly Haven ou Fab/Megascans | Poly Haven (CC0) utilisé | Poly Haven en priorité ; Fab seulement après vérification de la licence de chaque asset (dépôt public) |
+| WebGPU, React Three Fiber | WebGL2, Three.js direct | WebGPU plus tard (phase optimisation) ; pas de React Three Fiber (aucun gain pour nous) |
+Ce que la proposition ne couvre pas et qui reste nécessaire : streaming des objets, occlusion culling, HLOD, budget d'appels de dessin,
+et surtout la qualité des assets et de la lumière (voir `docs/TRANCHE-HD.md`).
