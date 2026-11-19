@@ -711,7 +711,7 @@ export const WAYS: Way[] = [
   { id: 'chemin-citadelle', name: 'Rampe de la Citadelle', kind: 'chemin', surface: 'pierre', width: 3, vehicles: false, pts: [[1150, 640], [1260, 720], [1330, 800], [1400, 760]], note: 'ancienne rampe dallée au sud-ouest de la mesa' },
   // --- sentiers (1,2-2 m)
   { id: 'sept-sommets', name: 'Sentier des Sept Sommets', kind: 'sentier', surface: 'terre', width: 1.6, vehicles: false,
-    pts: [[93, -348], [248, -275], [335, 10], [160, 270], [-160, 270], [-335, 10], [-175, -300], [93, -348]], note: 'boucle de crête autour de Capyville (4,2 km), belvédères sur chaque région' },
+    pts: [[93, -348], [248, -275], [335, 10], [160, 270], [-160, 270], [-335, 10], [-175, -300], [93, -348]], note: 'boucle de crête autour de Capyville (≈ 2,6 km en suivant les crêtes), belvédères sur chaque région' },
   { id: 'sentier-pelerin', name: 'Chemin du Pèlerin', kind: 'sentier', surface: 'terre', width: 1.6, vehicles: false,
     pts: [[300, 2000], [330, 2250], [420, 2400], [280, 2500], [430, 2600], [300, 2680], [400, 2760], [310, 2830], [305, 2899]], note: 'lacets réguliers jusqu’au cratère, dix stations à torii, refuge à mi-pente' },
   { id: 'sentier-aurore', name: 'Sentier des Crêtes', kind: 'sentier', surface: 'pierre', width: 1.4, vehicles: false,

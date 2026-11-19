@@ -423,3 +423,403 @@ pins sur les crêtes sèches ; hêtres et fougères dans les versants nord ; ép
 arbres géants de la jungle dans les fonds humides ; oliviers sur les versants sud de la garrigue ; aucun arbre sur les pentes > 38° ni sur les éboulis frais.
 Densités : forêts 140 à 260 arbres/ha, bocage 1 haie tous les 60 à 120 m, lisières de 6 à 12 m d'arbustes, clairières tous les 300 à 500 m en forêt
 (on doit toujours pouvoir y voir le ciel et un repère). Rochers et bois mort dispersés sur les mêmes cartes (éboulis, lits, crêtes).
+
+## 6. Hydrographie
+
+### 6.1 Principe
+
+L'eau dessine l'île : chaque grande vallée a sa rivière, chaque cuvette son lac, chaque rebord sa cascade. Les rivières principales sont **tracées à la main**
+(`RIVERS`, polylignes d'amont en aval avec altitude d'eau `y` et largeur `w` à chaque point) ; les **affluents secondaires naissent de la simulation**
+(accumulation d'écoulement sur la carte de hauteur érodée), avec un ruisseau visible tous les 400 à 800 m dans les pays humides
+(bocages, lacs, forêt des Mousses, jungle) et des lits secs dans la garrigue. Une rivière ne remonte jamais une pente : `y` décroît toujours
+vers l'aval (le script le contrôle). Aucune rivière ne sort de la couronne de Capyville : l'étang se vide par une perte vers les Veines Tièdes.
+
+### 6.2 Rivières
+
+| Rivière | De → à | Eau (y) | Largeur | Caractère |
+| --- | --- | --- | --- | --- |
+| **La Seine** | Fontaine de la Seine (-250, -620) → estuaire (-1160, -3490) | 14 → 0 | 3 → 80 m | rivière calme à méandres, peupliers, traverse Paris (34 m, quais 5 m au-dessus) |
+| **La Tamise** | sous la Brèche du Loup (-1600, -200) → estuaire (-2900, -1420) | 150 → 0 | 3 → 70 | torrent, cascade de la Tamise (22 m), puis boucles de bocage et estuaire à vasières |
+| Ruisseau du Grand Arbre | (-1350, -1450) → Tamise | 95 → 17 | 1,5 → 4 | gué de pierres |
+| Haute Yuzawa | Lac du Tanuki (430, -640) → gorge de Capyville (160, -330) | 120 → 46 | 3 → 4 | cascade du Tanuki ; prolonge `STREAM` de `zones.ts` |
+| **Rivière des Érables** | déversoir du Grand Lac (1650, -1750) → baie de New York | 45 → 0 | 18 → 55 | rapides, **Chutes du Huard** en fer à cheval (12 m) |
+| Ruisseau des Fauves | Mont Fauve → Grand Lac | 150 → 45 | 2 → 5 | suite de petites chutes |
+| **Rivière Rouge** | flanc est du Dormeur (1650, -150) → mer (3640, 330) | 150 → 0 | 3 → 25 | creuse le **Canyon Rouge** (60 à 90 m), Chute Rouge et sa vasque |
+| Oued des Ocres | garrigue (900, 400) → oasis | 80 → 36 | 6 → 18 | **lit à sec** de galets blancs et lauriers-roses |
+| **Rivière de Jade** | Plateau de Jade (1550, 1850) → mangrove (1100, 3700) | 300 → 0 | 5 → 60 | **Chute des Mille Voiles** (82 m), Escalier de Jade, eau turquoise |
+| Ruisseau Clair | flanc est du Fuji → Rivière de Jade | 130 → 62 | 3 → 6 | eau limpide sur rochers moussus (ref-18) |
+| **Rivière des Rizières (Kawa)** | Crêtes Blanches (-1250, 1750) → Lac du Torii | 200 → 5 | 3 → 20 | torrent puis rivière lente entre les diguettes |
+| Ruisseau des Lucioles | pied de la Crête des Lucioles → Kawa | 9 → 6,6 | 2 → 6 | lucioles la nuit |
+| Exutoire du Lac du Torii | lac → mer | 4,6 → 0 | 22 → 40 | traverse le port de la ville du Japon |
+| **Torrent des Clarines** | Lac de Cristal → Kawa | 262 → 12 | 4 → 12 | cascade des Clarines (50 m), traverse le village, scierie |
+| Ruisseau des Aurores | Col des Aurores → Lac de l'Aurore | 325 → 46 | 2 → 4 | gelé en surface |
+| Rivière Gelée | Lac de l'Aurore → Baie Gelée | 45 → 0 | 8 → 20 | **Cascade Gelée** (20 m) |
+| Émissaire du glacier | front du glacier → fjord | 12 → 0 | 10 → 20 | eau laiteuse, Pont de la Moraine |
+| Ruisseau du Cap | lande → falaises | 70 → 0 | 2 → 4 | **cascade du Cap** (55 m) sur la plage |
+
+Lits : 0,4 à 0,8 m d'eau dans les torrents et les gués, 1,5 à 3 m dans les rivières de plaine (nage), vasques de 2 à 4 m au pied des cascades.
+Berges : galets et rochers dans les torrents, prés et saules dans les plaines, quais de pierre en ville, roseaux dans les estuaires.
+
+### 6.3 Lacs (`LAKES`)
+
+| Lac | Centre | Taille (demi-axes) | Eau | Caractère |
+| --- | --- | --- | --- | --- |
+| **Grand Lac** | (1300, -1900) | 480 × 260, rot. 20° | 45 | plus grand lac, île au château, plages de galets, huards, canoës |
+| **Lac du Torii** | (-400, 2420) | 260 × 170 | 5 | torii dans l'eau (-560, 2390), reflet du Fuji depuis la rive ouest |
+| **Lac de Cristal** | (-1760, 820) | 120 × 80 | 262 | lac alpin turquoise au-dessus du verrou des Clarines |
+| **Lac de l'Aurore** | (-2350, 1930) | 220 × 140 | 45 | gelé, patinage, aurores (ref-15) |
+| Lac du Tanuki | (450, -660) | 70 × 55 | 120 | petit lac de montagne, source de la Yuzawa |
+| Lac du Huard | (1750, -2500) | 160 × 110 | 70 | barrage de castors |
+| Lac Miroir | (950, -2750) | 110 × 80 | 85 | reflète le Mont Fauve |
+| Bassin de l'oasis | (2330, 1320) | 38 × 30 | 35 | eau turquoise sous les palmiers |
+| Chott Blanc | (2850, 1550) | 350 × 200 | 30 (sec) | croûte de sel, mirages |
+
+Les berges sont **douces et praticables** sur au moins les trois quarts du tour (plages, prés, roselières) ; les rives raides sont lisibles (granite, falaise).
+
+### 6.4 Cascades (`WATERFALLS`) et glaciers (`GLACIERS`)
+
+Onze cascades, du ruban de 4 m à la **Chute des Mille Voiles** (82 m, 40 m de large, rideaux sur une falaise moussue, colonne de brume de 150 m
+visible à 3,5 km, **grotte derrière le rideau**). Les autres : Chutes du Huard (12 m en fer à cheval), cascade des Clarines (50 m),
+cascade du Cap (55 m sur la plage), Voile du Fjord (110 m en brume), Chute Rouge (8 m, vasque de baignade), cascade de la Tamise (22 m, grotte derrière),
+cascade du Tanuki, Escalier de Jade (marches et vasques), cascatelle du Ruisseau Clair, **Cascade Gelée** (orgues de glace, on passe derrière).
+Règle : **toute cascade de plus de 10 m a quelque chose derrière ou au pied** (grotte, vasque, passage, belvédère).
+
+Glaciers : **Glacier de l'Aurore** (langue crevassée du Pic jusqu'au fond du fjord, front de 40 m qui vêle des icebergs) ; névé du Mont des Neiges.
+
+### 6.5 Ponts et gués (`CROSSINGS`)
+
+Trente points de franchissement, tous typés : ponts de pierre (Gué-aux-Saules, Vieux Pont, pont à dos d'âne), ponts de bois (Lucioles, Kawa aux
+garde-corps vermillon, Fontaine des Clarines, Scierie, Moraine), **pont couvert des Érables** (rouge, vue sur les chutes), **viaduc du Canyon Rouge**
+(160 m de long, 85 m au-dessus de la rivière), passerelle suspendue du canyon, **pont de lianes** de la jungle, passerelles du village sur pilotis,
+deux radiers dans l'oued, une barque sur le Grand Lac et dix gués (pierres plates, pas japonais, glace). Le script vérifie qu'**aucune voie ne croise une
+rivière sans franchissement déclaré** (aujourd'hui : aucun manque). On peut aussi toujours traverser à la nage : aucune rivière n'est une barrière.
+
+## 7. Réseau de déplacement
+
+### 7.1 Hiérarchie des voies (`WAYS`)
+
+| Niveau | Revêtement | Largeur | Véhicules | Où | Bordures |
+| --- | --- | --- | --- | --- | --- |
+| Route | **asphalte** usé, ligne axiale discontinue | 7-8 m | oui | **seulement entre grandes villes** : Capyville → Paris, New York, Londres, Japon ; Paris → Londres ; Paris → New York | bas-côtés de gravier, fossés, haies ou murets selon le pays, bornes kilométriques |
+| Route de gravier | gravier, glissières de bois en montagne | 6 m | oui | Route du Givre (Capyville → Clarines → Pôle), Route des Embruns, Route des Fjords | talus, perches à neige dans le Givre |
+| Piste | terre rouge, gravier blanc ou sable balisé de cairns | 5-6 m | oui (lent) | Piste des Ocres, Piste des Ranchs, Piste du Col de Jade, Route du Bambou | rien, ornières |
+| Chemin de terre | terre, ornières | 2,5-4 m | parfois | entre hameaux, fermes, lacs, tours de lac | herbe haute, haies, murets |
+| Sentier | terre, pierre, neige | 1,2-2 m | non | montées aux belvédères, sommets, canyon, jungle, crêtes | marches de pierre ou de rondins au-delà de 18 % |
+| Sentier de bêtes | trace | 0,6-1 m | non | partout, semés par `ANIMAL_TRAIL_RULES` (un tous les 250 à 400 m hors route) | rien |
+| Raccourci de promenade | trace | 1,2-1,4 m | non | traverses directes à travers champs, avec échaliers dans les haies | rien |
+
+Règles de tracé : les voies suivent les **vallées et les courbes de niveau** ; aucune ligne droite de plus de 400 m sans raison (digue des rizières,
+plateau des Plaines) ; lacets réguliers au-delà de 8 % (routes) ; chaque route offre un point de vue au moins tous les 1,5 km (col, pont, belvédère
+de bord de route avec aire d'arrêt) ; les six routes de Capyville commencent à la fin des couloirs de cols (`COL_ROUTES` de `valley.ts`).
+
+### 7.2 Principales voies
+
+| id | Nom | Revêtement | Tracé | Particularités |
+| --- | --- | --- | --- | --- |
+| route-paris | Route de la Seine | asphalte | col de Paris → Paris | rive droite de la Seine, platanes à l'approche |
+| route-ny | Route des Érables | asphalte | col de New York → New York | pied du Dôme du Guetteur, lacs |
+| route-londres | Route de la Tamise | asphalte | col de Londres → Londres | Seuil des Cèdres, Vieux Pont |
+| route-japon | Route des Rizières | asphalte | col sud → Japon | **digue au-dessus des rizières miroir**, vue de conduite à l'aube (ref-5) |
+| route-paris-londres | Route du Grand Arbre | asphalte | Paris → Londres | haies sur talus, Seuil du Grand Arbre |
+| route-paris-ny | Route des Lacs | asphalte | Paris → New York | Col des Fauves, rive nord du Grand Lac, pont couvert |
+| route-pole | Route du Givre | gravier puis neige | col du Pôle → Clarines → Col des Aurores → Pôle | lacets à glissières de bois, perches à neige ; motoneige conseillée après le col |
+| piste-desert | Piste des Ocres | gravier puis sable | col du Désert → oasis | contourne la Citadelle, deux radiers |
+| piste-ranchs | Piste des Ranchs | terre rouge | New York → oasis | viaduc, descente du Rebord en lacets |
+| route-embruns | Route des Embruns | gravier | Japon → Pôle | corniche côtière |
+| route-fjords | Route des Fjords | gravier | Pôle → Londres | fond du fjord, Pont de la Moraine |
+| route-bambou | Route du Bambou | terre | Japon → lisière de la jungle | tunnels de bambou, parking des pirogues |
+| piste-jade | Piste du Col de Jade | sable | oasis → Col de Jade | la jungle se traverse à pied ou en pirogue |
+
+Plus dix chemins de terre (Saules, Grand Arbre, Chaumes, Phare, Tour du Grand Lac, Cabane à sucre, Dormeur, Bastide, Rizières, Rampe de la Citadelle),
+dix sentiers (dont le **Sentier des Sept Sommets**, boucle de crête d'environ 2,6 km autour de Capyville, le Chemin du Pèlerin du Fuji, le Sentier des Crêtes
+du Pic de l'Aurore, le Sentier des Douaniers sur les falaises, le Sentier du Canyon, le Sentier de la Jungle), trois sentiers de bêtes et trois raccourcis
+donnés en exemples.
+
+### 7.3 Temps de parcours
+
+Calculés par `tools/plan-monde.mjs` (longueur des tracés + 6 % pour le relief ; marche 4,2 m/s, à quatre pattes 8,5 m/s ; voiture 22 / 14 / 10 m/s
+selon le revêtement), de la place de Capyville au centre de la région (couloir du col et traversée de la ville compris) :
+
+| Trajet | Distance | À pied | À quatre pattes | En voiture |
+| --- | --- | --- | --- | --- |
+| Capyville → Paris | 2,8 km | 11 min | 5 min 30 | 2 min 30 |
+| Capyville → New York | 3,0 km | 12 min | 6 min | 2 min 30 |
+| Capyville → Londres | 2,9 km | 11 min 30 | 5 min 45 | 2 min 30 |
+| Capyville → Japon | 2,6 km | 10 min 30 | 5 min | 2 min |
+| Capyville → Désert | 2,8 km | 11 min | 5 min 30 | 3 min 30 |
+| Capyville → Les Clarines | 1,8 km | 7 min | 3 min 30 | 2 min |
+| Capyville → Pôle | 4,3 km | 17 min | 8 min 30 | 5 min 30 |
+| Paris → New York | 3,3 km | 13 min | 6 min 30 | 2 min 30 |
+| Paris → Londres | 2,8 km | 11 min | 5 min 30 | 2 min |
+| New York → Désert | 3,0 km | 12 min | 6 min | 4 min 30 |
+| Désert → Japon (par la jungle) | 4,6 km | 20 min (sentier) | 10 min | pistes jusqu'au col et depuis la lisière |
+| Japon → Pôle | 2,0 km | 8 min | 4 min | 2 min |
+| Pôle → Londres | 4,6 km | 18 min | 9 min | 5 min 30 |
+| Tour de l'île par les routes | ≈ 25 km | 1 h 40 | 50 min | ≈ 25 min |
+| Traversée Pôle → New York à vol d'oiseau | 7,1 km | 28 min | 14 min | — |
+
+C'est la bonne échelle pour une enfant de 9 à 12 ans : une région voisine en **un quart d'heure de balade** (on a le temps de vivre la transition)
+ou en **deux minutes de voiture** (pour les missions), et un monde qu'on ne finit pas de visiter en un après-midi.
+
+## 8. Points d'intérêt
+
+### 8.1 Types
+
+Hameaux et fermes, sanctuaires et chapelles, grottes (derrière les cascades, marines, peintes, de glace, tunnel de lave), cabanes et refuges,
+ruines (abbaye, château, citadelle, tours, ksar, cercle de pierres, aqueduc), belvédères, sources chaudes sauvages, campements, moulins, phare,
+arbres remarquables, curiosités naturelles (arches, cheminées de fée, chott, mangrove, vasques), ports, et les **15 Pierres-Vapeur**.
+
+### 8.2 Les lieux posés à la main (`POIS`, 93 lieux + 14 villages et hameaux)
+
+Chaque lieu a un **signal** (ce qui le fait voir de loin : silhouette, fumée, vapeur, son, lumière, couleur) et une **récompense de lieu**
+(ce qu'on y trouve ; le gameplay viendra s'y accrocher). Résumé par pays :
+
+- **Couronne** : Promontoire des Lucioles (vue ref-8), Fontaine de la Seine (résurgence bleue sous une voûte), Cabane du Lac du Tanuki.
+- **Seine** : Moulin de la Seine, Chapelle des Coquelicots (cloche qu'on sonne), Ferme du Pigeonnier, Guinguette des Peupliers (bal le soir),
+  Abbaye du Couchant, Cabane des Oyats.
+- **Lande et falaises** : **Phare du Cap Blanc** (140 marches, galerie), Cercle des Pierres Levées (aligné sur le couchant), Grotte marine,
+  **Épave du « Voyageur »**, cascade du Cap, Grotte des Contrebandiers.
+- **Albion** : **Grand Arbre** (escalier autour du tronc, cabane à 30 m, lanternes), Manoir aux Roses et son labyrinthe de haies,
+  Grotte des Sources (derrière la cascade de la Tamise), Tour de l'Estuaire.
+- **Fjords** : Belvédère du Glacier (on l'entend vêler), Cabane du Berger, Port-aux-Phoques.
+- **Givre** : Lac de Cristal, Chalet d'alpage (fromagerie), Refuge et **sommet du Pic de l'Aurore**, Grotte de glace, Chapelle des Neiges,
+  Scierie, **Sanctuaire Moussu** (statue de capybara gardien sous la mousse), Campement des Rennes, **Observatoire des Aurores**,
+  Cascade Gelée, Navire pris dans les glaces, Cabane du Guetteur des Glaces, Rochers aux Phoques, **Onsen des Neiges**.
+- **Levant** : Terrasses du Ciel, Jizō du Carrefour, Moulin des Rizières, Tunnel de bambous, Refuge du Pèlerin, **Cratère du Fuji**, Tunnel de lave,
+  Plage noire, Plage du Torii, Torii des Embruns.
+- **Jungle** : **Chute des Mille Voiles** et **Grotte des Voiles** (fresque des Voyageurs), **Les Colosses** (arbres de 60 m, passerelles),
+  **Temple du Gardien de Jade** (statue originale de capybara gardien, ref-14), Plate-forme de la Canopée, Vasques du Ruisseau Clair, Mangrove,
+  Crique des Cocotiers.
+- **Ocres** : **Citadelle des Ocres**, **Arches des Anciens** (aqueduc d'eau tiède qui fume encore), Source Tiède, Champs de lavande,
+  Baobab des Voyageurs, Arche de Pierre, Chott Blanc (flamants), Campement nomade (conteur), Ksar oublié, Belvédère des Dunes (glissade), Épave des Sables.
+- **Plaines** : Oreilles du Dormeur (vue sur Capyville), **Grotte peinte** (capybaras voyageurs), Cheminées de fée, Campement des Plaines, Arche marine Rouge.
+- **Lacs** : **Château de l'Île**, Dôme du Guetteur, Tour du Mont Fauve, Cabane du Lac du Huard (castors), Chutes du Huard (sentier derrière),
+  Crique aux Loutres, Pointe des Fous, Cabane du Pêcheur de Homards, Érablière aux Lanternes.
+
+### 8.3 Semis par règles (`POI_RULES`) et densité (`POI_DENSITY`)
+
+Entre les lieux nommés, un script sème les « petites choses » (rochers et arbres remarquables, abris, petits sanctuaires, calvaires et cairns,
+points d'eau, ruines mineures, panoramas, traces de vie, faune), chacune avec son espacement minimal, ses biomes et son emplacement type
+(crêtes, replats, carrefours, creux humides…). Les **cachettes** (futurs Squishy dumplings) sont des emplacements semés par les mêmes règles :
+creux d'arbre, dessous de pont, derrière cascade, fond de grotte, sommet de rocher, nid dans une ruine.
+
+Cibles contrôlées :
+- un « quelque chose d'intéressant » **visible tous les 200 à 400 m** depuis n'importe quel point des terres sauvages ;
+- un **lieu nommé** tous les 500 à 800 m le long des routes et chemins (contrôle actuel : distance moyenne au lieu nommé le plus proche
+  **244 m**, pire trou 680 m, que le semis par règles comble) ;
+- un **belvédère** ou point haut atteignable à moins de 1 km partout ;
+- une **Pierre-Vapeur** à moins de 1,5 km partout.
+
+### 8.4 Rythme : découverte → point de vue → récompense (`BALADES`)
+
+La boucle de base de la promenade, à répéter à toutes les échelles (2 minutes, 10 minutes, une heure) :
+
+1. **Découverte** : un signal attire l'œil (colonne de vapeur, silhouette sur une crête, bruit de cascade, lumière la nuit) ;
+2. **Chemin** : on y va par un sentier visible ou à travers champs ; le relief cache puis révèle ;
+3. **Point de vue** : on arrive en hauteur et on découvre plus loin (deux ou trois nouveaux signaux) ;
+4. **Récompense** : un lieu à explorer (grotte, cabane, ruine, bain), un personnage, une cachette, une histoire des Voyageurs.
+
+Treize balades composées à la main : De la Fontaine au Moulin, La nuit du Grand Arbre, Sentier des Douaniers, Tour du Grand Lac,
+Sur la tête du Dormeur, Au fond du Canyon Rouge, La Citadelle des Ocres, **Les Mille Voiles**, Chemin du Pèlerin, Les Terrasses du Ciel,
+Le Lac de Cristal, **La nuit des Aurores**, Le Glacier (3 à 5 km chacune).
+
+## 9. Villes moins carrées
+
+### 9.1 Principes communs (pour la spécialité Villes)
+
+Le client trouve les villes « trop carrées » (`RETOURS-CLIENT.md` §4). Une ville crédible raconte son histoire par son plan :
+
+1. **Le site d'abord** : la ville épouse son relief et son eau (méandre, colline, baie, lac). Les rues principales suivent les courbes de niveau
+   ou montent en lacets ; les rues droites ne sont que les grandes percées volontaires (une ou deux par ville), qui visent un monument.
+2. **Un noyau ancien serré** (ruelles courbes de 4 à 8 m, impasses, petites places irrégulières, passages sous voûte), puis des **faubourgs**
+   le long des routes d'arrivée, puis des **quartiers plus récents** plus réguliers ; la ville se défait en jardins, potagers et maisons isolées
+   sur 200 m avant la campagne (jamais de bord net).
+3. **Des îlots variés** : parcelles de 6 à 25 m de façade, hauteurs mélangées (± 1 à 3 niveaux entre voisins), styles d'époques différentes,
+   angles coupés, cours intérieures, un îlot sur cinq percé d'un passage.
+4. **Des places** à chaque carrefour d'importance (formes triangulaires, en trapèze ou en demi-lune, jamais un carré parfait), **des quais**
+   en bord d'eau, **des parcs** dans les creux du relief, **des escaliers** dans les pentes.
+5. **Des rez-de-chaussée vivants** (vitrines, terrasses, étals, auvents), des fenêtres en trompe-l'œil (interior mapping, `RETOURS-CLIENT.md` §5).
+6. **Lisibilité** : chaque ville a un monument visible de partout (et de loin, §3.1), une rue principale qui y mène, et une sortie vers chaque route.
+7. Taille : **quartiers emblématiques denses** de 430 à 560 m de rayon (voir §14), pas des métropoles entières.
+
+### 9.2 Ville par ville
+
+- **Paris** (-150, -2650) : la Seine fait un **méandre** dans la ville, avec une **île** au milieu (île de la Cité : cathédrale, parvis, quais bas
+  plantés de peupliers) reliée par cinq ponts de pierre différents. Rive droite : grands boulevards **courbes en arc** qui suivent l'ancien rempart,
+  places en étoile à cinq branches (une seule grande percée rectiligne qui vise la tour Eiffel), immeubles de pierre blonde à toits de zinc
+  de 5 à 7 niveaux, cours, passages couverts. Au nord, une **butte** de 40 m (moulins, escaliers, ruelles en lacets, vue sur toute la ville).
+  Rive gauche : quartier ancien de ruelles, jardin à la française dans un creux, **tour Eiffel** (-290, -2475) sur un champ en pente douce vers l'eau.
+  Faubourgs : guinguettes, jardins ouvriers, péniches.
+- **New York** (2350, -1450) : la seule ville où la grille est légitime, mais **cassée** : un vieux quartier sud aux rues courbes et étroites
+  (le port d'origine), une grande avenue diagonale qui coupe la grille en biais en créant des places triangulaires, une grille qui se tord
+  pour suivre la presqu'île, un **grand parc** sur un affleurement de granit (lacs, ponts de pierre, rochers où l'on grimpe), des quais et des jetées
+  de bois sur la baie, un pont suspendu vers la rive nord de la Rivière des Érables. Hauteurs très variées : brownstones de 4 niveaux contre tours de 40 ;
+  silhouette groupée en deux pics (le vieux centre et le nouveau), toujours visible depuis le Dôme du Guetteur.
+- **Londres** (-2400, -1350) : la Tamise fait **deux boucles** ; la ville ancienne est sur la rive nord, dans la boucle, autour d'une colline
+  avec la cathédrale ; rues sinueuses médiévales, **crescents** (rangées de maisons en demi-lune) et squares fermés plantés de platanes ;
+  Tour de l'Horloge (-2300, -1300) au bord de l'eau ; docks de brique à l'ouest vers l'estuaire, avec bassins et grues ; marchés couverts ;
+  terrasses victoriennes en brique sur les pentes ; parcs à l'anglaise dans les creux.
+- **Ville du Japon** (-800, 2380) : ville au bord du **Lac du Torii** et au pied du Fuji. **Vieille ville au nord** : rues étroites de machiya qui
+  montent vers un sanctuaire sur une butte, escaliers, canaux ; **quartier du lac** : promenade courbe sur la rive, onsen, ryokans, torii dans l'eau ;
+  **quartier moderne au sud-ouest** autour de la gare et du port, plus régulier mais avec une grande rue commerçante couverte qui serpente ;
+  rizières et vergers qui entrent dans la ville par les creux. Pas de grille : les rues suivent les anciens chemins de digue.
+- **Les Clarines** (-1450, 900) : village alpin en pente (10 à 20 %) dans la vallée en U ; **rue principale en S** qui suit le torrent, place de
+  l'église avec la **fontaine-abreuvoir**, chalets étagés en courbes de niveau avec leurs balcons fleuris vers la vallée, greniers sur pilotis de pierre,
+  ruelles en escaliers, pont de bois couvert, prés qui entrent jusqu'aux maisons ; la cascade dans l'axe de la rue (ref-9, ref-10 ; variante enneigée ref-11).
+- **Oasis du Désert** et **station polaire** : petites ; ksar de terre crue groupé autour de la source, ruelles couvertes en baïonnette, palmeraie
+  en jardins clos ; station polaire en arc au fond de la baie, radôme, igloos, quai sur la banquise.
+
+### 9.3 Raccord de Capyville
+
+Capyville ne change pas. À l'extérieur : les six couloirs de cols de `valley.ts` débouchent sur les voies de ce document ; le Sentier des Sept Sommets
+relie les sommets de la couronne ; les Pierres-Vapeur les plus proches sont à 1,2-1,4 km ; la lumière d'aube et la brume de vallée de Capyville
+restent la référence de l'ambiance du monde.
+
+## 10. Lumière et atmosphère à l'échelle du monde
+
+- **Perspective aérienne** : les plans successifs bleuissent et pâlissent avec la distance (cible ref-8) ; brouillard exponentiel faible
+  (`WORLD_STREAMING.fog`) plus **brume de hauteur** dans les fonds de vallée sous 25 m le matin.
+- **Ambiance par biome** (`BIOMES[].fog`, `weather`) pondérée par distance, fondue sur 500 m : brume permanente de la jungle, air sec et blanc de l'erg,
+  ciel changeant d'Albion avec averses et arcs-en-ciel, automne doré des Lacs, lumière dorée rasante des pinèdes, nuit à aurores dans la toundra.
+- **Lumière volumétrique** (commune à toutes les références du monde) : rayons à travers les troncs et la brume, contre-jour sur la vapeur et les cascades.
+- **Repères la nuit** : faisceau du phare, lanternes du Grand Arbre, fenêtres des villes, Pierres-Vapeur réveillées qui luisent, aurores.
+- Le soleil se lève au cap ≈ 110° (bible de Capyville §9) : le matin, le Fuji est éclairé de côté depuis le promontoire, le Pic de l'Aurore
+  rosit en premier.
+
+## 11. Budget et contraintes techniques (navigateur)
+
+Rappel du diagnostic (`RETOURS-CLIENT.md` §6) : ≈ 25-30 ms par image en qualité Moyenne, limite côté processeur (≈ 950 appels de dessin au sol).
+Un monde de 8 km ne tient qu'à ces conditions :
+
+1. **Terrain en clipmaps géométriques sur GPU** (remplace les morceaux CPU actuels de 200 m) : un maillage fixe centré sur la caméra, dense aux pieds
+   (pas de 1 m sur 160 m), de plus en plus grossier vers l'horizon (2, 4, 8 m, puis 32 m sur toute l'île, `terrainLods`), **déformé dans le vertex shader**
+   par une texture de hauteur 16 bits **streamée par tuiles** de 256 m. Quelques appels de dessin pour tout le terrain, aucun recalcul CPU.
+2. **Relief précalculé hors ligne** (§4.6) : simulation d'érosion hydraulique et thermique par notre script, exportée en tuiles de hauteur 16 bits
+   + cartes dérivées (pente, écoulement, humidité, dépôts) ; téléchargement estimé 25 à 40 Mo pour l'île au pas de 2 m (compressé).
+   Le détail sous 2 m vient du microrelief procédural sur GPU ; Capyville garde sa grille fine de 0,5 m.
+3. **Matières du sol** : **triplanar mapping** pour la roche sur les pentes fortes (pas d'étirement de texture sur les falaises), et **mélange par hauteur**
+   des matières PBR (herbe, terre, sable, galets, mousse, neige, roche…) piloté par la pente, l'altitude, l'humidité et la neige.
+   Textures photoscannées **Poly Haven (CC0) en priorité**, en atlas ou tableaux de textures (KTX2).
+4. **Dispersion** de la végétation, des rochers et des petits objets lue sur ces mêmes cartes, par tuile, en instanciation (une instance par modèle et par tuile).
+5. **Streaming** (`WORLD_STREAMING`) : tuiles de 256 m ; contenu complet (objets, herbe, collisions) dans un rayon de 700 m, déchargé au-delà de 900 m ;
+   préchargement 6 s devant le joueur dans le sens du mouvement (≈ 180 m en voiture) ; décodage dans des workers ; au plus 2 ms de transfert GPU par image.
+6. **Distances de vue** : herbe 60 m, objets 120 m, arbres complets 45 m, arbres simplifiés 140 m, **imposteurs d'arbres jusqu'à 1 km**,
+   puis canopée en maillage très simple jusqu'à 3,5 km et teinte de forêt peinte dans la texture du terrain au-delà ; bâtiments complets 140 m,
+   **HLOD par îlot** jusqu'à 400 m, puis **un maillage de silhouette par ville** (≤ 30 k triangles) toujours chargé ; les grands repères ont
+   des LOD dédiés et restent visibles sur toute l'île.
+7. **Occlusion** : le relief cache beaucoup (couronne de Capyville, cols, chaînes) : profils d'horizon précalculés par tuile pour ne pas dessiner
+   ce qui est derrière une montagne ; boîtes des bâtiments comme occulteurs en ville ; requêtes d'occlusion WebGL2 sur l'image précédente ensuite.
+8. **Ombres** : cascades à fréquences différentes (la plus lointaine une image sur 4), ombres lointaines du relief cuites dans les cartes dérivées.
+9. **Brume** : sert la profondeur **et** le budget (elle fond ce qui est simplifié), jamais un mur gris : les grands repères la percent.
+10. Budgets (qualité Moyenne) : **< 700 appels de dessin, < 3 M triangles, 16,6 ms** par image, mémoire GPU < 1,5 Go, téléchargement total < 120 Mo ;
+    les mesures de `tools/perf.cjs` se font sur les vues de §13 en plus de celles de Capyville.
+11. Plus tard : **WebGPU** (dessin indirect, culling sur GPU) quand le moteur de Three.js sera mûr.
+
+## 12. Liste de production par spécialité (dans l'ordre)
+
+### Terrain & relief (`heightmap.ts`, `terrain.ts`, `tools/terrain/**` à créer)
+1. Passer le monde à 8 × 8 km dans `layout.ts` (`WORLD_SIZE` 8000, régions lues depuis `WORLD_REGIONS`), sans toucher à la vallée de Capyville.
+2. Script hors ligne de génération : formes dirigées de `world-map.ts` (côte, `RELIEF_ZONES`, `CHAINS`, `WORLD_PEAKS` aux formes imposées, `WORLD_COLS`,
+   lits des `RIVERS`, `LAKES`, plats des villes et villages), bruit par zone.
+3. Érosion hydraulique et thermique (`TERRAIN_RULES`), replats, microrelief ; affluents et lacs issus de l'écoulement ; aplanissements des routes.
+4. Export en tuiles 16 bits de 256 m + cartes dérivées (pente, écoulement, humidité, dépôts, exposition, neige).
+5. Rendu en **clipmaps géométriques GPU** avec streaming des tuiles, collisions par tuile autour du joueur.
+6. Matières : triplanar pour la roche, mélange par hauteur des matières PBR (Poly Haven) selon pente, altitude, humidité, neige.
+7. Contrôles : pentes (§4.3), lignes de vue (§3.2), altitudes de contrôle, raccord exact avec la vallée de Capyville et les `COL_ROUTES`.
+
+### Végétation (`vegetation.ts`, `grass.ts`, `src/procgen/flora/**`)
+1. Essences par biome (§5.1) : priorité aux forêts qui couvrent le plus de surface (érables, épicéas et pins de la forêt des Mousses et des pinèdes,
+   cèdres et bambous du Levant, chênes et haies des bocages), puis jungle (arbres géants, lianes, fougères arborescentes), garrigue, savane, alpages.
+2. Placement écologique par les cartes dérivées (§5.4), fondus de transition (§5.2), avant-postes.
+3. Imposteurs jusqu'à 1 km, canopée lointaine, teinte de forêt dans le terrain.
+4. Herbes et fleurs par biome (prés fleuris, herbe blonde, bruyère, herbes rousses enneigées, riz, lavande).
+
+### Routes & chemins (`roads.ts`, `layout.ts` routes)
+1. Remplacer l'anneau et les rayons actuels par `WAYS` : rubans par revêtement, talus et fossés, bordures par pays, lacets.
+2. Ponts et gués de `CROSSINGS` (avec la Modélisation : pont couvert, viaduc, pont de lianes, ponts de pierre).
+3. Sentiers de bêtes semés (`ANIMAL_TRAIL_RULES`), raccourcis avec échaliers, panneaux indicateurs à chaque carrefour.
+
+### Eau (`water.ts`)
+1. Rubans de rivière à hauteur locale pour toutes les `RIVERS` (écoulement, écume aux rapides, eau laiteuse du glacier, oued sec, rivières gelées).
+2. Lacs à niveau propre (`LAKES`), gelés, sec (chott) ; mer avec houle et ressac, banquise.
+3. Cascades de `WATERFALLS` (rideaux, brume, colonne de la Mille Voiles visible de loin, cascade gelée), glaciers.
+
+### Villes (`src/regions/**`, après la tranche HD)
+1. Plans organiques de §9 pour Paris, New York, Londres, la ville du Japon ; Clarines ; oasis et station.
+2. Silhouettes lointaines et HLOD par îlot ; transitions de faubourgs.
+3. Hameaux de `SETTLEMENTS` dans leurs styles.
+
+### Points d'intérêt (`src/world/pois/**` à créer)
+1. Pose des `POIS` et des 15 Pierres-Vapeur avec leur signal (fumée, vapeur, lumière, son).
+2. Semis par `POI_RULES` et contrôle de `POI_DENSITY` ; emplacements de cachettes.
+3. Les treize `BALADES` vérifiées à pied (temps, signaux visibles, récompense).
+
+### Lumière & atmosphère (`sky.ts`, `postfx.ts`)
+1. Perspective aérienne et brume de hauteur à l'échelle de 8 km ; ambiances par biome pondérées par distance.
+2. Météo locale (pluie d'Albion et de la jungle, neige du Givre, brume de chaleur), aurores.
+3. Repères de nuit (phare, lanternes, Pierres-Vapeur) ; réglage de chaque vue de `WORLD_VIEWPOINTS` à son heure.
+
+### Autres spécialités (pour mémoire)
+Audio : ambiances par biome (§5.1, fondues sur 300 m). Faune : par biome (huards, rennes, dromadaires, singes, phoques, moutons, flamants).
+Optimisation : budgets du §11, mesures sur les vues du §13.
+
+## 13. Critères de revue (vues du monde à capturer)
+
+On juge chaque passage sur les 19 vues de `WORLD_VIEWPOINTS` (à leur heure), plus une vue aérienne de chaque pays et un trajet filmé
+Capyville → Pôle. Un critère n'est validé que s'il se voit.
+
+**Grandeur et liberté**
+1. Vue `promontoire-lucioles` : composition ref-8 réussie (premier plan riche, plaine, rivières, ville, Fuji enneigé, plans bleuis).
+2. Depuis chaque col, le pays suivant se révèle ; depuis Capyville, aucune ville n'est visible ; les lignes de vue du §3.2 sont dégagées.
+3. Depuis tout point dégagé : au moins deux grands repères et un « quelque chose d'intéressant » à moins de 400 m.
+4. On peut aller à pied vers tout ce qu'on voit : aucun blocage hors falaises désignées ; essai automatique de marche vers les repères.
+
+**Relief**
+5. Pentes praticables (part > 35° ≤ 4 % par tuile), falaises lisibles et contournables, modelé visible (ravines, éboulis, replats) sur chaque vue.
+6. Silhouettes justes : le Dormeur se lit comme un capybara, la Dent du Loup comme une dent, le Fuji comme un cône concave.
+
+**Transitions et biomes**
+7. Sur chaque trajet du §5.3, aucune frontière nette : essences, sol, architecture, brume et sons changent progressivement.
+8. Chaque biome se reconnaît au premier regard (couleur dominante, essence signature, son).
+
+**Eau et voies**
+9. Rivières qui coulent vers l'aval, lacs à niveau, cascades animées ; ponts et gués conformes à `CROSSINGS`.
+10. Asphalte seulement entre grandes villes ; routes en courbes de niveau, pentes ≤ 8 %.
+
+**Villes**
+11. Plans organiques (aucune grille régulière sauf New York, cassée), places, quais, impasses, faubourgs progressifs.
+
+**Technique**
+12. Budget du §11 respecté sur chaque vue et en voiture (pas d'à-coup au streaming à 30 m/s), aucune erreur console.
+
+## 14. Décisions à valider par le client
+
+1. **Mer et îles** : l'île-continent entourée de quatre mers, avec cinq petites îles et une limite douce en mer (houle et courant qui ramènent).
+   *Recommandation : oui.* C'est la seule limite naturelle sans mur invisible, et la mer donne les plus belles vues (phare, falaises, plages).
+   Autre choix possible : un continent fermé par de hautes montagnes (plus fermé, moins de variété).
+2. **Taille des villes** : quartiers emblématiques denses (430 à 560 m de rayon, un monument, une rue principale, un quai) ou grandes villes (1 km et plus).
+   *Recommandation : quartiers emblématiques.* On garde le niveau de détail PS5 voulu, le budget du navigateur et des terres sauvages vastes ;
+   les villes paraîtront plus grandes grâce aux faubourgs et aux silhouettes.
+3. **Climat et saisons** : un climat fixe par pays (automne doré aux Lacs, été aux Clarines, hiver au Pôle…) avec météo locale, ou un cycle de saisons
+   pour toute l'île. *Recommandation : climat fixe par pays d'abord* (le voyage fait changer de saison, c'est plus fort), et plus tard une option
+   « hiver » pour les Clarines enneigées (ref-11) et Capyville sous la neige.
+4. **Ordre des régions sur la carte** : on garde le cycle actuel (Paris au nord, New York au nord-est, Désert au sud-est, Japon au sud,
+   Pôle au sud-ouest, Londres au nord-ouest), sur lequel Capyville est construite (cols, fenêtre sur le Fuji). *Recommandation : le garder*,
+   le froid du Pôle s'explique par la montagne et la Mer des Glaces. Si le client tient à un « Pôle Nord » au nord, il faut échanger Paris et le Pôle :
+   c'est faisable (les cols de Capyville ne changent pas de forme, seulement de destination) mais la vallée de la Seine et le Givre seraient à redessiner.
+5. **Voyage rapide** : faut-il pouvoir se téléporter entre Pierres-Vapeur réveillées ? *Recommandation : oui, mais seulement vers des bornes déjà
+   réveillées à pied*, pour garder le plaisir de la promenade tout en évitant les longs retours.
+6. **Histoire du lieu** : valider la légende des Six Voyageurs, les Veines Tièdes et les Pierres-Vapeur comme base du lore (la bible gameplay en fera
+   les quêtes et l'histoire des Squishy dumplings). *Recommandation : oui* ; elle explique pourquoi Paris, New York et Londres sont sur la même île
+   et relie tous les lieux à Capyville et à sa source.
+
+## Annexe — Changements pour le code existant (à signaler aux autres spécialités)
+
+- `layout.ts` : `WORLD_SIZE` 3 200 → **8 000** ; `COAST_RADIUS` remplacé par `COASTLINE` ; positions des régions lues dans `WORLD_REGIONS`
+  (les caps sont conservés, les distances passent de 800 m à 2,5-3,4 km) ; `ROADS` (anneau + rayons) remplacé par `WAYS` ;
+  `regionWeights` / `nearestRegion` remplacés par une pondération par biome (§5.2).
+- `heightmap.ts` : `RIVERS` (Seine, Tamise), `LIBERTY_POS`, `FUJI_POS`, `JP_LAKE`, `OASIS_POS`, `PYRAMIDS` dérivés de `world-map.ts`
+  (`FUJI_POS` = (305, 2899) : cap 174° conservé depuis la place).
+- Capyville (`zones.ts`, `valley.ts`) : **aucun changement**. Les six `COL_ROUTES` deviennent le début des voies de `WAYS`.
+- Missions existantes : la mission de conduite « Premier volant » reste sur l'axe de Paris au-delà de la porte du Col ; les autres missions des régions
+  suivent leur région à sa nouvelle position.
