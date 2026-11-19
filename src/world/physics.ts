@@ -10,10 +10,12 @@ export interface BoxCollider {
   /** Si vrai, le dessus de la boîte est marchable (toit, pont, plateforme). */
   walkTop?: boolean;
   tag?: string;
+  /** origine (fichier:ligne de l'appel), renseignée seulement en mode diagnostic `?acces` */
+  src?: string;
 }
 export interface CircleCollider {
   kind: 'circle';
-  x: number; z: number; r: number; y0: number; y1: number; walkTop?: boolean; tag?: string;
+  x: number; z: number; r: number; y0: number; y1: number; walkTop?: boolean; tag?: string; src?: string;
 }
 export type Collider = BoxCollider | CircleCollider;
 
@@ -21,7 +23,20 @@ const CELL = 24;
 const grid = new Map<number, Collider[]>();
 const key = (i: number, j: number) => (i + 4096) * 8192 + (j + 4096);
 
+// --- CONDUITE & ACCÈS --- mode diagnostic (`?acces` dans l'URL) : chaque collision retient le fichier et la ligne
+// qui l'ont créée, pour que tools/acces-test.cjs nomme l'objet qui bloque un chemin ou un pont.
+const TRACE = typeof location !== 'undefined' && /[?&]acces(&|=|$)/.test(location.search);
+function callerOf(stack: string) {
+  // deux appelants (ex. « bollard ← buildVillageGround ») ; les lignes sont celles du code servi par Vite
+  const lines = stack.split('\n').slice(1).map((l) => l.trim()).filter((l) => !/physics\.ts/.test(l)).slice(0, 2);
+  return lines.map((l) => {
+    const m = l.match(/at (?:([\w$.<>]+) )?\(?.*\/src\/([^?:)]+)(?:\?[^:)]*)?:(\d+)/);
+    return m ? `${m[1] ?? '?'} (${m[2]}:${m[3]})` : l;
+  }).join(' ← ');
+}
+
 export function addCollider(c: Collider) {
+  if (TRACE && !c.src) c.src = callerOf(new Error().stack ?? '');
   let rx: number, rz: number;
   if (c.kind === 'box') {
     const cos = Math.abs(Math.cos(c.rot)), sin = Math.abs(Math.sin(c.rot));
@@ -156,6 +171,19 @@ export function raycastFraction(ax: number, ay: number, az: number, bx: number, 
   }
   return 1;
 }
+
+/** --- CONDUITE & ACCÈS --- collisions (non marchables) qui touchent le disque (x, z, r) entre y0 et y1 (diagnostic). */
+export function collidersNear(x: number, z: number, r: number, y0 = -Infinity, y1 = Infinity): Collider[] {
+  const out: Collider[] = [];
+  query(x, z, r + 1, (c) => {
+    if (c.y1 < y0 || c.y0 > y1) return;
+    if (inside(c, x, z, r)) out.push(c);
+  });
+  return out;
+}
+
+// diagnostic : accès direct depuis les outils de test (indépendant du rechargement à chaud de Vite)
+if (TRACE) (globalThis as unknown as { __physics: object }).__physics = { collidersNear, groundAt, resolveCircle };
 
 export function clearPhysics() {
   grid.clear();
