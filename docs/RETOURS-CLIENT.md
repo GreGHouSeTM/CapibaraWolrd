@@ -80,3 +80,13 @@ la sauvegarde et le joueur à zéro ; sinon un écran de transition court. Petit
 | **PNJ bipèdes** (debout, comme le héros) | 2 (avec le rig du capybara) |
 | **Mode survie** (option) : barres de faim, de soif et de vie, inventaire, magasins, cueillette | 2 (gameplay) |
 | **Traces de pas** dans le sable, la neige et la boue (et traces de roues) | 3 (effets) |
+
+## 10. Test du terrain 8 km (retour du 2026-11-20)
+Constat du client : « beaucoup de bugs de terrain, des pentes trop pentues, des fossés énormes, des routes sans logique ou pas à la bonne
+hauteur ; les montagnes sont encore beaucoup trop lisses, je veux me balader en montagne, pas sur une colline toute lisse ». Direction
+artistique jugée encore « Switch » et non « next gen » ; trois rendus de référence fournis (forêt et escalier moussu, forêt de nuit à la
+lanterne, village en bois), gardés hors dépôt (`docs/references/prive/nextgen/`, droits), avec ses captures de bugs (`prive/terrain-bugs/`).
+Diagnostic du chef de projet : voies quasi droites avec déblais et remblais jusqu'à 15 m (tranchées) ; ruban de route posé au-dessus du sol
+quand le profil passe plus haut (routes et lignes flottantes) ; replats réguliers qui font des marches sur les versants ; aucun détail sous 2 m
+ni roche en relief. Chantier : **Terrain v2** (`wip/terrain-v2`) : contrôle automatique, routes de moindre coût en lacets à la hauteur du sol,
+relief alpin sans marches, détail de près et affleurements rocheux photoscannés.
