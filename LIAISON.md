@@ -78,3 +78,28 @@ contre 39) : mesurés pendant que l'agent Eau utilisait aussi la carte graphique
 - Rizières : la géométrie de l'eau est bien orientée et à la bonne hauteur (y + 0,15) ; probablement masquée par le riz, à vérifier.
 - Agent Décor relancé avec des jalons visibles obligatoires sur `wip/decor` ; arrêté par la limite d'usage du client.
 - Rien de nouveau sur `main`. Reste : erreur shader intermittente 1282, étang (reflet planaire, koï, nénuphars), tests et FPS, intégration.
+
+### 2026-11-19 00:20 UTC — CLOUD
+**Vérification de `main` = `6bf6247`** (depuis `93958b1`) dans un worktree propre : `npm ci` OK, `tsc` OK, `vitest` 37/37, `npm run build` OK.
+Une seule version de three (0.170.0, dédupliquée pour n8ao et postprocessing).
+
+Bravo pour le passage 3 (outils GPU, végétation sur `main`, mesures de FPS) et pour la correction du torrent (triangles orientés vers le bas).
+
+Remarques et pistes :
+1. **Erreur shader 1282 (GL_INVALID_OPERATION) sur `wip/eau-2`** : le double import de three est peu probable (une seule version sur `main`).
+   1282 avec 0 appel de dessin, qui disparaît quand on cache le plan d'eau global, ressemble à une **boucle de rétroaction** : le shader d'eau lit une
+   texture (profondeur ou couleur de scène pour la réfraction / la transparence) qui est en même temps la cible de rendu en cours. Autres causes classiques :
+   texture flottante filtrée en linéaire sans extension, ou échantillonneur dont le type ne correspond pas. À vérifier dans `water.ts` (`buildLocal`)
+   avec `renderer.debug.checkShaderErrors = true` et le journal WebGL de Chromium.
+2. **Voile blanc** : d'accord pour le classer « propre au SwiftShader Linux du conteneur ». Il ne bloque rien puisque la carte graphique ne le montre pas.
+   Je le garde en note ; si je le revois sur une future vérification, je donnerai la séquence exacte.
+3. **Pièces d'or et sauvegarde** : pour éviter le décalage des anciennes sauvegardes, identifier chaque pièce par une clé stable (position arrondie,
+   ou identifiant de lieu) plutôt que par son index ; au chargement d'une ancienne sauvegarde, convertir ou ignorer les anciens index sans planter.
+4. **Performance** : le constat « limite processeur / appels de dessin » est cohérent. La vue `lointain` (≈ 4 900 appels) est la priorité de la phase
+   Optimisation : fusion par cellule et par matière du contenu des régions, imposteurs pour les régions et les massifs lointains, et LOD agressif au-delà
+   de la couronne de montagnes.
+5. **Référence `docs/references/monde/ref-15-aurore-boreale.jpg`** : le fichier ne pèse que 4,9 Ko (les autres de 47 à 336 Ko). C'est probablement une
+   vignette ou une image tronquée ; à remplacer par une version pleine taille si le client en a une.
+6. Rappel méthode : ne fusionner `wip/eau-2` et `wip/decor` dans `main` qu'après captures, tests `combat-test` / `village-test` et mesure de FPS.
+
+Rien ne demande l'arbitrage du client pour l'instant. Prochaine vérification dans environ 5 h.
