@@ -12,7 +12,7 @@ import { heightAt } from '../../world/heightmap';
 import { addBox } from '../../world/physics';
 import { paveRect } from '../../world/grass';
 import { streamInfo, rectSdf } from '../../world/valley';
-import { BUILDINGS, PATHS, PLAZA, PathDef, XZ, pointAlong } from '../../world/zones';
+import { BRIDGES, BUILDINGS, PATHS, PLAZA, PathDef, XZ, distToPolyline, pointAlong } from '../../world/zones';
 import { Instancer, bollard, mats as fmats, stepStone } from './furniture';
 
 const STEP = 0.18;
@@ -220,6 +220,18 @@ function boxUV(g: THREE.BufferGeometry) {
 }
 
 // ------------------------------------------------------------------------------------------------ bordures en bois et bambou
+/**
+ * --- CONDUITE & ACCÈS --- vrai là où une bordure (garde-corps, barrière) doit s'interrompre : têtes de pont
+ * (BRIDGES) et croisements avec un autre chemin de PATHS. Vérifié par tools/acces-test.cjs.
+ */
+function edgeGap(x: number, z: number, self: string) {
+  for (const br of BRIDGES) {
+    const m = br.width / 2 + 1.6;
+    if (Math.hypot(x - br.a[0], z - br.a[1]) < m || Math.hypot(x - br.b[0], z - br.b[1]) < m) return true;
+  }
+  return PATHS.some((q) => q.id !== self && distToPolyline(x, z, q.pts) < q.width / 2 + 0.9);
+}
+
 /** Garde-corps de bois côté torrent (Promenade des Bains) : poteaux tous les 1,82 m, main courante ; collisions. */
 function waterRail(b: Batch, p: PathDef) {
   const M = groundMats();
@@ -232,7 +244,7 @@ function waterRail(b: Batch, p: PathDef) {
     const sL = streamInfo(q.x + nx * hw, q.z + nz * hw).d, sR = streamInfo(q.x - nx * hw, q.z - nz * hw).d;
     const sgn = sL < sR ? 1 : -1;
     const x = q.x + nx * hw * sgn, z = q.z + nz * hw * sgn;
-    if (overStream(x, z, 0.3) || streamInfo(x, z).d > 9) { prev = null; continue; }
+    if (overStream(x, z, 0.3) || streamInfo(x, z).d > 9 || edgeGap(x, z, p.id)) { prev = null; continue; }
     const y = heightAt(x, z);
     b.addAt(new THREE.BoxGeometry(0.12, 1.05, 0.12).translate(0, 0.52, 0), M.rail, x, y, z);
     const cur = new THREE.Vector3(x, y, z);
@@ -260,7 +272,7 @@ function bambooFence(b: Batch, p: PathDef) {
     let prev: THREE.Vector3 | null = null;
     for (const q of S) {
       const x = q.x - q.dz * hw * sgn, z = q.z + q.dx * hw * sgn;
-      if (nearBuilding(x, z, 1.2) || overStream(x, z, 1)) { prev = null; continue; }
+      if (nearBuilding(x, z, 1.2) || overStream(x, z, 1) || edgeGap(x, z, p.id)) { prev = null; continue; }
       const y = heightAt(x, z);
       b.addAt(new THREE.CylinderGeometry(0.045, 0.05, 1.1, 6).translate(0, 0.55, 0), M.bamboo, x, y, z);
       const cur = new THREE.Vector3(x, y, z);
@@ -351,14 +363,19 @@ export function buildVillageGround(inst: Instancer): VillageGround {
     if (!['ruelle', 'sando', 'promenade'].includes(p.kind)) continue;
     for (const end of [0, 1]) {
       const pts = end ? p.pts.slice().reverse() : p.pts;
-      const q = pointAlong(pts, 0.8);
-      if (overStream(q.x, q.z, 1)) continue;
+      const isStreet = (x: number, z: number, m: number) => PATHS.some((r) => r.kind === 'rue' && r.pts.some((_, i) => i < r.pts.length - 1 && distSeg(x, z, r.pts[i], r.pts[i + 1]) < r.width / 2 + m));
       // seulement si l'extrémité touche une rue carrossable
-      const touchesStreet = PATHS.some((r) => (r.kind === 'rue') && r.pts.some((_, i) => i < r.pts.length - 1 && distSeg(q.x, q.z, r.pts[i], r.pts[i + 1]) < r.width / 2 + 3.5));
+      const q0 = pointAlong(pts, 0.8);
+      const touchesStreet = isStreet(q0.x, q0.z, 3.5);
       if (!touchesStreet && p.kind !== 'sando') continue;
-      const n = p.width > 3 ? 3 : 2;
-      for (let k = 0; k < n; k++) {
-        const t = (k / (n - 1) - 0.5) * (p.width - 0.6);
+      // --- CONDUITE & ACCÈS --- les bornes se posent sur la ruelle, en retrait de la rue (jamais sur la chaussée),
+      // une de chaque côté : le passage du milieu reste libre à pied (≥ 1,8 m) mais trop étroit pour une voiture
+      let sAt = 0.8;
+      while (sAt < 8 && isStreet(pointAlong(pts, sAt).x, pointAlong(pts, sAt).z, 0.9)) sAt += 0.5;
+      const q = pointAlong(pts, sAt);
+      if (overStream(q.x, q.z, 1)) continue;
+      for (const sg of [-1, 1]) {
+        const t = sg * (p.width / 2 - 0.3);
         const x = q.x - q.dz * t, z = q.z + q.dx * t;
         bollard(inst, x, heightAt(x, z), z);
       }

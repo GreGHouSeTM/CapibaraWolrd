@@ -34,6 +34,10 @@ const VIEWS = {
   sando: { cam: [-12, 10, -16], look: [-26, 12, -70], hour: 9 },
   moulin: { cam: [30, 12, -60], look: [55, 8, -72], hour: 10 },
   pont: { cam: [58, 9, 18], look: [70, 6, 2], hour: 10 },
+  // --- CONDUITE & ACCÈS --- têtes de pont dégagées (Pont du Levant, Gué, Passerelle des Brumes)
+  acceslevant: { cam: [50, 9.5, -19], look: [60, 6, -27], hour: 10 },
+  accesgue: { cam: [20, 7, 127], look: [25, 3.5, 135], hour: 10 },
+  accesbrumes: { cam: [92, 26.5, -178], look: [99, 22.5, -185], hour: 10 },
   rotenburo: { cam: [44, 10, 82], look: [60, 5.5, 68], hour: 10 },
   departaube: { pos: [-3, 26], yaw: Math.PI, pitch: 0.12, hour: 6.75, dist: 7 },
   // nuit avec des lanternes provisoires autour de la place (test des lumières dynamiques et des taches de lumière)
