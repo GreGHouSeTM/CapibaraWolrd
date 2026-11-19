@@ -65,3 +65,7 @@ Chantier : **Optimisation** (prévu au plan, étape 4 de PASSATION.md), à lance
 | WebGPU, React Three Fiber | WebGL2, Three.js direct | WebGPU plus tard (phase optimisation) ; pas de React Three Fiber (aucun gain pour nous) |
 Ce que la proposition ne couvre pas et qui reste nécessaire : streaming des objets, occlusion culling, HLOD, budget d'appels de dessin,
 et surtout la qualité des assets et de la lumière (voir `docs/TRANCHE-HD.md`).
+
+## 8. Menu (retour du 2026-11-19)
+« Nouvelle partie » donne l'impression de relancer tout le chargement. À vérifier : ne pas reconstruire le monde, seulement remettre
+la sauvegarde et le joueur à zéro ; sinon un écran de transition court. Petite tâche, à glisser dans la phase gameplay (ou avant si rapide).
