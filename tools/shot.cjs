@@ -45,6 +45,13 @@ const VIEWS = {
   rizieres: { pos: [-134, -32], yaw: -1.75, pitch: 0.2, hour: 9, dist: 7 },
   theiers: { pos: [108, -70], yaw: 2.5, pitch: 0.22, hour: 10, dist: 7 },
   brume: { cam: [-60, 34, 150], look: [60, 6, -60], hour: 6.9 },
+  // --- Tranche verticale « niveau PS5 » (quartier des Bains) : ground = hauteurs y comptées au-dessus du terrain
+  'hd-rotenburo': { cam: [48, 1.5, 63], look: [62, 0.4, 71], hour: 6.75, ground: true },
+  'hd-ryokan': { cam: [57, 1.5, 40], look: [51, 2.2, 46], hour: 6.75, ground: true },
+  'hd-torrent': { cam: [63, 1.4, 36], look: [70, 0.6, 22], hour: 6.75, ground: true },
+  'hd-ensemble': { cam: [42, 4, 84], look: [64, 1, 66], hour: 6.75, ground: true },
+  'hd-detail': { cam: [53.5, 1.1, 41], look: [51, 0.8, 44], hour: 9.5, ground: true },
+  'hd-nuit': { cam: [48, 1.5, 63], look: [62, 0.4, 71], hour: 21.5, ground: true },
 };
 module.exports = { VIEWS };
 if (require.main === module) (async () => {
@@ -84,6 +91,15 @@ if (require.main === module) (async () => {
         Object.assign(v, { cam: r.cam, look: r.look, ground: false });
         console.log('démo', k, JSON.stringify(r.info));
         v.stats = true;
+      }
+      if (v.ground && !v.demo) {
+        // vue posée sur le relief : y de cam et look comptés au-dessus du terrain
+        const r = await page.evaluate(async (v) => {
+          const { heightAt } = await import('/src/world/heightmap.ts');
+          const at = (p) => [p[0], heightAt(p[0], p[2]) + p[1], p[2]];
+          return { cam: at(v.cam), look: at(v.look) };
+        }, v);
+        Object.assign(v, r, { ground: false });
       }
       await page.evaluate((v) => {
         const g = window.__game; const P = g.player.pos.constructor;

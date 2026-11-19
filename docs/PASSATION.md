@@ -24,6 +24,7 @@ par exemple une session locale sur le PC du client avec sa carte graphique. Le r
 | Capybara | **Debout** pour marcher et à l'arrêt, **à quatre pattes** pour sprinter et nager, transitions animées fluides (annexe de la bible) |
 | Monde | **8 × 8 km**, terres sauvages en **procédural dirigé** (érosion, rivières simulées, végétation écologique, points d'intérêt), aucun mur invisible (annexe de la bible) |
 | Méthode | Boucle d'amélioration : intégrer → vérifier → captures → critique contre la grille → pousser sur `main` sans régression |
+| Niveau visuel (2026-11-19) | **On reste sur Three.js** (navigateur) mais on vise un **niveau de détail PS5** : assets, modélisation et rendu à élever ; méthode par tranche verticale, voir `docs/TRANCHE-HD.md` |
 | Mini-carte | Réduite (110-150 px), demandée par le client |
 | Zones du monde 8 km (2026-11-18) | **Village alpin** (ref-9 à ref-11) = porte d'entrée de la zone Pôle Nord / arctique (puis pinèdes enneigées ref-12, aurores ref-15) ; **jungle** (ref-14, ref-16 à ref-18) = dans la zone Asie (autour de la région Japon) |
 | 2 joueurs | Plus tard (code déjà prévu pour plusieurs joueurs / caméras) |
