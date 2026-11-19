@@ -1,11 +1,11 @@
 // Contrôles de la végétation de Capyville (spécialité Végétation) : retraits de la bible autour des chemins,
 // des bâtiments et de l'eau, forêts sur les pentes de la couronne, prairies de susuki sans arbres.
 import { describe, it, expect, beforeAll } from 'vitest';
-import { bakeWorld } from '../src/world/heightmap';
+import { loadTestTerrain } from './helpers/terrain';
 import { BUILDINGS, PATHS, TALL_GRASS_ZONES, pointAlong, FOREST_BELTS } from '../src/world/zones';
 import { bakeFloraMask, canPlantTree, forestAt } from '../src/procgen/flora/capyville';
 
-beforeAll(() => { bakeWorld(); bakeFloraMask(); }, 120000);
+beforeAll(async () => { await loadTestTerrain(); bakeFloraMask(); }, 120000);
 
 describe('végétation de Capyville', () => {
   it('aucun arbre à moins de 3 m d’un chemin', () => {

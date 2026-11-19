@@ -1,5 +1,7 @@
-// Disposition générale du monde : une prairie centrale (Capyville) entourée de six régions.
+// Disposition générale du monde (8 × 8 km, bible du monde) : Capyville au centre, six régions à 2,5-3,4 km.
+// Positions, sols et voies lus dans world-map.ts (source de vérité du Lead) ; les régions gardent leur contenu.
 import { colRoute } from './valley';
+import { WAYS, WORLD, WORLD_REGIONS } from './world-map';
 export type RegionId = 'hub' | 'paris' | 'newyork' | 'london' | 'japan' | 'desert' | 'pole';
 export type Look = 'city' | 'nature';
 
@@ -22,44 +24,47 @@ export interface RegionDef {
   music: 'hub' | 'paris' | 'newyork' | 'london' | 'japan' | 'desert' | 'pole';
 }
 
-export const WORLD_SIZE = 3200; // mètres, de -1600 à +1600
+export const WORLD_SIZE = WORLD.size; // 8 000 m, de -4 000 à +4 000
 export const WATER_LEVEL = 0;
-export const COAST_RADIUS = 1230;
+// Brouillard des régions : densités de la brume de distance, réglées pour 8 km (bible §10 : l'horizon se fond vers 5 km,
+// le mont Fuji reste visible depuis la place à 2,9 km). La brume au sol des vallées (sky.ts, postfx.ts) n'en dépend pas.
 
-const ring = 800;
-const at = (deg: number): [number, number] => {
-  const a = (deg * Math.PI) / 180;
-  return [Math.sin(a) * ring, -Math.cos(a) * ring];
+// --- TERRAIN & RELIEF : positions, sols et rayons d'influence des régions lus dans WORLD_REGIONS (world-map.ts) ;
+// cityRadius garde l'emprise du contenu actuel des villes (aplatie par le relief cuit, tools/terrain/carve.py).
+const WR = (id: RegionId) => WORLD_REGIONS.find((r) => r.id === id)!;
+const at = (id: RegionId): { x: number; z: number; ground: number; radius: number } => {
+  const r = WR(id);
+  return { x: r.x, z: r.z, ground: r.ground, radius: Math.round(r.radius * 0.5) };
 };
 
 export const REGIONS: RegionDef[] = [
   {
     id: 'hub', name: 'Capyville', welcome: 'Bienvenue à Capyville !', x: 0, z: 0, radius: 330, cityRadius: 150, ground: 6,
-    look: 'nature', fog: [0.72, 0.82, 0.9], fogDensity: 0.0011, saturation: 0.18, contrast: 0.06, warmth: 0.25, music: 'hub',
+    look: 'nature', fog: [0.72, 0.82, 0.9], fogDensity: 0.00016, saturation: 0.18, contrast: 0.06, warmth: 0.25, music: 'hub',
   },
   {
-    id: 'paris', name: 'Paris', welcome: 'Bonjour Paris !', x: at(0)[0], z: at(0)[1], radius: 380, cityRadius: 280, ground: 6,
-    look: 'city', fog: [0.78, 0.8, 0.84], fogDensity: 0.0012, saturation: 0.04, contrast: 0.1, warmth: 0.15, music: 'paris',
+    id: 'paris', name: 'Paris', welcome: 'Bonjour Paris !', ...at('paris'), cityRadius: 280,
+    look: 'city', fog: [0.78, 0.8, 0.84], fogDensity: 0.00018, saturation: 0.04, contrast: 0.1, warmth: 0.15, music: 'paris',
   },
   {
-    id: 'newyork', name: 'New York', welcome: 'Welcome to New York !', x: at(60)[0], z: at(60)[1], radius: 380, cityRadius: 280, ground: 6,
-    look: 'city', fog: [0.74, 0.78, 0.85], fogDensity: 0.0012, saturation: 0.02, contrast: 0.12, warmth: -0.05, music: 'newyork',
+    id: 'newyork', name: 'New York', welcome: 'Welcome to New York !', ...at('newyork'), cityRadius: 280,
+    look: 'city', fog: [0.74, 0.78, 0.85], fogDensity: 0.00018, saturation: 0.02, contrast: 0.12, warmth: -0.05, music: 'newyork',
   },
   {
-    id: 'desert', name: 'Le Désert des Dunes', welcome: 'Le Désert des Dunes', x: at(120)[0], z: at(120)[1], radius: 420, cityRadius: 130, ground: 8,
-    look: 'nature', fog: [0.93, 0.82, 0.66], fogDensity: 0.0011, saturation: 0.2, contrast: 0.06, warmth: 0.6, music: 'desert',
+    id: 'desert', name: 'Le Désert des Dunes', welcome: 'Le Désert des Dunes', ...at('desert'), cityRadius: 130,
+    look: 'nature', fog: [0.93, 0.82, 0.66], fogDensity: 0.00014, saturation: 0.2, contrast: 0.06, warmth: 0.6, music: 'desert',
   },
   {
-    id: 'japan', name: 'Le Japon', welcome: 'Konnichiwa ! Le Japon', x: at(180)[0], z: at(180)[1], radius: 400, cityRadius: 170, ground: 6,
-    look: 'nature', fog: [0.78, 0.84, 0.92], fogDensity: 0.0011, saturation: 0.22, contrast: 0.05, warmth: 0.1, music: 'japan',
+    id: 'japan', name: 'Le Japon', welcome: 'Konnichiwa ! Le Japon', ...at('japan'), cityRadius: 170,
+    look: 'nature', fog: [0.78, 0.84, 0.92], fogDensity: 0.00016, saturation: 0.22, contrast: 0.05, warmth: 0.1, music: 'japan',
   },
   {
-    id: 'pole', name: 'Le Pôle Nord', welcome: 'Brrr… le Pôle Nord !', x: at(240)[0], z: at(240)[1], radius: 420, cityRadius: 140, ground: 4,
-    look: 'nature', fog: [0.85, 0.9, 0.97], fogDensity: 0.0013, saturation: 0.12, contrast: 0.04, warmth: -0.5, music: 'pole',
+    id: 'pole', name: 'Le Pôle Nord', welcome: 'Brrr… le Pôle Nord !', ...at('pole'), cityRadius: 140,
+    look: 'nature', fog: [0.85, 0.9, 0.97], fogDensity: 0.00019, saturation: 0.12, contrast: 0.04, warmth: -0.5, music: 'pole',
   },
   {
-    id: 'london', name: 'Londres', welcome: 'Hello Londres !', x: at(300)[0], z: at(300)[1], radius: 380, cityRadius: 260, ground: 6,
-    look: 'city', fog: [0.74, 0.77, 0.8], fogDensity: 0.0014, saturation: 0.0, contrast: 0.08, warmth: -0.1, music: 'london',
+    id: 'london', name: 'Londres', welcome: 'Hello Londres !', ...at('london'), cityRadius: 260,
+    look: 'city', fog: [0.74, 0.77, 0.8], fogDensity: 0.00021, saturation: 0.0, contrast: 0.08, warmth: -0.1, music: 'london',
   },
 ];
 
@@ -110,30 +115,21 @@ function buildRoads(): RoadDef[] {
   const roads: RoadDef[] = [];
   const hub = REGIONS[0];
   const outer = REGIONS.slice(1);
-  // Rayons : du village vers chaque région
+  // Rayons : les six couloirs des cols de Capyville (valley.ts), dans l'ordre des régions (Paris d'abord : mission « Premier volant »)
   for (const r of outer) {
-    // --- TERRAIN & RELIEF : l'axe part de la porte du village et suit le couloir creusé dans le col (valley.ts) ---
     const pass = colRoute(r.id);
     if (pass) {
       roads.push({ pts: pass.pts.map((p) => [p[0], p[1]] as [number, number]), width: 9 });
       continue;
     }
-    // --- fin du bloc TERRAIN & RELIEF ---
     const a = edge(hub, r, 28);
     const b = edge(r, hub, r.cityRadius * 0.82);
-    const mx = (a[0] + b[0]) / 2, mz = (a[1] + b[1]) / 2;
-    const px = -(b[1] - a[1]) * 0.08, pz = (b[0] - a[0]) * 0.08;
-    roads.push({ pts: [a, [mx + px, mz + pz], b], width: 9 });
+    roads.push({ pts: [a, b], width: 9 });
   }
-  // Anneau extérieur reliant les régions voisines
-  for (let i = 0; i < outer.length; i++) {
-    const r1 = outer[i], r2 = outer[(i + 1) % outer.length];
-    const a = edge(r1, r2, r1.cityRadius * 0.8);
-    const b = edge(r2, r1, r2.cityRadius * 0.8);
-    const mx = (a[0] + b[0]) / 2, mz = (a[1] + b[1]) / 2;
-    const ml = Math.hypot(mx, mz);
-    const push = 1.0 + 60 / ml;
-    roads.push({ pts: [a, [mx * push, mz * push], b], width: 9 });
+  // --- TERRAIN & RELIEF : voies carrossables du monde (WAYS de world-map.ts : routes, routes de gravier, pistes)
+  for (const w of WAYS) {
+    if (!w.vehicles || w.width < 5) continue;
+    roads.push({ pts: w.pts.map((p) => [p[0], p[1]] as [number, number]), width: w.kind === 'route' ? 9 : w.width + 1 });
   }
   return roads;
 }

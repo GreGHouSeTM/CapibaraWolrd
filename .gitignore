@@ -5,3 +5,5 @@ dist
 test-shots
 .claude/
 docs/references/prive/
+tools/terrain/cache/
+__pycache__/

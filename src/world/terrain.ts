@@ -1,218 +1,198 @@
-// Maillage du terrain et son matériau à couches (spécialité Terrain & relief).
-// - Hors de la vallée : morceaux de 200 m à deux niveaux de détail.
-// - Vallée de Capyville (emprise DETAIL) : chaque morceau de 200 m se découpe de près en 16 tuiles de 50 m
-//   construites à la demande en 0,5 m, 1 m ou 2,5 m selon la distance (grille fine de heightmap.ts).
-// - Jupes verticales sur les bords pour masquer les fissures entre niveaux de détail.
-// - Matériau : 9 couches PBR (herbe, herbe rase moussue, sous-bois, terre, galets, roche moussue, roche,
-//   sable, neige) dans deux tableaux de textures, mélange par masque de surface et par hauteur, roche
-//   en projection triplanaire sur les pentes, sol mouillé au bord de l'eau.
-// Textures : Poly Haven (CC0) — celles de public/assets/tex/ et, pour la vallée, public/assets/tex/terrain/
-// (mossy_rock, river_small_rocks, forest_leaves_02, sparse_grass).
+// Terrain en clipmaps géométriques sur GPU (spécialité Terrain & relief), méthode CDLOD :
+// - un seul maillage (carreau de 32 × 32 mailles) instancié sur les nœuds d'un arbre quaternaire choisis chaque image
+//   autour de la caméra : 0,5 m par maille aux pieds, puis 1, 2, 4… jusqu'à 128 m à l'horizon ;
+// - la hauteur est lue dans le vertex shader (TERRAIN_HEIGHT_GLSL : tuiles de 2 m + grille de 0,5 m de Capyville),
+//   exactement comme heightAt côté processeur (physique, placement) ;
+// - pas de fissures : à l'approche de la limite de son niveau, chaque sommet « glisse » (morphing) vers la grille
+//   du niveau suivant, qui est celle du voisin plus grossier ;
+// - normales par pixel depuis la texture de hauteur ; un appel de dessin pour toute l'île (plus un par cascade d'ombre).
+// Matériau : 9 couches PBR (herbe, herbe rase, sous-bois, terre, galets, roche moussue, roche, sable, neige) dans deux
+// tableaux de textures, mélangées par hauteur ; roche en projection triplanaire sur les pentes ; masques lus dans les
+// cartes dérivées (écoulement, humidité, dépôts, roche) et la carte des biomes (sable, neige, sol sec, mousse),
+// fondus de biome de 300 à 600 m (bible du monde §4-5). Vallée de Capyville : couches fines d'origine (valley.ts).
+// Textures : Poly Haven (CC0) — public/assets/tex/ et public/assets/tex/terrain/.
 import * as THREE from 'three';
-import {
-  HM_RES, WORLD_HALF, getDetailSplatTexture, getSplatTexture, heightAt, normalAt, wetAt,
-} from './heightmap';
+import { TERRAIN_HEIGHT_GLSL, getBiomeTexture, getDetailSplatTexture, getSurfaceTexture, terrainHeightUniforms } from './heightmap';
+import { terrainData } from './terrain-data';
 import { DETAIL } from './valley';
-import { REGIONS, RegionId, WORLD_SIZE } from './layout';
 import { IMG } from '../core/assets';
+import { beforeRender } from '../procgen/village/lod';
 
-const CHUNK = 200;
-const TILE = 50;
+// ------------------------------------------------------------------------------------------- arbre quaternaire
+const G = 32; // mailles par côté de carreau
+const LEAF = 16; // côté d'un nœud du niveau 0 (0,5 m par maille)
+const LEVELS = 10; // 16 m … 8 192 m
+const ORIGIN = -4096;
+/** Portée de chaque niveau (m) : distance caméra-nœud jusqu'à laquelle ce niveau suffit. */
+const RANGE = Array.from({ length: LEVELS }, (_, k) => 64 * 2 ** k);
+RANGE[LEVELS - 1] = 1e7;
+const MORPH_START = RANGE.map((r, k) => { const p = k === 0 ? 0 : RANGE[k - 1]; return p + (r - p) * 0.62; });
 
-const GRASS_TINT: Record<RegionId, [number, number, number]> = {
-  hub: [0.62, 0.84, 0.32],
-  paris: [0.5, 0.68, 0.3],
-  newyork: [0.48, 0.66, 0.32],
-  london: [0.42, 0.62, 0.3],
-  japan: [0.5, 0.86, 0.38],
-  desert: [0.85, 0.74, 0.45],
-  pole: [0.9, 0.95, 1.0],
-};
-
-function tintAt(x: number, z: number, out: THREE.Color) {
-  let r = 0, g = 0, b = 0, sum = 0;
-  for (const reg of REGIONS) {
-    const d = Math.hypot(x - reg.x, z - reg.z);
-    const w = Math.pow(Math.max(0, 1 - d / (reg.radius * 1.7)), 3) + 1e-4;
-    const t = GRASS_TINT[reg.id];
-    r += t[0] * w; g += t[1] * w; b += t[2] * w; sum += w;
-  }
-  return out.setRGB(r / sum, g / sum, b / sum);
-}
-
-// ------------------------------------------------------------------------------------------- géométrie
-const indexCache = new Map<number, THREE.BufferAttribute>();
-/** Indices d'une grille seg × seg suivie de sa jupe (4 bords, les deux faces). */
-function gridIndex(seg: number) {
-  let a = indexCache.get(seg);
-  if (a) return a;
-  const n = seg + 1;
-  const idx: number[] = [];
-  for (let j = 0; j < seg; j++)
-    for (let i = 0; i < seg; i++) {
-      const p = j * n + i;
-      idx.push(p, p + n, p + 1, p + 1, p + n, p + n + 1);
-    }
-  // jupe : sommets n*n + k (k le long du contour)
-  const ring = edgeRing(seg);
-  const base = n * n;
-  for (let k = 0; k < ring.length; k++) {
-    const a0 = ring[k], a1 = ring[(k + 1) % ring.length];
-    const b0 = base + k, b1 = base + ((k + 1) % ring.length);
-    idx.push(a0, b0, a1, a1, b0, b1, a0, a1, b0, a1, b1, b0);
-  }
-  const total = base + ring.length;
-  a = new THREE.BufferAttribute(total > 65535 ? new Uint32Array(idx) : new Uint16Array(idx), 1);
-  indexCache.set(seg, a);
-  return a;
-}
-const ringCache = new Map<number, number[]>();
-function edgeRing(seg: number) {
-  let r = ringCache.get(seg);
-  if (r) return r;
-  const n = seg + 1;
-  r = [];
-  for (let i = 0; i < seg; i++) r.push(i); // nord
-  for (let j = 0; j < seg; j++) r.push(j * n + seg); // est
-  for (let i = seg; i > 0; i--) r.push(seg * n + i); // sud
-  for (let j = seg; j > 0; j--) r.push(j * n); // ouest
-  ringCache.set(seg, r);
-  return r;
-}
-
-/** Grille de terrain carrée centrée en (cx, cz), coordonnées locales au centre. */
-function buildGrid(cx: number, cz: number, size: number, seg: number, skirt: number) {
-  const n = seg + 1;
-  const ring = edgeRing(seg);
-  const count = n * n + ring.length;
-  const pos = new Float32Array(count * 3);
-  const nor = new Float32Array(count * 3);
-  const col = new Float32Array(count * 3);
-  const wet = new Float32Array(count);
-  const v = new THREE.Vector3(), c = new THREE.Color();
-  const step = size / seg;
-  const e = Math.max(0.5, step);
-  let minY = Infinity, maxY = -Infinity;
-  for (let j = 0; j < n; j++)
-    for (let i = 0; i < n; i++) {
-      const lx = -size / 2 + i * step, lz = -size / 2 + j * step;
-      const x = cx + lx, z = cz + lz;
-      const y = heightAt(x, z);
-      const k = j * n + i;
-      pos[k * 3] = lx; pos[k * 3 + 1] = y; pos[k * 3 + 2] = lz;
-      normalAt(x, z, v, e);
-      nor[k * 3] = v.x; nor[k * 3 + 1] = v.y; nor[k * 3 + 2] = v.z;
-      tintAt(x, z, c);
-      col[k * 3] = c.r; col[k * 3 + 1] = c.g; col[k * 3 + 2] = c.b;
-      wet[k] = wetAt(x, z);
-      if (y < minY) minY = y;
-      if (y > maxY) maxY = y;
-    }
-  for (let k = 0; k < ring.length; k++) {
-    const s = ring[k], d = n * n + k;
-    pos[d * 3] = pos[s * 3]; pos[d * 3 + 1] = pos[s * 3 + 1] - skirt; pos[d * 3 + 2] = pos[s * 3 + 2];
-    nor.copyWithin(d * 3, s * 3, s * 3 + 3);
-    col.copyWithin(d * 3, s * 3, s * 3 + 3);
-    wet[d] = wet[s];
-  }
-  const geo = new THREE.BufferGeometry();
-  geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
-  geo.setAttribute('normal', new THREE.BufferAttribute(nor, 3));
-  geo.setAttribute('color', new THREE.BufferAttribute(col, 3));
-  geo.setAttribute('aWet', new THREE.BufferAttribute(wet, 1));
-  geo.setIndex(gridIndex(seg));
-  geo.computeBoundingSphere();
-  geo.computeBoundingBox();
-  return { geo, minY, maxY };
-}
-
-// ------------------------------------------------------------------------------------------- tuiles à la demande
-const TILE_LEVELS = [
-  { seg: 100, dist: 0, skirt: 0.4 }, // 0,5 m
-  { seg: 50, dist: 75, skirt: 0.8 }, // 1 m
-  { seg: 20, dist: 180, skirt: 1.5 }, // 2,5 m
-];
-const _cam = new THREE.Vector3(), _me = new THREE.Vector3();
-
-/** Tuile de 50 m dont les niveaux de détail sont construits à la demande (et le plus fin libéré de loin). */
-class LazyTile extends THREE.LOD {
-  private built: boolean[] = [];
-  constructor(private cx: number, private cz: number, private material: THREE.Material) {
-    super();
-    this.position.set(cx, 0, cz);
-    for (const L of TILE_LEVELS) {
-      const m = new THREE.Mesh(new THREE.BufferGeometry(), material);
-      m.receiveShadow = true;
-      m.matrixAutoUpdate = false;
-      this.addLevel(m, L.dist);
-      this.built.push(false);
-    }
-  }
-  update(camera: THREE.Camera) {
-    _cam.setFromMatrixPosition(camera.matrixWorld);
-    _me.setFromMatrixPosition(this.matrixWorld);
-    const d = _cam.distanceTo(_me);
-    let lvl = 0;
-    for (let i = 1; i < TILE_LEVELS.length; i++) if (d >= TILE_LEVELS[i].dist) lvl = i;
-    if (!this.built[lvl]) this.build(lvl);
-    // la version la plus fine coûte de la mémoire : on la libère quand on s'éloigne
-    if (this.built[0] && d > TILE_LEVELS[1].dist * 2.2) {
-      const m = this.levels[0].object as THREE.Mesh;
-      m.geometry.dispose();
-      m.geometry = new THREE.BufferGeometry();
-      this.built[0] = false;
-    }
-    super.update(camera);
-  }
-  private build(lvl: number) {
-    const L = TILE_LEVELS[lvl];
-    const m = this.levels[lvl].object as THREE.Mesh;
-    m.geometry.dispose();
-    m.geometry = buildGrid(this.cx, this.cz, TILE, L.seg, L.skirt).geo;
-    this.built[lvl] = true;
-  }
-}
-
-const chunkInDetail = (cx: number, cz: number) =>
-  cx - CHUNK / 2 >= DETAIL.x0 - 0.01 && cx + CHUNK / 2 <= DETAIL.x1 + 0.01 && cz - CHUNK / 2 >= DETAIL.z0 - 0.01 && cz + CHUNK / 2 <= DETAIL.z1 + 0.01;
-
-export function createTerrain(material: THREE.Material, lodDist: number) {
-  const group = new THREE.Group();
-  group.name = 'terrain';
-  const n = Math.round(WORLD_SIZE / CHUNK);
-  for (let j = 0; j < n; j++) {
-    for (let i = 0; i < n; i++) {
-      const cx = -WORLD_HALF + CHUNK / 2 + i * CHUNK;
-      const cz = -WORLD_HALF + CHUNK / 2 + j * CHUNK;
-      const lod = new THREE.LOD();
-      const high = buildGrid(cx, cz, CHUNK, 64, 2);
-      if (high.maxY < -9) { high.geo.dispose(); continue; } // fond marin profond : l'eau suffit
-      const low = buildGrid(cx, cz, CHUNK, 16, 4);
-      const mh = new THREE.Mesh(high.geo, material);
-      const ml = new THREE.Mesh(low.geo, material);
-      mh.receiveShadow = true;
-      ml.receiveShadow = true;
-      if (chunkInDetail(cx, cz)) {
-        // vallée : tuiles fines de près
-        const tiles = new THREE.Group();
-        for (let tj = 0; tj < CHUNK / TILE; tj++)
-          for (let ti = 0; ti < CHUNK / TILE; ti++)
-            tiles.add(new LazyTile(cx - CHUNK / 2 + TILE / 2 + ti * TILE, cz - CHUNK / 2 + TILE / 2 + tj * TILE, material));
-        // les tuiles sont positionnées en absolu : le groupe compense la position du LOD
-        tiles.position.set(-cx, 0, -cz);
-        lod.addLevel(tiles, 0);
-        lod.addLevel(mh, 300);
-        lod.addLevel(ml, Math.max(lodDist, 700));
-      } else {
-        lod.addLevel(mh, 0);
-        lod.addLevel(ml, lodDist);
+/** Hauteurs min / max par nœud (pyramide), pour les tests de portée. */
+class MinMax {
+  mn: Float32Array[] = [];
+  mx: Float32Array[] = [];
+  n: number[] = [];
+  constructor() {
+    const td = terrainData!;
+    const H = td.meta.height;
+    const per = LEAF / H.cell; // échantillons par nœud feuille
+    let n = H.n / per;
+    const mn = new Float32Array(n * n).fill(Infinity), mx = new Float32Array(n * n).fill(-Infinity);
+    for (let j = 0; j < H.n; j++) {
+      const nj = Math.min(n - 1, Math.floor(j / per));
+      for (let i = 0; i < H.n; i++) {
+        const v = td.height[j * H.n + i];
+        const k = nj * n + Math.min(n - 1, Math.floor(i / per));
+        if (v < mn[k]) mn[k] = v;
+        if (v > mx[k]) mx[k] = v;
       }
-      lod.position.set(cx, 0, cz);
-      lod.autoUpdate = true;
-      group.add(lod);
+    }
+    this.mn.push(mn); this.mx.push(mx); this.n.push(n);
+    while (n > 1) {
+      const m = n / 2, a = this.mn[this.mn.length - 1], b = this.mx[this.mx.length - 1];
+      const mn2 = new Float32Array(m * m), mx2 = new Float32Array(m * m);
+      for (let j = 0; j < m; j++)
+        for (let i = 0; i < m; i++) {
+          const q0 = 2 * j * n + 2 * i, q1 = q0 + 1, q2 = q0 + n, q3 = q2 + 1;
+          mn2[j * m + i] = Math.min(a[q0], a[q1], a[q2], a[q3]);
+          mx2[j * m + i] = Math.max(b[q0], b[q1], b[q2], b[q3]);
+        }
+      this.mn.push(mn2); this.mx.push(mx2); this.n.push(m);
+      n = m;
     }
   }
-  return group;
+  get(level: number, i: number, j: number): [number, number] {
+    const k = j * this.n[level] + i;
+    return [this.mn[level][k] - 2, this.mx[level][k] + 2];
+  }
+}
+
+export interface TerrainStats { nodes: number; triangles: number }
+
+export class TerrainClipmap {
+  mesh: THREE.Mesh;
+  private geo: THREE.InstancedBufferGeometry;
+  private attr: THREE.InstancedBufferAttribute;
+  private data: Float32Array;
+  private mm: MinMax;
+  private count = 0;
+  private cam = new THREE.Vector3();
+  readonly uniforms = { uMorphCam: { value: new THREE.Vector3() } };
+  stats: TerrainStats = { nodes: 0, triangles: 0 };
+  private max = 4096;
+
+  constructor(material: THREE.Material, depth: THREE.Material) {
+    this.mm = new MinMax();
+    const base = new THREE.PlaneGeometry(1, 1, G, G);
+    base.rotateX(-Math.PI / 2);
+    base.translate(0.5, 0, 0.5); // coordonnées locales 0..1 (x, z)
+    this.geo = new THREE.InstancedBufferGeometry();
+    this.geo.index = base.index;
+    this.geo.setAttribute('position', base.getAttribute('position'));
+    this.data = new Float32Array(this.max * 4);
+    this.attr = new THREE.InstancedBufferAttribute(this.data, 4);
+    this.attr.setUsage(THREE.DynamicDrawUsage);
+    this.geo.setAttribute('aNode', this.attr);
+    this.geo.instanceCount = 0;
+    this.mesh = new THREE.Mesh(this.geo, material);
+    this.mesh.frustumCulled = false;
+    this.mesh.receiveShadow = true;
+    this.mesh.castShadow = true;
+    this.mesh.customDepthMaterial = depth;
+    this.mesh.name = 'terrain-clipmap';
+  }
+
+  /** Choix des nœuds pour la caméra (une fois par image, avant le rendu). */
+  update(camera: THREE.Camera) {
+    camera.getWorldPosition(this.cam);
+    this.uniforms.uMorphCam.value.copy(this.cam);
+    this.count = 0;
+    this.select(0, 0, LEVELS - 1);
+    this.geo.instanceCount = this.count;
+    this.attr.clearUpdateRanges();
+    this.attr.addUpdateRange(0, this.count * 4);
+    this.attr.needsUpdate = true;
+    this.stats.nodes = this.count;
+    this.stats.triangles = this.count * G * G * 2;
+  }
+
+  /** Distance de la caméra à la boîte du nœud (i, j) du niveau `level`. */
+  private dist(level: number, i: number, j: number) {
+    const size = LEAF * 2 ** level;
+    const x0 = ORIGIN + i * size, z0 = ORIGIN + j * size;
+    const [y0, y1] = this.mm.get(level, i, j);
+    const c = this.cam;
+    const dx = Math.max(x0 - c.x, 0, c.x - (x0 + size));
+    const dz = Math.max(z0 - c.z, 0, c.z - (z0 + size));
+    const dy = Math.max(y0 - c.y, 0, c.y - y1);
+    return Math.sqrt(dx * dx + dy * dy + dz * dz);
+  }
+
+  private push(level: number, i: number, j: number, drawLevel: number) {
+    if (this.count >= this.max) return;
+    const size = LEAF * 2 ** level;
+    const o = this.count++ * 4;
+    this.data[o] = ORIGIN + i * size;
+    this.data[o + 1] = ORIGIN + j * size;
+    this.data[o + 2] = size;
+    this.data[o + 3] = drawLevel;
+  }
+
+  private select(i: number, j: number, level: number): boolean {
+    if (level < LEVELS - 1 && this.dist(level, i, j) > RANGE[level]) return false;
+    if (level === 0) { this.push(0, i, j, 0); return true; }
+    if (this.dist(level, i, j) > RANGE[level - 1]) { this.push(level, i, j, level); return true; }
+    for (let q = 0; q < 4; q++) {
+      const ci = 2 * i + (q & 1), cj = 2 * j + (q >> 1);
+      if (!this.select(ci, cj, level - 1)) this.push(level - 1, ci, cj, level); // quart dessiné au niveau du parent
+    }
+    return true;
+  }
+}
+
+// ------------------------------------------------------------------------------------------- shaders
+/** Code de sommet commun (rendu et ombres) : position du carreau, morphing CDLOD, hauteur. */
+const VERT_PARS = /* glsl */ `
+attribute vec4 aNode;
+uniform vec3 uMorphCam;
+uniform float uRange[${LEVELS}];
+uniform float uMorphStart[${LEVELS}];
+varying vec3 vWPos;
+${TERRAIN_HEIGHT_GLSL}
+vec3 terrainVertex(vec3 local) {
+  float size = aNode.z;
+  float lvl = aNode.w;
+  float cell = size / ${G}.0;
+  float ls = ${(LEAF / G).toFixed(4)} * exp2(lvl); // pas de la grille du niveau dessiné
+  float r = floor(ls / cell + 0.5);                 // 1, ou 2 pour un quart dessiné au niveau du parent
+  vec2 idx = floor(local.xz * ${G}.0 + 0.5);
+  idx = floor(idx / r + 0.001) * r;                 // ramène les sommets sur la grille du niveau
+  vec2 p0 = aNode.xy + idx * cell;
+  float h0 = terrainHeight(p0);
+  int li = int(lvl + 0.5);
+  float d = distance(uMorphCam, vec3(p0.x, h0, p0.y));
+  float morph = clamp((d - uMorphStart[li]) / (uRange[li] - uMorphStart[li]), 0.0, 1.0);
+  // sommets impairs (sur la grille du niveau) glissés vers le sommet pair voisin : grille du niveau suivant
+  vec2 odd = mod(idx / r, 2.0);
+  vec2 p = aNode.xy + (idx - odd * r * morph) * cell;
+  return vec3(p.x, terrainHeight(p), p.y);
+}
+`;
+const VERT_MAIN = /* glsl */ `
+  vec3 tw = terrainVertex(position);
+  vWPos = tw;
+  vec3 transformed = tw;
+`;
+
+function patchVertex(shader: THREE.WebGLProgramParametersWithUniforms, uniforms: Record<string, THREE.IUniform>) {
+  Object.assign(shader.uniforms, uniforms);
+  shader.vertexShader = shader.vertexShader
+    .replace('#include <common>', '#include <common>\n' + VERT_PARS)
+    .replace('#include <beginnormal_vertex>', 'vec3 objectNormal = vec3(0.0, 1.0, 0.0);')
+    .replace('#include <begin_vertex>', VERT_MAIN)
+    // le carreau est déjà en coordonnées du monde (modelMatrix = identité)
+    .replace('#include <worldpos_vertex>', 'vec4 worldPosition = vec4(transformed, 1.0);');
 }
 
 // ------------------------------------------------------------------------------------------- matériau
@@ -221,10 +201,10 @@ const LAYERS: { diff: string; nor: string; scale: number; rough: number }[] = [
   { diff: 'grass_diff', nor: 'grass_nor', scale: 4.5, rough: 0.95 }, // 0 herbe des prés
   { diff: 'terrain/mosslawn_diff', nor: 'terrain/mosslawn_nor', scale: 3.2, rough: 0.92 }, // 1 herbe rase moussue (village)
   { diff: 'terrain/forestmoss_diff', nor: 'terrain/forestmoss_nor', scale: 3.6, rough: 0.95 }, // 2 sous-bois : mousse et feuilles
-  { diff: 'dirtroad_diff', nor: 'dirtroad_nor', scale: 3.5, rough: 0.92 }, // 3 terre des chemins
+  { diff: 'dirtroad_diff', nor: 'dirtroad_nor', scale: 3.5, rough: 0.92 }, // 3 terre
   { diff: 'terrain/pebbles_diff', nor: 'terrain/pebbles_nor', scale: 2.4, rough: 0.7 }, // 4 galets
   { diff: 'terrain/mossrockgrey_diff', nor: 'terrain/mossrockgrey_nor', scale: 6, rough: 0.85 }, // 5 roche moussue
-  { diff: 'rock_diff', nor: 'rock_nor', scale: 9, rough: 0.88 }, // 6 roche (reste du monde)
+  { diff: 'rock_diff', nor: 'rock_nor', scale: 9, rough: 0.88 }, // 6 roche
   { diff: 'sand_diff', nor: 'sand_nor', scale: 6, rough: 0.95 }, // 7 sable
   { diff: 'snow_diff', nor: 'snow_nor', scale: 5, rough: 0.6 }, // 8 neige
 ];
@@ -270,41 +250,51 @@ function loadLayerImages(alb: THREE.DataArrayTexture, nor: THREE.DataArrayTextur
   });
 }
 
+/** Uniformes partagés par le rendu et les ombres (hauteur, portées, position de morphing). */
+const sharedUniforms: Record<string, THREE.IUniform> = {};
+function initShared() {
+  if (sharedUniforms.uTHGlobal) return;
+  Object.assign(sharedUniforms, terrainHeightUniforms(), {
+    uRange: { value: RANGE.slice() },
+    uMorphStart: { value: MORPH_START.slice() },
+    uMorphCam: { value: new THREE.Vector3() },
+  });
+}
+
 export function createTerrainMaterial(): THREE.MeshStandardMaterial {
-  const mat = new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.92, metalness: 0 });
+  initShared();
+  const mat = new THREE.MeshStandardMaterial({ roughness: 0.92, metalness: 0 });
   const alb = makeArray(ALB, true), nor = makeArray(NOR, false);
   loadLayerImages(alb, nor);
   const ds = getDetailSplatTexture().image as { width: number; height: number };
-  const uniforms = {
-    uSplat: { value: getSplatTexture() },
+  const td = terrainData!;
+  const S = td.meta.surface, Bm = td.meta.biome;
+  const extra = {
     uSplatD: { value: getDetailSplatTexture() },
+    uSurf: { value: getSurfaceTexture() },
+    uBiome: { value: getBiomeTexture() },
+    uSurfRect: { value: new THREE.Vector4(S.x0, S.cell * S.n, Bm.x0, Bm.cell * Bm.n) },
+    uSurfRes: { value: new THREE.Vector2(S.n, Bm.n) },
     uAlb: { value: alb },
     uNor: { value: nor },
-    uWorld: { value: WORLD_SIZE },
-    uGRes: { value: HM_RES },
     uDRect: { value: new THREE.Vector4(DETAIL.x0, DETAIL.z0, DETAIL.x1, DETAIL.z1) },
     uDRes: { value: new THREE.Vector2(ds.width, ds.height) },
   };
   const scales = LAYERS.map((l) => l.scale.toFixed(2)).join(', ');
   const roughs = LAYERS.map((l) => l.rough.toFixed(2)).join(', ');
   mat.onBeforeCompile = (shader) => {
-    Object.assign(shader.uniforms, uniforms);
-    shader.vertexShader = shader.vertexShader
-      .replace('#include <common>', '#include <common>\nvarying vec3 vWPos;\nvarying vec3 vWNor;\nattribute float aWet;\nvarying float vWet;')
-      .replace(
-        '#include <worldpos_vertex>',
-        '#include <worldpos_vertex>\nvWPos = (modelMatrix * vec4(transformed,1.0)).xyz;\nvWNor = normalize(mat3(modelMatrix) * objectNormal);\nvWet = aWet;',
-      );
+    patchVertex(shader, sharedUniforms);
+    Object.assign(shader.uniforms, extra);
     shader.fragmentShader = shader.fragmentShader
       .replace(
         '#include <common>',
         `#include <common>
         varying vec3 vWPos;
-        varying vec3 vWNor;
-        varying float vWet;
-        uniform sampler2D uSplat, uSplatD;
+        ${TERRAIN_HEIGHT_GLSL}
+        uniform sampler2D uSplatD, uSurf, uBiome;
         uniform highp sampler2DArray uAlb, uNor;
-        uniform float uWorld, uGRes;
+        uniform vec4 uSurfRect;
+        uniform vec2 uSurfRes;
         uniform vec4 uDRect;
         uniform vec2 uDRes;
         const float LSC[9] = float[9](${scales});
@@ -329,43 +319,71 @@ export function createTerrainMaterial(): THREE.MeshStandardMaterial {
         '#include <map_fragment>',
         `
         vec2 wp = vWPos.xz;
-        vec3 Nw = normalize(vWNor);
-        // masques : grille globale (herbe, sable, neige, roche) et grille fine de la vallée (roche, galets, terre, sous-bois)
-        vec2 gq = (wp + uWorld * 0.5) / uWorld * (uGRes - 1.0);
-        vec4 gs = texture(uSplat, (gq + 0.5) / uGRes);
-        gs /= max(0.001, gs.r + gs.g + gs.b + gs.a);
+        float camD = length(vWPos - cameraPosition);
+        // normale par pixel depuis la hauteur (pas adapté à la distance)
+        float e = clamp(camD * 0.004, 0.3, 12.0);
+        vec3 Nw = normalize(vec3(terrainHeight(wp - vec2(e, 0.0)) - terrainHeight(wp + vec2(e, 0.0)), 2.0 * e,
+                                 terrainHeight(wp - vec2(0.0, e)) - terrainHeight(wp + vec2(0.0, e))));
+        // cartes dérivées (4 m) et biomes (8 m)
+        vec4 sf = texture(uSurf, (wp - uSurfRect.x) / uSurfRect.y + 0.5 / uSurfRes.x);
+        vec4 bm = texture(uBiome, (wp - uSurfRect.z) / uSurfRect.w + 0.5 / uSurfRes.y);
+        float flow = sf.r, wet = sf.g, depo = sf.b, rockM = sf.a;
+        float sand = bm.r, snow = bm.g, dry = bm.b, lush = bm.a;
+        // vallée de Capyville : couches fines d'origine (roche, galets, terre, sous-bois)
         vec2 dq = (wp - uDRect.xy) / (uDRect.zw - uDRect.xy);
         float dm = min(min(wp.x - uDRect.x, uDRect.z - wp.x), min(wp.y - uDRect.y, uDRect.w - wp.y));
         float inD = smoothstep(0.0, 12.0, dm);
         vec4 ds = texture(uSplatD, (clamp(dq, 0.0, 1.0) * (uDRes - 1.0) + 0.5) / uDRes);
         float dsum = ds.r + ds.g + ds.b + ds.a;
         if (dsum > 1.0) { ds /= dsum; dsum = 1.0; }
-        float wg = 1.0 - dsum;
         float vill = smoothstep(135.0, 105.0, length(wp));
-        tW[0] = mix(gs.r, wg * (1.0 - 0.55 * vill), inD);
-        tW[1] = inD * wg * 0.55 * vill;
-        tW[2] = inD * ds.a;
-        tW[3] = inD * ds.b;
-        tW[4] = inD * ds.g;
-        tW[5] = inD * ds.r;
-        tW[6] = (1.0 - inD) * gs.a;
-        tW[7] = (1.0 - inD) * gs.g;
-        tW[8] = (1.0 - inD) * gs.b;
-        // roche toujours présente sur les pentes très raides (falaises fines)
-        float steep = smoothstep(0.72, 0.55, Nw.y);
+        float slopeY = Nw.y;
+        // monde : neige, roche des pentes et affleurements, sable, lits et éboulis (galets), terre sèche, sous-bois, herbe
+        float n1 = tNoise(wp / 23.0), n2 = tNoise(wp / 7.0);
+        float rockW = max(smoothstep(0.86, 0.72, slopeY + 0.06 * (n1 - 0.5)), rockM * 0.9);
+        float snowW = snow * smoothstep(0.55, 0.75, slopeY + 0.1 * n2);
+        float sandW = sand * (1.0 - rockW);
+        // galets seulement dans les vrais lits (bassin versant de plus de 5 ha) et les éboulis frais
+        float bedW = smoothstep(0.78, 0.9, flow) * (0.6 + 0.4 * wet) * (1.0 - sand);
+        // éboulis : roche claire en pied de pente plutôt que galets (texture trop petite pour de grandes surfaces)
+        float screeW = smoothstep(0.35, 0.8, depo) * smoothstep(0.97, 0.85, slopeY);
+        rockW = max(rockW, screeW * 0.7);
+        float dirtW = dry * 0.45 * smoothstep(0.45, 0.8, n1 + 0.3 * depo) + 0.15 * depo * (1.0 - lush);
+        float mossW = lush * smoothstep(0.3, 0.8, wet + 0.3 * (n2 - 0.5));
+        float wl = 1.0 - inD;
+        float r0 = 1.0;
+        tW[8] = snowW; r0 -= tW[8];
+        tW[6] = r0 * rockW * (1.0 - 0.6 * lush);
+        tW[5] = r0 * rockW * 0.6 * lush; r0 -= tW[6] + tW[5];
+        tW[7] = r0 * sandW; r0 -= tW[7];
+        tW[4] = r0 * clamp(bedW, 0.0, 1.0); r0 -= tW[4];
+        tW[3] = r0 * clamp(dirtW, 0.0, 1.0); r0 -= tW[3];
+        tW[2] = r0 * mossW; r0 -= tW[2];
+        tW[0] = max(r0, 0.0);
+        tW[1] = 0.0;
+        for (int i = 0; i < 9; i++) tW[i] *= wl;
+        float wg = 1.0 - dsum;
+        tW[0] += inD * wg * (1.0 - 0.55 * vill);
+        tW[1] += inD * wg * 0.55 * vill;
+        tW[2] += inD * ds.a;
+        tW[3] += inD * ds.b;
+        tW[4] += inD * ds.g;
+        tW[5] += inD * ds.r;
+        // roche toujours présente sur les pentes très raides (falaises)
+        float steep = smoothstep(0.72, 0.55, slopeY);
         for (int i = 0; i < 9; i++) tW[i] *= (1.0 - steep);
         tW[5] += steep * inD; tW[6] += steep * (1.0 - inD);
         // mélange par hauteur (luminance de l'albédo) et triplanaire pour la roche
         vec3 tCol = vec3(0.0); vec3 tNt = vec3(0.0); float tSum = 0.0; tRough = 0.0;
         vec3 tri = pow(abs(Nw), vec3(4.0)); tri /= (tri.x + tri.y + tri.z);
-        float camD = length(vWPos - cameraPosition);
         for (int i = 0; i < 9; i++) {
           float w = tW[i];
           if (w < 0.004) continue;
           vec4 a; vec3 nt;
           if (i == 5 || i == 6) {
             vec2 px = vWPos.zy, pz = vWPos.xy;
-            a = tAlb(i, wp) * tri.y + texture(uAlb, vec3(px / LSC[i], float(i))) * tri.x + texture(uAlb, vec3(pz / LSC[i], float(i))) * tri.z;
+            // faces verticales : deux échelles mélangées aussi (pas de motif répété sur les grandes parois)
+            a = tAlb(i, wp) * tri.y + tAlb(i, px) * tri.x + tAlb(i, pz) * tri.z;
             nt = (texture(uNor, vec3(wp / LSC[i], float(i))).xyz * 2.0 - 1.0) * tri.y
                + (texture(uNor, vec3(px / LSC[i], float(i))).xyz * 2.0 - 1.0) * tri.x
                + (texture(uNor, vec3(pz / LSC[i], float(i))).xyz * 2.0 - 1.0) * tri.z;
@@ -378,16 +396,20 @@ export function createTerrainMaterial(): THREE.MeshStandardMaterial {
           tCol += a.rgb * hw; tNt += nt * hw; tRough += LRO[i] * hw; tSum += hw;
         }
         tCol /= tSum; tNt /= tSum; tRough /= tSum;
-        // teintes : herbe des prés selon la région (couleurs de sommet), herbe du village plus profonde
-        float grassW = (tW[0] + tW[1]) ;
-        vec3 tint = mix(vec3(1.0), vColor.rgb * 1.45, clamp(tW[0] / max(0.001, grassW + tW[2] + tW[3] + tW[4] + tW[5] + tW[6] + tW[7] + tW[8]), 0.0, 1.0) * 0.85);
-        tCol *= tint;
+        // teinte de l'herbe selon le biome : vert profond (mousse), herbe blonde (sec), herbe rousse (froid)
+        vec3 tintV = vec3(0.9, 1.22, 0.47);
+        vec3 tintG = mix(tintV, vec3(1.25, 1.07, 0.62), dry);
+        tintG = mix(tintG, vec3(0.75, 1.18, 0.55), lush * 0.6);
+        tintG = mix(tintG, vec3(1.1, 0.98, 0.78), smoothstep(0.0, 0.6, snow) * (1.0 - snowW));
+        tintG = mix(tintV, tintG, wl);
+        tCol *= mix(vec3(1.0), tintG, clamp(tW[0] + tW[1], 0.0, 1.0) * 0.85);
         // variation lente de couleur (taches) pour casser l'uniformité au loin
         float macro = tNoise(wp / 37.0) * 0.6 + tNoise(wp / 113.0) * 0.4;
         tCol *= 0.84 + 0.32 * macro;
         // sol mouillé au bord de l'eau
-        tCol *= mix(1.0, 0.58, vWet);
-        tRough = mix(tRough, 0.32, vWet);
+        float vWet = wl * smoothstep(0.75, 1.0, wet) * 0.6;
+        tCol *= mix(1.0, 0.62, vWet);
+        tRough = mix(tRough, 0.35, vWet);
         // normale perturbée (repère : u le long de +x, v le long de +z)
         float nk = 1.0 / (1.0 + camD * 0.015);
         tNt.y = -tNt.y;
@@ -397,10 +419,38 @@ export function createTerrainMaterial(): THREE.MeshStandardMaterial {
         diffuseColor.rgb = tCol;
         `,
       )
-      .replace('#include <color_fragment>', '')
       .replace('#include <roughnessmap_fragment>', 'float roughnessFactor = tRough;')
       .replace('#include <normal_fragment_maps>', '#include <normal_fragment_maps>\nnormal = normalize((viewMatrix * vec4(tN, 0.0)).xyz);');
   };
-  mat.customProgramCacheKey = () => 'terrain-v2';
+  mat.customProgramCacheKey = () => 'terrain-clipmap-v1';
   return mat;
+}
+
+function createDepthMaterial() {
+  initShared();
+  const m = new THREE.MeshDepthMaterial({ depthPacking: THREE.RGBADepthPacking });
+  m.onBeforeCompile = (shader) => patchVertex(shader, sharedUniforms);
+  m.customProgramCacheKey = () => 'terrain-clipmap-depth-v1';
+  return m;
+}
+
+/** Terrain de toute l'île (clipmap GPU). `lodDist` (réglage de qualité des anciens morceaux) n'est plus utilisé. */
+export function createTerrain(material: THREE.Material, _lodDist: number) {
+  initShared();
+  const group = new THREE.Group();
+  group.name = 'terrain';
+  const clip = new TerrainClipmap(material, createDepthMaterial());
+  // position de morphing partagée par le rendu et les ombres (toujours celle de la caméra principale)
+  sharedUniforms.uMorphCam.value = clip.uniforms.uMorphCam.value;
+  group.add(clip.mesh);
+  group.userData.clipmap = clip;
+  // choix des nœuds une fois par rendu de la scène, avec sa caméra (avant les ombres)
+  let attached = false;
+  group.addEventListener('added', () => {
+    const sc = group.parent;
+    if (attached || !(sc instanceof THREE.Scene)) return;
+    attached = true;
+    beforeRender(sc, (camera) => clip.update(camera));
+  });
+  return group;
 }
