@@ -68,6 +68,7 @@ const VIEWS = {
   'monde-japon': { cam: [-1150, 25, 2250], look: [305, -260, 2899], hour: 8, ground: true, tp: [-1150, 2255] },
   'monde-route': { cam: [-150, 2.2, 1200], look: [-663, 30, 2609], hour: 6.9, ground: true, tp: [-150, 1195] },
   'monde-dormeur': { cam: [176, 2, -168], look: [1300, 150, 100], hour: 9, ground: true },
+  'monde-sommet': { cam: [-2290, 4, 455], look: [-300, 150, 600], hour: 9.5, ground: true, tp: [-2280, 460] },
   'monde-givre-air': { cam: [-1200, 700, 1500], look: [-2300, 300, 500], hour: 9, tp: [-1250, 1450] },
 };
 module.exports = { VIEWS };

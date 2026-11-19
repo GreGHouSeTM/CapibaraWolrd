@@ -259,7 +259,8 @@ def benches(h, E, cell, W):
     f = q - np.floor(q)
     ht = S * (np.floor(q) + smoothstep(a, 1.0, f))
     patch = smoothstep(-0.1, 0.25, fbm(X / 450, Z / 450, 3, 83))          # replats par endroits, pas partout
-    w = smoothstep(14, 18, s) * smoothstep(33, 28, s) * patch * E * 0.85
+    # replats doux et irréguliers (pas d'escalier) : surtout sur les versants moyens
+    w = smoothstep(14, 18, s) * smoothstep(30, 24, s) * patch * E * 0.5
     return (h + (ht - h) * w).astype(np.float64)
 
 
