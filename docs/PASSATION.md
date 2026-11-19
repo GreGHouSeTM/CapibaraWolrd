@@ -24,7 +24,9 @@ par exemple une session locale sur le PC du client avec sa carte graphique. Le r
 | Capybara | **Debout** pour marcher et à l'arrêt, **à quatre pattes** pour sprinter et nager, transitions animées fluides (annexe de la bible) |
 | Monde | **8 × 8 km**, terres sauvages en **procédural dirigé** (érosion, rivières simulées, végétation écologique, points d'intérêt), aucun mur invisible (annexe de la bible) |
 | Méthode | Boucle d'amélioration : intégrer → vérifier → captures → critique contre la grille → pousser sur `main` sans régression |
+| Niveau visuel (2026-11-19) | **On reste sur Three.js** (navigateur) mais on vise un **niveau de détail PS5** : assets, modélisation et rendu à élever ; méthode par tranche verticale, voir `docs/TRANCHE-HD.md` |
 | Mini-carte | Réduite (110-150 px), demandée par le client |
+| Zones du monde 8 km (2026-11-18) | **Village alpin** (ref-9 à ref-11) = porte d'entrée de la zone Pôle Nord / arctique (puis pinèdes enneigées ref-12, aurores ref-15) ; **jungle** (ref-14, ref-16 à ref-18) = dans la zone Asie (autour de la région Japon) |
 | 2 joueurs | Plus tard (code déjà prévu pour plusieurs joueurs / caméras) |
 
 ## 3. Documents de référence
@@ -55,11 +57,25 @@ sur les vues larges (budget 700 ; ~1 000 au sol, plus en vue aérienne) ; escali
 plus de texture de dalles dédiée (on utilise `stonewall`).
 
 ## 6. Prochaines étapes (ordre prévu)
+0. **Tranche verticale niveau PS5** (`docs/TRANCHE-HD.md`), prioritaire : elle fixe les outils et la qualité appliqués ensuite partout.
+   Les chantiers Eau (`wip/eau-2`, torrent corrigé) et Décor (`wip/decor`, générateur d'accessoires) reprendront à ce nouveau niveau.
 1. ~~Corriger le voile blanc puis pousser la végétation~~ (fait) ; finir et intégrer l'Eau.
 2. Décor (bande devant les façades, place, enseignes ; pièces d'or), Effets (fumée, vapeur, pétales, lucioles ; brancher `setHitFxHandler` du combat), Routes (chemins de terre en campagne), Ennemis & faune.
 3. **Rig & animation Blender du capybara** (postures debout / quatre pattes).
-4. Audio, **passe dédiée Lumière & ombres** (ombres de la vallée et des montagnes, AO cuite, ombres de contact, reflets).
-5. Chantier **Monde 8 km** (Lead → Terrain → Végétation et points d'intérêt → Routes → Eau → Lumière).
+4. **Phase Optimisation** (demandée par le client le 2026-11-18) : gagner en FPS et en fluidité sans perte visuelle. Constat des
+   mesures (`tools/perf.cjs`) : ~25-30 ms par image en Moyenne quelle que soit la résolution, donc limite côté processeur
+   (≈ 950 appels de dessin au sol, ≈ 4 900 en vue lointaine, simulation) plutôt que côté carte graphique. Pistes : fusion du décor
+   statique par cellule et par matériau, instanciation, LOD et imposteurs du décor lointain, ombres limitées aux objets proches.
+5. Audio, **passe dédiée Lumière & ombres** (ombres de la vallée et des montagnes, AO cuite, ombres de contact, reflets).
+6. **Gameplay, quêtes et histoire** (souhait du client, 2026-11-18) : **pas de missions basiques** du type « ramasser les pièces » ;
+   un vrai système de quêtes intéressantes (chaînes de quêtes, choix, énigmes, personnages attachants) porté par une histoire et un lore
+   cohérents avec la bible (§1). **Fil rouge du jeu : les collectionnables « Squishy dumplings »** : tendance actuelle chez les enfants, des squishies
+   en forme de brioches vapeur asiatiques (bao / manjū) aux plis du dessus, petit visage kawaii (yeux noirs, joues roses), vendus dans
+   un **panier vapeur en bambou** et souvent en **boîte mystère**. Variantes de matière qui font naturellement la rareté : mat pastel
+   (basique), nacré ou pailleté (rare), arc-en-ciel (épique), doré ou spécial (légendaire)… Designs **originaux** à créer (aucun emballage,
+   logo ni personnage de marque copié). Lien naturel avec Capyville : les paniers vapeur de manjū de la Grand-Rue (bible §8.1).
+   À préciser avec le client : liste exacte des raretés, obtention (quêtes, cachettes, échanges, paniers mystère), album, récompenses. Le Lead écrira une bible gameplay avant toute production.
+7. Chantier **Monde 8 km** (Lead → Terrain → Végétation et points d'intérêt → Routes → Eau → Lumière).
 
 ## 7. Méthode et outils
 - Lancer le jeu : `npm install`, `npm run dev` (http://localhost:5173). Tests : `npx tsc --noEmit -p .`, `npx vitest run`, `npm run build`.

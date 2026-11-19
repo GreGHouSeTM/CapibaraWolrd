@@ -27,6 +27,15 @@ const { VIEWS } = require('./shot.cjs');
       for (const k of (list || 'departaube').split(',')) {
         const v = VIEWS[k];
         if (!v || v.demo) { console.log('vue inconnue ou démo', k); continue; }
+        if (v.ground) {
+          // vue posée sur le relief (voir shot.cjs)
+          const r = await page.evaluate(async (v) => {
+            const { heightAt } = await import('/src/world/heightmap.ts');
+            const at = (p) => [p[0], heightAt(p[0], p[2]) + p[1], p[2]];
+            return { cam: at(v.cam), look: at(v.look) };
+          }, v);
+          Object.assign(v, r, { ground: false });
+        }
         const r = await page.evaluate(({ v, N }) => {
           const g = window.__game; const P = g.player.pos.constructor;
           g.rig.override = null;
