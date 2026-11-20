@@ -13,7 +13,7 @@ import { paveRect } from './grass';
 
 /** Hauteur du ruban au-dessus du sol (m) ; le décalage de profondeur du matériau fait le reste. */
 export const ROAD_LIFT = 0.03;
-const STEP = 2; // pas des sommets le long de la voie (m), celui de la grille du relief
+const STEP = 1; // pas des sommets le long de la voie (m) : moitié de la maille du relief, le ruban épouse sa surface
 
 /** Points rééchantillonnés tous les `step` m (Catmull-Rom centripète sur les points de la voie) avec l'abscisse curviligne. */
 function densify(pts: [number, number][], h: number[], step: number) {
@@ -46,8 +46,9 @@ function ribbon(b: Batch, road: RoadSample, width: number, mats: Mats, lamps: bo
   // tablier : abscisses des ponts et viaducs de la voie (meta.ouvrages), comptées depuis le début de la voie
   const deck = (s: number) => (road.bridges ?? []).some(([a, c]) => s >= a && s <= c);
   const W = width / 2;
-  const across = Math.max(2, Math.round(width / 2));
-  const yAt = (x: number, z: number, i: number) => (deck(D[i].s) ? D[i].y : heightAt(x, z)) + ROAD_LIFT;
+  const across = Math.max(2, Math.ceil(width / 1.2));
+  // sur un tablier, jamais sous le sol (raccord des culées)
+  const yAt = (x: number, z: number, i: number) => (deck(D[i].s) ? Math.max(D[i].y, heightAt(x, z)) : heightAt(x, z)) + ROAD_LIFT;
   // découpage en tronçons hors des villes (les rues de la ville prennent le relais)
   const runs: number[][] = [];
   let cur: number[] | null = null;
@@ -92,8 +93,8 @@ function ribbon(b: Batch, road: RoadSample, width: number, mats: Mats, lamps: bo
         }
       }
       // herbe retirée sur la chaussée et ses accotements
-      if (i % 3 === 0) paveRect(p.x, p.z, width + 3, STEP * 3.5, -Math.atan2(dx, dz));
-      if (lamps && i % 28 === 14) {
+      if (i % 6 === 0) paveRect(p.x, p.z, width + 3, STEP * 7, -Math.atan2(dx, dz));
+      if (lamps && i % 56 === 28) {
         const x = p.x + nx * (W + 1.6), z = p.z + nz * (W + 1.6);
         if (!insideCity(x, z, 4)) addLamp(b, 'paris', x, heightAt(x, z), z, Math.atan2(nx, nz) + Math.PI);
       }

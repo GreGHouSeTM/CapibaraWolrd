@@ -95,12 +95,19 @@ def _edge_costs(hs, riv, lake, cliff, valley, attr, gx0, gz0, cell, nx, nz, DVv,
                 wmax = 0.0
                 cl = 0.0
                 bad = False
+                xm0 = 0.5 * (x0 + x1)
+                zm0 = 0.5 * (z0 + z1)
+                inx = False
+                for c in range(XS.shape[0]):
+                    if (xm0 - XS[c, 0]) ** 2 + (zm0 - XS[c, 1]) ** 2 < XR[c] ** 2:
+                        inx = True
                 for k in range(K + 1):
                     t = k / K
                     x = x0 + (x1 - x0) * t
                     z = z0 + (z1 - z0) * t
                     h = _bil(hs, x, z)
-                    if h < 0.4 or _bil(lake, x, z) > 0.5:
+                    # franchissement prévu (pont sur un bras de mer, un fjord, un lac) : l'eau dessous est permise
+                    if not inx and (h < 0.4 or _bil(lake, x, z) > 0.5):
                         bad = True
                         break
                     if _bil(valley, x, z) > 0.5 and (x - sx) ** 2 + (z - sz) ** 2 > 80.0 ** 2:

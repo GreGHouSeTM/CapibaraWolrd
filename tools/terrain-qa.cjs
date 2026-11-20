@@ -36,11 +36,28 @@ const fs = require('fs');
         for (let i = 6, k = 0; i < roadSamples.length; i++, k++) names[i] = drawn[k] ? drawn[k].id : `voie-${i}`;
       }
       // ponts et viaducs déclarés : le ruban y suit le tablier, ces points sont comptés à part
-      const decks = (terrainData.meta.ouvrages || []).filter((o) => o.kind === 'pont' || o.kind === 'viaduc');
-      const onDeck = (x, z) => decks.some((o) => {
-        const [ax, az] = o.from, [bx, bz] = o.to, vx = bx - ax, vz = bz - az, l2 = vx * vx + vz * vz || 1;
-        const t = Math.max(0, Math.min(1, ((x - ax) * vx + (z - az) * vz) / l2));
-        return Math.hypot(x - ax - vx * t, z - az - vz * t) < 9;
+      const wayById = Object.fromEntries((terrainData.meta.ways || []).map((w) => [w.id, w]));
+      const decks = [];
+      for (const o of terrainData.meta.ouvrages || []) {
+        if (o.kind !== 'pont' && o.kind !== 'viaduc') continue;
+        const w = wayById[o.way];
+        if (!w) continue;
+        // tronçon du tracé entre les abscisses s0 et s1 (le tablier peut être courbe)
+        let acc = 0;
+        const seg = [];
+        for (let i = 0; i < w.pts.length; i++) {
+          if (i) acc += Math.hypot(w.pts[i][0] - w.pts[i - 1][0], w.pts[i][1] - w.pts[i - 1][1]);
+          if (acc >= o.s0 - 4 && acc <= o.s1 + 4) seg.push(w.pts[i]);
+        }
+        if (seg.length > 1) decks.push(seg);
+      }
+      const onDeck = (x, z) => decks.some((seg) => {
+        for (let i = 0; i < seg.length - 1; i++) {
+          const [ax, az] = seg[i], [bx, bz] = seg[i + 1], vx = bx - ax, vz = bz - az, l2 = vx * vx + vz * vz || 1;
+          const t = Math.max(0, Math.min(1, ((x - ax) * vx + (z - az) * vz) / l2));
+          if (Math.hypot(x - ax - vx * t, z - az - vz * t) < 7) return true;
+        }
+        return false;
       });
       let deckPts = 0;
       // grille de recherche du point de tracé le plus proche (cases de 32 m)
