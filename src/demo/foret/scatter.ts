@@ -88,7 +88,7 @@ export class Scatter {
 
     // --- remplissage procédural
     const N = density;
-    for (let i = 0; i < 2600 * N; i++) {
+    for (let i = 0; i < 4200 * N; i++) {
       const x = -48 + rnd() * 96, z = -43 + rnd() * 76;
       if (!free(x, z)) continue;
       D.mask(x, z, m);
