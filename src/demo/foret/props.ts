@@ -2,7 +2,7 @@
 // (variation de teinte par instance, mousse sur les faces tournées vers le haut, terre et humidité au pied),
 // instanciation avec choix du LOD par instance selon la distance à la caméra.
 import * as THREE from 'three';
-import { glb, texSet, TexSet } from './tex';
+import { bakeGeometry, glb, texSet, TexSet } from './tex';
 import { BASE } from './data';
 import { patch } from './glsl';
 
@@ -50,9 +50,7 @@ export class PropLib {
           o.traverse((c) => {
             const m = c as THREE.Mesh;
             if (!m.isMesh) return;
-            const geo = m.geometry.clone();
-            geo.applyMatrix4(m.matrixWorld);
-            geo.computeBoundingSphere();
+            const geo = bakeGeometry(m.geometry, m.matrixWorld);
             const src = m.material as THREE.Material;
             let mat = mats.get(src);
             if (!mat) { mat = this.styled(src as THREE.MeshStandardMaterial, st, id); mats.set(src, mat); }

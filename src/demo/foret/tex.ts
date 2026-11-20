@@ -42,3 +42,18 @@ gltf.setMeshoptDecoder(MeshoptDecoder);
 export function glb(path: string) {
   return gltf.loadAsync(BASE() + path);
 }
+
+/** Copie d'une géométrie glTF quantifiée (meshopt) en flottants, transformée par `m` (sinon les entiers débordent). */
+export function bakeGeometry(src: THREE.BufferGeometry, m: THREE.Matrix4) {
+  const g = src.clone();
+  for (const name of Object.keys(g.attributes)) {
+    const a = g.getAttribute(name) as THREE.BufferAttribute;
+    if (a.array instanceof Float32Array && !(a as any).isInterleavedBufferAttribute) continue;
+    const f = new Float32Array(a.count * a.itemSize);
+    for (let i = 0; i < a.count; i++) for (let k = 0; k < a.itemSize; k++) f[i * a.itemSize + k] = a.getComponent(i, k);
+    g.setAttribute(name, new THREE.BufferAttribute(f, a.itemSize));
+  }
+  g.applyMatrix4(m);
+  g.computeBoundingSphere();
+  return g;
+}

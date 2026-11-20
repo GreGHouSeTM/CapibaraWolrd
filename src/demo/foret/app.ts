@@ -17,6 +17,7 @@ import { FORET_PRESETS, ForetPreset } from './presets';
 import { Ground } from './ground';
 import { buildWall } from './wall';
 import { buildStairs } from './stairs';
+import { Forest, placeTrees } from './trees';
 import { setAniso } from './tex';
 import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js';
 import { BASE } from './data';
@@ -34,6 +35,7 @@ export class ForetDemo {
   rig!: CameraRig;
   player!: Player;
   ground!: Ground;
+  forest!: Forest;
   sun = new THREE.DirectionalLight(0xffffff, 3);
   envMap: THREE.Texture | null = null;
   hemi = new THREE.HemisphereLight(0xc8d4e0, 0x3a3424, 0.8);
@@ -106,6 +108,10 @@ export class ForetDemo {
     this.buildCollisions();
     const f = D.scene.steps;
     this.scene.add(await buildStairs({ x1: f[0].x, x2: f[f.length - 1].x, zSplit: (f[13].z + f[14].z) / 2 }));
+    this.ui.setLoading(0.6, 'Pousse des épicéas…');
+    this.forest = new Forest();
+    await this.forest.build(D, placeTrees(D, this.preset.density), this.preset.treeLod0, true);
+    this.scene.add(this.forest.group);
     this.setupLights();
     this.rig = new CameraRig(window.innerWidth / window.innerHeight);
     this.rig.camera.near = 0.1;
@@ -315,6 +321,7 @@ export class ForetDemo {
 
   private lastHour = -1;
   private updateWorld(_dt: number) {
+    this.forest?.update(this.rig.camera.position, this.time);
     if (this.sky.hour !== this.lastHour) { this.lastHour = this.sky.hour; this.applyTime(); }
     if (this.state === 'play') {
       this.ui.setRegion('Forêt d’épicéas', this.sky.hour);
