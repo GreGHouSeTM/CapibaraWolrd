@@ -356,7 +356,7 @@ def stage_fine():
     tal2 = 34 + (50 - 34) * ro2
     tal2 = tal2 + (70 - tal2) * np.clip(cl2 * 1.4, 0, 1)
     ER.thermal(h2, np.tan(np.radians(tal2)).astype(np.float64), E2, 50, 2.0, 0.5, sc2)
-    h2 = despike(h2, np.maximum(ro2, cl2), 2.0)
+    h2 = despike(h2, ro2, 2.0)  # les parois de falaise voulues aussi : leurs aiguilles isolées sont des artefacts
 
     log('thermique 2 m')
     # microrelief (0,3 à 1 m, longueurs d'onde 4 à 20 m) hors plats, lits et vallée

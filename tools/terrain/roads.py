@@ -497,15 +497,25 @@ class Planner:
                 dd = np.abs((ANG - ang + np.pi) % (2 * np.pi) - np.pi)
                 starts = np.array([node * ND + d for d in np.argsort(dd)[:3]], dtype=np.int64)
             s, cost, pred, hp = _dijkstra(CE, CH, HOFF, DV, TC, nx, nz, starts, bi, bj, 2)
+            if s < 0 and heading is not None:
+                # départ trop contraint : tous les caps sont permis au départ
+                starts = np.array([node * ND + d for d in range(ND)], dtype=np.int64)
+                s, cost, pred, hp = _dijkstra(CE, CH, HOFF, DV, TC, nx, nz, starts, bi, bj, 2)
             if s < 0:
-                # diagnostic : point atteint le plus proche du but
-                reach = np.nonzero(pred.reshape(-1, ND).max(1) >= 0)[0]
+                # but inaccessible (au bord d'un lac, dans un plat, en pied de paroi) : on s'arrête au point atteint le plus
+                # proche s'il est à moins de 150 m, et la plateforme rejoint l'ancre en ligne droite
+                reach = np.nonzero(pred >= 0)[0]
                 if len(reach):
-                    ri, rj = reach % nx, reach // nx
-                    kk = int(np.argmin((ri - bi) ** 2 + (rj - bj) ** 2))
+                    rn = reach // ND
+                    ri, rj = rn % nx, rn // nx
+                    dd = (ri - bi) ** 2 + (rj - bj) ** 2
+                    kk = int(np.argmin(dd))
                     self.log(f"  {way['id']} : tronçon {k} ({a[0]:.0f}, {a[1]:.0f}) → ({b[0]:.0f}, {b[1]:.0f}) impossible à {100 * gmax:.0f} % ; "
                              f"point atteint le plus proche ({gx0 + ri[kk] * cell:.0f}, {gz0 + rj[kk] * cell:.0f})")
-                return None
+                    if math.sqrt(dd[kk]) * cell < 150:
+                        s = int(reach[kk])
+                if s < 0:
+                    return None
             chain = []
             while s >= 0:
                 chain.append((s, int(hp[s])))
@@ -536,6 +546,12 @@ class Planner:
                         pts.append(q0 + (p - q0) * t)
                         fx.append(False)
             pts[0] = a
+            gap = float(np.hypot(*(np.asarray(pts[-1]) - b)))
+            if gap > 12:
+                q0 = np.asarray(pts[-1])
+                for t in np.linspace(0, 1, int(gap / 2) + 1)[1:]:
+                    pts.append(q0 + (b - q0) * t)
+                    fx.append(False)
             pts[-1] = b
             fx[-1] = True
             if pieces:
