@@ -11,7 +11,7 @@
 # 4. Ouvrages : au-delà de 3 m de déblai ou de remblai, le tronçon est un mur de soutènement, un pont ou un viaduc,
 #    déclaré dans meta.json (« ouvrages ») pour la spécialité Routes. Sous un pont ou un viaduc, le relief reste naturel.
 # 5. Plateforme écrite dans la grille de 2 m par projection exacte sur le tracé (plus d'escaliers du plus proche voisin),
-#    talus progressifs raccordés au terrain (33° en remblai, 40° en déblai, 72° le long d'un mur), sans fossé.
+#    talus progressifs raccordés au terrain (33° en remblai, 40° en déblai, 55° le long d'un mur (le mur lui-même est un modèle de la spécialité Routes ; plus raide, la grille de 2 m dessinait des dents de scie)), sans fossé.
 # Le ruban des routes (src/world/roads.ts) suit ensuite exactement heightAt, sauf sur les ponts où il suit le tablier.
 import math
 import numpy as np
@@ -26,7 +26,7 @@ ORDER = ['route', 'piste', 'chemin', 'sentier']
 # départs des voies au bout des couloirs des cols de Capyville (COL_ROUTES de valley.ts)
 FROM_COL = {'route-paris': 'paris', 'route-ny': 'newyork', 'route-londres': 'london', 'route-japon': 'japan',
             'piste-desert': 'desert', 'route-pole': 'pole'}
-TALUS_FILL, TALUS_CUT, TALUS_WALL = math.tan(math.radians(33)), math.tan(math.radians(40)), math.tan(math.radians(72))
+TALUS_FILL, TALUS_CUT, TALUS_WALL = math.tan(math.radians(33)), math.tan(math.radians(40)), math.tan(math.radians(55))
 OUVRAGE_MIN = 3.0  # m de déblai ou de remblai au-delà desquels le tronçon devient un ouvrage
 
 # 32 directions : vecteurs primitifs de norme infinie ≤ 3, triés par angle

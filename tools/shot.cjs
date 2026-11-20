@@ -78,6 +78,9 @@ const VIEWS = {
   'qa-fuji-flanc': { cam: [470, 2, 2560], look: [330, 120, 2860], hour: 10, ground: true, tp: [470, 2555] },
   'qa-canyon': { cam: [1560, 6, 2060], look: [1700, -40, 2300], hour: 10, ground: true, tp: [1560, 2055] },
   'qa-givre': { cam: [-1880, 2, 900], look: [-2300, 300, 450], hour: 10, ground: true, tp: [-1880, 895] },
+  // --- TERRAIN & RELIEF v2 : lacets de la Route du Givre et route au sol (vues d'après le nouveau tracé)
+  'qa-lacets-air': { cam: [-1700, 120, 1440], look: [-1812, 0, 1534], hour: 10, ground: true, tp: [-1760, 1500] },
+  'qa-lacets-sol': { cam: [-1790, 2.2, 1500], look: [-1812, 1.0, 1534], hour: 10, ground: true, tp: [-1790, 1495] },
   'qa-givre-air': { cam: [-1600, 420, 1050], look: [-2300, 350, 450], hour: 10, tp: [-1650, 1000] },
 };
 for (const k of Object.keys(VIEWS)) if (k.startsWith('qa-')) VIEWS[k + '-nuit'] = { ...VIEWS[k], hour: 22.5 };
