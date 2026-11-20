@@ -119,6 +119,10 @@ def run(log):
     depo = np.clip(np.maximum(dep, 0) / 1.5 + scree / 2.0, 0, 1)
     cliff = carve.cliff_mask(W, X, Z, 4.0, n)
     rock = np.clip(smoothstep(30, 40, s) + cliff * smoothstep(25, 35, s) + smoothstep(600, 750, h4) * smoothstep(20, 30, s), 0, 1)
+    # roche voulue (pyramides sommitales, parois des cirques, couronnes des mesas, pitons) : roche franche dès 28°
+    rp = os.path.join(CACHE, 'roche4.npy')
+    if os.path.exists(rp):
+        rock = np.maximum(rock, np.load(rp) * smoothstep(22, 30, s))
     surf = np.stack([flow, wet, depo, rock], -1)
     sb = zlib.compress((surf * 255 + 0.5).astype(np.uint8).tobytes(), 9)
     open(os.path.join(OUT, 'surface.bin'), 'wb').write(sb)

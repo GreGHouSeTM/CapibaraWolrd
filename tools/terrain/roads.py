@@ -481,7 +481,7 @@ class Planner:
         for bx, bz in bans:
             attr += 30.0 * smoothstep(2 * hw + 14, 2 * hw + 4, np.hypot(GX - bx, GZ - bz))
         XS = np.array([[c['x'], c['z']] for c in self.W['CROSSINGS'] if c.get('way') == way['id']] or [[1e9, 1e9]], dtype=np.float64)
-        XR = np.array([max(30.0, c.get('length', 20) * 0.6 + 15) for c in self.W['CROSSINGS'] if c.get('way') == way['id']] or [1.0], dtype=np.float64)
+        XR = np.array([max(45.0, c.get('length', 20) * 1.5 + 30) for c in self.W['CROSSINGS'] if c.get('way') == way['id']] or [1.0], dtype=np.float64)
         sx, sz = A[0]
         ex, ez = A[-1]
         CE = _edge_costs(self.hs, self.riv, self.lake, self.cliff, self.valley, attr, gx0, gz0, cell, nx, nz, DV, gmax, hw, sx, sz, ex, ez, XS, XR)
@@ -795,7 +795,7 @@ def stamp_ways(h, W, cell, keep, log, water=None, lake=None, cliff=None, valley=
             log(f"voie {w['id']} : aucun tracé trouvé (gardée hors de la grille)")
             continue
         P, s, F = res
-        XS = [(c['x'], c['z'], max(30.0, c.get('length', 20) * 0.6 + 15)) for c in W['CROSSINGS'] if c.get('way') == w['id']]
+        XS = [(c['x'], c['z'], max(45.0, c.get('length', 20) * 1.5 + 30)) for c in W['CROSSINGS'] if c.get('way') == w['id']]
         y, p, works = profile_and_works(w, P, s, nat, riv, g * (relax if relax > 1 else 1.0), pin0, pin1, XS)
         planned[w['id']] = {'P': P, 'y': y, 'orig': w['pts']}
         roads.append({'P': P, 's': s, 'y': y, 'hw': hw, 'works': works, 'id': w['id']})
