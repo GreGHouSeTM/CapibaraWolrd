@@ -18,6 +18,10 @@ import { Ground } from './ground';
 import { buildWall } from './wall';
 import { buildStairs } from './stairs';
 import { Forest, placeTrees } from './trees';
+import { PropLib } from './props';
+import { ForetPost, buildCanopy, canopyUniforms, installShaderChunks } from './light';
+import { Reflector } from 'three/examples/jsm/objects/Reflector.js';
+import { PROP_IDS, STYLES, Scatter } from './scatter';
 import { setAniso } from './tex';
 import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js';
 import { BASE } from './data';
@@ -36,6 +40,12 @@ export class ForetDemo {
   player!: Player;
   ground!: Ground;
   forest!: Forest;
+  wallObj!: THREE.Object3D;
+  post!: ForetPost;
+  lamp = new THREE.PointLight(0xffa860, 0, 26, 2);
+  flame = new THREE.Mesh(new THREE.SphereGeometry(0.035, 12, 8), new THREE.MeshBasicMaterial({ color: new THREE.Color().setRGB(9, 4.5, 1.6) }));
+  props!: PropLib;
+  scatter!: Scatter;
   sun = new THREE.DirectionalLight(0xffffff, 3);
   envMap: THREE.Texture | null = null;
   hemi = new THREE.HemisphereLight(0xc8d4e0, 0x3a3424, 0.8);
@@ -65,7 +75,8 @@ export class ForetDemo {
     this.renderer.shadowMap.enabled = true;
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     this.renderer.outputColorSpace = THREE.SRGBColorSpace;
-    this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    this.renderer.toneMapping = THREE.NoToneMapping; // AgX dans le post-traitement
+    installShaderChunks(this.preset);
     this.input = new Input(this.canvas);
     window.addEventListener('resize', () => this.resize());
     document.addEventListener('pointerlockchange', () => {
@@ -78,9 +89,11 @@ export class ForetDemo {
   resize() {
     const w = window.innerWidth, h = window.innerHeight;
     this.renderer.setSize(w, h);
+    this.post?.setSize(w, h);
     if (this.rig) {
       this.rig.camera.aspect = w / h;
       this.rig.camera.updateProjectionMatrix();
+    this.post = new ForetPost(this.renderer, this.scene, this.rig.camera, this.preset);
     }
   }
 
@@ -100,7 +113,8 @@ export class ForetDemo {
     pm.dispose();
     this.scene.environment = this.envMap;
     this.ui.setLoading(0.15, 'Sculpture de la paroi de granite…');
-    this.scene.add(await buildWall());
+    this.wallObj = await buildWall();
+    this.scene.add(this.wallObj);
     this.ui.setLoading(0.2, 'Modelage du sol…');
     this.ground = new Ground(D, this.preset);
     await this.ground.build(Math.min(16, this.renderer.capabilities.getMaxAnisotropy()));
@@ -110,8 +124,16 @@ export class ForetDemo {
     this.scene.add(await buildStairs({ x1: f[0].x, x2: f[f.length - 1].x, zSplit: (f[13].z + f[14].z) / 2 }));
     this.ui.setLoading(0.6, 'Pousse des épicéas…');
     this.forest = new Forest();
-    await this.forest.build(D, placeTrees(D, this.preset.density), this.preset.treeLod0, true);
+    const trees = placeTrees(D, this.preset.density);
+    buildCanopy(trees);
+    canopyUniforms();
+    await this.forest.build(D, trees, this.preset.treeLod0, true);
     this.scene.add(this.forest.group);
+    this.ui.setLoading(0.75, 'Sous-bois, racines et bois mort…');
+    this.props = new PropLib();
+    await this.props.load(PROP_IDS, STYLES);
+    this.scatter = new Scatter().build(this.props, D, trees, this.preset.density);
+    this.scene.add(this.scatter.group);
     this.setupLights();
     this.rig = new CameraRig(window.innerWidth / window.innerHeight);
     this.rig.camera.near = 0.1;
@@ -184,12 +206,37 @@ export class ForetDemo {
     s.castShadow = true;
     s.shadow.mapSize.set(this.preset.shadowSize, this.preset.shadowSize);
     const c = s.shadow.camera as THREE.OrthographicCamera;
-    c.left = -75; c.right = 75; c.top = 75; c.bottom = -75; c.near = 1; c.far = 400;
+    c.left = -70; c.right = 70; c.top = 70; c.bottom = -70; c.near = 1; c.far = 320;
     c.updateProjectionMatrix();
-    s.shadow.bias = -0.0002;
-    s.shadow.normalBias = 0.03;
+    s.shadow.bias = -0.00025;
+    s.shadow.normalBias = 0.04;
     this.scene.add(s, s.target, this.hemi);
-    this.scene.fog = new THREE.FogExp2(0xb8c2c8, 0.012);
+    // lanterne : flamme chaude, ombres portées (cube), halo dans la brume (passe volumétrique)
+    const L = this.scatter.lantern;
+    this.lamp.position.set(L.x, L.y + 0.2, L.z);
+    this.lamp.castShadow = this.preset.lanternShadow > 0;
+    this.lamp.shadow.mapSize.set(this.preset.lanternShadow || 256, this.preset.lanternShadow || 256);
+    this.lamp.shadow.camera.near = 0.08;
+    this.lamp.shadow.camera.far = 22;
+    this.lamp.shadow.bias = -0.002;
+    this.lamp.decay = 2;
+    this.lamp.distance = 26;
+    this.flame.position.copy(this.lamp.position);
+    this.scene.add(this.lamp, this.flame);
+    // flaque : reflet plan (arbres, paroi, lanterne, ciel : calque 1) à résolution réduite
+    if (this.preset.reflection > 0) {
+      const P = this.data.scene.puddle;
+      const geo = new THREE.CircleGeometry(1, 48);
+      const r = new Reflector(geo, { textureWidth: Math.round(innerWidth * this.preset.reflection), textureHeight: Math.round(innerHeight * this.preset.reflection), color: 0x6a6a64, clipBias: 0.003 });
+      r.rotation.x = -Math.PI / 2;
+      r.scale.set(P.rx * 1.05, P.rz * 1.05, 1);
+      r.rotation.z = -P.rot;
+      r.position.set(P.x, this.data.height(P.x, P.z) + P.depth * 0.55, P.z);
+      (r as any).camera.layers.set(1);
+      this.scene.add(r);
+      for (const g of [this.forest.group, this.wallObj]) g.traverse((o) => o.layers.enable(1));
+      this.flame.layers.enable(1);
+    }
   }
 
   get night() {
@@ -198,18 +245,28 @@ export class ForetDemo {
 
   private applyTime() {
     const n = this.night;
-    // soleil voilé haut dans le dos du joueur (sud-ouest), légèrement de côté : lumière douce et diffuse
-    const dir = new THREE.Vector3(-0.35, 0.82, 0.45).normalize();
-    this.sun.position.copy(dir).multiplyScalar(200);
-    this.sun.target.position.set(0, 0, 0);
-    this.sun.color.set(n ? 0x8fa6d8 : 0xfff1dc);
-    this.sun.intensity = n ? 0.05 : 2.2;
-    this.hemi.color.set(n ? 0x1a2236 : 0xc8d4e0);
-    this.hemi.groundColor.set(n ? 0x06070a : 0x3a3424);
-    this.hemi.intensity = n ? 0.05 : 0.15;
-    this.scene.environmentIntensity = n ? 0.04 : 0.9;
-    (this.scene.fog as THREE.FogExp2).color.set(n ? 0x05070b : 0xb8c2c8);
-    this.scene.background = new THREE.Color(n ? 0x04060a : 0xc4ccd2);
+    // soleil voilé haut, à contre-jour léger vers le nord-est : lumière douce et diffuse, quelques taches au sol
+    const dir = n ? new THREE.Vector3(0.3, 0.8, 0.5).normalize() : new THREE.Vector3(0.28, 0.72, 0.62).normalize();
+    this.sun.position.copy(dir).multiplyScalar(180);
+    this.sun.target.position.set(0, 4, -5);
+    this.sun.position.add(this.sun.target.position);
+    this.sun.color.set(n ? 0x8095c8 : 0xffeedd);
+    this.sun.intensity = n ? 0.04 : 2.6;
+    this.hemi.color.set(n ? 0x141a2a : 0xb8c6d4);
+    this.hemi.groundColor.set(n ? 0x050608 : 0x2a2619);
+    this.hemi.intensity = n ? 0.02 : 0.1;
+    this.scene.environmentIntensity = n ? 0.025 : 1.0;
+    this.scene.background = n ? new THREE.Color().setRGB(0.004, 0.006, 0.01) : new THREE.Color().setRGB(1.5, 1.62, 1.72);
+    this.lamp.intensity = n ? 9 : 0;
+    this.flame.visible = n;
+    const f = this.post.fog.fogMat.uniforms;
+    f.uDens.value = n ? 0.03 : 0.022;
+    f.uHeight.value = n ? 5 : 9;
+    f.uBase.value = 5;
+    f.uSunDir.value.copy(dir);
+    f.uSunCol.value.copy(this.sun.color).multiplyScalar(this.sun.intensity * 0.55);
+    f.uAmb.value.setRGB(...(n ? [0.006, 0.008, 0.014] : [0.62, 0.68, 0.74]) as [number, number, number]);
+    this.post.fog.resetHistory();
   }
 
   // ------------------------------------------------------------------------------------------ écrans
@@ -322,6 +379,8 @@ export class ForetDemo {
   private lastHour = -1;
   private updateWorld(_dt: number) {
     this.forest?.update(this.rig.camera.position, this.time);
+    if (this.props) this.props.wind.value = this.time;
+    this.scatter?.update(this.rig.camera.position);
     if (this.sky.hour !== this.lastHour) { this.lastHour = this.sky.hour; this.applyTime(); }
     if (this.state === 'play') {
       this.ui.setRegion('Forêt d’épicéas', this.sky.hour);
@@ -329,8 +388,17 @@ export class ForetDemo {
     }
   }
 
-  private render(_dt: number) {
-    this.renderer.render(this.scene, this.rig.camera);
+  private render(dt: number) {
+    const f = this.post.fog.fogMat.uniforms;
+    f.tShadow.value = this.sun.shadow.map?.texture ?? null;
+    f.uShadowMat.value.copy(this.sun.shadow.matrix);
+    f.uTime.value = this.time;
+    // flamme : scintillement léger
+    const fl = 1 + 0.06 * Math.sin(this.time * 13.1) + 0.04 * Math.sin(this.time * 23.7 + 1.3);
+    if (this.night) this.lamp.intensity = 9 * fl;
+    f.uLampPos.value.copy(this.lamp.position);
+    f.uLampCol.value.setRGB(1.0, 0.55, 0.22).multiplyScalar(this.night ? 6 * fl : 0);
+    this.post.render(dt);
   }
 }
 
