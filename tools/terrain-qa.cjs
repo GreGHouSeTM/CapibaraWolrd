@@ -20,16 +20,29 @@ const fs = require('fs');
     await page.goto(`http://localhost:${port}/?manual&q=low`, { waitUntil: 'load' });
     await page.waitForFunction(() => window.__game && window.__game.state === 'title', null, { timeout: 300000 });
     const res = await page.evaluate(async () => {
-      const { heightAt, roadSamples } = await import('/src/world/heightmap.ts');
+      const hm = await import('/src/world/heightmap.ts');
+      const { heightAt } = hm;
+      const roadSamples = [...hm.roadSamples, ...(hm.pathSamples || [])];
       const { terrainData } = await import('/src/world/terrain-data.ts');
       const g = window.__game;
       let roads = null;
       g.scene.traverse((o) => { if (o.name === 'roads') roads = o; });
       if (!roads) return { error: 'groupe « roads » introuvable' };
       // noms des voies : 6 couloirs de Capyville puis les voies du monde dessinées (même filtre que buildRoadSamples)
-      const names = roadSamples.map((_, i) => (i < 6 ? `capyville-${i}` : null));
-      const drawn = (terrainData.meta.ways || []).filter((w) => w.vehicles && w.width >= 5);
-      for (let i = 6, k = 0; i < roadSamples.length; i++, k++) names[i] = drawn[k] ? drawn[k].id : `voie-${i}`;
+      const names = roadSamples.map((r, i) => r.id || (i < 6 ? `capyville-${i}` : `voie-${i}`));
+      if (!roadSamples[6] || !roadSamples[6].id) {
+        // ancien format (avant le tracé v2) : voies du monde dessinées dans l'ordre de meta.ways
+        const drawn = (terrainData.meta.ways || []).filter((w) => w.vehicles && w.width >= 5);
+        for (let i = 6, k = 0; i < roadSamples.length; i++, k++) names[i] = drawn[k] ? drawn[k].id : `voie-${i}`;
+      }
+      // ponts et viaducs déclarés : le ruban y suit le tablier, ces points sont comptés à part
+      const decks = (terrainData.meta.ouvrages || []).filter((o) => o.kind === 'pont' || o.kind === 'viaduc');
+      const onDeck = (x, z) => decks.some((o) => {
+        const [ax, az] = o.from, [bx, bz] = o.to, vx = bx - ax, vz = bz - az, l2 = vx * vx + vz * vz || 1;
+        const t = Math.max(0, Math.min(1, ((x - ax) * vx + (z - az) * vz) / l2));
+        return Math.hypot(x - ax - vx * t, z - az - vz * t) < 9;
+      });
+      let deckPts = 0;
       // grille de recherche du point de tracé le plus proche (cases de 32 m)
       const C = 32, bins = new Map();
       roadSamples.forEach((r, ri) => r.pts.forEach((p) => {
@@ -78,6 +91,7 @@ const fs = require('fs');
           for (const [u, w, s] of W) {
             const x = u * ax + w * bx + s * cx, y = u * ay + w * by + s * cy, z = u * az + w * bz + s * cz;
             const d = y - heightAt(x, z);
+            if (d > 0.1 && decks.length && onDeck(x, z)) { deckPts++; continue; }
             P[kind].push(d);
             all[kind].push(d);
             if (kind === 'chaussee' && Math.abs(d) > 0.3 && worst.length < 200000) worst.push([Math.round(x), Math.round(z), +d.toFixed(2), name]);
@@ -96,6 +110,7 @@ const fs = require('fs');
       for (const [k, P] of Object.entries(per)) out.voies[k] = { chaussee: stat(P.chaussee), marquage: stat(P.marquage) };
       worst.sort((p, q) => Math.abs(q[2]) - Math.abs(p[2]));
       out.pires = worst.slice(0, 20);
+      out.points_tablier = deckPts;
       return out;
     });
     if (res.error) throw new Error(res.error);
@@ -104,6 +119,7 @@ const fs = require('fs');
     const f = (s) => (s ? `max ${s.max} m, p95 ${s.p95} m, min ${s.min} m, flotte > 10 cm ${s.flotte_10cm} %, > 50 cm ${s.flotte_50cm} %, enterré ${s.enterre_2cm} %` : '—');
     console.log('chaussée :', f(res.global.chaussee));
     console.log('marquages :', f(res.global.marquage));
+    console.log('points sur tablier de pont ou viaduc déclaré (exclus) :', res.points_tablier);
     console.log('\n| Voie | Chaussée max (m) | p95 (m) | flotte > 10 cm | > 50 cm | enterrée | Marquages max (m) |\n| --- | --- | --- | --- | --- | --- | --- |');
     for (const [k, v] of Object.entries(res.voies)) {
       const c = v.chaussee, m = v.marquage;

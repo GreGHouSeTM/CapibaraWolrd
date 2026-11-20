@@ -171,6 +171,8 @@ def run(log):
         'rivers': rivers,
         # voies posées par le générateur : tracé dense lissé et altitude de la plateforme (pour les Routes)
         'ways': json.load(open(os.path.join(CACHE, 'ways.json'))),
+        # ouvrages des voies (murs de soutènement, ponts, viaducs, tunnels) : abscisses s0..s1 le long de la voie (m)
+        'ouvrages': json.load(open(os.path.join(CACHE, 'ouvrages.json'), encoding='utf-8')) if os.path.exists(os.path.join(CACHE, 'ouvrages.json')) else [],
         'bytes': total,
     }
     json.dump(meta_out, open(os.path.join(OUT, 'meta.json'), 'w'), separators=(',', ':'))

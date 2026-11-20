@@ -184,22 +184,27 @@ def rivers(h, W, X, Z, cell, n, keep_banks=True, dense=None):
     return h
 
 
-def water_mask(W, X, Z, cell, n, margin=6.0, dense=None, lake_edge=1.25):
-    """1 sur les lits des rivières et les lacs (protégés de l'érosion)."""
+def water_mask(W, X, Z, cell, n, margin=6.0, dense=None, lake_edge=1.25, parts=False):
+    """1 sur les lits des rivières et les lacs (protégés de l'érosion). parts=True : (rivières, lacs en eau) séparés."""
     m = np.zeros(X.shape, dtype=np.float32)
     for rv in W['RIVERS']:
         pts, _, ws = dense[rv['id']] if dense is not None else (rv['pts'], None, rv['w'])
         sj, si = bbox_slices(pts, float(np.max(ws)) + 40, cell, n)
         d, w = polyline_dist(X[sj, si], Z[sj, si], pts, vals=[ws])
         m[sj, si] = np.maximum(m[sj, si], smoothstep(w / 2 + margin + 10, w / 2 + margin, d))
+    lm = np.zeros(X.shape, dtype=np.float32)
     for lk in W['LAKES']:
         a = np.radians(lk['rot'])
         dx, dz = X - lk['x'], Z - lk['z']
         lx = dx * np.cos(a) + dz * np.sin(a)
         lz = -dx * np.sin(a) + dz * np.cos(a)
         e = np.hypot(lx / lk['rx'], lz / lk['rz'])
+        if parts:
+            if not lk.get('dry'):
+                lm = np.maximum(lm, smoothstep(lake_edge, lake_edge - 0.2, e))
+            continue
         m = np.maximum(m, smoothstep(lake_edge, lake_edge - 0.2, e))
-    return m
+    return (m, lm) if parts else m
 
 
 def protect_mask(W, X, Z, cell, n, dense=None):

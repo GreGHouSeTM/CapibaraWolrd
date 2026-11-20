@@ -315,13 +315,17 @@ def stage_routes(h2=None, W=None, X2=None, Z2=None, n2=None, dense=None):
     # vallée de Capyville : relief d'origine exact (masque), raccord doux au-delà de la couronne
     meta, routes, ref, det = carve.load_valley()
     m2 = carve.valley_mask(X2, Z2, routes)
-    # voies du monde : profil à pente bornée, plateforme et talus (hors de l'eau et de la vallée)
+    # voies du monde : tracé de moindre coût (lacets), profil à pente bornée, ouvrages, plateforme et talus
     import roads as RD
     import json
     wat = carve.water_mask(W, X2, Z2, 2.0, n2, margin=2, dense=dense, lake_edge=1.04)
+    riv, lake = carve.water_mask(W, X2, Z2, 2.0, n2, margin=2, dense=dense, lake_edge=1.04, parts=True)
+    cl2 = carve.cliff_mask(W, X2, Z2, 2.0, n2)
     keep = np.clip(np.maximum(m2, wat), 0, 1)
-    h2, ways = RD.stamp_ways(h2, W, 2.0, keep, log, water=wat)
+    h2, ways, works = RD.stamp_ways(h2, W, 2.0, keep, log, water=riv, lake=lake, cliff=cl2, valley=m2, colroutes=routes['routes'])
     json.dump(ways, open(os.path.join(CACHE, 'ways.json'), 'w'))
+    json.dump(works, open(os.path.join(CACHE, 'ouvrages.json'), 'w'), ensure_ascii=False)
+    log(f'ouvrages : {len(works)} ({", ".join(sorted(set(o["kind"] for o in works)))})')
     sl = (slice(int((-1000 + 4096) / 2), int((1000 + 4096) / 2) + 1),) * 2
     old = carve.sample_ref(ref, meta, X2[sl], Z2[sl])
     h2[sl] = h2[sl] + (old - h2[sl]) * m2[sl]

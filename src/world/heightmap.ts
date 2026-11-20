@@ -69,13 +69,19 @@ export const PYRAMIDS: { x: number; z: number; s: number }[] = [
 export const HOT_SPRING: [number, number] = [60, 70];
 export const HUB_POND: [number, number] = [-120, 90];
 
-/** Profil des routes (le relief cuit porte déjà les plats des couloirs de Capyville). */
-export const roadSamples: { pts: [number, number][]; h: number[]; width: number }[] = [];
+/** Voie à dessiner : tracé, profil en long h (altitude de la plateforme), largeur du ruban, revêtement,
+ *  tronçons en pont ou viaduc [s0, s1] (abscisses depuis le début de la voie, où le ruban suit h au lieu du sol). */
+export interface RoadSample { pts: [number, number][]; h: number[]; width: number; id?: string; kind?: string; surface?: string; bridges?: [number, number][] }
+/** Voies carrossables (couloirs de Capyville puis voies du monde posées par le générateur). */
+export const roadSamples: RoadSample[] = [];
+/** Chemins étroits et sentiers posés par le générateur (lacets vers les sommets) : dessinés en bandes de terre. */
+export const pathSamples: RoadSample[] = [];
 
 const inDetail = (x: number, z: number, m = 0) => x > DETAIL.x0 + m && x < DETAIL.x1 - m && z > DETAIL.z0 + m && z < DETAIL.z1 - m;
 
 function buildRoadSamples() {
   roadSamples.length = 0;
+  pathSamples.length = 0;
   // 1. les six couloirs des cols de Capyville (ROADS[0..5] de layout.ts) : profil en long du couloir (pente ≤ 8 %)
   for (const road of ROADS.slice(0, COL_ROUTES.length)) {
     const pts = sampleRoad(road, 5);
@@ -99,10 +105,13 @@ function buildRoadSamples() {
     }
     roadSamples.push({ pts, h: hs, width: road.width });
   }
-  // 2. voies carrossables du monde, posées par le générateur (plateforme à pente bornée, meta.ways)
+  // 2. voies du monde, tracées et posées par le générateur (tools/terrain/roads.py : lacets, plateforme, ouvrages)
+  const works = terrainData!.meta.ouvrages ?? [];
   for (const w of terrainData!.meta.ways ?? []) {
-    if (!w.vehicles || w.width < 5) continue;
-    roadSamples.push({ pts: w.pts, h: w.y.map((y) => y - 0.05), width: w.kind === 'route' ? 9 : w.width + 1 });
+    const bridges = works.filter((o) => o.way === w.id && (o.kind === 'pont' || o.kind === 'viaduc')).map((o) => [o.s0, o.s1] as [number, number]);
+    const base = { pts: w.pts, h: w.y, id: w.id, kind: w.kind, surface: w.surface, bridges };
+    if (w.vehicles && w.width >= 5) roadSamples.push({ ...base, width: w.kind === 'route' ? 9 : w.width + 1 });
+    else pathSamples.push({ ...base, width: w.width });
   }
 }
 
