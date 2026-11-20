@@ -64,7 +64,8 @@ function stairsMaterial(nor: THREE.Texture, ao: THREE.Texture, T: TexSet, S: Tex
         stone = mix(stone, vec3(0.16, 0.12, 0.085) * (0.8 + 0.4 * vnoise(vWp.xz * 11.0)), dirt * 0.8);
         // mousse : joints et creux, bords peu piétinés, dessus des blocs de bordure ; rompue par du bruit
         float n1 = fbm3(vWp.xz * 1.7 + vWp.y * 0.5);
-        float cover = max(smoothstep(0.7, 0.35, bao) * 0.95, smoothstep(0.2, 0.7, up) * smoothstep(0.9, 1.5, lat) * 0.9);
+        float stoneVar = smoothstep(0.25, 0.75, vnoise(vWp.xz * 0.9 + 4.0));
+        float cover = max(smoothstep(0.7, 0.35, bao) * 0.95, smoothstep(0.35, 0.8, up) * smoothstep(0.9, 1.5, lat) * mix(0.25, 1.0, stoneVar));
         cover = max(cover, smoothstep(0.3, 0.8, up) * (1.0 - walked) * smoothstep(0.45, 0.7, n1) * 0.8);
         cover *= smoothstep(0.25, 0.5, n1 + 0.25 - walked * 0.35);
         float wM = hblend(sA.b, aM.b, cover, 3.0) * smoothstep(0.03, 0.2, cover);

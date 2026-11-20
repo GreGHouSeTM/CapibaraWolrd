@@ -84,7 +84,7 @@ export class Forest {
     this.lod = [lod0, 75, 150];
     const [g, info, bark, rDiff, rNor, iDiff, iNor] = await Promise.all([
       glb('epiceas.glb'), fetch(BASE() + 'epiceas.json').then((r) => r.json()), texSet('ecorce'),
-      tex('tex/rameau_diff.png', true), tex('tex/rameau_nor.png', false), tex('tex/epicea_imp_diff.png', true, { repeat: false }), tex('tex/epicea_imp_nor.png', false, { repeat: false }),
+      tex('tex/rameau_diff.webp', true), tex('tex/rameau_nor.webp', false), tex('tex/epicea_imp_diff.webp', true, { repeat: false }), tex('tex/epicea_imp_nor.webp', false, { repeat: false }),
     ]);
     this.variants = info.variants;
     g.scene.updateMatrixWorld(true);

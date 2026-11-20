@@ -233,7 +233,14 @@ def main():
         Lf = fl['n'] * fl['run']
         t = 0.0
         while t < Lf + 0.6:
-            sz = (rng.uniform(0.45, 0.8), rng.uniform(0.4, 0.7), rng.uniform(0.32, 0.55))
+            # tailles très variées : gros blocs couchés, moellons, petites pierres de calage
+            k = rng.random()
+            if k < 0.25:
+                sz = (rng.uniform(0.8, 1.15), rng.uniform(0.6, 0.95), rng.uniform(0.45, 0.7))
+            elif k < 0.75:
+                sz = (rng.uniform(0.45, 0.75), rng.uniform(0.35, 0.6), rng.uniform(0.28, 0.5))
+            else:
+                sz = (rng.uniform(0.25, 0.4), rng.uniform(0.2, 0.35), rng.uniform(0.18, 0.3))
             x = fl['x'] - math.sin(fl['yaw']) * t - fl['width'] / 2 - 0.18 - sz[0] * 0.35 + rng.normal(0, 0.05)
             z = fl['z'] - math.cos(fl['yaw']) * t
             y = fl['y'] + min(t / fl['run'], fl['n']) * fl['rise']
@@ -242,7 +249,7 @@ def main():
             ob.location = g2b(x, max(gy, y - 0.35) + sz[2] * 0.12, z)
             ob.rotation_euler = (rng.normal(0, 0.1), rng.normal(0, 0.1), rng.uniform(0, 6.28))
             his.append(ob)
-            t += sz[1] * 0.85
+            t += sz[1] * rng.uniform(0.6, 1.05) + (rng.uniform(0.1, 0.45) if rng.random() < 0.2 else 0.0)
     # quelques blocs au pied de la paroi, à droite du bas de l'escalier
     for (x, z, s) in ((2.1, 6.4, 0.75), (2.6, 8.2, 0.55), (1.9, -5.2, 0.5)):
         gy = float(F.height(np.array([x]), np.array([z]))[0])

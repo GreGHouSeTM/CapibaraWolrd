@@ -253,7 +253,7 @@ def materials():
     """Matières Blender (pour les rendus d'imposteurs ; l'export glTF n'emporte pas de matière)."""
     import bpy
     out = {}
-    for kind, img, alpha in (('ecorce', os.path.join(OUT, 'tex', 'ecorce_diff.webp'), False), ('rameau', os.path.join(OUT, 'tex', 'rameau_diff.png'), True)):
+    for kind, img, alpha in (('ecorce', os.path.join(OUT, 'tex', 'ecorce_diff.webp'), False), ('rameau', os.path.join(OUT, 'tex', 'rameau_diff.webp' if os.path.exists(os.path.join(OUT, 'tex', 'rameau_diff.webp')) else 'rameau_diff.png'), True)):
         m = bpy.data.materials.new(kind)
         m.use_nodes = True
         nt = m.node_tree

@@ -131,6 +131,22 @@ def pom_heights():
 MATS['solh'] = pom_heights
 
 
+
+def cards_webp():
+    """Atlas des rameaux et des imposteurs (PNG des scripts Blender) → WebP (alpha conservé) : −60 % de poids."""
+    for n in ('rameau_diff', 'rameau_nor', 'epicea_imp_diff', 'epicea_imp_nor'):
+        p = os.path.join(OUT, n + '.png')
+        if not os.path.exists(p):
+            continue
+        im = Image.open(p)
+        im.save(os.path.join(OUT, n + '.webp'), quality=90, alpha_quality=100, method=6)
+        os.remove(p)
+        print(n, os.path.getsize(os.path.join(OUT, n + '.webp')) // 1024, 'Ko')
+
+
+MATS['cartes'] = cards_webp
+
+
 if __name__ == '__main__':
     want = sys.argv[1:] or [k for k in MATS if not k.startswith('_')]
     for k in want:
