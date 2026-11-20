@@ -113,7 +113,7 @@ export function groundMaterial(g: GroundTex) {
         float dist = length(cameraPosition - vWp);
         // couvertures cibles : sentier, boue, mousse ; le reste en litière d'aiguilles ou sol moussu (taches de 5-10 m)
         float varA = fbm3(wxz * 0.12 + 5.0);
-        float cMossy = smoothstep(0.42, 0.68, varA + mk.g * 0.25) * (1.0 - mk.r);
+        float cMossy = smoothstep(0.55, 0.78, varA + mk.g * 0.2) * (1.0 - mk.r) * 0.85;
         float b0 = (1.0 - mk.r) * (1.0 - cMossy), b1 = cMossy, b2 = mk.r, b3 = mk.b, b4 = mk.g;
         vec3 wPom = vec3(b0, b1, b2) / max(b0 + b1 + b2, 1e-3);
         vec3 Nw = normalize(vWn);
@@ -172,6 +172,9 @@ export function groundMaterial(g: GroundTex) {
           cA += cc[l] * w; nA += nn[l] * w; hA += aa[l] * w; wS += w;
         }
         cA /= max(wS, 1e-4); nA /= max(wS, 1e-4); hA /= max(wS, 1e-4);
+        // retouche : le sol moussu photoscanné est trop clair pour un sous-bois d'épicéas
+        cA *= mix(mix(0.5, 0.3, b1 / max(b0 + b1, 1e-3)), 0.85, (b2 + b3 + b4) / max(b0 + b1 + b2 + b3 + b4, 1e-3));
+        cA = mix(cA, vec3(dot(cA, vec3(0.3, 0.55, 0.15))) * vec3(1.05, 0.95, 0.8), 0.25);
         // variations de valeur et de teinte à grande échelle (pas d'uniformité « tuilée »)
         cA *= mix(vec3(0.86, 0.86, 0.84), vec3(1.08, 1.04, 0.98), fbm3(wxz * 0.05 + 2.0)) * (0.9 + 0.2 * vnoise(wxz * 0.35));
         // humidité : sol sombre et brillant autour de la flaque
@@ -179,7 +182,7 @@ export function groundMaterial(g: GroundTex) {
         cA *= mix(1.0, 0.55, wet);
         diffuseColor.rgb *= cA;
         float gAO = hA.r;
-        float gRough = mix(hA.g, 0.22, wet * 0.85);
+        float gRough = mix(max(hA.g, 0.82), 0.22, wet * 0.85);
         vec3 gN = normalize(vec3(nA.xy, max(nA.z, 0.2)));
       `,
       roughnessmap_fragment: 'float roughnessFactor = gRough;',

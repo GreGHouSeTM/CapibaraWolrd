@@ -41,6 +41,7 @@ export class ForetDemo {
   ground!: Ground;
   forest!: Forest;
   wallObj!: THREE.Object3D;
+  mirror: THREE.Object3D | null = null;
   post!: ForetPost;
   lamp = new THREE.PointLight(0xffa860, 0, 26, 2);
   flame = new THREE.Mesh(new THREE.SphereGeometry(0.035, 12, 8), new THREE.MeshBasicMaterial({ color: new THREE.Color().setRGB(9, 4.5, 1.6) }));
@@ -93,7 +94,6 @@ export class ForetDemo {
     if (this.rig) {
       this.rig.camera.aspect = w / h;
       this.rig.camera.updateProjectionMatrix();
-    this.post = new ForetPost(this.renderer, this.scene, this.rig.camera, this.preset);
     }
   }
 
@@ -139,6 +139,7 @@ export class ForetDemo {
     this.rig.camera.near = 0.1;
     this.rig.camera.far = 2500;
     this.rig.camera.updateProjectionMatrix();
+    this.post = new ForetPost(this.renderer, this.scene, this.rig.camera, this.preset);
     this.rig.sensitivity = this.save.settings.sensitivity;
     this.rig.invertY = this.save.settings.invertY;
     this.player = new Player(this.save.hat);
@@ -214,13 +215,15 @@ export class ForetDemo {
     // lanterne : flamme chaude, ombres portées (cube), halo dans la brume (passe volumétrique)
     const L = this.scatter.lantern;
     this.lamp.position.set(L.x, L.y + 0.2, L.z);
-    this.lamp.castShadow = this.preset.lanternShadow > 0;
+    this.lamp.castShadow = false; // activé la nuit seulement (6 rendus de la scène par image)
+    this.lamp.shadow.camera.layers.set(2);
+    for (const g of [this.scatter.group, this.ground.group, this.wallObj]) g.traverse((o) => o.layers.enable(2));
     this.lamp.shadow.mapSize.set(this.preset.lanternShadow || 256, this.preset.lanternShadow || 256);
     this.lamp.shadow.camera.near = 0.08;
     this.lamp.shadow.camera.far = 22;
     this.lamp.shadow.bias = -0.002;
     this.lamp.decay = 2;
-    this.lamp.distance = 26;
+    this.lamp.distance = 32;
     this.flame.position.copy(this.lamp.position);
     this.scene.add(this.lamp, this.flame);
     // flaque : reflet plan (arbres, paroi, lanterne, ciel : calque 1) à résolution réduite
@@ -234,6 +237,7 @@ export class ForetDemo {
       r.position.set(P.x, this.data.height(P.x, P.z) + P.depth * 0.55, P.z);
       (r as any).camera.layers.set(1);
       this.scene.add(r);
+      this.mirror = r;
       for (const g of [this.forest.group, this.wallObj]) g.traverse((o) => o.layers.enable(1));
       this.flame.layers.enable(1);
     }
@@ -246,26 +250,29 @@ export class ForetDemo {
   private applyTime() {
     const n = this.night;
     // soleil voilé haut, à contre-jour léger vers le nord-est : lumière douce et diffuse, quelques taches au sol
-    const dir = n ? new THREE.Vector3(0.3, 0.8, 0.5).normalize() : new THREE.Vector3(0.28, 0.72, 0.62).normalize();
+    const dir = n ? new THREE.Vector3(0.3, 0.8, 0.5).normalize() : new THREE.Vector3(0.3, 0.62, -0.72).normalize();
     this.sun.position.copy(dir).multiplyScalar(180);
     this.sun.target.position.set(0, 4, -5);
     this.sun.position.add(this.sun.target.position);
     this.sun.color.set(n ? 0x8095c8 : 0xffeedd);
-    this.sun.intensity = n ? 0.04 : 2.6;
+    this.sun.intensity = n ? 0.12 : 2.6;
     this.hemi.color.set(n ? 0x141a2a : 0xb8c6d4);
     this.hemi.groundColor.set(n ? 0x050608 : 0x2a2619);
     this.hemi.intensity = n ? 0.02 : 0.1;
-    this.scene.environmentIntensity = n ? 0.025 : 1.0;
+    this.scene.environmentIntensity = n ? 0.07 : 1.0;
     this.scene.background = n ? new THREE.Color().setRGB(0.004, 0.006, 0.01) : new THREE.Color().setRGB(1.5, 1.62, 1.72);
-    this.lamp.intensity = n ? 9 : 0;
+    this.lamp.intensity = n ? 16 : 0;
+    this.lamp.castShadow = n && this.preset.lanternShadow > 0;
     this.flame.visible = n;
+    if (this.mirror) this.mirror.visible = n;
     const f = this.post.fog.fogMat.uniforms;
-    f.uDens.value = n ? 0.03 : 0.022;
+    f.uDens.value = n ? 0.03 : 0.011;
     f.uHeight.value = n ? 5 : 9;
     f.uBase.value = 5;
+    f.uExpo.value = n ? 4.5 : 1.0; // exposition (œil adapté à la nuit)
     f.uSunDir.value.copy(dir);
     f.uSunCol.value.copy(this.sun.color).multiplyScalar(this.sun.intensity * 0.55);
-    f.uAmb.value.setRGB(...(n ? [0.006, 0.008, 0.014] : [0.62, 0.68, 0.74]) as [number, number, number]);
+    f.uAmb.value.setRGB(...(n ? [0.012, 0.016, 0.026] : [0.62, 0.68, 0.74]) as [number, number, number]);
     this.post.fog.resetHistory();
   }
 
@@ -395,7 +402,7 @@ export class ForetDemo {
     f.uTime.value = this.time;
     // flamme : scintillement léger
     const fl = 1 + 0.06 * Math.sin(this.time * 13.1) + 0.04 * Math.sin(this.time * 23.7 + 1.3);
-    if (this.night) this.lamp.intensity = 9 * fl;
+    if (this.night) this.lamp.intensity = 16 * fl;
     f.uLampPos.value.copy(this.lamp.position);
     f.uLampCol.value.setRGB(1.0, 0.55, 0.22).multiplyScalar(this.night ? 6 * fl : 0);
     this.post.render(dt);

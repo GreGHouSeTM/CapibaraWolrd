@@ -12,8 +12,8 @@ export const PROP_IDS = ['fern_02', 'shrub_sorrel_01', 'rock_moss_set_01', 'rock
   'stone_01', 'rock_07', 'rock_09', 'Lantern_01', 'fir_sapling'];
 
 export const STYLES: Record<string, PropStyle> = {
-  fern_02: { foliage: true, lodDist: [14, 40], shadow: true, tint: 0.25, color: [0.78, 0.85, 0.7] },
-  shrub_sorrel_01: { foliage: true, lodDist: [10, 30], shadow: false, tint: 0.2, color: [0.85, 0.95, 0.75] },
+  fern_02: { foliage: true, lodDist: [12, 35], shadow: true, tint: 0.25, color: [0.78, 0.85, 0.7] },
+  shrub_sorrel_01: { foliage: true, lodDist: [7, 22], shadow: false, tint: 0.2, color: [0.85, 0.95, 0.75] },
   fir_sapling: { foliage: true, lodDist: [18, 45, 90], shadow: true, tint: 0.15, color: [0.75, 0.8, 0.72] },
   rock_moss_set_01: { moss: 0.9, foot: 0.25, lodDist: [25, 70, 160] },
   rock_moss_set_02: { moss: 0.9, foot: 0.2, lodDist: [25, 70, 160] },
@@ -81,10 +81,9 @@ export class Scatter {
     add('root_cluster_02_a', -14.6, 22.8, 1.1, { ry: 0.3 }, 0.02);
     add('root_cluster_02_d', -11.4, 19.8, 1.2, { ry: 1.9 }, 0.02);
     add('dead_tree_trunk', -18.5, 24.5, 1.1, { ry: 1.2 }, 0.05);
-    // lanterne posée sur la borne de pierre au pied de l'escalier
-    const st0 = steps[0];
-    const lx = st0.x - st0.width / 2 - 0.42 + 0.13, lz = st0.z + 0.25 - 0.12;
-    this.lantern.set(lx, st0.y - st0.rise + 0.95 + 0.01, lz);
+    // lanterne posée sur la souche moussue au bord de la clairière, derrière la flaque (cadrage de la référence de nuit)
+    const lx = -9.8, lz = 18.5;
+    this.lantern.set(lx, D.height(lx, lz) - 0.05 + 0.5, lz);
     sets.set('lantern_01', [{ x: lx, y: this.lantern.y, z: lz, ry: 0.4, s: 1.6 }]);
 
     // --- remplissage procédural
@@ -98,7 +97,7 @@ export class Scatter {
       if (r < 0.3 && m[0] < 0.05) add(pick('fern_02'), x, z, 0.9 + rnd() * 0.9, {}, 0.0);
       // oxalis en colonies (pied de paroi, bords du sentier, mousse)
       else if (r < 0.62 && (m[1] > 0.3 || rnd() < 0.3)) {
-        const n = 6 + Math.floor(rnd() * 14);
+        const n = 4 + Math.floor(rnd() * 9);
         for (let k = 0; k < n; k++) {
           const a = rnd() * 6.283, d = Math.sqrt(rnd()) * 0.9;
           const xx = x + Math.cos(a) * d, zz = z + Math.sin(a) * d;

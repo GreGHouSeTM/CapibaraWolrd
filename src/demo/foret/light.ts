@@ -149,8 +149,9 @@ export class ForetPost {
       void mainImage(const in vec4 c, const in vec2 uv, out vec4 o) {
         vec3 x = c.rgb;
         float l = dot(x, vec3(0.2126, 0.7152, 0.0722));
-        x = mix(vec3(l), x, 1.08);
-        x = pow(max(x, 0.0), vec3(1.04));
+        x = mix(vec3(l), x, 1.06);
+        x = (x - 0.5) * 1.12 + 0.5;
+        x = pow(max(x, 0.0), vec3(1.06));
         x *= vec3(0.985, 1.0, 1.02);
         float v = distance(uv, vec2(0.5));
         x *= 1.0 - smoothstep(0.42, 0.95, v) * 0.35;

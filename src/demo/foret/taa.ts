@@ -13,7 +13,7 @@ uniform sampler2D tColor, tDepth, tShadow;
 uniform mat4 uCamWorld, uShadowMat; uniform vec2 uProjInv; uniform vec3 uCamPos;
 uniform float uNear, uFar;
 uniform vec3 uSunDir, uSunCol, uAmb, uLampPos, uLampCol;
-uniform float uDens, uHeight, uBase, uTime, uFrame, uMaxD;
+uniform float uDens, uHeight, uBase, uTime, uFrame, uMaxD, uExpo;
 varying vec2 vUv;
 float hh(vec2 p) { return fract(sin(dot(p, vec2(41.3, 289.1))) * 43758.5453); }
 float vn(vec2 p) { vec2 i = floor(p), f = fract(p); vec2 u = f * f * (3.0 - 2.0 * f);
@@ -49,13 +49,13 @@ void main() {
     vec3 p = uCamPos + rd * mix(t0, t1, j);
     float d = dens(p);
     vec3 lv = uLampPos - p;
-    vec3 Li = uAmb + uSunCol * sunVis(p) * hg * 6.0 + uLampCol / (dot(lv, lv) + 0.25) * 0.08;
+    vec3 Li = uAmb + uSunCol * sunVis(p) * hg * 2.6 + uLampCol / (dot(lv, lv) + 0.25) * 0.08;
     float a = exp(-d * (t1 - t0));
     scat += T * (1.0 - a) * Li;
     T *= a;
     t0 = t1;
   }
-  gl_FragColor = vec4(col.rgb * T + scat, col.a);
+  gl_FragColor = vec4((col.rgb * T + scat) * uExpo, col.a);
 }`;
 
 const taaFrag = /* glsl */ `
@@ -130,7 +130,7 @@ export class FogTAAPass extends Pass {
         uProjInv: { value: new THREE.Vector2() }, uCamPos: { value: new THREE.Vector3() }, uNear: { value: 0.1 }, uFar: { value: 1000 },
         uSunDir: { value: new THREE.Vector3(0, 1, 0) }, uSunCol: { value: new THREE.Color() }, uAmb: { value: new THREE.Color() },
         uLampPos: { value: new THREE.Vector3() }, uLampCol: { value: new THREE.Color(0, 0, 0) },
-        uDens: { value: 0.02 }, uHeight: { value: 8 }, uBase: { value: 4 }, uTime: { value: 0 }, uFrame: { value: 0 }, uMaxD: { value: 220 },
+        uDens: { value: 0.02 }, uHeight: { value: 8 }, uBase: { value: 4 }, uTime: { value: 0 }, uFrame: { value: 0 }, uMaxD: { value: 220 }, uExpo: { value: 1 },
       },
     });
     this.taaMat = taa ? new THREE.ShaderMaterial({

@@ -126,11 +126,11 @@ export class PropLib {
           if (uMoss > 0.0) {
             vec3 nW = normalize(vWn);
             float n1 = fbm3(vWp.xz * 1.3 + vWp.y * 0.7);
-            float cover = smoothstep(0.25, 0.85, nW.y + (n1 - 0.5) * 0.6) * uMoss;
+            float cover = smoothstep(0.35, 0.9, nW.y + (n1 - 0.5) * 1.1) * uMoss * smoothstep(0.2, 0.55, n1 + 0.15);
             vec2 muv = vWp.xz / 0.7;
             vec4 ma = texture2D(tMa, muv);
             wMossP = clamp((cover * 1.6 - 0.6 + (ma.b - 0.5) * 0.5) * 3.0 + 0.5, 0.0, 1.0) * smoothstep(0.03, 0.2, cover);
-            vec3 mc = texture2D(tMd, muv).rgb * mix(vec3(0.62, 0.7, 0.5), vec3(0.85, 0.88, 0.58), vnoise(vWp.xz * 0.8));
+            vec3 mc = texture2D(tMd, muv).rgb * mix(vec3(0.42, 0.5, 0.34), vec3(0.66, 0.7, 0.45), vnoise(vWp.xz * 0.8));
             diffuseColor.rgb = mix(diffuseColor.rgb, mc, wMossP);
             nMossP = unpackN(texture2D(tMn, muv));
           }
