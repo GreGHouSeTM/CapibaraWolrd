@@ -177,9 +177,9 @@ def relief_metrics(H, W, meta):
     cliff4 = carve.cliff_mask(W, X4, Z4, 4.0, n4)
     vm4 = np.load(os.path.join(CACHE, 'valleym4.npy'))
     wanted4 = cliff4 > 0.3
-    # barres rocheuses voulues (J2) : masque exporté dans meta si présent
-    if os.path.exists(os.path.join(CACHE, 'barres4.npy')):
-        wanted4 |= np.load(os.path.join(CACHE, 'barres4.npy')) > 0.5
+    # roche voulue (J2) : pyramides sommitales, parois de cirques, couronnes des mesas, pitons (gen_terrain.py)
+    if os.path.exists(os.path.join(CACHE, 'roche4.npy')):
+        wanted4 |= np.load(os.path.join(CACHE, 'roche4.npy')) > 0.5
     up = lambda a: np.repeat(np.repeat(a, 2, 0), 2, 1)
     wanted = up(wanted4)
     valley = up(vm4 > 0.5)
@@ -190,6 +190,8 @@ def relief_metrics(H, W, meta):
     for th in (30, 35, 40, 45, 55):
         out[f'part_{th}'] = round(100 * float((S[wild] > th).sum()) / nl, 2)
     out['part_45_falaises'] = round(100 * float((S[land & wanted] > 45).sum()) / max(1, (land & wanted).sum()), 1)
+    # part des terres classées en falaise ou roche voulue (pentes fortes admises) : à surveiller, pour ne pas tricher
+    out['part_voulue'] = round(100 * float((land & wanted).sum()) / max(1, land.sum()), 2)
     # pire tuile de 512 m (part > 35° hors falaises)
     T = 256
     worst = (0.0, None)

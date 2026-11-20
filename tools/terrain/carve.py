@@ -236,3 +236,50 @@ def cliff_mask(W, X, Z, cell, n):
         d = polyline_dist(X[sj, si], Z[sj, si], seg['pts'])[0]
         m[sj, si] = np.maximum(m[sj, si], smoothstep(160, 90, d))
     return m
+
+
+# routes du monde qui partent du bout des couloirs de Capyville (même table que roads.FROM_COL)
+COL_WAY = {'paris': 'route-paris', 'newyork': 'route-ny', 'london': 'route-londres', 'japan': 'route-japon',
+           'desert': 'piste-desert', 'pole': 'route-pole'}
+
+
+def exit_valleys(h, routes, W, X, Z, cell, n):
+    """Sorties des cols (bible §4.5 : le terrain descend vers 8 à 15 m au bout des couloirs, puis rejoint les fonds de relief).
+    Au lieu d'une cuvette ronde (fossé de 60 à 80 m de profondeur), une vallée douce part du bout du couloir le long de la
+    voie de la bible : fond montant à 4,5 % au plus, versants de 18°, jusqu'à rejoindre le relief naturel."""
+    ways = {w['id']: w for w in W['WAYS']}
+    for rt in routes['routes']:
+        end = np.asarray(rt['pts'][-1], dtype=np.float64)
+        y = rt['y'][-1]
+        # petit replat de sortie (raccord des derniers mètres du couloir)
+        d = np.hypot(X - end[0], Z - end[1])
+        h = h + (y - h) * smoothstep(110, 40, d)
+        w = ways.get(COL_WAY.get(rt['axis'], ''))
+        if not w:
+            continue
+        P = np.vstack([end[None], np.asarray(w['pts'][1:], dtype=np.float64)])
+        for _ in range(2):
+            q, r = 0.75 * P[:-1] + 0.25 * P[1:], 0.25 * P[:-1] + 0.75 * P[1:]
+            m = np.empty((2 * len(q), 2)); m[0::2] = q; m[1::2] = r
+            P = np.vstack([P[:1], m, P[-1:]])
+        seg = np.hypot(*(P[1:] - P[:-1]).T)
+        S = np.concatenate([[0], np.cumsum(seg)])
+        s = np.arange(0, S[-1], 8.0)
+        C = np.stack([np.interp(s, S, P[:, 0]), np.interp(s, S, P[:, 1])], 1)
+        hc = ndimage.map_coordinates(h, [(C[:, 1] - X0) / cell, (C[:, 0] - X0) / cell], order=1, mode='nearest')
+        floor = y + 0.045 * s
+        # la vallée s'arrête là où son fond rejoint le relief naturel (plus un fondu de 150 m)
+        hit = np.nonzero(floor >= ndimage.minimum_filter1d(hc, 9) - 1.0)[0]
+        hit = hit[s[hit] > 120]
+        smax = min(float(s[hit[0]]) if len(hit) else float(s[-1]), 900.0)
+        keep = s <= smax + 150
+        C, s, floor = C[keep], s[keep], floor[keep]
+        if len(C) < 3:
+            continue
+        sj, si = bbox_slices(C, 400, cell, n)
+        dd, ss, fl = polyline_dist(X[sj, si], Z[sj, si], C, vals=[s, floor])
+        lim = fl + np.maximum(0, dd - 28) * 0.33 + 5 * fbm(X[sj, si] / 70, Z[sj, si] / 70, 2, 77) * smoothstep(30, 90, dd)
+        fade = smoothstep(smax + 150, smax, ss) * smoothstep(260, 170, dd)
+        hh = h[sj, si]
+        h[sj, si] = hh + (smin(hh, lim, 8) - hh) * fade
+    return h
