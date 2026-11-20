@@ -15,6 +15,10 @@ import { lerp } from '../../core/math';
 import { ForetData } from './data';
 import { FORET_PRESETS, ForetPreset } from './presets';
 import { Ground } from './ground';
+import { buildWall } from './wall';
+import { setAniso } from './tex';
+import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js';
+import { BASE } from './data';
 
 export class ForetDemo {
   canvas: HTMLCanvasElement;
@@ -30,6 +34,7 @@ export class ForetDemo {
   player!: Player;
   ground!: Ground;
   sun = new THREE.DirectionalLight(0xffffff, 3);
+  envMap: THREE.Texture | null = null;
   hemi = new THREE.HemisphereLight(0xc8d4e0, 0x3a3424, 0.8);
   state: 'loading' | 'title' | 'play' | 'paused' = 'loading';
   time = 0;
@@ -82,6 +87,17 @@ export class ForetDemo {
     await this.data.load((p) => this.ui.setLoading(0.03 + p * 0.1));
     const D = this.data;
     setGroundOverride(D.height);
+    setAniso(Math.min(16, this.renderer.capabilities.getMaxAnisotropy()));
+    // lumière du ciel (IBL) : HDRI Poly Haven « misty_pines » (pinède brumeuse, ciel couvert)
+    const hdr = await new RGBELoader().loadAsync(BASE() + 'hdri/misty_pines_2k.hdr');
+    hdr.mapping = THREE.EquirectangularReflectionMapping;
+    const pm = new THREE.PMREMGenerator(this.renderer);
+    this.envMap = pm.fromEquirectangular(hdr).texture;
+    hdr.dispose();
+    pm.dispose();
+    this.scene.environment = this.envMap;
+    this.ui.setLoading(0.15, 'Sculpture de la paroi de granite…');
+    this.scene.add(await buildWall());
     this.ui.setLoading(0.2, 'Modelage du sol…');
     this.ground = new Ground(D, this.preset);
     this.scene.add(this.ground.group);
@@ -181,7 +197,8 @@ export class ForetDemo {
     this.sun.intensity = n ? 0.05 : 2.2;
     this.hemi.color.set(n ? 0x1a2236 : 0xc8d4e0);
     this.hemi.groundColor.set(n ? 0x06070a : 0x3a3424);
-    this.hemi.intensity = n ? 0.25 : 1.1;
+    this.hemi.intensity = n ? 0.05 : 0.15;
+    this.scene.environmentIntensity = n ? 0.04 : 0.9;
     (this.scene.fog as THREE.FogExp2).color.set(n ? 0x05070b : 0xb8c2c8);
     this.scene.background = new THREE.Color(n ? 0x04060a : 0xc4ccd2);
   }

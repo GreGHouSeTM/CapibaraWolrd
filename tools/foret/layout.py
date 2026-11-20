@@ -134,6 +134,20 @@ _STRIP = _pchip([-60, -30, -16, -14, 4, 6, 14, 24, 34, 60], [6.0, 3.5, 0.6, 0.12
 _WALLH = _pchip([-60, -34, -26, -18, -8, 0, 8, 16, 26, 34, 60], [0.0, 0.0, 2.5, 9.5, 12.8, 13.0, 11.0, 7.5, 3.2, 0.0, 0.0])
 
 
+_WALLTH = _pchip([-60, -26, -14, -4, 6, 16, 26, 60], [78.0, 78.0, 80.0, 82.5, 79.0, 76.0, 74.0, 74.0])
+WALL_INSIDE = 1.8  # le relief reste à 1,8 m derrière la face de la paroi (il ne perce jamais la roche)
+
+
+def wall_angle(z):
+    """Inclinaison de la face (radians depuis l'horizontale)."""
+    return np.radians(_WALLTH(z))
+
+
+def wall_top_e(z):
+    """Distance horizontale (m, depuis le pied) où le relief atteint le haut de la paroi."""
+    return wall_height(z) / np.tan(wall_angle(z)) + WALL_INSIDE
+
+
 def wall_strip(z):
     """Largeur de la bande de sol (blocs, trèfles) entre le bord du sentier et le pied de la paroi."""
     return _STRIP(z)
@@ -241,8 +255,11 @@ class Field:
         e = d - w
         foot = yc + 0.22 * sstep(0, np.maximum(strip, 0.2), e)
         ef = e - strip
-        face = np.maximum(0.28 * H, 0.6)
-        east = foot + H * sstep(0, face, ef) + 0.16 * np.maximum(ef, 0) + 0.8 * fbm(X * 0.05, Z * 0.05, 3, off=9.0) * sstep(2, 10, ef)
+        # derrière le pied : le relief monte à WALL_INSIDE m derrière la face (caché dans la roche), puis le plateau
+        etop = wall_top_e(Z)
+        inside = foot + H * np.clip((ef - WALL_INSIDE) / np.maximum(etop - WALL_INSIDE, 0.05), 0, 1)
+        plateau = foot + H + 0.12 * np.maximum(ef - etop, 0) + 0.8 * fbm(X * 0.05, Z * 0.05, 3, off=9.0) * sstep(4, 14, ef - etop)
+        east = np.where(ef < etop, inside, plateau)
         h = np.where(d < -w, west, np.where(d > w, east, path))
         # raccord doux sentier/pentes (évite une marche nette au bord)
         edge = sstep(w - 0.35, w + 0.25, np.abs(d))
