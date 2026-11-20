@@ -117,6 +117,19 @@ MATS = {
 }
 
 
+
+def pom_heights():
+    """Hauteurs du sol regroupées pour le parallax occlusion mapping : R aiguilles, G sol moussu, B sentier (même pavé)."""
+    hs = []
+    for n in ('aiguilles', 'solmousse', 'sentier'):
+        hs.append(np.asarray(Image.open(os.path.join(OUT, f'{n}_arh.webp')).convert('RGB'))[..., 2])
+    Image.fromarray(np.stack(hs, -1)).save(os.path.join(OUT, 'solh.webp'), quality=90, method=6)
+    print('solh', os.path.getsize(os.path.join(OUT, 'solh.webp')) // 1024, 'Ko')
+
+
+MATS['solh'] = pom_heights
+
+
 if __name__ == '__main__':
     want = sys.argv[1:] or list(MATS)
     for k in want:

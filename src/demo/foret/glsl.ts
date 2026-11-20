@@ -30,6 +30,30 @@ NT ntSetup(vec2 uv, float seed) {
 vec4 ntS(sampler2D t, NT n) { return mix(textureGrad(t, n.a, n.dx, n.dy), textureGrad(t, n.b, n.dx, n.dy), n.f); }
 
 vec3 unpackN(vec4 t) { return t.xyz * 2.0 - 1.0; }
+
+// Projection triplanaire (repère du monde, B. Golus « whiteout ») : poids aiguisés, plans négligeables ignorés.
+struct TP { vec2 ux; vec2 uy; vec2 uz; vec3 w; };
+TP tpSetup(vec3 p, vec3 n, float scale) {
+  TP t;
+  vec3 w = pow(abs(n), vec3(6.0));
+  t.w = w / (w.x + w.y + w.z);
+  t.ux = p.zy / scale; t.uy = p.xz / scale; t.uz = p.xy / scale;
+  return t;
+}
+vec4 tpS(sampler2D s, TP t) {
+  vec4 c = vec4(0.0); float k = 0.0;
+  if (t.w.x > 0.02) { c += texture(s, t.ux) * t.w.x; k += t.w.x; }
+  if (t.w.y > 0.02) { c += texture(s, t.uy) * t.w.y; k += t.w.y; }
+  if (t.w.z > 0.02) { c += texture(s, t.uz) * t.w.z; k += t.w.z; }
+  return c / max(k, 1e-4);
+}
+vec3 tpN(sampler2D s, TP t, vec3 nW) {
+  vec3 r = vec3(0.0);
+  if (t.w.x > 0.02) { vec3 a = unpackN(texture(s, t.ux)); a = vec3(a.xy + nW.zy, abs(a.z) * nW.x); r += a.zyx * t.w.x; }
+  if (t.w.y > 0.02) { vec3 a = unpackN(texture(s, t.uy)); a = vec3(a.xy + nW.xz, abs(a.z) * nW.y); r += a.xzy * t.w.y; }
+  if (t.w.z > 0.02) { vec3 a = unpackN(texture(s, t.uz)); a = vec3(a.xy + nW.xy, abs(a.z) * nW.z); r += a.xyz * t.w.z; }
+  return normalize(r);
+}
 // mélange de normales en espace tangent (« whiteout »)
 vec3 blendN(vec3 a, vec3 b) { return normalize(vec3(a.xy + b.xy, a.z * b.z)); }
 // poids de mélange par hauteur (hauteurs h, couverture c) : transition étroite au sommet des reliefs
