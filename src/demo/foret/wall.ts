@@ -75,7 +75,7 @@ export function wallMaterial(nor: THREE.Texture, ao: THREE.Texture, masks: THREE
         float wM = hblend(rH.b, hM.b, mk.r, 3.5);
         wM *= smoothstep(0.02, 0.2, mk.r);
         // mousse sombre et veloutée (vert olive), plus jaune par plaques
-        vec3 moss = cM * mix(vec3(0.6, 0.68, 0.48), vec3(0.85, 0.86, 0.55), smoothstep(0.3, 0.8, vnoise(um * 0.55)));
+        vec3 moss = cM * mix(vec3(0.5, 0.58, 0.4), vec3(0.74, 0.76, 0.5), smoothstep(0.3, 0.8, vnoise(um * 0.55)));
         vec4 diffuseColor2 = vec4(mix(rock, moss, wM), 1.0);
         // micro-ombrage : les creux cuits assombrissent aussi un peu la lumière directe
         float aoAll = bakedAO * mix(rH.r, hM.r, wM);

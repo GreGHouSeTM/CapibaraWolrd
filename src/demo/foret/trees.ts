@@ -44,6 +44,8 @@ export function placeTrees(D: ForetData, density: number): TreeInst[] {
       D.mask(x, z, m);
       if (m[0] > pathMargin || m[2] > 0.3 || nearStairs(x, z)) return false;
       if (Math.hypot(x - S.clearing.x, z - S.clearing.z) < S.clearing.r * 0.55) return false;
+      // dégagement des points de vue des captures (nuit : derrière la flaque ; jour : premier plan du sentier)
+      if (Math.hypot(x + 15.6, z - 25.4) < 3.2 || Math.hypot(x + 0.9, z - 11.5) < 2.2) return false;
     }
     return slope(x, z) < 0.75;
   };
@@ -169,7 +171,7 @@ export class Forest {
 
   private barkMaterial(b: { diff: THREE.Texture; nor: THREE.Texture; arh: THREE.Texture }) {
     const rep = (t: THREE.Texture) => { const c = t.clone(); c.repeat.set(1 / 1.2, 1 / 1.2); c.needsUpdate = true; return c; };
-    const m = new THREE.MeshStandardMaterial({ map: rep(b.diff), normalMap: rep(b.nor), roughnessMap: rep(b.arh), aoMap: rep(b.arh), roughness: 1, color: 0xb8b0a6 });
+    const m = new THREE.MeshStandardMaterial({ map: rep(b.diff), normalMap: rep(b.nor), roughnessMap: rep(b.arh), aoMap: rep(b.arh), roughness: 1, color: 0x8c857c });
     m.roughnessMap!.channel = 0;
     return patch(m, {
       uniforms: { uWind: this.wind },

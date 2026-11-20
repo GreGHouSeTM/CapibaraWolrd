@@ -130,7 +130,7 @@ export class PropLib {
             vec2 muv = vWp.xz / 0.7;
             vec4 ma = texture2D(tMa, muv);
             wMossP = clamp((cover * 1.6 - 0.6 + (ma.b - 0.5) * 0.5) * 3.0 + 0.5, 0.0, 1.0) * smoothstep(0.03, 0.2, cover);
-            vec3 mc = texture2D(tMd, muv).rgb * mix(vec3(0.42, 0.5, 0.34), vec3(0.66, 0.7, 0.45), vnoise(vWp.xz * 0.8));
+            vec3 mc = texture2D(tMd, muv).rgb * mix(vec3(0.34, 0.41, 0.27), vec3(0.56, 0.6, 0.38), vnoise(vWp.xz * 0.8)) * mix(0.7, 1.1, vnoise(vWp.xz * 3.7));
             diffuseColor.rgb = mix(diffuseColor.rgb, mc, wMossP);
             nMossP = unpackN(texture2D(tMn, muv));
           }

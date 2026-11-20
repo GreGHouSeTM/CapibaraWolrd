@@ -79,6 +79,9 @@ const VIEWS = {
   'foret-haut': { cam: [0.9, 1.8, -17.5], look: [-0.3, -0.8, 6], hour: 10, ground: true, query: 'demo=foret' },
   'foret-sousbois': { cam: [-11, 1.5, 2], look: [-26, 2.5, -12], hour: 10, ground: true, query: 'demo=foret' },
   'foret-plan': { cam: [0, 95, 12], look: [0, 0, -6], hour: 10, ground: true, query: 'demo=foret' },
+  'foret-clairiere': { cam: [-16.5, 1.4, 25.5], look: [-10.5, 0.4, 18.8], hour: 10, ground: true, query: 'demo=foret' },
+  'foret-cime': { cam: [-6, 1.5, -2], look: [-9, 14, -12], hour: 10, ground: true, query: 'demo=foret' },
+  'foret-marches': { cam: [-0.6, 1.0, 5.6], look: [0.6, 0.2, 2.2], hour: 10, ground: true, query: 'demo=foret' },
   'foret-capy': { pos: [-4.2, 26], yaw: Math.PI, pitch: 0.22, hour: 10, dist: 6, query: 'demo=foret' },
 };
 module.exports = { VIEWS };

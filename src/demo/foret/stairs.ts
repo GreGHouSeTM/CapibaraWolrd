@@ -51,7 +51,7 @@ function stairsMaterial(nor: THREE.Texture, ao: THREE.Texture, T: TexSet, S: Tex
         float wTop = smoothstep(0.55, 0.85, up);
         vec3 cT = tpS(tTd, tpT).rgb, cS = tpS(tSd, tpS2).rgb, cM = tpS(tMd, tpM).rgb;
         vec3 aT = tpS(tTa, tpT).rgb, aS2 = tpS(tSa, tpS2).rgb, aM = tpS(tMa, tpM).rgb;
-        vec3 stone = mix(cS, cT, wTop);
+        vec3 stone = mix(cS, cT * 0.62, wTop) * 0.8;
         vec3 sA = mix(aS2, aT, wTop);
         // teinte propre à chaque dalle (bruit à basse fréquence) : granite gris plus ou moins chaud
         stone *= mix(vec3(0.9, 0.93, 0.98), vec3(1.06, 1.02, 0.95), vnoise(vWp.xz * 0.9 + vWp.y)) * (0.85 + 0.25 * vnoise(vWp.xz * 2.3));
@@ -69,7 +69,7 @@ function stairsMaterial(nor: THREE.Texture, ao: THREE.Texture, T: TexSet, S: Tex
         cover = max(cover, smoothstep(0.3, 0.8, up) * (1.0 - walked) * smoothstep(0.45, 0.7, n1) * 0.8);
         cover *= smoothstep(0.25, 0.5, n1 + 0.25 - walked * 0.35);
         float wM = hblend(sA.b, aM.b, cover, 3.0) * smoothstep(0.03, 0.2, cover);
-        vec3 moss = cM * mix(vec3(0.62, 0.7, 0.5), vec3(0.85, 0.88, 0.58), vnoise(vWp.xz * 0.8));
+        vec3 moss = cM * mix(vec3(0.38, 0.45, 0.3), vec3(0.62, 0.66, 0.42), vnoise(vWp.xz * 0.8)) * mix(0.7, 1.1, vnoise(vWp.xz * 3.7));
         // lichen pâle par taches sur les flancs et les blocs
         float lich = smoothstep(0.62, 0.78, vnoise(vWp.xz * 3.1 + vWp.y * 2.7)) * (1.0 - wTop * walked) * (1.0 - wM);
         stone = mix(stone, vec3(0.58, 0.62, 0.52) * (0.8 + 0.4 * dot(stone, vec3(0.33))), lich * 0.45);

@@ -284,7 +284,7 @@ export class ForetDemo {
     f.uDens.value = n ? 0.03 : 0.011;
     f.uHeight.value = n ? 5 : 9;
     f.uBase.value = 5;
-    f.uExpo.value = n ? 4.5 : 1.0; // exposition (œil adapté à la nuit)
+    f.uExpo.value = n ? 3.6 : 1.0; // exposition (œil adapté à la nuit)
     f.uSunDir.value.copy(dir);
     f.uSunCol.value.copy(this.sun.color).multiplyScalar(this.sun.intensity * 0.55);
     f.uAmb.value.setRGB(...(n ? [0.012, 0.016, 0.026] : [0.62, 0.68, 0.74]) as [number, number, number]);
