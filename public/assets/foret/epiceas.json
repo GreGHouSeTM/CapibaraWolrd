@@ -1,0 +1,161 @@
+{
+ "variants": [
+  {
+   "name": "a",
+   "H": 31.0,
+   "crown": 0.55,
+   "R": 2.9,
+   "seed": 1
+  },
+  {
+   "name": "b",
+   "H": 26.0,
+   "crown": 0.5,
+   "R": 2.6,
+   "seed": 2
+  },
+  {
+   "name": "c",
+   "H": 34.0,
+   "crown": 0.6,
+   "R": 3.1,
+   "seed": 3
+  },
+  {
+   "name": "d",
+   "H": 22.5,
+   "crown": 0.45,
+   "R": 2.4,
+   "seed": 4
+  },
+  {
+   "name": "j1",
+   "H": 4.2,
+   "crown": 0.04,
+   "R": 1.25,
+   "seed": 5,
+   "young": true
+  },
+  {
+   "name": "j2",
+   "H": 6.5,
+   "crown": 0.06,
+   "R": 1.7,
+   "seed": 6,
+   "young": true
+  }
+ ],
+ "tris": {
+  "a": {
+   "lod0": {
+    "ecorce": 13954,
+    "rameaux": 8372
+   },
+   "lod1": {
+    "ecorce": 5070,
+    "rameaux": 3252
+   },
+   "lod2": {
+    "ecorce": 168,
+    "rameaux": 964
+   }
+  },
+  "b": {
+   "lod0": {
+    "ecorce": 12078,
+    "rameaux": 6120
+   },
+   "lod1": {
+    "ecorce": 4518,
+    "rameaux": 2740
+   },
+   "lod2": {
+    "ecorce": 144,
+    "rameaux": 900
+   }
+  },
+  "c": {
+   "lod0": {
+    "ecorce": 13684,
+    "rameaux": 8112
+   },
+   "lod1": {
+    "ecorce": 4998,
+    "rameaux": 3168
+   },
+   "lod2": {
+    "ecorce": 180,
+    "rameaux": 1072
+   }
+  },
+  "d": {
+   "lod0": {
+    "ecorce": 11678,
+    "rameaux": 5908
+   },
+   "lod1": {
+    "ecorce": 3498,
+    "rameaux": 2328
+   },
+   "lod2": {
+    "ecorce": 132,
+    "rameaux": 868
+   }
+  },
+  "j1": {
+   "lod0": {
+    "ecorce": 5250,
+    "rameaux": 2416
+   },
+   "lod1": {
+    "ecorce": 726,
+    "rameaux": 1088
+   },
+   "lod2": {
+    "ecorce": 120,
+    "rameaux": 376
+   }
+  },
+  "j2": {
+   "lod0": {
+    "ecorce": 7780,
+    "rameaux": 5140
+   },
+   "lod1": {
+    "ecorce": 1944,
+    "rameaux": 2024
+   },
+   "lod2": {
+    "ecorce": 120,
+    "rameaux": 680
+   }
+  }
+ },
+ "impostor": {
+  "views": 8,
+  "w": 256,
+  "h": 1024,
+  "rows": {
+   "a": {
+    "row": 0,
+    "H": 31.0,
+    "width": 8.06
+   },
+   "b": {
+    "row": 1,
+    "H": 26.0,
+    "width": 6.76
+   },
+   "c": {
+    "row": 2,
+    "H": 34.0,
+    "width": 8.84
+   },
+   "d": {
+    "row": 3,
+    "H": 22.5,
+    "width": 5.8500000000000005
+   }
+  }
+ }
+}

@@ -107,7 +107,7 @@ export class Game {
     const q = PRESETS[this.quality];
     this.renderer = new THREE.WebGLRenderer({ canvas: this.canvas, antialias: false, powerPreference: 'high-performance', stencil: false, depth: true });
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    this.renderer.setPixelRatio(this.quality === 'high' ? dpr : Math.min(dpr, 1.25) * q.pixelRatio);
+    this.renderer.setPixelRatio(this.quality === 'high' || this.quality === 'max' ? dpr : Math.min(dpr, 1.25) * q.pixelRatio);
     this.renderer.setSize(window.innerWidth, window.innerHeight);
     this.renderer.shadowMap.enabled = true;
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;

@@ -1,0 +1,842 @@
+{
+ "fern_02": {
+  "file": "models/fern_02.glb",
+  "bytes": 514484,
+  "parts": [
+   {
+    "name": "fern_02_a",
+    "dims": [
+     0.99,
+     0.428,
+     0.894
+    ],
+    "radius": 0.681,
+    "lods": [
+     "fern_02_a_lod0",
+     "fern_02_a_lod1"
+    ],
+    "tris": [
+     2384,
+     834
+    ]
+   },
+   {
+    "name": "fern_02_b",
+    "dims": [
+     0.552,
+     0.287,
+     0.613
+    ],
+    "radius": 0.406,
+    "lods": [
+     "fern_02_b_lod0",
+     "fern_02_b_lod1"
+    ],
+    "tris": [
+     784,
+     274
+    ]
+   },
+   {
+    "name": "fern_02_c",
+    "dims": [
+     0.573,
+     0.213,
+     0.593
+    ],
+    "radius": 0.36,
+    "lods": [
+     "fern_02_c_lod0",
+     "fern_02_c_lod1"
+    ],
+    "tris": [
+     816,
+     285
+    ]
+   },
+   {
+    "name": "fern_02_d",
+    "dims": [
+     0.874,
+     0.349,
+     0.765
+    ],
+    "radius": 0.493,
+    "lods": [
+     "fern_02_d_lod0",
+     "fern_02_d_lod1"
+    ],
+    "tris": [
+     2248,
+     786
+    ]
+   }
+  ]
+ },
+ "shrub_sorrel_01": {
+  "file": "models/shrub_sorrel_01.glb",
+  "bytes": 483400,
+  "parts": [
+   {
+    "name": "shrub_sorrel_01",
+    "dims": [
+     0.352,
+     0.058,
+     0.146
+    ],
+    "radius": 0.183,
+    "lods": [
+     "shrub_sorrel_01_lod0",
+     "shrub_sorrel_01_lod1"
+    ],
+    "tris": [
+     3319,
+     1012
+    ]
+   }
+  ]
+ },
+ "rock_moss_set_01": {
+  "file": "models/rock_moss_set_01.glb",
+  "bytes": 1543672,
+  "parts": [
+   {
+    "name": "rock_moss_set_01_a",
+    "dims": [
+     2.238,
+     1.473,
+     3.369
+    ],
+    "radius": 1.995,
+    "lods": [
+     "rock_moss_set_01_a_lod0",
+     "rock_moss_set_01_a_lod1",
+     "rock_moss_set_01_a_lod2"
+    ],
+    "tris": [
+     11000,
+     2750,
+     660
+    ]
+   },
+   {
+    "name": "rock_moss_set_01_b",
+    "dims": [
+     2.128,
+     1.768,
+     1.965
+    ],
+    "radius": 1.871,
+    "lods": [
+     "rock_moss_set_01_b_lod0",
+     "rock_moss_set_01_b_lod1",
+     "rock_moss_set_01_b_lod2"
+    ],
+    "tris": [
+     10589,
+     2647,
+     635
+    ]
+   },
+   {
+    "name": "rock_moss_set_01_c",
+    "dims": [
+     2.655,
+     1.262,
+     3.264
+    ],
+    "radius": 1.931,
+    "lods": [
+     "rock_moss_set_01_c_lod0",
+     "rock_moss_set_01_c_lod1",
+     "rock_moss_set_01_c_lod2"
+    ],
+    "tris": [
+     10996,
+     2748,
+     658
+    ]
+   },
+   {
+    "name": "rock_moss_set_01_d",
+    "dims": [
+     1.817,
+     1.205,
+     2.999
+    ],
+    "radius": 1.698,
+    "lods": [
+     "rock_moss_set_01_d_lod0",
+     "rock_moss_set_01_d_lod1",
+     "rock_moss_set_01_d_lod2"
+    ],
+    "tris": [
+     12000,
+     3000,
+     720
+    ]
+   },
+   {
+    "name": "rock_moss_set_01_e",
+    "dims": [
+     2.126,
+     1.262,
+     2.757
+    ],
+    "radius": 1.703,
+    "lods": [
+     "rock_moss_set_01_e_lod0",
+     "rock_moss_set_01_e_lod1",
+     "rock_moss_set_01_e_lod2"
+    ],
+    "tris": [
+     8994,
+     2248,
+     538
+    ]
+   },
+   {
+    "name": "rock_moss_set_01_f",
+    "dims": [
+     2.109,
+     1.1,
+     2.08
+    ],
+    "radius": 1.451,
+    "lods": [
+     "rock_moss_set_01_f_lod0",
+     "rock_moss_set_01_f_lod1",
+     "rock_moss_set_01_f_lod2"
+    ],
+    "tris": [
+     5000,
+     1250,
+     300
+    ]
+   }
+  ]
+ },
+ "rock_moss_set_02": {
+  "file": "models/rock_moss_set_02.glb",
+  "bytes": 1890124,
+  "parts": [
+   {
+    "name": "rock_moss_set_02_a",
+    "dims": [
+     1.693,
+     0.745,
+     1.215
+    ],
+    "radius": 1.024,
+    "lods": [
+     "rock_moss_set_02_a_lod0",
+     "rock_moss_set_02_a_lod1",
+     "rock_moss_set_02_a_lod2"
+    ],
+    "tris": [
+     9826,
+     2456,
+     588
+    ]
+   },
+   {
+    "name": "rock_moss_set_02_b",
+    "dims": [
+     1.954,
+     1.311,
+     1.529
+    ],
+    "radius": 1.378,
+    "lods": [
+     "rock_moss_set_02_b_lod0",
+     "rock_moss_set_02_b_lod1",
+     "rock_moss_set_02_b_lod2"
+    ],
+    "tris": [
+     8000,
+     2000,
+     480
+    ]
+   },
+   {
+    "name": "rock_moss_set_02_c",
+    "dims": [
+     1.206,
+     0.529,
+     0.984
+    ],
+    "radius": 0.735,
+    "lods": [
+     "rock_moss_set_02_c_lod0",
+     "rock_moss_set_02_c_lod1",
+     "rock_moss_set_02_c_lod2"
+    ],
+    "tris": [
+     8000,
+     2000,
+     480
+    ]
+   },
+   {
+    "name": "rock_moss_set_02_d",
+    "dims": [
+     1.58,
+     0.736,
+     1.443
+    ],
+    "radius": 1.012,
+    "lods": [
+     "rock_moss_set_02_d_lod0",
+     "rock_moss_set_02_d_lod1",
+     "rock_moss_set_02_d_lod2"
+    ],
+    "tris": [
+     7999,
+     1999,
+     479
+    ]
+   },
+   {
+    "name": "rock_moss_set_02_e",
+    "dims": [
+     1.629,
+     0.61,
+     1.011
+    ],
+    "radius": 0.94,
+    "lods": [
+     "rock_moss_set_02_e_lod0",
+     "rock_moss_set_02_e_lod1",
+     "rock_moss_set_02_e_lod2"
+    ],
+    "tris": [
+     7894,
+     1972,
+     472
+    ]
+   },
+   {
+    "name": "rock_moss_set_02_f",
+    "dims": [
+     2.091,
+     1.256,
+     1.138
+    ],
+    "radius": 1.478,
+    "lods": [
+     "rock_moss_set_02_f_lod0",
+     "rock_moss_set_02_f_lod1",
+     "rock_moss_set_02_f_lod2"
+    ],
+    "tris": [
+     7928,
+     1982,
+     474
+    ]
+   },
+   {
+    "name": "rock_moss_set_02_g",
+    "dims": [
+     2.203,
+     0.768,
+     1.552
+    ],
+    "radius": 1.217,
+    "lods": [
+     "rock_moss_set_02_g_lod0",
+     "rock_moss_set_02_g_lod1",
+     "rock_moss_set_02_g_lod2"
+    ],
+    "tris": [
+     8000,
+     2000,
+     480
+    ]
+   }
+  ]
+ },
+ "boulder_01": {
+  "file": "models/boulder_01.glb",
+  "bytes": 2516936,
+  "parts": [
+   {
+    "name": "boulder_01",
+    "dims": [
+     1.273,
+     1.005,
+     1.83
+    ],
+    "radius": 1.259,
+    "lods": [
+     "boulder_01_lod0",
+     "boulder_01_lod1",
+     "boulder_01_lod2"
+    ],
+    "tris": [
+     24000,
+     6000,
+     1440
+    ]
+   }
+  ]
+ },
+ "tree_stump_01": {
+  "file": "models/tree_stump_01.glb",
+  "bytes": 2161524,
+  "parts": [
+   {
+    "name": "tree_stump_01",
+    "dims": [
+     1.426,
+     0.573,
+     1.59
+    ],
+    "radius": 0.918,
+    "lods": [
+     "tree_stump_01_lod0",
+     "tree_stump_01_lod1",
+     "tree_stump_01_lod2"
+    ],
+    "tris": [
+     15999,
+     3998,
+     959
+    ]
+   }
+  ]
+ },
+ "tree_stump_02": {
+  "file": "models/tree_stump_02.glb",
+  "bytes": 2677168,
+  "parts": [
+   {
+    "name": "tree_stump_02",
+    "dims": [
+     1.522,
+     0.523,
+     1.392
+    ],
+    "radius": 0.807,
+    "lods": [
+     "tree_stump_02_lod0",
+     "tree_stump_02_lod1",
+     "tree_stump_02_lod2"
+    ],
+    "tris": [
+     16000,
+     4000,
+     960
+    ]
+   }
+  ]
+ },
+ "dead_tree_trunk": {
+  "file": "models/dead_tree_trunk.glb",
+  "bytes": 1588592,
+  "parts": [
+   {
+    "name": "dead_tree_trunk",
+    "dims": [
+     3.05,
+     0.289,
+     0.277
+    ],
+    "radius": 1.55,
+    "lods": [
+     "dead_tree_trunk_lod0",
+     "dead_tree_trunk_lod1",
+     "dead_tree_trunk_lod2"
+    ],
+    "tris": [
+     14000,
+     3500,
+     840
+    ]
+   }
+  ]
+ },
+ "dead_tree_trunk_02": {
+  "file": "models/dead_tree_trunk_02.glb",
+  "bytes": 2521396,
+  "parts": [
+   {
+    "name": "dead_tree_trunk_02",
+    "dims": [
+     4.055,
+     1.054,
+     1.057
+    ],
+    "radius": 2.252,
+    "lods": [
+     "dead_tree_trunk_02_lod0",
+     "dead_tree_trunk_02_lod1",
+     "dead_tree_trunk_02_lod2"
+    ],
+    "tris": [
+     16000,
+     4000,
+     960
+    ]
+   }
+  ]
+ },
+ "pine_roots": {
+  "file": "models/pine_roots.glb",
+  "bytes": 5179984,
+  "parts": [
+   {
+    "name": "pine_roots_a",
+    "dims": [
+     1.629,
+     0.147,
+     0.993
+    ],
+    "radius": 0.892,
+    "lods": [
+     "pine_roots_a_lod0",
+     "pine_roots_a_lod1"
+    ],
+    "tris": [
+     8000,
+     2000
+    ]
+   },
+   {
+    "name": "pine_roots_b",
+    "dims": [
+     1.739,
+     0.143,
+     0.826
+    ],
+    "radius": 0.911,
+    "lods": [
+     "pine_roots_b_lod0",
+     "pine_roots_b_lod1"
+    ],
+    "tris": [
+     7999,
+     2000
+    ]
+   }
+  ]
+ },
+ "root_cluster_01": {
+  "file": "models/root_cluster_01.glb",
+  "bytes": 2608236,
+  "parts": [
+   {
+    "name": "root_cluster_01",
+    "dims": [
+     4.122,
+     1.509,
+     2.684
+    ],
+    "radius": 2.458,
+    "lods": [
+     "root_cluster_01_lod0",
+     "root_cluster_01_lod1"
+    ],
+    "tris": [
+     17999,
+     4500
+    ]
+   }
+  ]
+ },
+ "root_cluster_02": {
+  "file": "models/root_cluster_02.glb",
+  "bytes": 1461028,
+  "parts": [
+   {
+    "name": "root_cluster_02_a",
+    "dims": [
+     1.454,
+     0.195,
+     2.28
+    ],
+    "radius": 1.202,
+    "lods": [
+     "root_cluster_02_a_lod0",
+     "root_cluster_02_a_lod1"
+    ],
+    "tris": [
+     5999,
+     1500
+    ]
+   },
+   {
+    "name": "root_cluster_02_b",
+    "dims": [
+     0.327,
+     0.089,
+     0.782
+    ],
+    "radius": 0.395,
+    "lods": [
+     "root_cluster_02_b_lod0",
+     "root_cluster_02_b_lod1"
+    ],
+    "tris": [
+     6000,
+     1500
+    ]
+   },
+   {
+    "name": "root_cluster_02_c",
+    "dims": [
+     0.312,
+     0.115,
+     0.977
+    ],
+    "radius": 0.491,
+    "lods": [
+     "root_cluster_02_c_lod0",
+     "root_cluster_02_c_lod1"
+    ],
+    "tris": [
+     5999,
+     1500
+    ]
+   },
+   {
+    "name": "root_cluster_02_d",
+    "dims": [
+     0.329,
+     0.139,
+     1.25
+    ],
+    "radius": 0.628,
+    "lods": [
+     "root_cluster_02_d_lod0",
+     "root_cluster_02_d_lod1"
+    ],
+    "tris": [
+     5999,
+     1500
+    ]
+   }
+  ]
+ },
+ "single_root": {
+  "file": "models/single_root.glb",
+  "bytes": 389632,
+  "parts": [
+   {
+    "name": "single_root",
+    "dims": [
+     0.555,
+     0.178,
+     1.836
+    ],
+    "radius": 0.942,
+    "lods": [
+     "single_root_lod0",
+     "single_root_lod1"
+    ],
+    "tris": [
+     4000,
+     1199
+    ]
+   }
+  ]
+ },
+ "dry_branches_medium_01": {
+  "file": "models/dry_branches_medium_01.glb",
+  "bytes": 672452,
+  "parts": [
+   {
+    "name": "dry_branches_medium_01_a",
+    "dims": [
+     0.323,
+     0.341,
+     1.299
+    ],
+    "radius": 0.672,
+    "lods": [
+     "dry_branches_medium_01_a_lod0",
+     "dry_branches_medium_01_a_lod1"
+    ],
+    "tris": [
+     2999,
+     899
+    ]
+   },
+   {
+    "name": "dry_branches_medium_01_b",
+    "dims": [
+     0.151,
+     0.142,
+     1.038
+    ],
+    "radius": 0.532,
+    "lods": [
+     "dry_branches_medium_01_b_lod0",
+     "dry_branches_medium_01_b_lod1"
+    ],
+    "tris": [
+     3000,
+     900
+    ]
+   },
+   {
+    "name": "dry_branches_medium_01_c",
+    "dims": [
+     0.13,
+     0.143,
+     0.777
+    ],
+    "radius": 0.407,
+    "lods": [
+     "dry_branches_medium_01_c_lod0",
+     "dry_branches_medium_01_c_lod1"
+    ],
+    "tris": [
+     3000,
+     900
+    ]
+   }
+  ]
+ },
+ "stone_01": {
+  "file": "models/stone_01.glb",
+  "bytes": 476912,
+  "parts": [
+   {
+    "name": "stone_01",
+    "dims": [
+     0.146,
+     0.072,
+     0.089
+    ],
+    "radius": 0.095,
+    "lods": [
+     "stone_01_lod0",
+     "stone_01_lod1"
+    ],
+    "tris": [
+     2500,
+     624
+    ]
+   }
+  ]
+ },
+ "rock_07": {
+  "file": "models/rock_07.glb",
+  "bytes": 302944,
+  "parts": [
+   {
+    "name": "rock_07",
+    "dims": [
+     0.169,
+     0.144,
+     0.32
+    ],
+    "radius": 0.208,
+    "lods": [
+     "rock_07_lod0",
+     "rock_07_lod1"
+    ],
+    "tris": [
+     3000,
+     750
+    ]
+   }
+  ]
+ },
+ "rock_09": {
+  "file": "models/rock_09.glb",
+  "bytes": 271236,
+  "parts": [
+   {
+    "name": "rock_09",
+    "dims": [
+     0.074,
+     0.033,
+     0.145
+    ],
+    "radius": 0.075,
+    "lods": [
+     "rock_09_lod0",
+     "rock_09_lod1"
+    ],
+    "tris": [
+     2500,
+     624
+    ]
+   }
+  ]
+ },
+ "Lantern_01": {
+  "file": "models/Lantern_01.glb",
+  "bytes": 495336,
+  "parts": [
+   {
+    "name": "lantern_01",
+    "dims": [
+     0.122,
+     0.294,
+     0.097
+    ],
+    "radius": 0.294,
+    "lods": [
+     "lantern_01_lod0",
+     "lantern_01_lod1"
+    ],
+    "tris": [
+     15999,
+     4800
+    ]
+   }
+  ]
+ },
+ "fir_sapling": {
+  "file": "models/fir_sapling.glb",
+  "bytes": 3063512,
+  "parts": [
+   {
+    "name": "fir_sapling",
+    "dims": [
+     2.728,
+     1.724,
+     0.824
+    ],
+    "radius": 1.697,
+    "lods": [
+     "fir_sapling_lod0",
+     "fir_sapling_lod1",
+     "fir_sapling_lod2"
+    ],
+    "tris": [
+     60158,
+     17614,
+     6300
+    ]
+   }
+  ]
+ },
+ "pine_sapling_small": {
+  "file": "models/pine_sapling_small.glb",
+  "bytes": 3094224,
+  "parts": [
+   {
+    "name": "pine_sapling_small",
+    "dims": [
+     2.641,
+     1.164,
+     0.756
+    ],
+    "radius": 1.673,
+    "lods": [
+     "pine_sapling_small_lod0",
+     "pine_sapling_small_lod1",
+     "pine_sapling_small_lod2"
+    ],
+    "tris": [
+     51523,
+     15750,
+     4730
+    ]
+   }
+  ]
+ }
+}

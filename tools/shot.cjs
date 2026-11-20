@@ -70,6 +70,19 @@ const VIEWS = {
   'monde-dormeur': { cam: [176, 2, -168], look: [1300, 150, 100], hour: 9, ground: true },
   'monde-sommet': { cam: [-2290, 4, 455], look: [-300, 150, 600], hour: 9.5, ground: true, tp: [-2280, 460] },
   'monde-givre-air': { cam: [-1200, 700, 1500], look: [-2300, 300, 500], hour: 9, tp: [-1250, 1450] },
+  // --- PREUVE NEXT-GEN : zone de démonstration « forêt » (?demo=foret, application autonome src/demo/foret) ;
+  // `query` est ajouté à l'URL (la page est rechargée si deux vues n'ont pas la même) ; ground = hauteurs au-dessus du sol
+  'foret-jour': { cam: [-0.9, 1.65, 11.5], look: [0.45, 1.3, -5], hour: 10, ground: true, query: 'demo=foret' },
+  'foret-nuit': { cam: [-15.6, 1.25, 25.4], look: [-9.8, 0.7, 18.5], hour: 22, ground: true, query: 'demo=foret' },
+  'foret-paroi': { cam: [-0.6, 1.6, 9.5], look: [3.6, 2.6, 3.5], hour: 10, ground: true, query: 'demo=foret' },
+  'foret-escalier': { cam: [0.1, 1.7, 7.2], look: [0.45, 1.1, -3], hour: 10, ground: true, query: 'demo=foret' },
+  'foret-haut': { cam: [0.9, 1.8, -17.5], look: [-0.3, -0.8, 6], hour: 10, ground: true, query: 'demo=foret' },
+  'foret-sousbois': { cam: [-11, 1.5, 2], look: [-26, 2.5, -12], hour: 10, ground: true, query: 'demo=foret' },
+  'foret-plan': { cam: [0, 95, 12], look: [0, 0, -6], hour: 10, ground: true, query: 'demo=foret' },
+  'foret-clairiere': { cam: [-16.5, 1.4, 25.5], look: [-10.5, 0.4, 18.8], hour: 10, ground: true, query: 'demo=foret' },
+  'foret-cime': { cam: [-6, 1.5, -2], look: [-9, 14, -12], hour: 10, ground: true, query: 'demo=foret' },
+  'foret-marches': { cam: [-0.6, 1.0, 5.6], look: [0.6, 0.2, 2.2], hour: 10, ground: true, query: 'demo=foret' },
+  'foret-capy': { pos: [-4.2, 26], yaw: Math.PI, pitch: 0.22, hour: 10, dist: 6, query: 'demo=foret' },
 };
 module.exports = { VIEWS };
 if (require.main === module) (async () => {
@@ -83,12 +96,17 @@ if (require.main === module) (async () => {
     const errs = [];
     page.on('pageerror', (e) => errs.push('PAGEERROR ' + e.message));
     page.on('console', (m) => { if (m.type() === 'error') errs.push('console.error ' + m.text()); });
-    await page.goto(`http://localhost:${port}/?manual&q=${q || 'medium'}`, { waitUntil: 'load' });
-    await page.waitForFunction(() => window.__game && window.__game.state === 'title', null, { timeout: 300000 });
-    await page.evaluate(() => { localStorage.clear(); window.__game.startPlay(); });
+    let curQuery = null;
+    const open = async (query) => {
+      curQuery = query;
+      await page.goto(`http://localhost:${port}/?manual&q=${q || 'medium'}${query ? '&' + query : ''}`, { waitUntil: 'load' });
+      await page.waitForFunction(() => window.__game && window.__game.state === 'title', null, { timeout: 300000 });
+      await page.evaluate(() => { localStorage.clear(); window.__game.startPlay(); });
+    };
     for (const k of (list || 'place').split(',')) {
       const v = VIEWS[k];
       if (!v) { console.log('vue inconnue', k); continue; }
+      if ((v.query || '') !== curQuery) await open(v.query || '');
       v.steps = v.steps || +(process.env.SHOT_STEPS || 25); // nombre d'images simulées avant la capture
       if (v.demo) {
         // scène de démonstration chargée dynamiquement (une seule fois par page)

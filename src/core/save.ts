@@ -13,7 +13,7 @@ export interface SaveData {
   discovered: string[]; // régions visitées
   pos: [number, number, number] | null;
   hour: number;
-  settings: { quality: 'low' | 'medium' | 'high'; music: number; sfx: number; sensitivity: number; invertY: boolean };
+  settings: { quality: 'low' | 'medium' | 'high' | 'max'; music: number; sfx: number; sensitivity: number; invertY: boolean };
 }
 
 const KEY = 'capy-world-save-v1';

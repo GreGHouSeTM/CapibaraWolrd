@@ -227,7 +227,14 @@ export function fineHeightAt(x: number, z: number): number {
 }
 
 /** Altitude du sol : grille de détail (0,5 m) dans la vallée de Capyville, tuiles de 2 m ailleurs. */
+// --- PREUVE NEXT-GEN (?demo=foret) : crochet additif, sol de remplacement de la zone de démonstration (null = monde normal)
+let groundOverride: ((x: number, z: number) => number) | null = null;
+export function setGroundOverride(fn: ((x: number, z: number) => number) | null) {
+  groundOverride = fn;
+}
+
 export function heightAt(x: number, z: number): number {
+  if (groundOverride) return groundOverride(x, z);
   if (detailReady && x > DETAIL.x0 && x < DETAIL.x1 && z > DETAIL.z0 && z < DETAIL.z1) {
     const fx = (x - DETAIL.x0) / DETAIL.cell, fz = (z - DETAIL.z0) / DETAIL.cell;
     const i = Math.min(DETAIL_NX - 2, Math.floor(fx)), j = Math.min(DETAIL_NZ - 2, Math.floor(fz));
