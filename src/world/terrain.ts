@@ -13,6 +13,7 @@
 // Textures : Poly Haven (CC0) — public/assets/tex/ et public/assets/tex/terrain/.
 import * as THREE from 'three';
 import { TERRAIN_HEIGHT_GLSL, getBiomeTexture, getDetailSplatTexture, getSurfaceTexture, terrainHeightUniforms } from './heightmap';
+import { TERRAIN_DETAIL_GLSL } from './terrain-detail';
 import { terrainData } from './terrain-data';
 import { DETAIL } from './valley';
 import { IMG } from '../core/assets';
@@ -160,6 +161,18 @@ uniform float uRange[${LEVELS}];
 uniform float uMorphStart[${LEVELS}];
 varying vec3 vWPos;
 ${TERRAIN_HEIGHT_GLSL}
+${TERRAIN_DETAIL_GLSL}
+uniform sampler2D uSurfV;
+uniform vec4 uSurfRectV;
+uniform float uSurfResV;
+// détail de près (même calcul que detailAt de heightmap.ts) : seulement dans les anneaux proches (≤ 1 m par maille)
+float terrainDetailAt(vec2 p) {
+  if (length(p) < 640.0) return 0.0;
+  float sx = (terrainHeight(p + vec2(2.0, 0.0)) - terrainHeight(p - vec2(2.0, 0.0))) / 4.0;
+  float sz = (terrainHeight(p + vec2(0.0, 2.0)) - terrainHeight(p - vec2(0.0, 2.0))) / 4.0;
+  vec4 sf = textureLod(uSurfV, (p - uSurfRectV.x) / uSurfRectV.y + 0.5 / uSurfResV, 0.0);
+  return terrainDetailMask(sf.a, sf.b, length(vec2(sx, sz)), p) * terrainDetailShape(p);
+}
 vec3 terrainVertex(vec3 local) {
   float size = aNode.z;
   float lvl = aNode.w;
@@ -176,7 +189,10 @@ vec3 terrainVertex(vec3 local) {
   // sommets impairs (sur la grille du niveau) glissés vers le sommet pair voisin : grille du niveau suivant
   vec2 odd = mod(idx / r, 2.0);
   vec2 p = aNode.xy + (idx - odd * r * morph) * cell;
-  return vec3(p.x, terrainHeight(p), p.y);
+  float hv = terrainHeight(p);
+  float fd = 1.0 - smoothstep(70.0, 115.0, d);
+  if (fd > 0.0 && ls <= 1.0) hv += fd * terrainDetailAt(p);
+  return vec3(p.x, hv, p.y);
 }
 `;
 const VERT_MAIN = /* glsl */ `
@@ -254,7 +270,12 @@ function loadLayerImages(alb: THREE.DataArrayTexture, nor: THREE.DataArrayTextur
 const sharedUniforms: Record<string, THREE.IUniform> = {};
 function initShared() {
   if (sharedUniforms.uTHGlobal) return;
+  const td = terrainData!;
+  const S = td.meta.surface;
   Object.assign(sharedUniforms, terrainHeightUniforms(), {
+    uSurfV: { value: getSurfaceTexture() },
+    uSurfRectV: { value: new THREE.Vector4(S.x0, S.cell * S.n, 0, 0) },
+    uSurfResV: { value: S.n },
     uRange: { value: RANGE.slice() },
     uMorphStart: { value: MORPH_START.slice() },
     uMorphCam: { value: new THREE.Vector3() },
@@ -291,6 +312,7 @@ export function createTerrainMaterial(): THREE.MeshStandardMaterial {
         `#include <common>
         varying vec3 vWPos;
         ${TERRAIN_HEIGHT_GLSL}
+        ${TERRAIN_DETAIL_GLSL}
         uniform sampler2D uSplatD, uSurf, uBiome;
         uniform highp sampler2DArray uAlb, uNor;
         uniform vec4 uSurfRect;
@@ -324,6 +346,18 @@ export function createTerrainMaterial(): THREE.MeshStandardMaterial {
         float e = clamp(camD * 0.004, 0.3, 12.0);
         vec3 Nw = normalize(vec3(terrainHeight(wp - vec2(e, 0.0)) - terrainHeight(wp + vec2(e, 0.0)), 2.0 * e,
                                  terrainHeight(wp - vec2(0.0, e)) - terrainHeight(wp + vec2(0.0, e))));
+        // détail de près dans la normale (relief de 0,1 à 0,4 m de la roche et des éboulis), jusqu'à 115 m
+        float fdN = 1.0 - smoothstep(70.0, 115.0, camD);
+        if (fdN > 0.0) {
+          vec4 sfd = texture(uSurf, (wp - uSurfRect.x) / uSurfRect.y + 0.5 / uSurfRes.x);
+          float md = fdN * terrainDetailMask(sfd.a, sfd.b, length(Nw.xz) / max(Nw.y, 0.05), wp);
+          if (md > 0.001) {
+            float ed = max(e, 0.15);
+            vec3 Nd = vec3(terrainDetailShape(wp - vec2(ed, 0.0)) - terrainDetailShape(wp + vec2(ed, 0.0)), 0.0,
+                           terrainDetailShape(wp - vec2(0.0, ed)) - terrainDetailShape(wp + vec2(0.0, ed))) * md / (2.0 * ed);
+            Nw = normalize(Nw + vec3(Nd.x, 0.0, Nd.z) * Nw.y);
+          }
+        }
         // cartes dérivées (4 m) et biomes (8 m)
         vec4 sf = texture(uSurf, (wp - uSurfRect.x) / uSurfRect.y + 0.5 / uSurfRes.x);
         vec4 bm = texture(uBiome, (wp - uSurfRect.z) / uSurfRect.w + 0.5 / uSurfRes.y);

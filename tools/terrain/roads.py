@@ -764,7 +764,7 @@ def stamp_ways(h, W, cell, keep, log, water=None, lake=None, cliff=None, valley=
         Rmin = 12.0 if veh else 3.5
         anchors, head, pin0, pin1 = way_anchors(w, W, planned, colends)
         res = None
-        for relax in (1.0, 1.3, 1.7):
+        for relax in (1.0, 1.3, 1.7, 2.4):
             res = pl.plan(w, anchors, head, g * relax, hw, cellw, Rmin, w['pts'])
             if res is not None:
                 break

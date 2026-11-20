@@ -127,6 +127,8 @@ def slope_k(h, cliff, rock=None, W=None):
     n = h.shape[0]
     X, Z, _ = grid(EXTENT_CELL[n])
     deg = 33 - 2.0 * (fbm(X / 260, Z / 260, 3, 95) * 0.5 + 0.5)
+    # haute montagne : la roche gagne au-dessus de 450 m (pentes à grimper, puis faces rocheuses vers 700 m)
+    deg = deg + 5 * smoothstep(400, 600, h) + 5 * smoothstep(600, 800, h)
     if W is not None:
         fj = next(p for p in W['WORLD_PEAKS'] if p['id'] == 'fuji')
         deg = deg + (36 - deg) * smoothstep(0.55 * fj['base'], 0.35 * fj['base'], np.hypot(X - fj['x'], Z - fj['z']))
@@ -137,7 +139,7 @@ def slope_k(h, cliff, rock=None, W=None):
 
 
 EXTENT_CELL = {2048: 4.0, 4096: 2.0, 1024: 8.0, 512: 16.0}
-PEAK_K = {'alpin': 0.78, 'volcan': 0.74, 'dome': 0.62, 'arrondi': 0.65, 'butte': 0.55, 'dormeur': 0.8, 'mesa': 1.3}
+PEAK_K = {'alpin': 0.74, 'volcan': 0.70, 'dome': 0.60, 'arrondi': 0.62, 'butte': 0.55, 'dormeur': 0.8, 'mesa': 1.3}
 
 
 def restore_peaks(h, forms_h, W, X, Z, cell, n, shrink=1.0, keep=None):
@@ -164,7 +166,10 @@ def restore_peaks(h, forms_h, W, X, Z, cell, n, shrink=1.0, keep=None):
             cone = cone - 42 * smoothstep(70, 40, r)
             # barrancos rayonnants : ravines sur le cône, plus profondes à mi-pente
             u = np.clip(r / (pk['y'] / K), 0, 1)
-            cone = cone - 14 * np.abs(np.sin(th * 23 + 3.0 * fbm(dx / 220, dz / 220, 3, 98))) ** 0.6 * smoothstep(0.08, 0.3, u)
+            # barrancos irréguliers (crêtes d'un bruit en coordonnées polaires, plus de motif périodique)
+            from common import ridged as _rd
+            q = th * (5.5 + 9 * u) / np.pi + 1.8 * fbm(dx / 300, dz / 300, 3, 98)
+            cone = cone - 12 * (1 - _rd(q, u * 3.0, 3, 99)) * smoothstep(0.08, 0.3, u)
         # le cône ne remplace que le haut du relief (au-dessus des deux tiers de la hauteur)
         hh = h[sj, si]
         w = smoothstep(pk['y'] * 0.3, pk['y'] * 0.55, cone)
@@ -195,8 +200,14 @@ def stage_erosion():
     # pentes bornées dès les formes (la thermique ne déplace la matière que d'une maille par itération)
     fixed = ((m4 > 0.5) | (prot > 0.5)).astype(np.float32)
     forms_h = h4.copy()
-    # les sommets gardent leur altitude : leurs pyramides sont en roche voulue (plus de cône restauré après coup)
     h4 = limit_slopes(h4, 4.0, cliff, fixed, rock, W)
+    # les sommets repères reprennent leur altitude sous un cône borné (36-38°, ravines irrégulières) ; ce cône est de la
+    # roche de haute montagne (masque roche voulue complété là où il dépasse 38°)
+    pre = h4.copy()
+    h4 = restore_peaks(h4, forms_h, W, X, Z, 4.0, n, keep=np.clip(np.maximum(prot, m4), 0, 1))
+    raised = ((h4 - pre) > 3) & (slope_deg(h4.astype(np.float32), 4.0) > 38)
+    rock = np.maximum(rock, ndimage.binary_dilation(raised, iterations=2).astype(np.float64) * 0.9)
+    np.save(os.path.join(CACHE, 'roche4.npy'), rock.astype(np.float32))
     report(h4.astype(np.float32), 4.0, 'bornees')
     hyd = W['TERRAIN_RULES']['hydraulic']
     dep4 = np.zeros_like(h4)

@@ -9,6 +9,7 @@ import { ROADS, WORLD_SIZE, regionById, sampleRoad, RegionId } from './layout';
 import { COL_ROUTES, DETAIL, DETAIL_NX, DETAIL_NZ, Grid, bakeDetailSurfaces, polyNearest } from './valley';
 import { terrainData } from './terrain-data';
 import { LAKES, ISLANDS, WORLD_PEAKS } from './world-map';
+import { detailMask, detailShape } from './terrain-detail';
 
 /** Résolution de la grille de synthèse (pas de 3,9 m sur 8 km). */
 export const HM_RES = 2049;
@@ -158,7 +159,7 @@ export function bakeWorld(onProgress?: (p: number) => void) {
   lap('donnees');
   for (let j = 0; j < HM_RES; j++) {
     const z = j * CELL - HALF;
-    for (let i = 0; i < HM_RES; i++) heights[j * HM_RES + i] = heightAt(i * CELL - HALF, z);
+    for (let i = 0; i < HM_RES; i++) heights[j * HM_RES + i] = heightBaseAt(i * CELL - HALF, z);
     if (onProgress && j % 256 === 0) onProgress(j / HM_RES);
   }
   lap('synthese');
@@ -235,8 +236,23 @@ export function fineHeightAt(x: number, z: number): number {
   return lerp(lerp(fine[o], fine[o + 1], tx), lerp(fine[o + FN], fine[o + FN + 1], tx), tz);
 }
 
-/** Altitude du sol : grille de détail (0,5 m) dans la vallée de Capyville, tuiles de 2 m ailleurs. */
+/** Détail de près (terrain-detail.ts) : roche, éboulis et pentes fortes ; nul sur les voies, les plats et à Capyville. */
+export function detailAt(x: number, z: number): number {
+  const td = terrainData;
+  if (!td || Math.hypot(x, z) < 640) return 0;
+  const sx = (fineHeightAt(x + 2, z) - fineHeightAt(x - 2, z)) / 4, sz = (fineHeightAt(x, z + 2) - fineHeightAt(x, z - 2)) / 4;
+  const S = td.meta.surface;
+  const m = detailMask(mapAt(S, td.surface, x, z, 3), mapAt(S, td.surface, x, z, 2), Math.hypot(sx, sz), x, z);
+  return m > 0.001 ? m * detailShape(x, z) : 0;
+}
+
+/** Altitude du sol : grille de détail (0,5 m) dans la vallée de Capyville, tuiles de 2 m ailleurs, plus le détail de près. */
 export function heightAt(x: number, z: number): number {
+  return heightBaseAt(x, z) + detailAt(x, z);
+}
+
+/** Altitude du sol sans le détail de près (grille de synthèse, cartes). */
+export function heightBaseAt(x: number, z: number): number {
   if (detailReady && x > DETAIL.x0 && x < DETAIL.x1 && z > DETAIL.z0 && z < DETAIL.z1) {
     const fx = (x - DETAIL.x0) / DETAIL.cell, fz = (z - DETAIL.z0) / DETAIL.cell;
     const i = Math.min(DETAIL_NX - 2, Math.floor(fx)), j = Math.min(DETAIL_NZ - 2, Math.floor(fz));
