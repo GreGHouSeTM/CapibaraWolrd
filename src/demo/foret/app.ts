@@ -217,7 +217,9 @@ export class ForetDemo {
     this.lamp.position.set(L.x, L.y + 0.2, L.z);
     this.lamp.castShadow = false; // activé la nuit seulement (6 rendus de la scène par image)
     this.lamp.shadow.camera.layers.set(2);
-    for (const g of [this.scatter.group, this.ground.group, this.wallObj]) g.traverse((o) => o.layers.enable(2));
+    // ombres de la lanterne : sol, paroi et gros objets proches (souches, troncs, racines, blocs) — pas les petites plantes
+    for (const g of [this.ground.hero, this.wallObj]) g.traverse((o) => o.layers.enable(2));
+    for (const b of this.scatter.batches) if (/stump|trunk|root|rock_moss|boulder|lantern/.test(b.part)) b.group.traverse((o) => o.layers.enable(2));
     this.lamp.shadow.mapSize.set(this.preset.lanternShadow || 256, this.preset.lanternShadow || 256);
     this.lamp.shadow.camera.near = 0.08;
     this.lamp.shadow.camera.far = 22;
@@ -238,7 +240,19 @@ export class ForetDemo {
       (r as any).camera.layers.set(1);
       this.scene.add(r);
       this.mirror = r;
-      for (const g of [this.forest.group, this.wallObj]) g.traverse((o) => o.layers.enable(1));
+      // le rendu du reflet ne doit pas recalculer les cartes d'ombre (déjà faites pour l'image) : -75 ms la nuit
+      const before = r.onBeforeRender.bind(r);
+      r.onBeforeRender = (...a: Parameters<typeof before>) => {
+        const sm = this.renderer.shadowMap, au = sm.autoUpdate;
+        sm.autoUpdate = false;
+        before(...a);
+        sm.autoUpdate = au;
+      };
+      // dans le reflet : paroi, lanterne et silhouettes des arbres (LOD2 et imposteurs) — le reflet voit tout le houppier
+      // au-dessus de la flaque ; les LOD proches y coûteraient 80 ms par image
+      this.wallObj.traverse((o) => o.layers.enable(1));
+      // (les arbres ne sont pas dans le reflet : +76 ms par image, voir docs/ETAT-PREUVE.md)
+      for (const b of this.scatter.batches) if (/lantern|stump/.test(b.part)) b.group.traverse((o) => o.layers.enable(1));
       this.flame.layers.enable(1);
     }
   }
@@ -263,6 +277,7 @@ export class ForetDemo {
     this.scene.background = n ? new THREE.Color().setRGB(0.004, 0.006, 0.01) : new THREE.Color().setRGB(1.5, 1.62, 1.72);
     this.lamp.intensity = n ? 16 : 0;
     this.lamp.castShadow = n && this.preset.lanternShadow > 0;
+    this.sun.castShadow = !n; // la lune est trop faible pour des ombres visibles
     this.flame.visible = n;
     if (this.mirror) this.mirror.visible = n;
     const f = this.post.fog.fogMat.uniforms;

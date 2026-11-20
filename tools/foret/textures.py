@@ -102,10 +102,11 @@ MATS = {
     'rocB': lambda: ph_mat('rocB', 'lichen_rock', sat=0.65, gain=(0.98, 1.0, 1.02), flat=0.6),
     # mousse courte (paroi, marches, sol) : vert profond, légèrement jaune dans les hautes lumières
     'mousse': lambda: acg_mat('mousse', 'Moss002', sat=0.82, gain=(0.86, 0.92, 0.7), gamma=1.12, flat=0.5),
-    'mousse2': lambda: acg_mat('mousse2', 'Moss003', sat=0.85, gain=(0.95, 1.0, 0.8), gamma=1.05, flat=0.5),
+    # 'mousse2' (Moss003) et 'litiere' (forest_leaves_02) : essayées, non retenues (poids)
+    '_mousse2': lambda: acg_mat('mousse2', 'Moss003', sat=0.85, gain=(0.95, 1.0, 0.8), gamma=1.05, flat=0.5),
     # sol : litière d'aiguilles, litière moussue, sentier, boue
     'aiguilles': lambda: ph_mat('aiguilles', 'forrest_ground_03', sat=0.7, gain=(0.95, 0.93, 0.9), flat=0.7),
-    'litiere': lambda: ph_mat('litiere', 'forest_leaves_02', sat=0.72, gain=(0.92, 0.95, 0.88), flat=0.6),
+    '_litiere': lambda: ph_mat('litiere', 'forest_leaves_02', sat=0.72, gain=(0.92, 0.95, 0.88), flat=0.6),
     'sentier': lambda: ph_mat('sentier', 'forest_ground_04', sat=0.65, gain=(0.96, 0.95, 0.94), flat=0.65),
     'boue': lambda: ph_mat('boue', 'mud_forest', sat=0.75, gain=(0.9, 0.9, 0.9), flat=0.5, rough_mul=0.8),
     'solmousse': lambda: acg_mat('solmousse', 'Ground037', sat=0.75, gain=(0.9, 0.95, 0.85), flat=0.55),
@@ -131,6 +132,6 @@ MATS['solh'] = pom_heights
 
 
 if __name__ == '__main__':
-    want = sys.argv[1:] or list(MATS)
+    want = sys.argv[1:] or [k for k in MATS if not k.startswith('_')]
     for k in want:
         MATS[k]()

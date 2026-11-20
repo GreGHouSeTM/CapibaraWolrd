@@ -138,6 +138,12 @@ export class Forest {
     }
   }
 
+  /** Calque des reflets : LOD2 et imposteurs seulement. */
+  reflectionLayer(l: number) {
+    for (const lods of this.lodMeshes.values()) for (const m of lods[2]) m.layers.enable(l);
+    for (const m of this.imp.values()) m.layers.enable(l);
+  }
+
   update(cam: THREE.Vector3, t: number) {
     this.wind.value = t;
     if (cam.distanceToSquared(this.last) < 1) return;
