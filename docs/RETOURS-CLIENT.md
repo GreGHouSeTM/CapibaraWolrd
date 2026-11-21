@@ -90,3 +90,12 @@ Diagnostic du chef de projet : voies quasi droites avec déblais et remblais jus
 quand le profil passe plus haut (routes et lignes flottantes) ; replats réguliers qui font des marches sur les versants ; aucun détail sous 2 m
 ni roche en relief. Chantier : **Terrain v2** (`wip/terrain-v2`) : contrôle automatique, routes de moindre coût en lacets à la hauteur du sol,
 relief alpin sans marches, détail de près et affleurements rocheux photoscannés.
+
+## 11. De vraies montagnes (retour du 2026-11-21)
+« Je veux des montagnes réalistes avec une vraie ascension, un vrai sentiment de hauteur, de toit du monde, de froid, de danger de tomber,
+d'exploration, forêt, lac, roches escarpées, grottes, faune, flore, qu'on s'y perde. » Le client trouve aussi qu'on fait du surplace.
+Constat : la vitesse du joueur ignore la pente (`player.ts` : 4,2 / 8,5 m/s partout, une paroi à 70° se gravit à > 20 m/s de dénivelé) ;
+sommet à 950 m, versants lisses, aucun repère d'échelle. Décision du chef de projet : **concevoir d'abord, puis construire un seul massif
+au niveau maximum** (tranche verticale : Pic de l'Aurore et Clarines). Agent Montagne (`wip/montagne`) : dossier `docs/MONTAGNE-AURORE.md`
+(échelle, étages, itinéraires, grottes, lacs, faune, froid, mécaniques, questions au client) puis déplacement en montagne (vitesse selon
+la pente, endurance, glissade, escalade, chute douce, froid). Terrain v2 recentré : rochers validés d'abord sur ce massif.
