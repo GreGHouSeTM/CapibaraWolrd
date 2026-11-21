@@ -747,6 +747,12 @@ def stamp(h, nat, roads, keep):
         kp = keep[j0:j1, i0:i1].ravel()[ok]
         sub[ok] = cur + (new - cur) * (1 - kp)
         h[j0:j1, i0:i1] = sub.reshape(j1 - j0, i1 - i0)
+    # 1 bis. talus adoucis : les arêtes des talus en biais sur la grille de 2 m dessinaient des dents de scie ;
+    # on lisse l'écart au relief naturel (pas le relief lui-même), puis les plateformes sont réimposées
+    dlt = h - nat
+    band = ndimage.binary_dilation(np.abs(dlt) > 0.05, iterations=2)
+    sm = ndimage.gaussian_filter(dlt, 1.1)
+    h = np.where(band & (keep < 0.5), nat + sm, h)
     # 2. plateformes (les grandes voies, posées en dernier, l'emportent aux carrefours)
     for (j0, j1, i0, i1, ok, d, yy, bb, ww, hw) in reversed(plat):
         sub = h[j0:j1, i0:i1].ravel()
