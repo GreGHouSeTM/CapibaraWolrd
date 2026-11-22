@@ -78,7 +78,7 @@ export class Game {
   runner = new MissionRunner();
   minimap!: Minimap;
   mapImg!: HTMLCanvasElement;
-  clock = new THREE.Clock();
+  clock = new THREE.Timer(); // (THREE.Clock est obsolète depuis r183)
   time = 0;
   state: 'loading' | 'title' | 'play' | 'paused' = 'loading';
   region: RegionDef = REGIONS[0];
@@ -110,7 +110,7 @@ export class Game {
     this.renderer.setPixelRatio(this.quality === 'high' || this.quality === 'max' ? dpr : Math.min(dpr, 1.25) * q.pixelRatio);
     this.renderer.setSize(window.innerWidth, window.innerHeight);
     this.renderer.shadowMap.enabled = true;
-    this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    this.renderer.shadowMap.type = THREE.PCFShadowMap; // (PCFSoftShadowMap retiré en r18x : PCF matériel + disque de Vogel)
     this.renderer.outputColorSpace = THREE.SRGBColorSpace;
     this.renderer.toneMapping = THREE.NoToneMapping;
     setMaxAnisotropy(Math.min(8, this.renderer.capabilities.getMaxAnisotropy()));
@@ -620,6 +620,7 @@ export class Game {
   private loop = () => {
     if (this.manual) return;
     requestAnimationFrame(this.loop);
+    this.clock.update();
     this.frame(Math.min(0.05, this.clock.getDelta()), true);
   };
 

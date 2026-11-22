@@ -26,7 +26,7 @@ float sunVis(vec3 p) {
   vec4 sc = uShadowMat * vec4(p, 1.0);
   sc.xyz /= sc.w;
   if (sc.x < 0.0 || sc.x > 1.0 || sc.y < 0.0 || sc.y > 1.0 || sc.z > 1.0) return 1.0;
-  return step(sc.z - 0.0015, unpackRGBAToDepth(texture2D(tShadow, sc.xy)));
+  return step(sc.z - 0.0015, texture2D(tShadow, sc.xy).r);
 }
 void main() {
   vec4 col = texture2D(tColor, vUv);

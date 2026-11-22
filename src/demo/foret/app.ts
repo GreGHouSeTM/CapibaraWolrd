@@ -23,7 +23,7 @@ import { ForetPost, buildCanopy, canopyUniforms, installShaderChunks } from './l
 import { Reflector } from 'three/examples/jsm/objects/Reflector.js';
 import { PROP_IDS, STYLES, Scatter } from './scatter';
 import { setAniso } from './tex';
-import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js';
+import { HDRLoader } from 'three/examples/jsm/loaders/HDRLoader.js';
 import { BASE } from './data';
 
 export class ForetDemo {
@@ -57,7 +57,7 @@ export class ForetDemo {
   /** compatibilité avec tools/shot.cjs (statistiques de la flore du monde principal) */
   world = { flora: null };
   manual = new URLSearchParams(location.search).has('manual');
-  private clock = new THREE.Clock();
+  private clock = new THREE.Timer();
   private fps = 60;
   private fpsEl: HTMLElement | null = null;
   private keyN = false;
@@ -69,12 +69,18 @@ export class ForetDemo {
     this.save = loadSave();
     const qp = new URLSearchParams(location.search).get('q') as Quality | null;
     this.quality = qp && QUALITIES.includes(qp) ? qp : this.save.settings.quality;
-    this.preset = FORET_PRESETS[this.quality];
+    this.preset = { ...FORET_PRESETS[this.quality] };
+    // réglages d'essai : ?fp=ao:Medium,pcss:16 (outils de mesure ; la qualité choisie reste celle du menu)
+    const fp = new URLSearchParams(location.search).get('fp');
+    if (fp) for (const kv of fp.split(',')) {
+      const [k, v] = kv.split(':');
+      (this.preset as any)[k] = v === 'true' ? true : v === 'false' ? false : isNaN(+v) ? v : +v;
+    }
     this.renderer = new THREE.WebGLRenderer({ canvas: this.canvas, antialias: false, powerPreference: 'high-performance', stencil: false, depth: true });
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2) * this.preset.pixelRatio);
     this.renderer.setSize(window.innerWidth, window.innerHeight);
     this.renderer.shadowMap.enabled = true;
-    this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    this.renderer.shadowMap.type = THREE.BasicShadowMap; // filtrage PCSS / Vogel maison (light.ts)
     this.renderer.outputColorSpace = THREE.SRGBColorSpace;
     this.renderer.toneMapping = THREE.NoToneMapping; // AgX dans le post-traitement
     installShaderChunks(this.preset);
@@ -105,7 +111,7 @@ export class ForetDemo {
     setGroundOverride(D.height);
     setAniso(Math.min(16, this.renderer.capabilities.getMaxAnisotropy()));
     // lumière du ciel (IBL) : HDRI Poly Haven « misty_pines » (pinède brumeuse, ciel couvert)
-    const hdr = await new RGBELoader().loadAsync(BASE() + 'hdri/misty_pines_2k.hdr');
+    const hdr = await new HDRLoader().loadAsync(BASE() + 'hdri/misty_pines_2k.hdr');
     hdr.mapping = THREE.EquirectangularReflectionMapping;
     const pm = new THREE.PMREMGenerator(this.renderer);
     this.envMap = pm.fromEquirectangular(hdr).texture;
@@ -139,6 +145,8 @@ export class ForetDemo {
     this.rig.camera.near = 0.1;
     this.rig.camera.far = 2500;
     this.rig.camera.updateProjectionMatrix();
+    // caméra du reflet de la flaque : calque 1 seulement (paroi, lanterne, souches, flamme)
+    if (this.mirror) (this.mirror as Reflector).getReflectionCamera(this.rig.camera).layers.set(1);
     this.post = new ForetPost(this.renderer, this.scene, this.rig.camera, this.preset);
     this.rig.sensitivity = this.save.settings.sensitivity;
     this.rig.invertY = this.save.settings.invertY;
@@ -237,17 +245,10 @@ export class ForetDemo {
       r.scale.set(P.rx * 1.05, P.rz * 1.05, 1);
       r.rotation.z = -P.rot;
       r.position.set(P.x, this.data.height(P.x, P.z) + P.depth * 0.55, P.z);
-      (r as any).camera.layers.set(1);
       this.scene.add(r);
       this.mirror = r;
-      // le rendu du reflet ne doit pas recalculer les cartes d'ombre (déjà faites pour l'image) : -75 ms la nuit
-      const before = r.onBeforeRender.bind(r);
-      r.onBeforeRender = (...a: Parameters<typeof before>) => {
-        const sm = this.renderer.shadowMap, au = sm.autoUpdate;
-        sm.autoUpdate = false;
-        before(...a);
-        sm.autoUpdate = au;
-      };
+      // (depuis r18x, le Reflector ne recalcule plus les cartes d'ombre pendant son rendu ; sa caméra est un clone de
+      // celle de la scène, créé à la première image : voir mirrorLayers)
       // dans le reflet : paroi, lanterne et silhouettes des arbres (LOD2 et imposteurs) — le reflet voit tout le houppier
       // au-dessus de la flaque ; les LOD proches y coûteraient 80 ms par image
       this.wallObj.traverse((o) => o.layers.enable(1));
@@ -365,6 +366,7 @@ export class ForetDemo {
   private loop = () => {
     if (this.manual) return;
     requestAnimationFrame(this.loop);
+    this.clock.update();
     this.frame(Math.min(0.05, this.clock.getDelta()), true);
   };
 
@@ -412,7 +414,7 @@ export class ForetDemo {
 
   private render(dt: number) {
     const f = this.post.fog.fogMat.uniforms;
-    f.tShadow.value = this.sun.shadow.map?.texture ?? null;
+    f.tShadow.value = this.sun.shadow.map?.depthTexture ?? null;
     f.uShadowMat.value.copy(this.sun.shadow.matrix);
     f.uTime.value = this.time;
     // flamme : scintillement léger

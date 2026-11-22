@@ -14,6 +14,8 @@ export interface ForetPreset {
   /** anti-crénelage temporel */
   taa: boolean;
   ao: 'off' | 'Low' | 'Medium' | 'High';
+  /** AO à demi-résolution (n8ao 2.1 : le mode High en pleine résolution fait perdre le contexte GL, voir ETAT-LUMIERE-V2) */
+  aoHalf: boolean;
   /** densité de la végétation (fraction des instances) */
   density: number;
   /** distance (m) du LOD0 des épicéas */
@@ -26,8 +28,8 @@ export interface ForetPreset {
 }
 
 export const FORET_PRESETS: Record<Quality, ForetPreset> = {
-  low: { pixelRatio: 0.75, shadowSize: 2048, pcss: 0, pom: 0, fogSteps: 0, taa: false, ao: 'off', density: 0.35, treeLod0: 12, reflection: 0, lanternShadow: 0, bloom: false },
-  medium: { pixelRatio: 1, shadowSize: 2048, pcss: 0, pom: 8, fogSteps: 12, taa: false, ao: 'Low', density: 0.6, treeLod0: 18, reflection: 0.25, lanternShadow: 256, bloom: true },
-  high: { pixelRatio: 1, shadowSize: 4096, pcss: 16, pom: 16, fogSteps: 24, taa: true, ao: 'Medium', density: 0.85, treeLod0: 26, reflection: 0.35, lanternShadow: 512, bloom: true },
-  max: { pixelRatio: 1, shadowSize: 8192, pcss: 32, pom: 32, fogSteps: 48, taa: true, ao: 'High', density: 1, treeLod0: 40, reflection: 0.5, lanternShadow: 768, bloom: true },
+  low: { pixelRatio: 0.75, shadowSize: 2048, pcss: 0, pom: 0, fogSteps: 0, taa: false, ao: 'off', aoHalf: true, density: 0.35, treeLod0: 12, reflection: 0, lanternShadow: 0, bloom: false },
+  medium: { pixelRatio: 1, shadowSize: 2048, pcss: 0, pom: 8, fogSteps: 12, taa: false, ao: 'Low', aoHalf: true, density: 0.6, treeLod0: 18, reflection: 0.25, lanternShadow: 256, bloom: true },
+  high: { pixelRatio: 1, shadowSize: 4096, pcss: 16, pom: 16, fogSteps: 24, taa: true, ao: 'Medium', aoHalf: true, density: 0.85, treeLod0: 26, reflection: 0.35, lanternShadow: 512, bloom: true },
+  max: { pixelRatio: 1, shadowSize: 8192, pcss: 32, pom: 32, fogSteps: 48, taa: true, ao: 'Medium', aoHalf: false, density: 1, treeLod0: 40, reflection: 0.5, lanternShadow: 768, bloom: true },
 };

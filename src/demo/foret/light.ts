@@ -82,33 +82,50 @@ export function installShaderChunks(q: ForetPreset) {
       iblIrradiance *= cv; irradiance *= mix(1.0, cv, 0.7); radiance *= cv;
     }
   `;
-  if (q.pcss > 0) {
-    // PCSS : taille de la source (soleil voilé) en texels de la carte d'ombre
-    const n = q.pcss;
-    C.shadowmap_pars_fragment = C.shadowmap_pars_fragment.replace('#ifdef USE_SHADOWMAP', `#ifdef USE_SHADOWMAP
-      #define PCSS_N ${n}
-      vec2 pcssDisk(int i, float ang) { float r = sqrt((float(i) + 0.5) / float(PCSS_N)); float a = float(i) * 2.39996 + ang; return vec2(cos(a), sin(a)) * r; }
-      float pcss(sampler2D sm, vec2 texel, vec4 sc) {
-        float ang = fract(sin(dot(gl_FragCoord.xy, vec2(12.9898, 78.233))) * 43758.5453) * 6.2831853;
-        float light = 34.0;
-        float sb = 0.0; float nb = 0.0;
-        for (int i = 0; i < PCSS_N; i++) {
-          vec2 o = pcssDisk(i, ang) * light * texel;
-          float d = unpackRGBAToDepth(texture2D(sm, sc.xy + o));
-          if (d < sc.z) { sb += d; nb += 1.0; }
+  // Ombres (three.js r18x : cartes d'ombre en textures de profondeur). La démo utilise BasicShadowMap (lecture brute de
+  // la profondeur, sampler2D) pour pouvoir chercher les bloqueurs : PCSS pour le soleil voilé, filtrage de Vogel sinon ;
+  // la lanterne (cube) reçoit un filtrage de Vogel à 12 lectures.
+  const n = q.pcss;
+  C.shadowmap_pars_fragment = C.shadowmap_pars_fragment.replace('#ifdef USE_SHADOWMAP', `#ifdef USE_SHADOWMAP
+    #define PCSS_N ${Math.max(n, 8)}
+    vec2 pcssDisk(int i, float ang) { float r = sqrt((float(i) + 0.5) / float(PCSS_N)); float a = float(i) * 2.39996 + ang; return vec2(cos(a), sin(a)) * r; }
+    float foretIGN() { return fract(52.9829189 * fract(dot(gl_FragCoord.xy, vec2(0.06711056, 0.00583715)))) * 6.2831853; }
+    float pcss(sampler2D sm, vec2 texel, vec4 sc) {
+      float ang = foretIGN();
+      ${n > 0 ? `
+      float light = 34.0;
+      float sb = 0.0; float nb = 0.0;
+      for (int i = 0; i < PCSS_N; i++) {
+        vec2 o = pcssDisk(i, ang) * light * texel;
+        float d = texture2D(sm, sc.xy + o).r;
+        if (d < sc.z) { sb += d; nb += 1.0; }
+      }
+      if (nb < 0.5) return 1.0;
+      float avg = sb / nb;
+      float pen = clamp((sc.z - avg) / max(avg, 1e-3) * light * 2.5, 1.2, light);` : 'float pen = 1.6;'}
+      float s = 0.0;
+      for (int i = 0; i < PCSS_N; i++) {
+        vec2 o = pcssDisk(i, ang + 1.7) * pen * texel;
+        s += step(sc.z, texture2D(sm, sc.xy + o).r);
+      }
+      return s / float(PCSS_N);
+    }`).replace('float depth = texture2D( shadowMap, shadowCoord.xy ).r;', `return mix( 1.0, pcss( shadowMap, 1.0 / shadowMapSize, shadowCoord ), shadowIntensity );
+        float depth = texture2D( shadowMap, shadowCoord.xy ).r;`).replace(`float depth = textureCube( shadowMap, bd3D ).r;`, `float depth = 1.0;
+      {
+        // lanterne : 12 lectures sur un disque de Vogel autour de la direction (ombres douces)
+        float ph = foretIGN();
+        vec3 tg = normalize(cross(bd3D, abs(bd3D.x) > abs(bd3D.z) ? vec3(0.0, 1.0, 0.0) : vec3(1.0, 0.0, 0.0)));
+        vec3 bt = cross(bd3D, tg);
+        float ts = 3.0 / shadowMapSize.x;
+        float acc = 0.0;
+        for (int k = 0; k < 12; k++) {
+          float r = sqrt((float(k) + 0.5) / 12.0); float th = float(k) * 2.39996 + ph;
+          vec3 dd = normalize(bd3D + (tg * cos(th) + bt * sin(th)) * r * ts);
+          acc += step(dp, textureCube(shadowMap, dd).r);
         }
-        if (nb < 0.5) return 1.0;
-        float avg = sb / nb;
-        float pen = clamp((sc.z - avg) / max(avg, 1e-3) * light * 2.5, 1.2, light);
-        float s = 0.0;
-        for (int i = 0; i < PCSS_N; i++) {
-          vec2 o = pcssDisk(i, ang + 1.7) * pen * texel;
-          s += step(sc.z, unpackRGBAToDepth(texture2D(sm, sc.xy + o)));
-        }
-        return s / float(PCSS_N);
-      }`).replace('#if defined( SHADOWMAP_TYPE_PCF )', `return mix(1.0, pcss(shadowMap, 1.0 / shadowMapSize, shadowCoord), shadowIntensity);
-        #if defined( SHADOWMAP_TYPE_PCF )`);
-  }
+        return mix(1.0, acc / 12.0, shadowIntensity);
+      }`);
+  if (!C.shadowmap_pars_fragment.includes('pcss( shadowMap')) throw new Error('morceau d’ombres de three.js inattendu');
 }
 
 /** Uniformes de la canopée ajoutés aux matériaux éclairés de three.js (copiés à la compilation de chaque matériau). */
@@ -138,7 +155,7 @@ export class ForetPost {
       this.ao = new N8AOPostPass(scene, camera, size.x, size.y);
       const c = (this.ao as any).configuration;
       c.aoRadius = 1.6; c.distanceFalloff = 0.8; c.intensity = 2.6; c.color = new THREE.Color(0x0a0c08);
-      c.halfRes = q.ao !== 'High'; c.depthAwareUpsampling = true; c.gammaCorrection = false;
+      c.halfRes = q.aoHalf; c.depthAwareUpsampling = true; c.gammaCorrection = false;
       (this.ao as any).setQualityMode?.(q.ao);
       this.composer.addPass(this.ao as any);
     }
