@@ -1,0 +1,27 @@
+{
+ "n": 81743,
+ "massif": 53425,
+ "models": {
+  "barre-a": 2284,
+  "barre-b": 2422,
+  "barre-c": 2621,
+  "bloc-a": 3463,
+  "bloc-b": 3403,
+  "bloc-c": 1609,
+  "dalle": 352,
+  "eboulis-a": 20702,
+  "eboulis-b": 20769,
+  "eboulis-c": 20870,
+  "gendarme": 3159,
+  "moutonnee-a": 45,
+  "moutonnee-b": 44
+ },
+ "bytes": 2407210,
+ "focus": {
+  "x0": -3150,
+  "x1": -1200,
+  "z0": -300,
+  "z1": 1650,
+  "edge": 250
+ }
+}

@@ -82,6 +82,13 @@ const VIEWS = {
   'qa-lacets-air': { cam: [-1700, 120, 1440], look: [-1812, 0, 1534], hour: 10, ground: true, tp: [-1760, 1500] },
   'qa-lacets-sol': { cam: [-1790, 2.2, 1500], look: [-1812, 1.0, 1534], hour: 10, ground: true, tp: [-1790, 1495] },
   'qa-givre-air': { cam: [-1600, 420, 1050], look: [-2300, 350, 450], hour: 10, tp: [-1650, 1000] },
+  // --- TERRAIN & RELIEF v2 : massif de l'Aurore (zone de qualité des rochers), du fond de vallée au sommet
+  'qa-aurore-vallee': { cam: [-1600, 2, 900], look: [-2300, -60, 450], hour: 10, ground: true, tp: [-1600, 895] },
+  'qa-aurore-mipente': { cam: [-1950, 2, 650], look: [-2290, -10, 460], hour: 10, ground: true, tp: [-1950, 645] },
+  'qa-aurore-eboulis': { cam: [-2000, 2.5, 600], look: [-1880, -25, 700], hour: 15, ground: true, tp: [-2000, 595] },
+  'qa-aurore-arete': { cam: [-2140, 3, 340], look: [-2050, 10, 200], hour: 10, ground: true, tp: [-2140, 335] },
+  'qa-aurore-sommet': { cam: [-2272, 3, 468], look: [-1800, -120, 900], hour: 10, ground: true, tp: [-2272, 463] },
+  'qa-aurore-air': { cam: [-1500, 900, 1100], look: [-2300, 600, 450], hour: 10, tp: [-1550, 1050] },
 };
 for (const k of Object.keys(VIEWS)) if (k.startsWith('qa-')) VIEWS[k + '-nuit'] = { ...VIEWS[k], hour: 22.5 };
 module.exports = { VIEWS };
