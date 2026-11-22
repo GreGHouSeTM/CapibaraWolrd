@@ -39,8 +39,8 @@ npm install -g @google/gemini-cli
 ## 3. Restaurer le privé
 Décompresser `transfert-capy.zip` :
 - `prive/` va dans `CapyWorld\docs\references\prive\` ;
-- `skills/` va dans `C:SERS<TOI>.CLAUDESKILLS` ;
-- `MEMOIRE/` VA DANS le dossier de mémoire de Claude Code du nouveau projet, `C:\Users\<toi>\.claude\projects\<dossier-du-projet>\memory\`.
+- `skills/` va dans `C:\Users\<toi>\.claude\skills\` ;
+- `memoire/` va dans le dossier de mémoire de Claude Code du nouveau projet, `C:\Users\<toi>\.claude\projects\<dossier-du-projet>\memory\`.
 
 Ce dossier n'existe qu'après la première ouverture du projet dans Claude Code. Le plus simple : ouvrir le projet, puis demander à Claude de copier ce dossier à cet endroit.
 
