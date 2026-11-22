@@ -62,7 +62,7 @@ Vitesse de marche selon la pente dans le sens de la marche (implémentée dans `
 | 40° | 0,6 m/s (14 %) | 0,49 m/s |
 | > 41° (pente du sol) | n'avance plus, glisse | — |
 
-En descente, la marche accélère jusqu'à +12 % vers 15°, puis le capybara **glisse** (contrôlable) au-delà de 38°.
+En descente, la marche accélère jusqu'à +12 % vers 15° ; au-delà de 41° (32° sur la neige), le capybara **glisse** (un peu dirigeable).
 La course à quatre pattes suit la même courbe, coûte de l'endurance, et devient impossible au-delà de 30°.
 
 **Compression du temps assumée** : une randonneuse entraînée monte 400 à 600 m par heure ; le capybara monte au mieux **1 m par seconde**
@@ -107,7 +107,7 @@ Altitudes de l'option B. Avec l'option A, on multiplie les altitudes au-dessus d
 | **4. Pinède claire et limite des arbres** | 800-900 m | derniers **arolles tordus** par le vent, troncs blanchis, bois mort, premières plaques de neige à l'ombre | vent dans les aiguilles, cassenoix | **cassenoix**, lièvre variable, **chamois** à la lisière | arolles, pins à crochets, genévriers nains | le vent se lève, 6-9 °C ressentis ; **la jauge de chaleur commence à baisser** |
 | **5. Éboulis et barres rocheuses** | 900-1 060 m | **pierriers** gris, barres de roche grimpables (marquées de lichen orange), le refuge au toit rouge, le vide sous la vallée | cailloux qui roulent, **sifflement du vent**, chute de pierres lointaine | **bouquetins** sur les vires, **chamois**, **aigle royal** qui tourne en dessous de soi | coussins de fleurs (silène acaule), lichens | 2-5 °C ressentis ; rafales ; nuages qui passent à hauteur des yeux |
 | **6. Névés et glacier** | 1 060-1 180 m | **névés** où l'on glisse, langue du **Glacier de l'Aurore** bleue et crevassée, **pont de neige**, séracs | craquements de la glace, eau de fonte sous la neige | **lagopèdes** blancs, traces d'hermine, chocards | presque rien : quelques mousses | -2 à 2 °C ressentis ; **brouillard** possible ; souffle visible |
-| **7. Arête sommitale exposée** | 1 180-1 250 m | arête de roche et de neige large de 2 à 5 m, **vide des deux côtés**, mer de nuages, toute l'île | **vent fort, puis le silence** au sommet abrité | aigle au-dessous de soi, chocards qui jouent dans le vent | aucune | -8 à -4 °C ressentis, de nuit -15 °C : **la doudoune est nécessaire** |
+| **7. Arête sommitale exposée** | 1 180-1 250 m | arête de roche et de neige large de 2 à 5 m, **vide des deux côtés**, mer de nuages, toute l'île | **vent fort, puis le silence** au sommet abrité | aigle au-dessous de soi, chocards qui jouent dans le vent | aucune | -8 à -4 °C ressentis, de nuit -15 °C : **le manteau d'hiver** rend le froid supportable |
 
 ## 4. Les itinéraires
 
@@ -134,7 +134,7 @@ l'escalade ou rien. Le profil en long est en tête de ce dossier.
 | **Lac de Cristal** | 262 m | ponton, truites, eau transparente | balade « Le Lac de Cristal » de la bible |
 | **Cascade des Marmottes** | 400 m | petite cascade en escalier, colonie de marmottes | — |
 | **Lacs Jumeaux** | 560 m | deux lacs reliés par un gué de pierres, reflets du sommet | lieu de pique-nique, premier point de vue sur Capyville |
-| **Chalet d'estive** | 700 m | bergère, fromage, lait chaud, **feu** (chaleur) | quête de la **doudoune** (voir §6) |
+| **Chalet d'estive** | 700 m | bergère, fromage, lait chaud, **feu** (chaleur) | quête du **manteau d'hiver** (phase gameplay) |
 | **Mine abandonnée** | 820 m | galerie de 60 m, wagonnet, cristaux, abri du vent | les mineurs ont trouvé une **Veine Tiède** : l'air y est tiède |
 | **Ermitage** | 640 m | cabane d'un vieil ermite qui note le temps qu'il fait | il raconte que le Voyageur du Grand Froid est monté au sommet « pour voir les six côtes à la fois » |
 | **Grotte des Veines Tièdes** | 700 m | grotte où une source chaude affleure, vapeur, lumière bleue | **fragment de fresque des Six Voyageurs** ; point chaud (remonte la jauge) |
@@ -161,12 +161,12 @@ Principe : **un vrai enjeu, jamais de punition**. On ne meurt pas, on ne perd ri
 | --- | --- | --- | --- |
 | **Vitesse selon la pente** | courbe du §2.2 ; en descente +12 % jusqu'à 15° | le capybara ralentit, se penche vers l'avant, souffle | oui |
 | **Pente infranchissable** | au-delà de 41° hors roche grimpable, on n'avance plus en montée et l'on glisse vers le bas | glissade sur le derrière, petite traînée de poussière ou de neige | oui |
-| **Glissade en descente** | au-delà de 38°, glissade contrôlée (on peut diriger un peu) ; sur la neige dès 30° | même pose, plus rapide sur la neige ; c'est aussi un jeu (névés) | oui |
-| **Endurance** | 100 points ; la course coûte 9/s (plus en montée), l'escalade 6,5/s ; recharge 28/s au repos, 14/s en marchant, 3 s après l'effort | **anneau discret** près du capybara, visible seulement quand il n'est pas plein ; rouge quand il est presque vide | oui |
-| **Escalade** | sur la roche au-dessus de 45° (`surfaceAt` roche) : on s'accroche en avançant vers la paroi, 0,9 m/s ; endurance vide → il glisse le long de la paroi jusqu'au replat | pose à plat ventre contre la paroi, pattes qui alternent | oui (provisoire : toute roche raide, pas de prises marquées) |
+| **Glissade en descente** | au-delà de 41°, glissade un peu dirigeable ; sur la neige dès 32° ; une glissade le long d'une paroi de plus de 55° compte comme une chute | assis sur le derrière, gerbe de neige ou de poussière ; c'est aussi un jeu (névés) | oui |
+| **Endurance** | 100 points ; la course coûte 9/s (plus en montée), l'escalade 6,5/s ; recharge 28/s au repos, 14/s en marchant, 0,9 s après l’effort | **anneau discret** près du capybara, visible seulement quand il n'est pas plein ; rouge quand il est presque vide | oui |
+| **Escalade** | sur la roche au-dessus de 45° (`surfaceAt` roche) : on s’accroche en avançant vers la paroi, 0,85 m/s de montée verticale ; endurance vide → il glisse le long de la paroi jusqu'au replat | pose à plat ventre contre la paroi, pattes qui alternent | oui (provisoire : toute roche raide, pas de prises marquées) |
 | **Chute** | moins de 4 m : rien ; 4 à 14 m : **roulade**, puis se relève, 1 à 3 demi-cœurs en moins (jamais le dernier) ; plus de 14 m : **fondu doux** et retour au dernier point sûr, 2 demi-cœurs en moins | roulé-boulé comique, étoiles, « Ouille ! » ; jamais de blessure montrée | oui |
-| **Froid** | jauge de chaleur 0-100 ; baisse au-dessus de 650 m (de plus en plus vite avec l'altitude) et la nuit, plus vite dans le vent ; remonte près d'un feu, d'une lanterne, d'une vapeur des Veines Tièdes ou au refuge ; à 0 pendant 25 s : fondu et réveil au dernier point chaud (« Une bergère t'a ramené au chaud ») | **givre** au bord de l'écran, **souffle visible**, le capybara grelotte et ralentit un peu | oui (refuge et feux de la montagne à poser avec le relief) |
-| **Tenues chaudes** | la tenue réduit la perte de chaleur : bonnet 25 %, écharpe 35 %, **doudoune 75 %** (débloquée par la quête de la bergère du chalet d'estive : rapporter trois cloches de vache égarées) ; sans doudoune, l'arête sommitale est atteignable mais il faut courir de point chaud en point chaud | tenue visible sur le capybara | crochet prêt (`warmthGear`), bonnet branché ; doudoune et quête à faire |
+| **Froid** (décision du client) | jauge de chaleur 0-100 ; baisse au-dessus de 650 m (de plus en plus vite avec l'altitude) et la nuit ; remonte près d'un feu, d'une lanterne, d'une vapeur des Veines Tièdes ou au refuge. **Hors mode survie, le froid ne fait aucun dégât et ne force jamais à redescendre** : sous 25, l'endurance revient jusqu'à 40 % moins vite, c'est tout. **Mode survie** (option à venir) : le froid y coûte un demi-cœur toutes les 20 s à jauge vide (point d'entrée `Player.survival` / `onColdHurt`) | **givre** au bord de l'écran, **souffle visible**, le capybara frissonne | oui |
+| **Manteau d'hiver** (décision du client) | objet de l'inventaire : **équipé, le froid disparaît** jusqu'au sommet ; débloqué plus tard par une quête (phase gameplay, par exemple au chalet d'estive). Le bonnet arrête déjà 25 % du froid | manteau visible sur le capybara ; icône 🧥 dans la jauge | crochet prêt (`Player.winterCoat`, drapeau de test `?manteau`) ; objet, modèle et quête à faire |
 | **Vent** | rafales sur l'arête et au col : poussée latérale douce, froid plus rapide ; le capybara se met à quatre pattes s'il s'arrête | herbe et neige soufflées, son du vent | à faire (avec Rendu et Son) |
 | **Brouillard** | certains matins au-dessus de 600 m et dans la Boucle des Lacs : vue à 40-60 m | cairns et **bruit du torrent** pour s'orienter | à faire (Rendu) |
 | **Se perdre sans frustration** | cairns sur la voie normale ; le sommet et sa vapeur visibles de partout dès qu'on sort du brouillard ; la boussole de la mini-carte indique toujours le refuge et le sommet ; un sentier se retrouve toujours en descendant (tous les vallons ramènent aux lacs) | — | à faire (Gameplay) |
@@ -190,18 +190,17 @@ Principe : **un vrai enjeu, jamais de punition**. On ne meurt pas, on ne perd ri
 | **Eau** | Lac de Cristal et Lacs Jumeaux (eau turquoise), cascade des Clarines et cascade des Marmottes, ruisseaux de fonte, glacier (bleu, crevasses) | moyen |
 | **Rendu** | neige et névés, mer de nuages et brouillard d'altitude, givre de l'écran, aurore, perspective aérienne au sommet | élevé |
 | **Modélisation** | refuge, chalet d'estive, ermitage, mine et wagonnet, croix et livre d'or, cairns, câbles, Pierre-Vapeur du sommet, pont de neige ; rochers photoscannés (déjà chez le Terrain v2) | moyen |
-| **Gameplay** | mécaniques de la partie B (en cours sur `wip/montagne`) ; vent ; orientation (cairns, boussole) ; quête de la doudoune ; Pierre-Vapeur du sommet et voyage rapide ; faune (marmottes, chamois, bouquetins, aigle, lagopèdes) ; véhicules en pente | moyen, en cours |
+| **Gameplay** | mécaniques de la partie B (en cours sur `wip/montagne`) ; vent ; orientation (cairns, boussole) ; quête du manteau d'hiver ; Pierre-Vapeur du sommet et voyage rapide ; faune (marmottes, chamois, bouquetins, aigle, lagopèdes) ; véhicules en pente | moyen, en cours |
 | **Son** | étagement sonore : torrent → clarines → marmottes → vent → silence ; craquements du glacier ; souffle du capybara | faible à moyen |
 
-## 9. Questions au client
-1. **Hauteur du Pic** : garder 950 m, ou monter à **1 250 m** en déplaçant le sommet de 300 m vers l'ouest (§2.3) ?
-   *Recommandation : 1 250 m.* La montée dure 25 à 30 minutes au lieu de 18 à 24, et aucune région ni ligne de vue ne change.
-   Au-delà de 1 500 m, l'île est trop petite pour garder des pentes praticables.
-2. **Le froid peut-il obliger à redescendre ?** Sans tenue chaude, à jauge vide, la bergère ramène le capybara au dernier point chaud (rien n'est perdu).
-   *Recommandation : oui*, c'est ce qui donne son prix à la doudoune ; l'enfant n'est jamais bloquée, il y a toujours un feu ou une vapeur à moins d'une minute sur la voie normale.
-3. **Une seizième Pierre-Vapeur au sommet**, réveillée seulement à pied, qui sert de voyage rapide vers le sommet et montre les bornes endormies sur la carte ?
-   *Recommandation : oui* ; c'est la récompense qui donne envie de faire l'ascension, et elle colle au lore validé.
-4. **Chutes** : roulade et quelques demi-cœurs en moins, jamais de « Ouf ! » à cause d'une chute, retour au dernier point sûr si la chute est grande.
-   *Recommandation : garder ce niveau* (un vrai enjeu, aucune frustration) ; une option « montagne facile » sans perte de cœur pourra être ajoutée dans les réglages.
-5. **Escalade** : partout sur la roche raide (liberté maximale), ou seulement sur les **barres marquées** (lichen orange, prises visibles) ?
-   *Recommandation : seulement sur les barres marquées*, pour garder les voies lisibles et le sentiment d'ascension ; le reste de la roche se contourne.
+## 9. Décisions du client (2026-11-22)
+1. **Hauteur du Pic : validée à 1 250 m**, sommet déplacé en **(-2600, 520)**. La montée dure 25 à 30 minutes ; aucune région ni ligne de vue ne change.
+   À reporter par le lead dans `world-map.ts` et la bible ; le Terrain change le codage des hauteurs (plafond actuel 988 m).
+2. **Froid : la bergère est refusée.** Le client la remplace par un **objet « manteau d'hiver »** qui protège du froid, et ne veut **aucun dégât lié
+   au froid hors du mode survie** (option, seul mode avec faim, soif et vie). Hors survie, le froid reste une sensation (jauge, givre, souffle,
+   frissons, endurance un peu plus lente à revenir), sans jamais bloquer ni ramener en arrière. Le manteau d'hiver fait disparaître le froid.
+3. **Pierre-Vapeur du sommet : validée.** Seizième borne, réveillée seulement à pied, voyage rapide vers le sommet, bornes endormies montrées sur la carte.
+4. **Chutes douces : validées.** Roulade et un à trois demi-cœurs en moins, jamais de « Ouf ! » à cause d'une chute ; au-delà de 14 m, fondu doux et
+   retour au dernier point sûr.
+5. **Escalade seulement sur les barres marquées : validée.** Le Terrain marque les barres grimpables (lichen orange, prises visibles) dans la carte
+   dérivée ; en attendant, toute roche au-dessus de 45° est grimpable (`mountainTerrain.rock`).
