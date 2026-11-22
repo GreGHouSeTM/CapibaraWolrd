@@ -443,12 +443,12 @@ def recipes():
          (0.6, 0.75, 1.0, 0.6, 0.12, 0.05, 0.15), (0.9, 0.55, 1.2, 0.8, 0.08, 0.18, 0.28)],
         dip=0.05, joints=((-3.4, 0.12, 0.22, 0.10), (-0.6, -0.08, 0.16, 0.08), (2.3, 0.2, 0.25, 0.12), (4.6, 0.0, 0.14, 0.07))))
     # barre-b : gradins (sept bancs minces de dureté alternée), escalier naturel
-    R['barre-b'] = dict(family='barre', res=300, tex=2048, lod=(10000, 2500, 560), rec=bar_recipe(
+    R['barre-b'] = dict(family='barre', res=300, tex=2048, lod=(9600, 2500, 560), rec=bar_recipe(
         202, 9.0, 4.6, 4.2,
         [(1.0, 0.0, 0.4, 0.2, 0.0, 0.06, 0.2), (0.5, 0.55, 0.6, 0.5, 0.08, 0.04, 0.12), (0.8, 0.35, 0.7, 0.4, 0.06, 0.06, 0.16),
          (0.45, 1.0, 0.9, 0.7, 0.1, 0.04, 0.12), (0.7, 0.85, 1.0, 0.8, 0.07, 0.05, 0.15), (0.4, 1.45, 1.2, 1.0, 0.1, 0.04, 0.1),
          (0.6, 1.35, 1.4, 1.1, 0.06, 0.12, 0.2)],
-        dip=-0.04, dipz=0.03, joints=((-2.2, 0.3, 0.2, 0.09), (1.4, -0.15, 0.24, 0.11))))
+        dip=-0.04, dipz=0.03, joints=((-2.2, 0.3, 0.2, 0.16), (1.4, -0.15, 0.24, 0.18))))
     # barre-c : trois bancs épais, le banc sommital dur fait corniche (surplomb), banc tendre creusé dessous
     R['barre-c'] = dict(family='barre', res=320, tex=2048, lod=(10000, 2500, 560), rec=bar_recipe(
         303, 14.0, 3.0, 5.2,
@@ -612,6 +612,49 @@ def decimate_copy(src, name, tris):
         select_only(ob)
         bpy.ops.object.modifier_apply(modifier='tri')
     return ob
+
+
+def clean(ob):
+    """Faces dégénérées laissées par la décimation (contrôle blender-asset-qa) : dissoutes."""
+    import bmesh
+    bm = bmesh.new()
+    bm.from_mesh(ob.data)
+    from mathutils.bvhtree import BVHTree
+    bmesh.ops.dissolve_degenerate(bm, dist=1e-4, edges=bm.edges[:])
+    bmesh.ops.triangulate(bm, faces=[f for f in bm.faces if len(f.verts) > 3])
+    # parois opposées collées par la décimation dans les fentes étroites (z-fighting, faces dos à dos) : les deux
+    # faces sont retirées et le trou est rebouché
+    for _ in range(4):
+        bm.faces.ensure_lookup_table()
+        bm.faces.index_update()
+        bm.normal_update()
+        tree = BVHTree.FromBMesh(bm, epsilon=0.0)
+        bad = set()
+        for fi in bm.faces:
+            n = fi.normal
+            vs = [v.co for v in fi.verts]
+            cen = fi.calc_center_median()
+            vset = set(fi.verts)
+            for pt in (cen, cen.lerp(vs[0], .6), cen.lerp(vs[1], .6), cen.lerp(vs[2], .6)):
+                for _, _, j, _ in tree.find_nearest_range(pt, 0.003):
+                    if j is None or j == fi.index:
+                        continue
+                    fj = bm.faces[j]
+                    if abs(n.dot(fj.normal)) < 0.99:  # (repli le long d une arête commune compris)
+                        continue
+                    q = pt - fj.normal * fj.normal.dot(pt - fj.verts[0].co)
+                    from mathutils.geometry import intersect_point_tri
+                    if intersect_point_tri(q, *[v.co for v in fj.verts]) is not None:
+                        bad.update((fi, fj))
+        if not bad:
+            break
+        bmesh.ops.delete(bm, geom=list(bad), context='FACES_ONLY')
+        bmesh.ops.holes_fill(bm, edges=bm.edges[:], sides=12)
+        bmesh.ops.triangulate(bm, faces=[f for f in bm.faces if len(f.verts) > 3])
+        bm.normal_update()
+    bm.to_mesh(ob.data)
+    bm.free()
+    ob.data.update()
 
 
 def setup_cycles(samples):
@@ -811,6 +854,7 @@ def make_rock(rid, R):
     hi.data.materials.append(mh)
     # LOD0 : décimation du HD, UV par projection intelligente ; LOD1 et LOD2 décimés depuis LOD0 (UV partagées)
     lo0 = decimate_copy(hi, rid + '_lod0', R['lod'][0])
+    clean(lo0)
     lo0.data.materials.clear()
     if lo0.data.color_attributes.get('champs'):
         lo0.data.color_attributes.remove(lo0.data.color_attributes['champs'])
@@ -826,6 +870,7 @@ def make_rock(rid, R):
     lods = [lo0]
     for k in (1, 2):
         lods.append(decimate_copy(lo0, f'{rid}_lod{k}', R['lod'][k]))
+        clean(lods[-1])
     for ob in lods:
         ob.data.name = ob.name
     size = R['tex'] // (2 if FAST else 1)

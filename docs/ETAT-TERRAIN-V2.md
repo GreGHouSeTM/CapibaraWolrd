@@ -14,8 +14,26 @@
   sommets restaurés sous cône borné 36-38° (marqué roche). Réserves : faces sommitales encore lisses et uniformes ;
   la roche voulue couvre 12,3 % des terres ; « colonnes » 25,6 % et « aiguilles » 347 (surtout bords de falaises côtières,
   détecteur à affiner).
-- **J3 partiel** : `src/world/terrain-detail.ts` (détail 0,4 m identique CPU/GPU, anneaux proches, normales) branché.
-  Rochers et affleurements Blender/Poly Haven : **non faits**.
+- **J3** : `src/world/terrain-detail.ts` (détail 0,4 m identique CPU/GPU, anneaux proches, normales) branché.
+  **Rochers** (priorité client : massif de l'Aurore et des Clarines d'abord, densité de base ailleurs) :
+  - modèles : `tools/terrain/bl_rochers.py` (13 modèles : barre-a/b/c, dalle, bloc-a/b/c, gendarme, eboulis-a/b/c,
+    moutonnee-a/b ; champ de distance numba → surface nets → remaillage voxel → projection exacte → LOD0/1/2 par
+    décimation, UV partagées, cuisson Cycles normales + AO + courbure/variation ; `--apercu` rend une vue argile dans
+    `tools/terrain/cache/rochers/`, `--textures` convertit les textures de détail CC0) ; sorties `public/assets/terrain/rochers/`
+    (crédits : `CREDITS.md` du dossier). Lancer **un modèle par processus** (mémoire GPU partagée avec les autres agents).
+  - contrôle des assets (blender-asset-qa, obligatoire) : `tools/terrain/qa_rochers.py` → `test-shots/terrain/rochers-qa.json`,
+    planches `rochers-qa-random.png` et `rochers-qa-wire.png`.
+  - placement : `tools/terrain/rochers.py` (lit seulement les données exportées du jeu : se relance tel quel sur un relief
+    remodelé) → `public/assets/terrain/rochers.bin` ; zone de qualité `FOCUS` (massif de l'Aurore), `BASE` ailleurs ;
+    carte de contrôle `test-shots/terrain/rochers-massif.png`.
+  - jeu : `src/world/rocks.ts` (un InstancedMesh par modèle et LOD, tri par cellules de 64 m quand la caméra bouge,
+    distances selon la taille, collisions boîtes/cercles > 0,9 m, matériau triplanaire + mousse/lichen/neige par instance) ;
+    branché dans `world.ts` avant la végétation. Vues `qa-aurore-*` (et `-nuit`) dans `tools/shot.cjs`.
+- **Réserves J1 (Givre 15,5 %, épingles des Clarines)** : essai « relâchement par tronçon + abords libres autour des
+  ancres » (copie `tools/terrain/cache/roads-essai-relachement-par-troncon.py`, journal `test-shots/terrain/gen-routes-essai.log`) :
+  pas d'amélioration (le Col des Aurores est perché sur une bosse à 376 m, parois de 50-59° au sud ; la voie doit ensuite
+  descendre de 320 m vers la Baie Gelée en 660 m). C'est un défaut du relief du massif : à traiter avec le plan de level
+  design du massif (remodelage), pas en retouchant les voies. Essai abandonné, `roads.py` inchangé.
 - **J4** : QA avant/après, captures `test-shots/terrain/planche-avant-apres.jpg`, `planche-lacets.jpg`.
 
 ## Chiffres QA (avant → après)

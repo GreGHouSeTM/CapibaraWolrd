@@ -78,7 +78,11 @@ def main():
     lap = ndimage.laplace(ndimage.gaussian_filter(H, 4.0)).astype(np.float32) / (cell * cell)
     Hg = ndimage.gaussian_filter(H, 30.0)
     ggz, ggx = np.gradient(Hg, cell)
+    # sources d'éboulis : parois raides ou roche franche à moins de 50 m (les cônes naissent au pied des barres)
+    src = ndimage.maximum_filter((S > 38).astype(np.float32), size=25)
+    src = ndimage.gaussian_filter(src, 4.0)
     hS, sS, gxS, gzS, lapS = (sampler(a, X0, cell) for a in (H, S, gx.astype(np.float32), gz.astype(np.float32), lap))
+    srcS = sampler(src.astype(np.float32), X0, cell)
     ggxS, ggzS = sampler(ggx.astype(np.float32), X0, cell), sampler(ggz.astype(np.float32), X0, cell)
     surf, sm = load_map(meta, 'surface')
     bio, bm = load_map(meta, 'biome')
@@ -216,7 +220,7 @@ def main():
     keep = focus(X, Z) > BASE * 0.99
     X, Z = X[keep], Z[keep]
     h, s, depo = hS(X, Z), sS(X, Z), surfS[2](X, Z)
-    p = smoothstep(0.18, 0.55, depo) * smoothstep(16, 22, s) * smoothstep(44, 38, s) * focus(X, Z) * land(X, Z) * 0.55
+    p = smoothstep(0.18, 0.55, depo) * smoothstep(16, 22, s) * smoothstep(44, 38, s) * smoothstep(0.15, 0.6, srcS(X, Z)) * focus(X, Z) * land(X, Z) * 0.7
     k = pick(p)
     X1, Z1, s1 = X[k], Z[k], s[k]
     toe = smoothstep(36, 24, s1)  # 1 au pied du cône
@@ -235,8 +239,11 @@ def main():
     # ------------------------------------------------------------------ 4. roches moutonnées (fonds glaciaires du Givre)
     X, Z = candidates(22.0)
     h, s = hS(X, Z), sS(X, Z)
-    glac = smoothstep(0.25, 0.5, bioS[1](X, Z) + 0.6 * smoothstep(-1200, -1600, X))
-    p = smoothstep(150, 220, h) * smoothstep(24, 16, s) * smoothstep(2, 6, s) * glac * focus(X, Z) * land(X, Z) * 0.45
+    glac = smoothstep(0.2, 0.45, bioS[1](X, Z) + 0.6 * smoothstep(-1200, -1600, X))
+    X, Z = candidates(16.0)
+    h, s = hS(X, Z), sS(X, Z)
+    glac = smoothstep(0.2, 0.45, bioS[1](X, Z) + 0.6 * smoothstep(-1200, -1600, X))
+    p = smoothstep(120, 200, h) * smoothstep(26, 18, s) * smoothstep(1, 4, s) * glac * focus(X, Z) * land(X, Z) * 0.6
     k = pick(p)
     X1, Z1 = X[k], Z[k]
     # +x local vers l'aval de la glace : rotation Y d'angle θ : (1, 0, 0) → (cos θ, 0, −sin θ)

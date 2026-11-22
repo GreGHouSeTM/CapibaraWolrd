@@ -16,6 +16,7 @@ sys.path.insert(0, SK)
 import bpy  # noqa: E402
 
 DIR = os.path.join(ROOT, 'public', 'assets', 'terrain', 'rochers')
+CACHE = os.path.join(HERE, 'cache', 'rochers')
 OUT = os.path.join(ROOT, 'test-shots', 'terrain')
 
 
@@ -28,10 +29,16 @@ def main():
     lod0 = []
     x = 0.0
     for rid in sorted(models):
-        bpy.ops.import_scene.gltf(filepath=os.path.join(DIR, rid + '.glb'))
-        obs = [o for o in bpy.context.selected_objects if o.type == 'MESH']
+        # glb brut (avant gltfpack : la quantification met une échelle de déquantification sur les nœuds)
+        bpy.ops.import_scene.gltf(filepath=os.path.join(CACHE, rid + '_raw.glb'))
+        obs = sorted([o for o in bpy.context.selected_objects if o.type == 'MESH'], key=lambda o: -len(o.data.polygons))
+        mat = bpy.data.materials.get('roche') or bpy.data.materials.new('roche')
+        for k, o in enumerate(obs):
+            o.name = f'{rid}_lod{k}'
+            o.data.materials.clear()
+            o.data.materials.append(mat)
         res = {}
-        for o in sorted(obs, key=lambda o: o.name):
+        for o in obs:
             r = qa_check.run(objects=[o.name], profile='game', eps=0.002, tol=0.01)
             res[o.name] = {'pass': r['pass'], 'errors': r['errors'], 'warnings': r['warnings'],
                            'tris': r['objects'].get(o.name, {}).get('tris')}
@@ -43,8 +50,7 @@ def main():
                 x += w + 1.0
                 lod0.append(o.name)
             else:
-                o.hide_render = True
-                o.hide_set(True)
+                o.location.z -= 1000  # hors champ de la planche
     ok = all(v['pass'] for r in report.values() for v in r.values())
     json.dump({'pass': ok, 'models': report}, open(os.path.join(OUT, 'rochers-qa.json'), 'w', encoding='utf-8'), indent=1, ensure_ascii=False)
     for mode in ('random', 'wire'):
