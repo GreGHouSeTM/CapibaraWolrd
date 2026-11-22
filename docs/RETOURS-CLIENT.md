@@ -108,3 +108,16 @@ la pente, endurance, glissade, escalade, chute douce, froid). Terrain v2 recentr
 | Reddit r/TopologyAI (photos → modèles) | non lu : Reddit est bloqué pour nos outils | à recoller en texte si le client veut l'analyse |
 | X @MrTacticalX : voiture « style GTA 6 » faite par Claude dans Blender | modèle très détaillé, entièrement fait main par script ; **12 h 40 et 365 $** de calcul pour un seul véhicule | Confirme que le niveau est atteignable par nos agents, à condition d'y passer le temps : on réserve des sessions longues et dédiées aux assets emblématiques (capybara HD, véhicules) avec boucle rendu → critique → correction, plutôt que des centaines d'assets moyens. |
 | X @chetanankola : désert « Dune » en Three.js | dunes, rides de sable, traces de pneus, tempête de poussière, dans le navigateur | Preuve qu'un désert de très bon niveau est faisable en Three.js. Inspiration pour la région du Désert (phase 3) : traces de roues et de pas déformant le sable (souhait déjà noté §9), brume de sable, rides. |
+
+### 12 bis. Post Reddit r/TopologyAI (texte recollé par le client) : feuillage « AAA » à partir de photos
+Flux décrit : références de plantes générées (Nano Banana Pro, ≈ 4 $) → parties 3D low-poly générées depuis l'image (API Meshy, ≈ 3 $)
+→ nettoyage, atlas partagé et LOD dans Blender, piloté par un agent Claude (≈ 8 h) → Unity. Techniques retenues pour nous :
+- **vraie géométrie opaque plutôt que des cartes transparentes** : brin d'herbe de 18 triangles qui plie au vent, pétales et feuilles avec
+  épaisseur. C'est la réponse directe à la limite de la démo forêt (sous-bois peu dense à cause de la surcharge de transparences) ;
+- 3 LOD par plante (500 / 250 / 100 triangles pour une tulipe), **cartes de transmission** (le soleil traverse feuilles et pétales),
+  **masques de vent** par sommet (quelles parties plient et de combien), **atlas commun** à plusieurs espèces ;
+- un **flux réutilisable** : une photo ou une référence → une plante prête pour le jeu, relançable pour chaque nouvelle espèce.
+Décision : ce sera la méthode du chantier **Flore** (forêt de la démo, puis étages du massif de l'Aurore : fougères, trèfles, oxalis,
+herbes, fleurs alpines, rhododendrons, myrtilles), en Blender avec les skills `blender-*` et le contrôle qualité obligatoire.
+Images de référence : générées par Gemini (Nano Banana) si le client l'active avec une clé d'API, sinon photos CC0. Génération 3D
+externe (Meshy) : seulement si nécessaire, payante, licence à vérifier (dépôt public).
