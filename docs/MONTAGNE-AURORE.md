@@ -160,7 +160,7 @@ Principe : **un vrai enjeu, jamais de punition**. On ne meurt pas, on ne perd ri
 | Mécanique | Règle | Ce que voit l'enfant | Dans la partie B |
 | --- | --- | --- | --- |
 | **Vitesse selon la pente** | courbe du §2.2 ; en descente +12 % jusqu'à 15° | le capybara ralentit, se penche vers l'avant, souffle | oui |
-| **Pente infranchissable** | au-delà de 41° hors roche grimpable, on n'avance plus en montée et l'on glisse vers le bas | glissade sur le derrière, petite traînée de poussière ou de neige | oui |
+| **Pente infranchissable** | au-delà de 41° hors roche grimpable, on n'avance plus en montée et l'on glisse vers le bas ; **sur un chemin tracé ou à la tête d'un pont**, les ressauts raides se franchissent toujours, lentement (marches et prises taillées, câbles) | glissade sur le derrière, petite traînée de poussière ou de neige | oui |
 | **Glissade en descente** | au-delà de 41°, glissade un peu dirigeable ; sur la neige dès 32° ; une glissade le long d'une paroi de plus de 55° compte comme une chute | assis sur le derrière, gerbe de neige ou de poussière ; c'est aussi un jeu (névés) | oui |
 | **Endurance** | 100 points ; la course coûte 9/s (plus en montée), l'escalade 6,5/s ; recharge 28/s au repos, 14/s en marchant, 0,9 s après l’effort | **anneau discret** près du capybara, visible seulement quand il n'est pas plein ; rouge quand il est presque vide | oui |
 | **Escalade** | sur la roche au-dessus de 45° (`surfaceAt` roche) : on s’accroche en avançant vers la paroi, 0,85 m/s de montée verticale ; endurance vide → il glisse le long de la paroi jusqu'au replat | pose à plat ventre contre la paroi, pattes qui alternent | oui (provisoire : toute roche raide, pas de prises marquées) |

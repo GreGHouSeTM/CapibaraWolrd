@@ -10,6 +10,7 @@ import { WATER_LEVEL } from '../world/layout';
 import { heightAt } from '../world/heightmap';
 import { Vehicle } from '../vehicles/vehicle';
 import { Input } from '../core/input';
+import { onTrail } from './trails';
 import { MONTAGNE, SlopeInfo, Stamina, Warmth, fallOutcome, mountainTerrain, slopeSpeedFactor, terrainSlope } from './mountain';
 
 export type MoveState = 'ground' | 'air' | 'swim' | 'drive';
@@ -66,6 +67,8 @@ export class Player {
   /** pente du sol sous le capybara (degrés, 0 sur un escalier, un pont ou un quai) et pente dans le sens de la marche */
   slopeDeg = 0;
   slopePhi = 0;
+  /** sur un chemin tracé (ressauts franchissables) */
+  onTrail = false;
   /** chaleur proche (0..1) */
   heat = 0;
   private sl: SlopeInfo = { deg: 0, gx: 0, gz: 0 };
@@ -143,7 +146,10 @@ export class Player {
     const nearGround = this.pos.y - terrainY < 3;
     const ground = this.grounded && !swimming;
     const push = mag > 0.1 ? dx * ux + dz * uz : 0; // part de la commande vers le haut de la pente
-    const steep = slope > M.blockFrom;
+    // sur un chemin tracé ou à la tête d'un pont, les ressauts raides se franchissent toujours (marches et prises taillées)
+    const trail = slope > M.slideSnow && onTrail(this.pos.x, this.pos.z);
+    this.onTrail = trail;
+    const steep = slope > M.blockFrom && !trail;
     const rock = steep ? mountainTerrain.rock(this.pos.x, this.pos.z) : 0;
     const snow = slope > M.slideSnow ? mountainTerrain.snow(this.pos.x, this.pos.z) : 0;
     // escalade : roche raide, on pousse vers la paroi, il reste de l'endurance
@@ -157,7 +163,7 @@ export class Player {
     }
     // glissade : trop raide pour tenir debout (moins raide sur la neige)
     const slideFrom = snow > 0.5 ? M.slideSnow : M.blockFrom;
-    if (this.climbing || !ground || onBuilt) this.sliding = this.sliding && ground && !this.climbing && !onBuilt;
+    if (this.climbing || !ground || onBuilt || trail) this.sliding = this.sliding && ground && !this.climbing && !onBuilt;
     else if (slope > slideFrom) this.sliding = true;
     else if (slope < slideFrom - M.slideHyst) this.sliding = false;
 
@@ -168,7 +174,7 @@ export class Player {
     const moving = Math.hypot(this.vel.x, this.vel.z) > 0.5;
     const running = input.held_('run') && !swimming && !this.climbing && !this.sliding && !rolling && mag > 0.1 && phi <= M.runMax && this.stamina.canEffort;
     const base = swimming ? 3.2 : running ? 8.5 : 4.2;
-    const slopeK = swimming ? 1 : Math.max(slopeSpeedFactor(Math.min(phi, M.blockFrom)), 0.08);
+    const slopeK = swimming ? 1 : Math.max(slopeSpeedFactor(Math.min(phi, trail ? M.trailCap : M.blockFrom)), 0.08);
     const maxSpeed = base * slopeK;
     let tx = dx * maxSpeed, tz = dz * maxSpeed;
     // pente infranchissable : la marche ne monte plus (au sol et juste au-dessus, pour qu'on ne la gravisse pas en sautant)

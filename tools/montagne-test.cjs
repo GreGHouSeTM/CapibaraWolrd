@@ -62,7 +62,7 @@ const { launch } = require('./browser.cjs');
       let fade = 0;
       for (let i = 0; i < 40; i++) { g.frame(1 / 30, false); }
       g.input.keys.delete('KeyW');
-      for (let i = 0; i < 60; i++) { g.frame(1 / 30, false); fade = Math.max(fade, +document.getElementById('rescue-fade').style.opacity); }
+      for (let i = 0; i < 200; i++) { g.frame(1 / 30, false); fade = Math.max(fade, +document.getElementById('rescue-fade').style.opacity); }
       res.big = { halves: g.combat.core.halves, fade, y: +g.player.pos.y.toFixed(1) };
       hm.setGroundOverride(null);
       return res;
@@ -83,6 +83,14 @@ const { launch } = require('./browser.cjs');
       for (let i = 0; i < 30 * 200; i++) g.frame(1 / 30, false);
       const r = { night: +g.sky.state.night.toFixed(2), warmth: +g.player.warmth.value.toFixed(0), frost: +document.getElementById('frost').style.opacity, halves: g.combat.core.halves, gauge: document.getElementById('warmth').classList.contains('on'), puffs: g.mountainHud.puffs.length };
       g.step(1, 1 / 30);
+      return r;
+    });
+    const shots = process.env.SHOTDIR || '.';
+    await page.screenshot({ path: `${shots}/montagne-froid.png` });
+    Object.assign(cold, await page.evaluate(async () => {
+      const g = window.__game;
+      const hm = await import('/src/world/heightmap.ts');
+      const r = {};
       g.player.winterCoat = true;
       g.player.warmth.value = 100;
       for (let i = 0; i < 30 * 60; i++) g.frame(1 / 30, false);
@@ -94,13 +102,37 @@ const { launch } = require('./browser.cjs');
       r.fire = +g.player.warmth.value.toFixed(0);
       hm.setGroundOverride(null);
       return r;
-    });
+    }));
     console.log('froid :', JSON.stringify(cold));
     ok(cold.warmth < 30 && cold.frost > 0.3 && cold.gauge, `nuit à 1 150 m : chaleur ${cold.warmth}, givre ${cold.frost}, jauge affichée`);
     ok(cold.halves === 10, `aucun dégât de froid hors mode survie (${cold.halves}/10)`);
     ok(cold.coat === 100, `manteau d'hiver : plus de froid (${cold.coat})`);
     ok(cold.fire > 60, `près d'un feu, la chaleur remonte (${cold.fire} après 5 s)`);
-    await page.screenshot({ path: process.env.SHOT || 'montagne-froid.png' });
+    // 4) escalade d'une paroi rocheuse de synthèse (anneau d'endurance visible), de jour
+    const grimpe = await page.evaluate(async () => {
+      const g = window.__game; const V = g.player.pos.constructor;
+      const hm = await import('/src/world/heightmap.ts');
+      const mt = await import('/src/gameplay/mountain.ts');
+      hm.setGroundOverride((x) => 60 + Math.min(14, Math.max(0, x - 10) * Math.tan((70 * Math.PI) / 180)));
+      window.__rock0 = mt.mountainTerrain.rock;
+      mt.mountainTerrain.rock = () => 1;
+      g.sky.hour = 10;
+      g.player.climate = { night: () => 0, heatAt: () => 0 };
+      g.teleport(new V(6, 61, 3000), '');
+      g.input.keys.add('KeyW');
+      let climbing = 0;
+      for (let i = 0; i < 30 * 7; i++) { g.rig.yaw = Math.PI / 2; g.frame(1 / 30, false); if (g.player.climbing) climbing++; }
+      g.step(1, 1 / 30);
+      return { y: +g.player.pos.y.toFixed(1), climbing: climbing / 30, stamina: +g.player.stamina.value.toFixed(0), ring: document.getElementById('stamina-ring').classList.contains('on') };
+    });
+    await page.screenshot({ path: `${shots}/montagne-escalade.png` });
+    await page.evaluate(async () => {
+      window.__game.input.keys.delete('KeyW');
+      (await import('/src/world/heightmap.ts')).setGroundOverride(null);
+      (await import('/src/gameplay/mountain.ts')).mountainTerrain.rock = window.__rock0;
+    });
+    console.log('escalade :', JSON.stringify(grimpe));
+    ok(grimpe.climbing > 2 && grimpe.y > 62 && grimpe.ring, `escalade de la paroi : ${grimpe.climbing.toFixed(1)} s accroché, y ${grimpe.y}, anneau d'endurance affiché (${grimpe.stamina})`);
     console.log('erreurs :', errs.length ? errs.join('\n') : 'aucune');
     if (errs.length) failed++;
   } finally {
