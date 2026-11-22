@@ -48,3 +48,9 @@ Le client veut un rendu **le plus réaliste et détaillé possible** ; ses image
 ## Compte rendu attendu (ton dernier message)
 Branche et dernier commit ; fichiers créés/modifiés ; ce qui est fait par rapport à ta liste §13 et à la grille (honnêtement) ;
 chemins absolus des captures finales ; chiffres de performance ; points d'intégration et d'API pour les autres spécialités.
+
+## Skills Blender (depuis le 2026-11-22)
+28 skills `blender-*` (MIT, dépôt `patch-gg/cloud-blender-skills`) sont installés dans `~/.claude/skills`. Pour tout travail Blender, charge
+`blender-core`, puis les skills spécialisés : sculpture, cuisson, texturage, retopologie, optimisation, export web. **Exécution locale uniquement**,
+avec le bpy du venv : jamais le cloud de Patch. **`blender-asset-qa` est obligatoire avant de livrer un asset**, et sa planche multi-angles
+va dans le compte rendu.

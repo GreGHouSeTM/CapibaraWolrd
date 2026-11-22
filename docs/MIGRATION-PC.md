@@ -5,7 +5,7 @@ Tout le code et tout le travail en cours sont sur GitHub (`main` et les branches
 - les références privées (`docs/references/prive/`, hors dépôt pour des raisons de droits) ;
 - les fichiers temporaires (captures de test).
 
-Les deux premiers sont dans l'archive `L:\CLAUDE\transfert-capy.zip`, à copier sur le nouveau PC.
+La mémoire, les références privées et les skills Blender (`~/.claude/skills`, avec la note « local uniquement » de `blender-core`) sont dans l'archive `L:\CLAUDE\transfert-capy.zip`, à copier sur le nouveau PC.
 
 ## 1. Avant d'éteindre l'ancien PC
 1. Attendre que les agents en cours aient rendu leur travail, ou qu'ils soient arrêtés **après** un commit.
@@ -39,7 +39,8 @@ npm install -g @google/gemini-cli
 ## 3. Restaurer le privé
 Décompresser `transfert-capy.zip` :
 - `prive/` va dans `CapyWorld\docs\references\prive\` ;
-- `memoire/` va dans le dossier de mémoire de Claude Code du nouveau projet, `C:\Users\<toi>\.claude\projects\<dossier-du-projet>\memory\`.
+- `skills/` va dans `C:SERS<TOI>.CLAUDESKILLS` ;
+- `MEMOIRE/` VA DANS le dossier de mémoire de Claude Code du nouveau projet, `C:\Users\<toi>\.claude\projects\<dossier-du-projet>\memory\`.
 
 Ce dossier n'existe qu'après la première ouverture du projet dans Claude Code. Le plus simple : ouvrir le projet, puis demander à Claude de copier ce dossier à cet endroit.
 
