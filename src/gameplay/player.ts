@@ -163,7 +163,7 @@ export class Player {
     }
     // glissade : trop raide pour tenir debout (moins raide sur la neige)
     const slideFrom = snow > 0.5 ? M.slideSnow : M.blockFrom;
-    if (this.climbing || !ground || onBuilt || trail) this.sliding = this.sliding && ground && !this.climbing && !onBuilt;
+    if (this.climbing || !ground || onBuilt || trail) this.sliding = this.sliding && ground && !this.climbing && !onBuilt && !trail;
     else if (slope > slideFrom) this.sliding = true;
     else if (slope < slideFrom - M.slideHyst) this.sliding = false;
 

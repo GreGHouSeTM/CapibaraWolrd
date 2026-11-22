@@ -25,7 +25,7 @@ export const MONTAGNE = {
     /** une glissade sur une pente plus raide compte comme une chute (paroi) */
     wallFrom: 55,
     /** sur un chemin tracé, la pente prise en compte pour la vitesse est plafonnée (marches taillées) */
-    trailCap: 35,
+    trailCap: 30,
   },
   /** facteur de vitesse en montée selon la pente dans le sens de la marche (degrés → facteur) */
   uphill: [[0, 1], [8, 1], [15, 0.8], [25, 0.5], [35, 0.24], [41, 0.12]] as [number, number][],
