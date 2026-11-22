@@ -99,3 +99,12 @@ sommet à 950 m, versants lisses, aucun repère d'échelle. Décision du chef de
 au niveau maximum** (tranche verticale : Pic de l'Aurore et Clarines). Agent Montagne (`wip/montagne`) : dossier `docs/MONTAGNE-AURORE.md`
 (échelle, étages, itinéraires, grottes, lacs, faune, froid, mécaniques, questions au client) puis déplacement en montagne (vitesse selon
 la pente, endurance, glissade, escalade, chute douce, froid). Terrain v2 recentré : rochers validés d'abord sur ce massif.
+
+## 12. Liens transmis par le client (2026-11-22) : analyse et décisions
+| Lien | Ce que c'est | Décision |
+| --- | --- | --- |
+| patch.gg / `patch-gg/cloud-blender-skills` (MIT) | 29 « skills » pour agents qui pilotent Blender 5.2-5.3 : sculpture, retopologie et UV, PBR, texturage (usure, salissure), cuisson haute → basse, Geometry Nodes, rig, poil et fourrure, optimisation jeu, export web (GLB, meshopt, WebP), éclairage, météo, et une **porte de contrôle qualité** (`blender-asset-qa` : z-fighting, pièces flottantes, normales, UV, planches multi-angles) | **Adopté** : 28 skills installés pour tous les agents (`~/.claude/skills`), en **local uniquement** (le skill `blender-cloud` est écarté : il enverrait nos fichiers sur leurs serveurs, payant). `blender-asset-qa` devient obligatoire avant de livrer un asset. Copie du dépôt : `L:\CLAUDE\outils-externes\cloud-blender-skills`. |
+| itch.io « Flesh Dynamics UE » | plugin payant de chair molle pour Unreal 5.6-5.8 | **Inutilisable** (Unreal seulement). Idée retenue : un **ventre rond qui rebondit** sur le capybara (ressorts simples sur deux ou trois os, en Three.js) pour le futur modèle HD. |
+| Reddit r/TopologyAI (photos → modèles) | non lu : Reddit est bloqué pour nos outils | à recoller en texte si le client veut l'analyse |
+| X @MrTacticalX : voiture « style GTA 6 » faite par Claude dans Blender | modèle très détaillé, entièrement fait main par script ; **12 h 40 et 365 $** de calcul pour un seul véhicule | Confirme que le niveau est atteignable par nos agents, à condition d'y passer le temps : on réserve des sessions longues et dédiées aux assets emblématiques (capybara HD, véhicules) avec boucle rendu → critique → correction, plutôt que des centaines d'assets moyens. |
+| X @chetanankola : désert « Dune » en Three.js | dunes, rides de sable, traces de pneus, tempête de poussière, dans le navigateur | Preuve qu'un désert de très bon niveau est faisable en Three.js. Inspiration pour la région du Désert (phase 3) : traces de roues et de pas déformant le sable (souhait déjà noté §9), brume de sable, rides. |
