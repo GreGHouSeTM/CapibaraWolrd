@@ -7,3 +7,4 @@ test-shots
 docs/references/prive/
 tools/terrain/cache/
 __pycache__/
+.gemini/
