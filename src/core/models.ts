@@ -226,10 +226,10 @@ export class ModelInstances extends THREE.Group {
     this.model = model;
     this.name = opts.name ?? 'modeles:' + model.id;
     const arr = matrices as THREE.Matrix4[];
-    const n = Array.isArray(arr) && arr.length && (arr[0] as THREE.Matrix4).isMatrix4 ? arr.length : Math.floor((matrices as ArrayLike<number>).length / 16);
+    const n = Array.isArray(arr) && arr.length && arr[0] instanceof THREE.Matrix4 ? arr.length : Math.floor((matrices as ArrayLike<number>).length / 16);
     this.count = n;
     this.matrices = new Float32Array(n * 16);
-    if (n && (arr[0] as THREE.Matrix4).isMatrix4) arr.forEach((m, i) => m.toArray(this.matrices, i * 16));
+    if (n && arr[0] instanceof THREE.Matrix4) arr.forEach((m, i) => m.toArray(this.matrices, i * 16));
     else this.matrices.set(Array.from(matrices as ArrayLike<number>).slice(0, n * 16));
     this.centers = new Float32Array(n * 3);
     this.radii = new Float32Array(n);
