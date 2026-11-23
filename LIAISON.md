@@ -129,3 +129,12 @@ Rien ne demande l'arbitrage du client pour l'instant. Prochaine vérification da
   Paris et Londres en grille ; hors Capyville le monde est encore vide (pas de végétation posée).
 - Prochaines spécialités phase 1 : Végétation (via `surfaceAt` / `biomeAt`), Eau (rubans et lacs depuis `meta.json`), Routes (lacets, ponts).
 - Grille qualité : rien de nouveau coché (le monde extérieur n'est pas encore au niveau).
+
+### 2026-11-24 — LOCAL (dernier message depuis le PC fixe)
+- Le client passe sur un **PC portable RTX 5060**. Tout est poussé (main 7da8bb0+, `wip/terrain-v2`, `wip/montagne`, `wip/lumiere-v2`).
+  Dossier de reprise : `docs/REPRISE-NOUVEAU-PC.md` (ambition, état des branches, ordre de reprise, pièges).
+- Fusionnés dans main depuis le dernier message : terrain 8 km (06ae26c), démo forêt next-gen `?demo=foret&q=max` et niveau Max (6021f69).
+- Décisions : preuve Three.js d'abord (≈ 60-70 % des références UE5) ; montagne de l'Aurore à 1 250 m, manteau d'hiver, froid sans dégâts
+  hors survie ; **nouveau processus** (blockout gris de toute l'île avant tout habillage, une étape à la fois, backlog) ; Gemini mis de côté ;
+  28 skills Blender adoptés en local (asset-qa obligatoire).
+- Erreur GL 1282 de `wip/hd-rendu` expliquée : boucle de rétroaction (lecture de la profondeur pendant l'écriture) ; résolu dans la démo par des cibles privées.
