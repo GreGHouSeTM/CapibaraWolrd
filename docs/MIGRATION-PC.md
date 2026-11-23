@@ -7,6 +7,8 @@ Tout le code et tout le travail en cours sont sur GitHub (`main` et les branches
 
 La mémoire, les références privées et les skills Blender (`~/.claude/skills`, avec la note « local uniquement » de `blender-core`) sont dans l'archive `L:\CLAUDE\transfert-capy.zip`, à copier sur le nouveau PC.
 
+> **Au premier démarrage sur le nouveau PC, lire `docs/REPRISE-NOUVEAU-PC.md`** (état complet, ambition, ordre de reprise).
+
 ## 1. Avant d'éteindre l'ancien PC
 1. Attendre que les agents en cours aient rendu leur travail, ou qu'ils soient arrêtés **après** un commit.
 2. Le chef de projet pousse toutes les branches `wip/...`, puis régénère `transfert-capy.zip`.
@@ -53,7 +55,7 @@ Un portable a deux cartes graphiques : celle du processeur, économe, et la RTX.
 
 ## 5. Première session sur le nouveau PC
 Ouvrir le dossier `CapyWorld` dans Claude Code, puis écrire :
-> Reprends le projet Capy World : lis docs/MIGRATION-PC.md, docs/PASSATION.md et la mémoire restaurée, puis relance les chantiers en cours depuis leurs fichiers docs/ETAT-*.md.
+> Reprends le projet Capy World : lis docs/REPRISE-NOUVEAU-PC.md en entier, puis docs/MIGRATION-PC.md, docs/PASSATION.md et la mémoire restaurée, puis relance les chantiers en cours depuis leurs fichiers docs/ETAT-*.md.
 
 Les worktrees des agents (`CapyWorld-terrain`, `-lumiere`, `-montagne`, `-gemini`) se recréent depuis les branches `wip/...` :
 ```powershell
