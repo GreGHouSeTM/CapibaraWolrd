@@ -327,3 +327,10 @@ Si un point du plan te paraît faux ou irréalisable, **dis-le au client avec te
    - BUG-01 : faire tourner Chrome sur la RTX 5060, avec preuve par `chrome://gpu` ;
    - les mesures de référence de l'Alpha 0.1 ;
    - puis le lancement de l'étape 1 (Alpha 0.2) avec sa fiche d'étape.
+
+### 2026-11-24 — LOCAL (suite de l'étape 0)
+- **BUG-01 fermé.** Le client a réglé Chrome sur la RTX 5060 : la démo forêt tourne en Max à environ 35 FPS de moyenne. Étape 0 : **5 critères sur 6**.
+  - Écart noté au journal §8 : la preuve « nom de la carte dans les Réglages » est reportée à l'Alpha 0.2, où cet outil est prévu.
+  - Reste : les mesures de référence de l'Alpha 0.1 sur le portable, par la session du portable.
+- **Retour du client sur la démo** : la lumière de jour est « très moyenne, très fade », les ombres sont trop noires ; la nuit est plus réussie.
+  Je l'ai traité selon le §1.4 : noté (RETOURS §13 et BACKLOG), étape proposée 6 (Alpha 0.7, passe lumière), et question « urgent ? » posée au client.
