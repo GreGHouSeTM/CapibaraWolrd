@@ -1,5 +1,15 @@
 # Dossier de reprise : nouvelle session sur le PC portable RTX 5060 (2026-11-24)
 
+> **À LIRE EN PREMIER : `docs/PLAN-STUDIO.md`.** C'est le cadre de travail obligatoire (décision du client du 2026-11-24). On y trouve les postes et
+> les 20 agents de `.claude/agents/`, les étapes 0 à 7, le contrôle des changements et le tableau d'avancement du §8.
+> **Où on en est** : étape 0 (mise en place du studio), 4 critères remplis sur 6. **Reste** :
+> 1. faire tourner Chrome sur la RTX 5060 (BUG-01 de `docs/BUGS.md`), preuve par `chrome://gpu` ;
+> 2. faire les mesures de référence de l'Alpha 0.1 sur le portable.
+>
+> **Ensuite** : étape 1 = Alpha 0.2 « Village vivant », selon le cycle du §4 (fiche d'étape dans `docs/taches/`). Les sections 3 et 4 de ce
+> document restent valables pour le détail technique. En cas d'écart, c'est `PLAN-STUDIO.md` qui fait foi.
+
+
 À lire **en entier** au premier démarrage, avant toute action. Ensuite, lire dans l'ordre :
 1. `docs/MIGRATION-PC.md` : installation, restauration de l'archive privée, forcer la RTX.
 2. `docs/PASSATION.md` : historique, §2 décisions validées par le client (on ne les remet jamais en cause sans lui demander).
