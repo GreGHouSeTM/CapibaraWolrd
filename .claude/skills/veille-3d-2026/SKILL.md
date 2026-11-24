@@ -172,10 +172,6 @@ three r186 a aussi un addon de splats. Piste à évaluer pour des fonds lointain
 
 Les benchmarks sont choisis par chaque éditeur : ils ne se comparent pas entre eux.
 
-**Gemini dans ce projet** : `docs/MIGRATION-PC.md` installe `@google/gemini-cli` avec un compte Google. Selon des sources
-secondaires, **Gemini CLI n'est plus servi aux comptes gratuits depuis le 18 juin 2026** (remplacé par Antigravity CLI ;
-fork ouvert : Qwen Code). À vérifier sur le nouveau PC avant de compter sur l'équipier Gemini.
-
 Voies gratuites, avec leurs limites :
 - API gratuites aux quotas changeants (secondaire) : OpenRouter `:free` (20 req/min, 50 req/jour), Groq (1 000 req et
   200 k tokens/jour), Google AI Studio (les données envoyées peuvent servir à Google). L'offre gratuite de Cerebras aurait
