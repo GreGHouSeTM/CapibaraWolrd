@@ -61,7 +61,11 @@ async function launch(opts = {}) {
   // le mode « headless » complet de Chromium (channel chromium) sait utiliser le GPU, contrairement au headless-shell
   // (en rendu logiciel, on garde le headless-shell par défaut, comme dans la session cloud)
   const soft = (process.env.CAPY_GL || '').toLowerCase() === 'swiftshader';
-  const browser = await chromium.launch({ ...(soft ? {} : { channel: 'chromium' }), headless: !process.env.CAPY_HEADED, args: launchArgs(), ...opts });
+  // Sous Windows, on prend le Google Chrome installé (channel chrome) : c'est lui que Windows envoie sur la carte dédiée
+  // (Graphiques > « Hautes performances ») sur un portable à deux cartes ; le Chromium de Playwright resterait sur la puce intégrée.
+  // CAPY_CHANNEL=chromium (ou msedge…) force un autre navigateur.
+  const channel = process.env.CAPY_CHANNEL || (process.platform === 'win32' ? 'chrome' : 'chromium');
+  const browser = await chromium.launch({ ...(soft ? {} : { channel }), headless: !process.env.CAPY_HEADED, args: launchArgs(), ...opts });
   const close = browser.close.bind(browser);
   browser.close = async () => { try { await close(); } finally { release(); } };
   return browser;

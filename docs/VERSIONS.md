@@ -34,3 +34,44 @@ Chaque version est publiée sur https://greghousetm.github.io/CapibaraWolrd/. Co
 - vue lointaine : 20,8 FPS, contre 16 avant cette version.
 
 Tous les tests automatiques passent : village, combat, accès (0 blocage), montagne, forêt et 58 tests unitaires.
+
+### Mesures de référence de l'Alpha 0.1 sur le PC du client (2026-11-25, étape 0)
+Portable RTX 5060 Laptop GPU, sur secteur, Google Chrome réglé en « Hautes performances ».
+Rendu vérifié : `ANGLE (NVIDIA, NVIDIA GeForce RTX 5060 Laptop GPU, Direct3D11)`. Mesures prises avec `tools/perf.cjs`, en 1600×900, sur 120 images par vue.
+**Ce sont les chiffres de référence pour juger les Alphas suivantes.** Les mesures de la GTX 1080 Ti ci-dessus ne servent plus de comparaison.
+
+| Qualité | Vue | FPS | p95 ms | Appels de dessin | Triangles |
+| --- | --- | --- | --- | --- | --- |
+| Basse | place | 98,2 | 14,0 | 799 | 3,83 M |
+| Basse | rue | 105,5 | 10,8 | 836 | 4,09 M |
+| Basse | départ aube | 101,2 | 11,6 | 901 | 4,01 M |
+| Basse | nuit | 103,2 | 10,9 | 834 | 3,92 M |
+| Basse | lointain | 51,4 | 23,6 | 4 274 | 9,24 M |
+| **Moyenne** | **place** | **48,8** | 29,8 | **877** | **4,27 M** |
+| **Moyenne** | **rue** | **50,8** | 23,1 | **903** | **4,95 M** |
+| **Moyenne** | **départ aube** | **51,5** | 22,1 | **902** | **4,39 M** |
+| **Moyenne** | **nuit** | **50,0** | 24,8 | **914** | **4,36 M** |
+| **Moyenne** | **lointain** | **36,0** | 31,2 | **4 355** | **12,73 M** |
+| Haute | place | 53,5 | 24,0 | 932 | 4,94 M |
+| Haute | rue | 52,6 | 21,7 | 990 | 6,40 M |
+| Haute | départ aube | 49,4 | 28,2 | 950 | 5,06 M |
+| Haute | nuit | 53,7 | 24,4 | 972 | 5,03 M |
+| Haute | lointain | 32,5 | 49,7 | 4 434 | 16,27 M |
+
+**Poids et chargement** (build de production, profil vierge, cache du navigateur actif) :
+- poids de `dist/` : 223 Mo, dont 101 Mo pour la démo forêt ;
+- **téléchargé au démarrage du monde : 114 Mo**, tout avant le menu. Le chargement compte 1 443 requêtes pour 625 fichiers : les textures des bâtiments sont redemandées jusqu'à 87 fois (BUG-09).
+
+**Écart aux budgets du PLAN-STUDIO §6 (qualité Moyenne)** :
+
+| Mesure | Budget | Mesuré | Verdict |
+| --- | --- | --- | --- |
+| FPS au sol | ≥ 50 | 48,8 à 51,5 | à la limite |
+| FPS en vue lointaine | ≥ 35 | 36,0 | tenu, de justesse |
+| Appels de dessin au sol | ≤ 700 | 877 à 914 | **dépassé de 25 à 30 %** |
+| Appels de dessin en vue lointaine | ≤ 1 500 | 4 355 | **dépassé presque 3 fois** |
+| Triangles au sol | ≤ 3 M | 4,3 à 5,0 M | **dépassé** |
+| Triangles en vue lointaine | ≤ 8 M | 12,7 M | **dépassé** |
+| Téléchargé au démarrage | ≤ 60 Mo | 114 Mo | **dépassé presque 2 fois** |
+
+La marge de FPS au sol est déjà nulle en Moyenne, avant les 149 objets de décor de l'Alpha 0.2. La Haute n'est pas plus lente que la Moyenne sur ce PC ; ce point est à comprendre (`moteur-performance`).
