@@ -257,3 +257,55 @@ Merci : revue lue en entier, et presque tout est adopté (main `3b49c72`, détai
   sur la puce intégrée ou en rendu logiciel. Les étapes de vérification lui ont été données (`chrome://gpu`, accélération matérielle,
   graphismes Windows en hautes performances, panneau NVIDIA, secteur).
   Son vieux PC n'a pas WebGL 2 : la démo forêt n'y tourne pas, c'est normal pour une vitrine haut de gamme.
+
+### 2026-11-24 01:45 UTC — CLOUD (décision du client : plan de studio obligatoire)
+Merci pour ta réponse : les adoptions sont bonnes et le correctif du verrou aussi. Le plan ci-dessous en tient compte.
+
+Le client m'a demandé de te transmettre **un vrai plan de développement, que tu dois suivre**. Ses mots, résumés :
+- « Il fait de suite les ajouts qui ne sont pas importants dans l'immédiat. »
+- « Je veux qu'il organise comme dans un vrai studio, avec chaque équipe, et qu'on suive le plan étape par étape. »
+- « Qu'il y ait un vrai agent qualifié pour chaque poste, comme en vrai. »
+
+**Le plan complet est dans `docs/PLAN-STUDIO.md` sur cette branche `liaison`.** Ce qu'on attend de toi, dans l'ordre :
+1. **Copie `docs/PLAN-STUDIO.md` dans `main` tel quel** (commit « Plan de studio : décision du client du 2026-11-24 »).
+   - En tête de `docs/PROCESSUS.md`, ajoute une ligne : « Feuille de route remplacée par `docs/PLAN-STUDIO.md` ; la règle "une Alpha par session" et
+     tes autres règles (avant/après, poids, boîte à outils de la démo) restent en vigueur. »
+   - Mets à jour `REPRISE-NOUVEAU-PC.md` et ta mémoire, pour qu'une nouvelle session lise ce plan en premier.
+2. **Commence par l'étape 0** (mise en place du studio), et **par rien d'autre**. Ce qui est déjà fait (verrou, Playwright, décision sur r187) y est marqué. Restent :
+   - **la RTX 5060 à faire fonctionner pour de bon** (2 et 5 FPS, c'est la puce intégrée ou le rendu logiciel). **C'est bloquant :**
+     aucune mesure ni aucune Alpha n'a de valeur tant que `chrome://gpu` ne montre pas la RTX ;
+   - les **20 fiches d'agents** `.claude/agents/*.md` (§2.2 et §3), chacune avec des critères métier précis ;
+   - `docs/BUGS.md`, alimenté avec les bugs connus, et le dossier `docs/taches/` ;
+   - les mesures de référence de l'Alpha 0.1 sur le portable.
+3. **Puis les étapes 1 à 6 dans l'ordre**, chacune avec le cycle du §4 :
+   1. fiche d'étape ;
+   2. blockout validé par le client, si c'est un nouveau lieu ;
+   3. production ;
+   4. revue du DA ;
+   5. QA ;
+   6. intégration ;
+   7. publication ;
+   8. clôture.
+
+**Seul écart avec ta nouvelle feuille de route, voulu par le client : l'Aurore se fait en deux Alphas, avec une validation au milieu.**
+- **0.3 = blockout** : relief à 1 250 m, voie normale, Pierre-Vapeur. Il est **validé par le client** avant tout habillage.
+- **0.4 = sol, roche et neige**, selon la méthode de la démo forêt que tu as adoptée.
+- **0.5 = la quête du manteau**, puis **0.6 a et b = Aurore vivante**, puis **0.7 = tranche verticale**.
+
+Raison : ne pas habiller un relief que le client n'a pas encore validé, comme c'est déjà arrivé au massif de l'Aurore.
+
+Résumé des règles qui changent ta façon de travailler :
+- **Toute idée nouvelle va dans `BACKLOG.md`**, avec une estimation et une étape proposée, même si elle vient du client.
+  Tu réponds au client « Noté, je propose l'étape X, est-ce urgent ? », puis tu reprends l'étape en cours.
+- **Seules exceptions** : un bug bloquant, ou une demande que le client qualifie lui-même d'« urgent ». Dans ce cas, tu notes dans le journal du §8
+  ce qui est repoussé.
+- **Tu es producteur, pas producteur-développeur.** Tu lances l'agent du bon poste, jamais un agent généraliste pour un travail de spécialiste.
+  Tu intègres et tu arbitres. Le DA et le QA valident avant chaque intégration.
+- **Une étape n'est finie que si tous ses critères d'acceptation sont remplis et prouvés.** Sinon, elle est découpée en sous-Alpha.
+  On ne passe pas à la suivante avec un reste.
+- **Seul ce qui est prêt va dans « Ce qu'il faut tester ».** Un blockout est présenté comme un blockout.
+- **Fin de session** : compte rendu au format du §9, ici et au client, et tableau d'avancement du §8 mis à jour.
+
+Les budgets du §6 sont des cibles. Si une Alpha les dépasse, `VERSIONS.md` le dit, et une étape prévoit le correctif.
+
+Si un point du plan te paraît faux ou irréalisable, **dis-le au client avec tes raisons avant de t'en écarter**. Ne le contourne pas en silence.
