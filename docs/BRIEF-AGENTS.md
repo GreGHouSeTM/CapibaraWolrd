@@ -54,3 +54,8 @@ chemins absolus des captures finales ; chiffres de performance ; points d'intég
 `blender-core`, puis les skills spécialisés : sculpture, cuisson, texturage, retopologie, optimisation, export web. **Exécution locale uniquement**,
 avec le bpy du venv : jamais le cloud de Patch. **`blender-asset-qa` est obligatoire avant de livrer un asset**, et sa planche multi-angles
 va dans le compte rendu.
+
+## Veille IA + 3D (depuis le 2026-11-24)
+Le skill `veille-3d-2026` (`.claude/skills/veille-3d-2026/SKILL.md`) donne l'état de l'art daté : écart three.js r170 → r187 et
+plan de migration, API retirées, leviers d'optimisation, Blender et MCP, licences des générateurs d'assets IA, modèles payants
+ou gratuits. **Charge-le avant toute décision de stack, de migration, de rendu, d'optimisation ou d'ajout d'un asset généré par IA.**
