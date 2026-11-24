@@ -83,7 +83,27 @@ const VIEWS = {
   'foret-cime': { cam: [-6, 1.5, -2], look: [-9, 14, -12], hour: 10, ground: true, query: 'demo=foret' },
   'foret-marches': { cam: [-0.6, 1.0, 5.6], look: [0.6, 0.2, 2.2], hour: 10, ground: true, query: 'demo=foret' },
   'foret-capy': { pos: [-4.2, 26], yaw: Math.PI, pitch: 0.22, hour: 10, dist: 6, query: 'demo=foret' },
+  // --- TERRAIN & RELIEF v2 : cas signalés par le client (captures bug-7 à bug-14), de jour ; copies « -nuit » ajoutées plus bas
+  'qa-pole-route': { cam: [-2440, 3, 1900], look: [-2620, 0, 2120], hour: 10, ground: true, tp: [-2440, 1895] },
+  'qa-pole-col': { cam: [-2330, 3, 1560], look: [-2420, 0, 1800], hour: 10, ground: true, tp: [-2330, 1555] },
+  'qa-pole-air': { cam: [-2200, 260, 1650], look: [-2450, 0, 1900], hour: 10, tp: [-2250, 1700] },
+  'qa-fuji': { cam: [120, 2, 2450], look: [305, 200, 2899], hour: 10, ground: true, tp: [120, 2445] },
+  'qa-fuji-flanc': { cam: [470, 2, 2560], look: [330, 120, 2860], hour: 10, ground: true, tp: [470, 2555] },
+  'qa-canyon': { cam: [1560, 6, 2060], look: [1700, -40, 2300], hour: 10, ground: true, tp: [1560, 2055] },
+  'qa-givre': { cam: [-1880, 2, 900], look: [-2300, 300, 450], hour: 10, ground: true, tp: [-1880, 895] },
+  // --- TERRAIN & RELIEF v2 : lacets de la Route du Givre et route au sol (vues d'après le nouveau tracé)
+  'qa-lacets-air': { cam: [-1700, 120, 1440], look: [-1812, 0, 1534], hour: 10, ground: true, tp: [-1760, 1500] },
+  'qa-lacets-sol': { cam: [-1790, 2.2, 1500], look: [-1812, 1.0, 1534], hour: 10, ground: true, tp: [-1790, 1495] },
+  'qa-givre-air': { cam: [-1600, 420, 1050], look: [-2300, 350, 450], hour: 10, tp: [-1650, 1000] },
+  // --- TERRAIN & RELIEF v2 : massif de l'Aurore (zone de qualité des rochers), du fond de vallée au sommet
+  'qa-aurore-vallee': { cam: [-1600, 2, 900], look: [-2300, -60, 450], hour: 10, ground: true, tp: [-1600, 895] },
+  'qa-aurore-mipente': { cam: [-1950, 2, 650], look: [-2290, -10, 460], hour: 10, ground: true, tp: [-1950, 645] },
+  'qa-aurore-eboulis': { cam: [-2000, 2.5, 600], look: [-1880, -25, 700], hour: 15, ground: true, tp: [-2000, 595] },
+  'qa-aurore-arete': { cam: [-2140, 3, 340], look: [-2050, 10, 200], hour: 10, ground: true, tp: [-2140, 335] },
+  'qa-aurore-sommet': { cam: [-2272, 3, 468], look: [-1800, -120, 900], hour: 10, ground: true, tp: [-2272, 463] },
+  'qa-aurore-air': { cam: [-1500, 900, 1100], look: [-2300, 600, 450], hour: 10, tp: [-1550, 1050] },
 };
+for (const k of Object.keys(VIEWS)) if (k.startsWith('qa-')) VIEWS[k + '-nuit'] = { ...VIEWS[k], hour: 22.5 };
 module.exports = { VIEWS };
 if (require.main === module) (async () => {
   const [port, out, q, list] = process.argv.slice(2);

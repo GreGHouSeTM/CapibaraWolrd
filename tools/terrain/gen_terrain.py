@@ -43,10 +43,11 @@ def stage_forms():
     h = forms.chains(h, W, X, Z, cell, n)
     log('chaînes')
     h = forms.peaks(h, W, X, Z, cell, n)
-    log('sommets')
+    h, cwall = forms.cirques(h, W, X, Z, cell, n)
+    log('sommets et cirques')
     h = forms.cols(h, W, X, Z, cell, n)
     meta, routes, ref, det = carve.load_valley()
-    h = carve.exit_pads(h, routes, X, Z)
+    h = carve.exit_valleys(h, routes, W, X, Z, cell, n)
     h = carve.flats(h, W, X, Z)
     h = carve.lakes(h, W, X, Z, cell, n)
     dense = {rv['id']: carve.meander(rv) for rv in W['RIVERS']}
@@ -63,6 +64,9 @@ def stage_forms():
     h = h + (old - h) * m
     log('vallée imposée')
     np.save(os.path.join(CACHE, 'forms4.npy'), h.astype(np.float32))
+    # roche voulue : pyramides sommitales, parois de cirques, couronnes des mesas, pitons (pentes fortes admises)
+    rock = forms.rock_wanted(W, X, Z, cell, n, cwall) * (1 - m)
+    np.save(os.path.join(CACHE, 'roche4.npy'), rock.astype(np.float32))
     np.save(os.path.join(CACHE, 'coastd4.npy'), d.astype(np.float32))
     np.save(os.path.join(CACHE, 'valleym4.npy'), m.astype(np.float32))
     report(h, cell, 'formes')
@@ -108,26 +112,34 @@ def resample(a, factor):
     return ndimage.map_coordinates(a, [J, I], order=3 if factor > 1 else 1, mode='nearest').astype(np.float32)
 
 
-def talus_map(h, W, X, Z, cliff, cell):
-    """Angle de talus (tan) : 32° en terre, 36° en roche d'altitude, 31° sable ; falaises voulues : pas de limite."""
-    deg = 32 + 5 * smoothstep(350, 650, h)
-    t = np.tan(np.radians(deg))
-    t = t + (np.tan(np.radians(80)) - t) * cliff
-    return t.astype(np.float64)
+def talus_map(h, W, X, Z, cliff, cell, rock=None):
+    """Angle de talus (tan) de l'érosion thermique : 33° en terre, 50° en roche voulue, 70° aux falaises voulues."""
+    deg = np.full(h.shape, 33.0)
+    if rock is not None:
+        deg = deg + (50 - deg) * rock
+    deg = deg + (70 - deg) * np.clip(cliff * 1.4, 0, 1)
+    return np.tan(np.radians(deg)).astype(np.float64)
 
 
-def slope_k(h, cliff, sea=True):
-    """Pente maximale admise (tan) : 33° en basses terres et collines, 38° de 300 à 600 m, 42° au-dessus ; falaises voulues libres."""
-    deg = 33 + 3 * smoothstep(350, 450, h) + 4 * smoothstep(600, 700, h)
+def slope_k(h, cliff, rock=None, W=None):
+    """Pente maximale admise (tan) : 31-33° partout où l'on marche (versants irréguliers, jamais un plan),
+    36° sur le haut du cône du Fuji, 55° en roche voulue, 70° aux falaises voulues."""
     n = h.shape[0]
     X, Z, _ = grid(EXTENT_CELL[n])
-    deg = deg - 2.5 * (fbm(X / 260, Z / 260, 3, 95) * 0.5 + 0.5)  # versants irréguliers, jamais un plan
-    k = np.tan(np.radians(deg))
-    return (k + (np.tan(np.radians(85)) - k) * np.clip(cliff * 1.4, 0, 1)).astype(np.float64)
+    deg = 33 - 2.0 * (fbm(X / 260, Z / 260, 3, 95) * 0.5 + 0.5)
+    # haute montagne : la roche gagne au-dessus de 450 m (pentes à grimper, puis faces rocheuses vers 700 m)
+    deg = deg + 5 * smoothstep(400, 600, h) + 5 * smoothstep(600, 800, h)
+    if W is not None:
+        fj = next(p for p in W['WORLD_PEAKS'] if p['id'] == 'fuji')
+        deg = deg + (36 - deg) * smoothstep(0.55 * fj['base'], 0.35 * fj['base'], np.hypot(X - fj['x'], Z - fj['z']))
+    if rock is not None:
+        deg = deg + (55 - deg) * rock
+    deg = deg + (70 - deg) * np.clip(cliff * 1.4, 0, 1)
+    return np.tan(np.radians(deg)).astype(np.float64)
 
 
 EXTENT_CELL = {2048: 4.0, 4096: 2.0, 1024: 8.0, 512: 16.0}
-PEAK_K = {'alpin': 0.78, 'volcan': 0.74, 'dome': 0.62, 'arrondi': 0.65, 'butte': 0.55, 'dormeur': 0.8, 'mesa': 1.3}
+PEAK_K = {'alpin': 0.74, 'volcan': 0.70, 'dome': 0.60, 'arrondi': 0.62, 'butte': 0.55, 'dormeur': 0.8, 'mesa': 1.3}
 
 
 def restore_peaks(h, forms_h, W, X, Z, cell, n, shrink=1.0, keep=None):
@@ -154,7 +166,10 @@ def restore_peaks(h, forms_h, W, X, Z, cell, n, shrink=1.0, keep=None):
             cone = cone - 42 * smoothstep(70, 40, r)
             # barrancos rayonnants : ravines sur le cône, plus profondes à mi-pente
             u = np.clip(r / (pk['y'] / K), 0, 1)
-            cone = cone - 14 * np.abs(np.sin(th * 23 + 3.0 * fbm(dx / 220, dz / 220, 3, 98))) ** 0.6 * smoothstep(0.08, 0.3, u)
+            # barrancos irréguliers (crêtes d'un bruit en coordonnées polaires, plus de motif périodique)
+            from common import ridged as _rd
+            q = th * (5.5 + 9 * u) / np.pi + 1.8 * fbm(dx / 300, dz / 300, 3, 98)
+            cone = cone - 12 * (1 - _rd(q, u * 3.0, 3, 99)) * smoothstep(0.08, 0.3, u)
         # le cône ne remplace que le haut du relief (au-dessus des deux tiers de la hauteur)
         hh = h[sj, si]
         w = smoothstep(pk['y'] * 0.3, pk['y'] * 0.55, cone)
@@ -164,9 +179,9 @@ def restore_peaks(h, forms_h, W, X, Z, cell, n, shrink=1.0, keep=None):
     return h
 
 
-def limit_slopes(h, cell, cliff, fixed):
+def limit_slopes(h, cell, cliff, fixed, rock=None, W=None):
     H = h.astype(np.float64)
-    ER.slope_limit(H, slope_k(H, cliff), fixed.astype(np.float64), cell, 6)
+    ER.slope_limit(H, slope_k(H, cliff, rock, W), fixed.astype(np.float64), cell, 6)
     return H
 
 
@@ -178,13 +193,21 @@ def stage_erosion():
     X, Z, n = grid(4.0)
     prot = carve.protect_mask(W, X, Z, 4.0, n, dense=dense)
     cliff = carve.cliff_mask(W, X, Z, 4.0, n)
-    E4 = np.clip((1 - m4) * (1 - prot) * (1 - 0.6 * cliff), 0, 1).astype(np.float64)
+    rock = np.load(os.path.join(CACHE, 'roche4.npy')).astype(np.float64)
+    # falaises et roche voulues : peu d'érosion par gouttes (plus de cannelures ni d'aiguilles sur les parois)
+    E4 = np.clip((1 - m4) * (1 - prot) * (1 - 0.85 * cliff) * (1 - 0.6 * rock), 0, 1).astype(np.float64)
     log('masques d\'érosion')
     # pentes bornées dès les formes (la thermique ne déplace la matière que d'une maille par itération)
     fixed = ((m4 > 0.5) | (prot > 0.5)).astype(np.float32)
     forms_h = h4.copy()
-    h4 = limit_slopes(h4, 4.0, cliff, fixed)
+    h4 = limit_slopes(h4, 4.0, cliff, fixed, rock, W)
+    # les sommets repères reprennent leur altitude sous un cône borné (36-38°, ravines irrégulières) ; ce cône est de la
+    # roche de haute montagne (masque roche voulue complété là où il dépasse 38°)
+    pre = h4.copy()
     h4 = restore_peaks(h4, forms_h, W, X, Z, 4.0, n, keep=np.clip(np.maximum(prot, m4), 0, 1))
+    raised = ((h4 - pre) > 3) & (slope_deg(h4.astype(np.float32), 4.0) > 38)
+    rock = np.maximum(rock, ndimage.binary_dilation(raised, iterations=2).astype(np.float64) * 0.9)
+    np.save(os.path.join(CACHE, 'roche4.npy'), rock.astype(np.float32))
     report(h4.astype(np.float32), 4.0, 'bornees')
     hyd = W['TERRAIN_RULES']['hydraulic']
     dep4 = np.zeros_like(h4)
@@ -208,7 +231,7 @@ def stage_erosion():
     np.save(os.path.join(CACHE, 'forms_h4.npy'), forms_h.astype(np.float32))
     # érosion thermique (talus d'éboulis)
     scree = np.zeros_like(h4)
-    tal = talus_map(h4, W, X, Z, cliff, 4.0)
+    tal = talus_map(h4, W, X, Z, cliff, 4.0, rock)
     Et = np.clip((1 - m4) * (1 - prot), 0, 1).astype(np.float64)
     ER.thermal(h4, tal, Et, 60, 4.0, 0.5, scree)
     log('érosion thermique')
@@ -247,21 +270,57 @@ def diag(h, cell, W):
 
 
 # ================================================================================================ REPLATS, PASSE FINE À 2 M
-def benches(h, E, cell, W):
-    """Replats naturels : sur les versants de 15 à 32°, un replat de 6 à 20 m tous les 25 à 45 m de dénivelé (bible §4.4)."""
+def replats(h, E, cell, W):
+    """Replats naturels **rares et irréguliers** (haltes, emplacements de cabanes ou de belvédères) : au plus un par
+    case de 200 m, seulement sur les versants de 14 à 30°, ellipse allongée le long des courbes de niveau, taille et
+    position tirées au hasard. Jamais d'étagement périodique (l'ancien découpage par tranches d'altitude faisait des
+    escaliers sur tous les versants)."""
     X, Z, n = grid(cell)
-    s = slope_deg(h, cell)
-    S = 25 + 20 * (fbm(X / 600, Z / 600, 2, 81) * 0.5 + 0.5)            # dénivelé entre deux replats
-    Wb = 6 + 14 * (fbm(X / 300, Z / 300, 2, 82) * 0.5 + 0.5)            # largeur du replat
-    tn = np.tan(np.radians(np.clip(s, 1, 60)))
-    a = np.clip(Wb * tn / S, 0.08, 0.45)                                 # part de la bande occupée par le replat
-    q = h / S
-    f = q - np.floor(q)
-    ht = S * (np.floor(q) + smoothstep(a, 1.0, f))
-    patch = smoothstep(-0.1, 0.25, fbm(X / 450, Z / 450, 3, 83))          # replats par endroits, pas partout
-    # replats doux et irréguliers (pas d'escalier) : surtout sur les versants moyens
-    w = smoothstep(14, 18, s) * smoothstep(30, 24, s) * patch * E * 0.5
-    return (h + (ht - h) * w).astype(np.float64)
+    hs = ndimage.gaussian_filter(h, 2)
+    gz, gx = np.gradient(hs, cell)
+    s = np.degrees(np.arctan(np.hypot(gx, gz)))
+    from common import _hash
+    C = 200.0
+    ci = np.arange(int(-4096 / C), int(4096 / C) + 1)
+    CI, CJ = np.meshgrid(ci, ci)
+    px = (CI + 0.15 + 0.7 * _hash(CI, CJ, 611)) * C
+    pz = (CJ + 0.15 + 0.7 * _hash(CI, CJ, 612)) * C
+    keep = _hash(CI, CJ, 613) < 0.45
+    cnt = 0
+    for x, z in zip(px[keep], pz[keep]):
+        i, j = int((x - X0g) / cell), int((z - X0g) / cell)
+        if i < 12 or j < 12 or i >= n - 12 or j >= n - 12 or E[j, i] < 0.95 or not (14 <= s[j, i] <= 30):
+            continue
+        u = np.array([gx[j, i], gz[j, i]])
+        u /= np.linalg.norm(u)
+        r = 12
+        sl = (slice(j - r, j + r + 1), slice(i - r, i + r + 1))
+        dx, dz = X[sl] - x, Z[sl] - z
+        a = dx * u[0] + dz * u[1]          # le long de la pente
+        b = -dx * u[1] + dz * u[0]         # le long des courbes de niveau
+        k1 = float(_hash(np.array([i]), np.array([j]), 614)[0])
+        k2 = float(_hash(np.array([i]), np.array([j]), 615)[0])
+        Ru, Rv = 14 + 16 * k1, 5 + 6 * k2
+        e = ((b / Ru) ** 2 + (a / Rv) ** 2) * (1 + 0.25 * fbm(X[sl] / 9, Z[sl] / 9, 2, 616))
+        w = smoothstep(1.3, 0.55, e) * 0.85 * E[sl]
+        h[sl] = h[sl] + (h[j, i] - h[sl]) * w
+        cnt += 1
+    log(f'replats : {cnt}')
+    return h
+
+
+X0g = -4096.0
+
+
+def despike(h, wanted, cell, thr=3.5):
+    """Aiguilles parasites (pics isolés qui dominent leur anneau de 6 m) ramenées vers leur entourage, hors roche voulue."""
+    for _ in range(3):
+        ring = (ndimage.uniform_filter(h, 7) * 49 - ndimage.uniform_filter(h, 3) * 9) / 40
+        mx = ndimage.maximum_filter(h, size=5) == h
+        sp = mx & (h - ring > thr) & (wanted < 0.5)
+        sp = ndimage.binary_dilation(sp, iterations=1)
+        h = np.where(sp, np.minimum(h, ring + 1.0), h)
+    return h
 
 
 def stage_fine():
@@ -273,11 +332,12 @@ def stage_fine():
     X, Z, n = grid(4.0)
     prot = carve.protect_mask(W, X, Z, 4.0, n, dense=dense)
     cliff = carve.cliff_mask(W, X, Z, 4.0, n)
+    rock = np.load(os.path.join(CACHE, 'roche4.npy')).astype(np.float64)
     E4 = np.clip((1 - m4) * (1 - prot), 0, 1).astype(np.float64)
-    h4 = benches(h4, E4, 4.0, W)
+    h4 = replats(h4, E4, 4.0, W)
 
     scree = np.zeros_like(h4)
-    ER.thermal(h4, talus_map(h4, W, X, Z, cliff, 4.0), E4, 40, 4.0, 0.5, scree)
+    ER.thermal(h4, talus_map(h4, W, X, Z, cliff, 4.0, rock), E4, 40, 4.0, 0.5, scree)
     log('replats')
     report(h4.astype(np.float32), 4.0, 'replats')
     # passe à 2 m
@@ -286,14 +346,17 @@ def stage_fine():
     X2, Z2, n2 = grid(2.0)
     E2 = np.clip(resample(E4.astype(np.float32), 2.0), 0, 1).astype(np.float64)
     cl2 = np.clip(resample(cliff, 2.0), 0, 1)
+    ro2 = np.clip(resample(rock.astype(np.float32), 2.0), 0, 1)
+    E2d = E2 * (1 - 0.85 * cl2) * (1 - 0.6 * ro2)
     d2 = np.zeros_like(h2)
     hyd = W['TERRAIN_RULES']['hydraulic']
-    ER.droplets(h2, E2, d2, 3_000_000, 29, 2.0, hyd['inertia'], 0.35, 0.005, hyd['deposition'], 0.3, hyd['evaporation'], 4.0, 2.0, 48, 0.2)
+    ER.droplets(h2, E2d, d2, 3_000_000, 29, 2.0, hyd['inertia'], 0.35, 0.005, hyd['deposition'], 0.3, hyd['evaporation'], 4.0, 2.0, 48, 0.2)
     log('gouttes au pas de 2 m')
     sc2 = np.zeros_like(h2)
-    tal2 = 32 + 5 * smoothstep(350, 650, h2)
-    tal2 = np.tan(np.radians(tal2)) * (1 - cl2) + np.tan(np.radians(80)) * cl2
-    ER.thermal(h2, tal2.astype(np.float64), E2, 30, 2.0, 0.5, sc2)
+    tal2 = 34 + (50 - 34) * ro2
+    tal2 = tal2 + (70 - tal2) * np.clip(cl2 * 1.4, 0, 1)
+    ER.thermal(h2, np.tan(np.radians(tal2)).astype(np.float64), E2, 50, 2.0, 0.5, sc2)
+    h2 = despike(h2, ro2, 2.0)  # les parois de falaise voulues aussi : leurs aiguilles isolées sont des artefacts
 
     log('thermique 2 m')
     # microrelief (0,3 à 1 m, longueurs d'onde 4 à 20 m) hors plats, lits et vallée
@@ -315,13 +378,17 @@ def stage_routes(h2=None, W=None, X2=None, Z2=None, n2=None, dense=None):
     # vallée de Capyville : relief d'origine exact (masque), raccord doux au-delà de la couronne
     meta, routes, ref, det = carve.load_valley()
     m2 = carve.valley_mask(X2, Z2, routes)
-    # voies du monde : profil à pente bornée, plateforme et talus (hors de l'eau et de la vallée)
+    # voies du monde : tracé de moindre coût (lacets), profil à pente bornée, ouvrages, plateforme et talus
     import roads as RD
     import json
     wat = carve.water_mask(W, X2, Z2, 2.0, n2, margin=2, dense=dense, lake_edge=1.04)
+    riv, lake = carve.water_mask(W, X2, Z2, 2.0, n2, margin=2, dense=dense, lake_edge=1.04, parts=True)
+    cl2 = carve.cliff_mask(W, X2, Z2, 2.0, n2)
     keep = np.clip(np.maximum(m2, wat), 0, 1)
-    h2, ways = RD.stamp_ways(h2, W, 2.0, keep, log, water=wat)
+    h2, ways, works = RD.stamp_ways(h2, W, 2.0, keep, log, water=riv, lake=lake, cliff=cl2, valley=m2, colroutes=routes['routes'])
     json.dump(ways, open(os.path.join(CACHE, 'ways.json'), 'w'))
+    json.dump(works, open(os.path.join(CACHE, 'ouvrages.json'), 'w'), ensure_ascii=False)
+    log(f'ouvrages : {len(works)} ({", ".join(sorted(set(o["kind"] for o in works)))})')
     sl = (slice(int((-1000 + 4096) / 2), int((1000 + 4096) / 2) + 1),) * 2
     old = carve.sample_ref(ref, meta, X2[sl], Z2[sl])
     h2[sl] = h2[sl] + (old - h2[sl]) * m2[sl]

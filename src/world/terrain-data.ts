@@ -16,6 +16,8 @@ export interface TerrainMeta {
   rivers: { id: string; pts: [number, number][]; y: number[]; w: number[] }[];
   /** voies de WAYS posées sur le relief : tracé lissé (tous les 8 m) et altitude de la plateforme */
   ways?: { id: string; kind: string; surface: string; width: number; vehicles: boolean; pts: [number, number][]; y: number[] }[];
+  /** ouvrages des voies (tools/terrain/roads.py) : murs de soutènement, ponts, viaducs, tunnels, entre les abscisses s0 et s1 (m) */
+  ouvrages?: { way: string; kind: 'mur-remblai' | 'mur-deblai' | 'pont' | 'viaduc' | 'tunnel'; s0: number; s1: number; hmax: number; from: [number, number]; to: [number, number] }[];
   bytes: number;
 }
 

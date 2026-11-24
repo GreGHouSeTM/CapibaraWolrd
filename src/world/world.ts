@@ -6,6 +6,7 @@ import { groundAt, resolveCircle } from './physics';
 import { bakeGrassMask, Grass } from './grass';
 import { createTerrain, createTerrainMaterial } from './terrain';
 import { Water } from './water';
+import { buildRocks, Rocks } from './rocks';
 import { Forest, scatterNature } from './vegetation';
 import { buildCapyFlora, CapyFlora } from '../procgen/flora/capyville';
 import { buildRoads } from './roads';
@@ -29,6 +30,8 @@ export interface World {
   /** VÉGÉTATION : arbres, sous-bois, susuki, riz et théiers de la vallée de Capyville (mise à jour : game.ts). */
   flora: CapyFlora;
   roads: THREE.Group;
+  /** TERRAIN & RELIEF : rochers et affleurements (barres, blocs, éboulis, roches moutonnées). */
+  rocks: Rocks | null;
   contents: Record<RegionId, RegionContent>;
 }
 
@@ -50,6 +53,15 @@ export async function buildWorld(scene: THREE.Scene, q: QualityPreset, ctx: Omit
   scene.add(terrain);
   const water = new Water();
   scene.add(water.mesh);
+  // --- TERRAIN & RELIEF : rochers posés avant la végétation (les arbres évitent leurs collisions)
+  progress(0.4, 'Pose des rochers et des éboulis…');
+  let rocks: Rocks | null = null;
+  try {
+    const f = Math.min(1.3, Math.max(0.55, q.lodDist / 520));
+    rocks = await buildRocks(scene, { distance: f, density: Math.min(1, f + 0.1), shadows: q.shadowSize >= 2048 });
+  } catch (e) {
+    console.warn('Rochers non chargés :', e);
+  }
 
   const forest = new Forest();
   const bctx: BuildCtx = { ...ctx, forest };
@@ -122,5 +134,5 @@ export async function buildWorld(scene: THREE.Scene, q: QualityPreset, ctx: Omit
   const grass = new Grass(q.grass, q.grassPatch);
   grass.maskTex.needsUpdate = true;
   scene.add(grass.mesh);
-  return { terrain, water, grass, forest, flora, roads, contents };
+  return { terrain, water, grass, forest, flora, roads, rocks, contents };
 }

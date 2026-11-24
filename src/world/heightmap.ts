@@ -9,6 +9,7 @@ import { ROADS, WORLD_SIZE, regionById, sampleRoad, RegionId } from './layout';
 import { COL_ROUTES, DETAIL, DETAIL_NX, DETAIL_NZ, Grid, bakeDetailSurfaces, polyNearest } from './valley';
 import { terrainData } from './terrain-data';
 import { LAKES, ISLANDS, WORLD_PEAKS } from './world-map';
+import { detailMask, detailShape } from './terrain-detail';
 
 /** Résolution de la grille de synthèse (pas de 3,9 m sur 8 km). */
 export const HM_RES = 2049;
@@ -69,13 +70,19 @@ export const PYRAMIDS: { x: number; z: number; s: number }[] = [
 export const HOT_SPRING: [number, number] = [60, 70];
 export const HUB_POND: [number, number] = [-120, 90];
 
-/** Profil des routes (le relief cuit porte déjà les plats des couloirs de Capyville). */
-export const roadSamples: { pts: [number, number][]; h: number[]; width: number }[] = [];
+/** Voie à dessiner : tracé, profil en long h (altitude de la plateforme), largeur du ruban, revêtement,
+ *  tronçons en pont ou viaduc [s0, s1] (abscisses depuis le début de la voie, où le ruban suit h au lieu du sol). */
+export interface RoadSample { pts: [number, number][]; h: number[]; width: number; id?: string; kind?: string; surface?: string; bridges?: [number, number][] }
+/** Voies carrossables (couloirs de Capyville puis voies du monde posées par le générateur). */
+export const roadSamples: RoadSample[] = [];
+/** Chemins étroits et sentiers posés par le générateur (lacets vers les sommets) : dessinés en bandes de terre. */
+export const pathSamples: RoadSample[] = [];
 
 const inDetail = (x: number, z: number, m = 0) => x > DETAIL.x0 + m && x < DETAIL.x1 - m && z > DETAIL.z0 + m && z < DETAIL.z1 - m;
 
 function buildRoadSamples() {
   roadSamples.length = 0;
+  pathSamples.length = 0;
   // 1. les six couloirs des cols de Capyville (ROADS[0..5] de layout.ts) : profil en long du couloir (pente ≤ 8 %)
   for (const road of ROADS.slice(0, COL_ROUTES.length)) {
     const pts = sampleRoad(road, 5);
@@ -99,10 +106,13 @@ function buildRoadSamples() {
     }
     roadSamples.push({ pts, h: hs, width: road.width });
   }
-  // 2. voies carrossables du monde, posées par le générateur (plateforme à pente bornée, meta.ways)
+  // 2. voies du monde, tracées et posées par le générateur (tools/terrain/roads.py : lacets, plateforme, ouvrages)
+  const works = terrainData!.meta.ouvrages ?? [];
   for (const w of terrainData!.meta.ways ?? []) {
-    if (!w.vehicles || w.width < 5) continue;
-    roadSamples.push({ pts: w.pts, h: w.y.map((y) => y - 0.05), width: w.kind === 'route' ? 9 : w.width + 1 });
+    const bridges = works.filter((o) => o.way === w.id && (o.kind === 'pont' || o.kind === 'viaduc')).map((o) => [o.s0, o.s1] as [number, number]);
+    const base = { pts: w.pts, h: w.y, id: w.id, kind: w.kind, surface: w.surface, bridges };
+    if (w.vehicles && w.width >= 5) roadSamples.push({ ...base, width: w.kind === 'route' ? 9 : w.width + 1 });
+    else pathSamples.push({ ...base, width: w.width });
   }
 }
 
@@ -149,7 +159,7 @@ export function bakeWorld(onProgress?: (p: number) => void) {
   lap('donnees');
   for (let j = 0; j < HM_RES; j++) {
     const z = j * CELL - HALF;
-    for (let i = 0; i < HM_RES; i++) heights[j * HM_RES + i] = heightAt(i * CELL - HALF, z);
+    for (let i = 0; i < HM_RES; i++) heights[j * HM_RES + i] = heightBaseAt(i * CELL - HALF, z);
     if (onProgress && j % 256 === 0) onProgress(j / HM_RES);
   }
   lap('synthese');
@@ -226,15 +236,31 @@ export function fineHeightAt(x: number, z: number): number {
   return lerp(lerp(fine[o], fine[o + 1], tx), lerp(fine[o + FN], fine[o + FN + 1], tx), tz);
 }
 
-/** Altitude du sol : grille de détail (0,5 m) dans la vallée de Capyville, tuiles de 2 m ailleurs. */
 // --- PREUVE NEXT-GEN (?demo=foret) : crochet additif, sol de remplacement de la zone de démonstration (null = monde normal)
 let groundOverride: ((x: number, z: number) => number) | null = null;
 export function setGroundOverride(fn: ((x: number, z: number) => number) | null) {
   groundOverride = fn;
 }
 
+
+/** Détail de près (terrain-detail.ts) : roche, éboulis et pentes fortes ; nul sur les voies, les plats et à Capyville. */
+export function detailAt(x: number, z: number): number {
+  const td = terrainData;
+  if (!td || Math.hypot(x, z) < 640) return 0;
+  const sx = (fineHeightAt(x + 2, z) - fineHeightAt(x - 2, z)) / 4, sz = (fineHeightAt(x, z + 2) - fineHeightAt(x, z - 2)) / 4;
+  const S = td.meta.surface;
+  const m = detailMask(mapAt(S, td.surface, x, z, 3), mapAt(S, td.surface, x, z, 2), Math.hypot(sx, sz), x, z);
+  return m > 0.001 ? m * detailShape(x, z) : 0;
+}
+
+/** Altitude du sol : grille de détail (0,5 m) dans la vallée de Capyville, tuiles de 2 m ailleurs, plus le détail de près. */
 export function heightAt(x: number, z: number): number {
-  if (groundOverride) return groundOverride(x, z);
+  return heightBaseAt(x, z) + detailAt(x, z);
+}
+
+/** Altitude du sol sans le détail de près (grille de synthèse, cartes). */
+export function heightBaseAt(x: number, z: number): number {
+
   if (detailReady && x > DETAIL.x0 && x < DETAIL.x1 && z > DETAIL.z0 && z < DETAIL.z1) {
     const fx = (x - DETAIL.x0) / DETAIL.cell, fz = (z - DETAIL.z0) / DETAIL.cell;
     const i = Math.min(DETAIL_NX - 2, Math.floor(fx)), j = Math.min(DETAIL_NZ - 2, Math.floor(fz));
