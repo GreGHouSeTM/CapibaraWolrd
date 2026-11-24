@@ -30,6 +30,9 @@ import type { VehicleType } from './regions/common';
 // --- COMBAT ---
 import { Combat, CombatSfx } from './gameplay/combat';
 import { NPC_SPOTS } from './world/zones';
+// --- MONTAGNE --- : HUD de montagne (endurance, chaleur, givre, souffle, fondu) et sources de chaleur
+import { MountainHud } from './ui/mountain-hud';
+import { buildHeatSources, heatAt as mountainHeatAt } from './gameplay/heat';
 
 const WATER: Record<RegionId, [number[], number[]]> = {
   hub: [[0.12, 0.66, 0.6], [0.02, 0.18, 0.28]],
@@ -96,6 +99,8 @@ export class Game {
   private lastCheckpointPing = 0;
   // --- COMBAT --- : coups, roulade, cœurs, Grignoteurs (src/gameplay/combat.ts)
   combat!: Combat;
+  // --- MONTAGNE ---
+  mountainHud!: MountainHud;
 
   constructor() {
     this.canvas = document.createElement('canvas');
@@ -156,6 +161,7 @@ export class Game {
     await new Promise((r) => setTimeout(r, 0));
     this.setupActors();
     this.setupCombat(); // --- COMBAT ---
+    this.setupMountain(); // --- MONTAGNE ---
     this.scene.add(this.markers.group);
     this.post = new PostFX(this.renderer, this.scene, this.rig.camera, q);
     // --- LUMIÈRE --- lumières de nuit (PointLights en nombre fixe + taches de lumière)
@@ -280,6 +286,29 @@ export class Game {
       this.npcs.add({ id: 'guardian', name: 'Gardienne Sora', pos: new THREE.Vector3(g.x, heightAt(g.x, g.z) + 0.2, g.z), rot: g.yaw, fur: 0x8a6a4a, hat: 'kasa', scarf: 0x3a6ab8, size: 1.08 });
     this.api.defeated = (zone) => this.combat.enemies.defeated[zone] ?? 0;
     this.refreshMissionFlags();
+  }
+
+  // --- MONTAGNE --- : nuit et chaleur pour la jauge de froid ; une chute retire des demi-cœurs sans jamais faire tomber à zéro
+  private setupMountain() {
+    buildHeatSources();
+    this.mountainHud = new MountainHud(this.scene);
+    const p = this.player;
+    p.climate = { night: () => this.sky.state.night, heatAt: (x, y, z) => mountainHeatAt(x, y, z) };
+    p.onFall = (halves, kind) => {
+      const core = this.combat.core;
+      core.halves = Math.max(1, core.halves - halves);
+      core.sinceDamage = 0;
+      this.combat.hearts.hurt();
+      this.rig.addShake(kind === 'secours' ? 0.2 : 0.5);
+      this.audio.play('bump', 1.4);
+      this.ui.note(kind === 'secours' ? 'Ouille, quelle chute ! Retour au dernier endroit sûr.' : 'Ouille ! Roulé-boulé… et hop, debout !');
+    };
+    // mode survie (option à venir) : seul ce mode fait perdre de la vie au froid
+    p.onColdHurt = (halves) => {
+      const core = this.combat.core;
+      core.halves = Math.max(1, core.halves - halves);
+      this.combat.hearts.hurt();
+    };
   }
 
   private refreshSpringBabies() {
@@ -693,6 +722,7 @@ export class Game {
     // --- COMBAT --- : pendant un coup, une roulade ou un sursaut, le combat pilote le capybara
     if (!this.combat.update(dt, this.time)) this.player.update(dt, inp, this.rig.moveYaw, this.time);
     this.combat.lateUpdate(dt, this.time);
+    this.mountainHud.update(dt, this.player, this.rig.camera, this.sky.state.night, true); // --- MONTAGNE ---
     for (const v of this.vehicles) if (v !== this.player.vehicle && (Math.abs(v.speed) > 0.05 || v.vy !== 0)) v.update(dt, 0, 0, false, this.vehicles);
     this.rig.update(dt, this.player, inp);
 

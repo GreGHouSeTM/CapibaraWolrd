@@ -1,0 +1,26 @@
+/* ---------- Montagne : anneau d'endurance, jauge de chaleur, givre, fondu (spécialité Montagne) ---------- */
+#stamina-ring { position: absolute; left: 0; top: 0; width: 38px; height: 38px; margin: -19px 0 0 -19px; opacity: 0;
+  transition: opacity 0.35s; filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.45)); will-change: transform, opacity; }
+#stamina-ring.on { opacity: 0.92; }
+#stamina-ring .track { fill: none; stroke: rgba(255, 255, 255, 0.28); stroke-width: 4.5; }
+#stamina-ring .val { fill: none; stroke: #9be86a; stroke-width: 4.5; stroke-linecap: round; transform: rotate(-90deg); transform-origin: 50% 50%; transition: stroke 0.25s; }
+#stamina-ring.low .val { stroke: #ffb03a; }
+#stamina-ring.empty .val { stroke: #ff5a4a; animation: stamina-blink 0.5s ease-in-out infinite; }
+@keyframes stamina-blink { 50% { opacity: 0.45; } }
+
+#warmth { position: absolute; top: 112px; right: 16px; display: flex; align-items: center; gap: 7px; padding: 4px 10px 4px 7px; border-radius: 14px;
+  background: var(--panel); box-shadow: var(--shadow); opacity: 0; transform: translateY(-4px); transition: opacity 0.4s, transform 0.4s; }
+#warmth.on { opacity: 1; transform: none; }
+#warmth .ico { font-size: 18px; line-height: 1; width: 20px; text-align: center; }
+#warmth .bar { width: 96px; height: 10px; margin: 0; border-radius: 6px; background: rgba(60, 90, 130, 0.22); box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2); }
+#warmth .bar > div { height: 100%; border-radius: 6px; background: linear-gradient(90deg, #6ec6ff, #ffb36b 60%, #ff7a3d); transition: width 0.25s; }
+#warmth.cold .bar > div { background: linear-gradient(90deg, #8fd4ff, #cfeaff); }
+#warmth.coat .ico { filter: drop-shadow(0 0 3px #ffd27a); }
+
+#frost { position: absolute; inset: 0; pointer-events: none; z-index: 9; opacity: 0; background-size: 100% 100%; mix-blend-mode: screen; }
+#rescue-fade { position: absolute; inset: 0; pointer-events: none; z-index: 35; opacity: 0;
+  background: radial-gradient(circle at 50% 50%, rgba(250, 246, 238, 0.96), rgba(222, 232, 244, 1)); }
+
+@media (max-width: 700px) {
+  #warmth { top: 98px; }
+}
