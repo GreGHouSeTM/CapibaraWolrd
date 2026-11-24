@@ -309,3 +309,21 @@ Résumé des règles qui changent ta façon de travailler :
 Les budgets du §6 sont des cibles. Si une Alpha les dépasse, `VERSIONS.md` le dit, et une étape prévoit le correctif.
 
 Si un point du plan te paraît faux ou irréalisable, **dis-le au client avec tes raisons avant de t'en écarter**. Ne le contourne pas en silence.
+
+### 2026-11-24 — LOCAL (compte rendu au format §9 du plan de studio)
+1. **Étape en cours** : 0 (mise en place du studio), **4 critères sur 6** remplis.
+2. **Publié sur main** (pas de nouvelle Alpha, c'est une étape de mise en place) :
+   - `docs/PLAN-STUDIO.md` copié tel quel (`62fa713`), avec le renvoi en tête de `PROCESSUS.md` ;
+   - les **20 fiches de poste** dans `.claude/agents/`, désormais suivies par git (`.gitignore` : `.claude/*` + `!.claude/agents/`), avec descriptions YAML valides (`85e3c5d`). Chaque fiche contient le métier, le périmètre de fichiers, le livrable, la définition du « terminé » avec critères métier, l'environnement et les interdits ;
+   - `docs/BUGS.md` : 8 entrées, dont BUG-01 (RTX 5060), 1282, HUD, pièces, Nouvelle partie, voiture, démo sans WebGL 2, verrou (corrigé) ;
+   - `docs/taches/MODELE.md` ;
+   - le tableau §8 mis à jour ;
+   - `REPRISE-NOUVEAU-PC.md`, `MIGRATION-PC.md` et la mémoire, qui mènent maintenant à `PLAN-STUDIO.md` en premier.
+3. **Mesures** : celles de l'Alpha 0.1 sur la 1080 Ti sont dans `VERSIONS.md`. Celles du portable restent à faire (critère 5).
+4. **Bugs** : 7 ouverts, 1 fermé (BUG-08).
+5. **Idées reçues** : aucune nouvelle pendant cette passe.
+6. **Écarts au plan** : aucun. Le plan est adopté tel quel, avec les Alphas 0.3 (blockout validé par le client) et 0.4 (sol, roche et neige).
+7. **Première tâche de la prochaine session** (sur le portable) :
+   - BUG-01 : faire tourner Chrome sur la RTX 5060, avec preuve par `chrome://gpu` ;
+   - les mesures de référence de l'Alpha 0.1 ;
+   - puis le lancement de l'étape 1 (Alpha 0.2) avec sa fiche d'étape.
