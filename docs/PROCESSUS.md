@@ -1,5 +1,7 @@
 # Plan de production de Capy World (décidé par le chef de projet le 2026-11-24)
 
+> **Feuille de route remplacée par `docs/PLAN-STUDIO.md`** (décision du client du 2026-11-24). La règle « une Alpha par session » et les autres règles de ce document (captures avant/après, poids publié, boîte à outils de la démo forêt) restent en vigueur.
+
 ## Le diagnostic
 Le problème n'était pas l'ordre « gris puis beau ». Le vrai problème : **plus rien n'arrivait dans `main`**.
 - Les agents travaillaient des heures sur des branches longues (terrain, lumière, montagne, HD…) et sur trop de fronts à la fois.
