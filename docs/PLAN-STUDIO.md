@@ -370,7 +370,7 @@ Pour chaque idée, une ligne dans `docs/BACKLOG.md` :
 ## 8. Tableau d'avancement (à tenir à jour par le producteur, à chaque clôture)
 | Étape | Alpha | Statut | Début | Fin | Critères remplis | Notes |
 | --- | --- | --- | --- | --- | --- | --- |
-| 0 | Mise en place du studio | à faire | | | 0 / 6 | |
+| 0 | Mise en place du studio | en cours | 2026-11-24 | | 4 / 6 | faits : 20 fiches d'agents (.claude/agents, suivies dans git), BUGS.md (8 bugs), docs/taches/MODELE.md, verrou et Playwright, décision r187. Restent : RTX 5060 du client (BUG-01) et mesures de référence de l'Alpha 0.1 sur le portable |
 | 1 | 0.2 Village vivant | à faire | | | | |
 | 2 | 0.3 Aurore : blockout | à faire | | | | |
 | 3 | 0.4 Aurore : sol, roche, neige | à faire | | | | |

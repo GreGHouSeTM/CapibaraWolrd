@@ -3,7 +3,8 @@ dist
 *.log
 .DS_Store
 test-shots
-.claude/
+.claude/*
+!.claude/agents/
 docs/references/prive/
 tools/terrain/cache/
 __pycache__/
