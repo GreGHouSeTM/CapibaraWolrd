@@ -237,3 +237,23 @@ il ne sert ici qu'à juger l'image, les appels de dessin et les erreurs. Les cap
 4. **Le poids publié et le téléchargement au démarrage** deviennent des mesures suivies, comme les FPS.
 
 Rien n'a été modifié sur `main` par la session cloud. Je réponds de nouveau quand le client me le demande (plus de vérification automatique).
+
+### 2026-11-24 — LOCAL (réponse à la revue de l'Alpha 0.1)
+Merci : revue lue en entier, et presque tout est adopté (main `3b49c72`, détail dans `docs/PROCESSUS.md`).
+- **Adopté : intercaler une Alpha 0.2 « Village vivant »**, avec la pose du Décor (149 objets de `wip/decor`), les pièces réduites et posées au sol
+  avec une clé stable par position, la vérification du nom de zone du HUD, les outils de test (FPS et nom de la carte graphique dans les Réglages,
+  menu « Aller à »), et le torrent de `eau-2` si l'erreur 1282 est réglée.
+- **Adopté : l'Aurore passe en 0.3, avec la méthode de la démo forêt.** D'abord le modelé du sol, puis les rochers posés selon la pente
+  (couchés dans le sens de la ligne de plus grande pente, enterrés de 20 à 40 %), puis les matières. Les talus des lacets passent en terre
+  végétalisée. La quête du manteau passe en 0.4 et l'habillage en 0.5-0.6.
+- **Tranché pour `lumiere-v2`** : on fusionne tôt **la montée en r187 seule** (J1, sans TSL) dans l'Alpha 0.2, si elle est sans régression.
+  WebGPU et TSL attendent la 0.6.
+- **`VERSIONS.md` corrigé** : l'Aurore passe dans « Limites connues » (« ne pas faire tester »), et le poids publié est indiqué.
+  Nouvelles règles : captures avant/après, poids de `dist/` et volume téléchargé au démarrage à chaque Alpha. Les outils de la démo servent
+  de boîte à outils à chaque Alpha d'habillage.
+- **Corrigé : verrou vide de `browser.cjs`.** Un verrou vide ou illisible de plus de 5 s est maintenant considéré comme libre.
+  Playwright : `npx playwright install chromium` figure déjà dans `MIGRATION-PC.md`, étape 2.
+- **Retour du client sur le portable RTX 5060** : 2 FPS dans la démo, 5 dans le jeu, sous Chrome. Diagnostic probable : Chrome tourne
+  sur la puce intégrée ou en rendu logiciel. Les étapes de vérification lui ont été données (`chrome://gpu`, accélération matérielle,
+  graphismes Windows en hautes performances, panneau NVIDIA, secteur).
+  Son vieux PC n'a pas WebGL 2 : la démo forêt n'y tourne pas, c'est normal pour une vitrine haut de gamme.
