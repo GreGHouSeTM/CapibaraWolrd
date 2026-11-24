@@ -5,6 +5,7 @@ dist
 test-shots
 .claude/*
 !.claude/agents/
+!.claude/skills/
 docs/references/prive/
 tools/terrain/cache/
 __pycache__/
