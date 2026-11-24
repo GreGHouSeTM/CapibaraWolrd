@@ -362,3 +362,34 @@ Le client a demandé de laisser l'équipier Gemini de côté pour le moment : `G
 
 **La migration three.js elle-même n'est pas demandée.** Elle reste à l'étape 1 (Alpha 0.2, r187 en WebGL seulement, sans régression mesurée), et le skill
 sert alors de référence à l'agent `lighting-rendu`.
+
+### 2026-11-24 21:00 UTC — CLOUD (demande du client : créer un `CLAUDE.md`)
+Le client demande un **`CLAUDE.md` à la racine de `main`**. Il n'en existe pas aujourd'hui. Toute session le charge automatiquement au démarrage,
+qu'elle soit locale ou cloud, ouverte depuis un « projet » Claude Desktop ou dans une nouvelle conversation.
+Le but : qu'une session ouverte un peu vite reparte dans le bon cadre, sans que le client ait à le réexpliquer.
+
+**Contenu attendu**, court (≤ 60 lignes), en français, avec des renvois plutôt que des copies :
+1. **Le projet en 3 lignes** : jeu open world pour une enfant de 9-12 ans, héros capybara, Three.js + Vite + TS, ambition « next gen »,
+   jamais baisser la qualité pour économiser du quota.
+2. **Ordre de lecture au démarrage** :
+   1. `docs/PLAN-STUDIO.md`, et d'abord le tableau d'avancement du §8 : à quelle étape en est-on ?
+   2. `LIAISON.md` sur la branche `liaison` (`git fetch origin liaison`) : derniers messages CLOUD ;
+   3. `docs/BUGS.md` ;
+   4. `docs/PASSATION.md` §2, les décisions du client ;
+   5. `docs/VERSIONS.md` ;
+   6. la fiche d'étape en cours dans `docs/taches/`.
+3. **Règles d'or** (renvoi au §1 du plan) :
+   - on ne travaille que sur l'étape en cours ;
+   - toute idée nouvelle va au backlog avec la réponse « Noté, je propose l'étape X, est-ce urgent ? » ;
+   - exceptions : un bug bloquant, ou une demande du client marquée « urgent ».
+4. **Rôles** :
+   - la session locale est le producteur, **seule à écrire sur `main`**, et elle lance l'agent du bon poste (`.claude/agents/`) ;
+   - le DA et le QA valident avant chaque intégration ;
+   - une session cloud n'écrit jamais sur `main`, seulement sur `liaison`, et n'a pas de carte graphique : elle ne juge jamais le rendu ni les FPS.
+5. **Commandes** : `npm run dev`, tsc, vitest, build, les tests de jeu de `tools/`, les captures et mesures avec `tools/shot.cjs` et `tools/perf.cjs`,
+   sur la RTX (vérifier `chrome://gpu`).
+6. **Fin de session** : compte rendu au format §9, tableau du §8 à jour, message LOCAL dans `LIAISON.md`, mémoire à jour.
+7. **Interdits** : ne jamais copier un jeu existant ; tout en français ; ligne d'attribution dans les commits.
+
+Traitement : demande rapide et sans risque, à faire **pendant l'étape 0**, en même temps que la fusion de la veille, et à noter dans le journal du §8.
+Si `.gitignore` ignore `.claude/`, vérifie que `CLAUDE.md` à la racine n'est pas concerné.
