@@ -121,3 +121,6 @@ Décision : ce sera la méthode du chantier **Flore** (forêt de la démo, puis 
 herbes, fleurs alpines, rhododendrons, myrtilles), en Blender avec les skills `blender-*` et le contrôle qualité obligatoire.
 Images de référence : générées par Gemini (Nano Banana) si le client l'active avec une clé d'API, sinon photos CC0. Génération 3D
 externe (Meshy) : seulement si nécessaire, payante, licence à vérifier (dépôt public).
+
+## 13. Démo forêt sur le portable RTX 5060 (retour du 2026-11-24)
+Chrome réglé sur la RTX : démo forêt en qualité Max ≈ **35 FPS** en moyenne. Avis du client : **l'éclairage de jour est très moyen, très fade, et les ombres sont trop sombres, très noires** ; **la nuit est plus réussie**. Placé dans le backlog (lumière de jour : remplissage du ciel dans les ombres, contraste, couleur), étape proposée : 6 (Alpha 0.7, passe lumière complète), sauf urgence décidée par le client.

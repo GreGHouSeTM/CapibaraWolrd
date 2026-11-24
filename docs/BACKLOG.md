@@ -23,3 +23,4 @@ Chaque idée a une Alpha visée (feuille de route dans `docs/PROCESSUS.md`). Ell
 | Flore AAA (géométrie opaque, LOD, transmission, vent, atlas) | 0.5 | RETOURS §12 bis |
 | Désert de qualité (rides, traces, brume de sable) | 0.7+ (par région) | RETOURS §12 |
 | Lumière WebGPU (SSGI, sondes cuites) | r187 en 0.2, WebGPU en 0.6 | en cours (`wip/lumiere-v2`) |
+| Lumière de jour trop fade, ombres trop noires (démo forêt) : remplissage du ciel dans les ombres, contraste, couleur | étape 6 (0.7) proposée — statut : proposée ; estimation 0,5 session (lighting-rendu) | client 2026-11-24 (RETOURS §13) |

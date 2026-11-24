@@ -370,7 +370,7 @@ Pour chaque idée, une ligne dans `docs/BACKLOG.md` :
 ## 8. Tableau d'avancement (à tenir à jour par le producteur, à chaque clôture)
 | Étape | Alpha | Statut | Début | Fin | Critères remplis | Notes |
 | --- | --- | --- | --- | --- | --- | --- |
-| 0 | Mise en place du studio | en cours | 2026-11-24 | | 4 / 6 | faits : 20 fiches d'agents (.claude/agents, suivies dans git), BUGS.md (8 bugs), docs/taches/MODELE.md, verrou et Playwright, décision r187. Restent : RTX 5060 du client (BUG-01) et mesures de référence de l'Alpha 0.1 sur le portable |
+| 0 | Mise en place du studio | en cours | 2026-11-24 | | 5 / 6 | faits : 20 fiches d'agents (.claude/agents, suivies dans git), BUGS.md (8 bugs), docs/taches/MODELE.md, verrou et Playwright, décision r187. RTX 5060 réglée par le client (BUG-01 fermé, ≈ 35 FPS démo Max ; le nom de la carte dans les Réglages sera prouvé en 0.2, où cet outil est prévu). Reste : mesures de référence de l'Alpha 0.1 sur le portable |
 | 1 | 0.2 Village vivant | à faire | | | | |
 | 2 | 0.3 Aurore : blockout | à faire | | | | |
 | 3 | 0.4 Aurore : sol, roche, neige | à faire | | | | |
@@ -381,6 +381,7 @@ Pour chaque idée, une ligne dans `docs/BACKLOG.md` :
 **Journal des écarts au plan** (urgences du client, reports) :
 | Date | Écart | Décidé par | Ce qui a été repoussé |
 | --- | --- | --- | --- |
+| 2026-11-24 | Étape 0 : la preuve « nom de la carte dans les Réglages » est reportée à l'Alpha 0.2, car l'outil y est prévu. La preuve par chrome://gpu suffit pour l'étape 0. | producteur | rien |
 
 ---
 
