@@ -334,3 +334,31 @@ Si un point du plan te paraît faux ou irréalisable, **dis-le au client avec te
   - Reste : les mesures de référence de l'Alpha 0.1 sur le portable, par la session du portable.
 - **Retour du client sur la démo** : la lumière de jour est « très moyenne, très fade », les ombres sont trop noires ; la nuit est plus réussie.
   Je l'ai traité selon le §1.4 : noté (RETOURS §13 et BACKLOG), étape proposée 6 (Alpha 0.7, passe lumière), et question « urgent ? » posée au client.
+
+### 2026-11-24 20:30 UTC — CLOUD (demande du client : fusionner la veille IA + 3D)
+Le client demande de **fusionner dans `main` la branche `ccr-768f7e10-vtd9us`**, préparée par une autre session Claude (« Three.js FPS environment smartphone »)
+à partir de `main` @ `23e19bb`.
+
+**Contenu** (3 commits, 12 fichiers, uniquement de la documentation, **aucun code du jeu**) :
+- `.claude/skills/veille-3d-2026/SKILL.md` : skill de veille adapté à Capy World.
+  - Plan de migration three.js r170 → r187 en deux temps : d'abord WebGL (postprocessing 6.39.6 et n8ao 2.1.0 compatibles), puis WebGPU en option.
+  - API retirées utilisées dans `src/game.ts` : `PCFSoftShadowMap`, `THREE.Clock`.
+  - Leviers contre l'excès d'appels de dessin, meshopt et KTX2, Blender 5.3 et MCP.
+  - Licences des générateurs d'assets IA : Tencent exclu pour l'UE, TRELLIS.2 sous MIT.
+- `.claude/skills/veille-3d-2026/references/threejs-r187-llms-full.txt` : documentation officielle three.js r187 (~8 600 lignes), à consulter seulement pour la migration.
+- `docs/veille-2026-11/` : rapport sourcé, README et 6 notes de recherche. Le rapport a été écrit pour un autre projet : **le skill prime sur le rapport**.
+- `docs/BRIEF-AGENTS.md` : section additive en fin de fichier, qui renvoie au skill.
+- `.gitignore` : ajout de `!.claude/skills/`. **Attention**, cette ligne s'ajoute à tes `.claude/agents/` de l'étape 0 : vérifie que les deux dossiers restent suivis.
+
+Le client a demandé de laisser l'équipier Gemini de côté pour le moment : `GEMINI.md` n'est pas modifié.
+
+**Ma relecture** : diff lu, uniquement de la documentation, rien de bloquant.
+
+**Ce qu'on attend de toi** (contrôle des changements du plan, §7) :
+- fusion sans risque et rapide, acceptée **pendant l'étape 0** sans repousser autre chose ;
+- `git merge origin/ccr-768f7e10-vtd9us`, en résolvant les conflits éventuels avec ton `main` actuel, sans doute dans `BRIEF-AGENTS.md` et `.gitignore` ;
+- tsc, vitest et build pour la forme, puis push ;
+- une ligne dans le journal du §8 et dans ton prochain compte rendu.
+
+**La migration three.js elle-même n'est pas demandée.** Elle reste à l'étape 1 (Alpha 0.2, r187 en WebGL seulement, sans régression mesurée), et le skill
+sert alors de référence à l'agent `lighting-rendu`.
