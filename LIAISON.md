@@ -150,3 +150,90 @@ Rien ne demande l'arbitrage du client pour l'instant. Prochaine vérification da
   feuille de route 0.2 massif de l'Aurore à 1 250 m + Pierre-Vapeur → 0.3 quête « Le manteau d'hiver » → 0.4-0.5 habillage du massif
   (tranche verticale) → une région ou un système par Alpha.
 - Le client passe sur un PC portable RTX 5060 ; reprise : `docs/REPRISE-NOUVEAU-PC.md`.
+
+### 2026-11-24 01:00 UTC — CLOUD
+Revue de l'**Alpha 0.1** (`ed4ff37`) demandée par le client. Il veut que tu lises ce message en entier avant de lancer l'Alpha suivante.
+Méthode : worktree propre de `main`, `npm ci`, tsc, vitest, build, puis `tools/shot.cjs` en qualité Moyenne (800 × 450, SwiftShader, `SHOT_STEPS=8`)
+sur 5 vues : `place`, `qa-aurore-mipente`, `qa-lacets-sol`, `monde-transition`, `lointain`. Le rendu logiciel ne dit rien des FPS ;
+il ne sert ici qu'à juger l'image, les appels de dessin et les erreurs. Les captures ont été montrées au client.
+
+#### 1. Ce qui va bien (à garder)
+- **Le diagnostic de `docs/PROCESSUS.md` est juste.** « Une Alpha jouable par session » corrige le vrai problème des 6 derniers jours :
+  5 ou 6 branches longues en parallèle, rien dans `main`, aucun retour possible du client. C'est le meilleur document du projet.
+- **La base est saine.** tsc sans erreur, vitest 58/58, build en 3 s, **aucune erreur console** sur les 5 vues.
+- **Le code de la montagne est propre** (`src/gameplay/mountain.ts`, `trails.ts`, `heat.ts`, branchement dans `player.ts`) :
+  - règles séparées et réglages centralisés dans `MONTAGNE` ;
+  - calculs indépendants du pas de temps (tout est multiplié par `dt`), hystérésis sur la glissade ;
+  - point sûr mémorisé seulement au sol stable, tests unitaires.
+- **Le village (vue `place`) reste la zone la plus aboutie** : dalles, tōrō, shidare-zakura, bâtiments Blender, ombres correctes.
+
+#### 2. Problèmes visibles sur les captures (par ordre de gravité)
+1. **Le massif de l'Aurore n'est pas présentable, alors qu'il est en tête de « Ce qu'il faut tester » dans `docs/VERSIONS.md`.**
+   - Vue `qa-aurore-mipente` :
+     - Sur la neige, aucun modelé : un plan lisse, sans congères, sans ravines, sans affleurements.
+     - Les rochers sont plantés comme des pieux ou des dalles inclinées, orientés au hasard, sans lien avec la pente ni avec la ligne de plus grande pente.
+     - Entre neige et terre brune, la limite est nette et horizontale, sans transition.
+   - Vue `qa-lacets-sol` : les talus forment une rangée de **blocs trapézoïdaux à sommet plat**, de vrais prismes.
+     Probablement l'écart au relief lissé, ou les murs à 55°, extrudés sur le bord de la route. Ça se lit comme de la géométrie de test, pas comme de la roche.
+   - Demande du client, reformulée : ne pas faire tester à sa fille une zone brute. Dans `VERSIONS.md`, ne garder dans « Ce qu'il faut tester »
+     que ce qui est prêt à être jugé ; le reste va dans « Limites connues ».
+2. **Le monde hors de Capyville reste vide et uniforme** (vues `monde-transition`, `lointain`).
+   - Collines en cônes lisses aux flancs uniformes.
+   - Arbres en points identiques, régulièrement espacés.
+   - Prairie jaune sans aucun objet.
+   - Vers le désert : on passe de la prairie à **trois pyramides isolées**, au milieu de rien. C'est l'opposé des transitions de 300 à 800 m
+     demandées (`RETOURS-CLIENT.md` §3).
+3. **Pièces d'or** (vue `place`) : énormes, trop nombreuses et flottantes. Une pièce géante occupe le premier plan à côté du capybara.
+   - Ce point est noté depuis le passage 2 et toujours pas traité.
+   - Rappel déjà donné : clé des pièces ramassées = **position stable**, pas un index, sinon les anciennes sauvegardes se décalent.
+4. **Écart démo forêt / reste du jeu.** La démo atteint 60 à 70 % du niveau « next gen », le monde reste au niveau « Switch ».
+   - Risque : une vitrine superbe et un jeu qui ne lui ressemble pas.
+   - Proposition : les outils de la démo (atlas, imposteurs, matières de pierre et mousse, méthode de valeurs) deviennent la boîte à outils
+     de **chaque** Alpha, pas une branche à part.
+5. **Vue lointaine** :
+   - 3 301 appels de dessin et 12,1 M triangles (budget 700). Le reste au sol est dans le budget : `place` 875, lacets 185, transition 183.
+   - Le gain de 16 à 20,8 FPS est réel, mais c'est toujours le point dur.
+   - Pistes : fusion par cellule des imposteurs d'arbres et des rochers lointains, HLOD des groupes de bâtiments, réduire les ombres en cascades au loin.
+6. **Poids publié** :
+   - `dist/` = **215 Mo** : `foret` 97, `tex` 45, `models` 42, `terrain` 31.
+   - Le client teste sur GitHub Pages, donc le premier chargement est long.
+   - À vérifier : la démo forêt ne doit rien télécharger tant qu'on ne la lance pas.
+   - À suivre : ajouter le poids de `dist/` et le volume téléchargé au démarrage du monde aux mesures de chaque Alpha, dans `VERSIONS.md`.
+
+#### 3. Bugs et fragilités d'outillage
+- **`tools/browser.cjs`, `acquireLock()` : attente infinie si le verrou est vide.** Un fichier `capy-chromium.lock` vide, laissé par l'ancien `shot-lock.sh`
+  (`flock` ne l'efface pas), donne `pid = 0`. La condition `if (pid && !alive(pid))` ne le supprime donc jamais, et la boucle attend sans fin
+  (15 min perdues ici). Correctif : considérer un verrou vide ou illisible comme libre, au moins s'il a plus de quelques secondes,
+  par exemple `if (!pid || !alive(pid)) unlink`.
+- **Version de Playwright figée** : la devDependency (1.65) attend son propre Chromium, absent sur une autre machine.
+  `launch()` a planté ici, et ça arrivera aussi sur le nouveau portable RTX 5060 tant que `npx playwright install chromium` n'est pas lancé.
+  À ajouter dans `docs/MIGRATION-PC.md`, ou bien accepter `CAPY_CHROME=<chemin>` comme `executablePath` dans `launch()`.
+- **Nom de zone dans le HUD** : « Capyville » s'affiche sur les 5 vues, y compris sur l'Aurore et près du désert. C'est peut-être seulement
+  le mode `?manual` + `step()`, qui n'appellerait pas la mise à jour de région (`game.ts:840`, `ui.setRegion`). À vérifier en vrai jeu.
+  Si c'est réel, c'est un bug.
+
+#### 4. Travail fait qui dort hors de `main`, et absent de la feuille de route
+- `wip/decor` (3 commits) : **149 variantes d'accessoires Blender déjà générées** (atlas 4 × 4, `decor.glb` + `decor.json`), jamais posées.
+  C'est le point qui m'inquiète le plus : du travail fini, qui ne figure dans aucune Alpha de `PROCESSUS.md`.
+- `wip/eau-2` (5 commits) : torrent corrigé, mais erreur shader intermittente 1282 non résolue. Ma piste reste une boucle de rétroaction :
+  le shader d'eau lit la cible de rendu sur laquelle il écrit (réflexion ou profondeur). Étang, koï et rizières encore à faire. Prévu en 0.4,
+  mais la branche vieillit.
+- `wip/lumiere-v2` (2 commits) : Three.js r187. **Plus elle attend, plus la fusion sera coûteuse.** Décider : fusionner tôt, seule et sans TSL,
+  si elle est sans régression, ou la geler jusqu'à 0.5.
+
+#### 5. Recommandations (le client les a lues, à toi de trancher et d'écrire ta décision dans `PROCESSUS.md`)
+1. **Intercaler une Alpha rapide « Village vivant »** avant le remodelage de l'Aurore. Elle tient en une session, avec peu de risque et un gain visible tout de suite :
+   - pose du Décor (149 objets, place ≥ 60 objets, bandes de façade, lanternes) ;
+   - pièces réduites et replacées, clé stable ;
+   - si possible, le torrent de `wip/eau-2` sans l'étang.
+2. **Remodeler l'Aurore avec la méthode de la démo forêt**, plutôt que d'ajouter des rochers sur un relief lisse :
+   - d'abord le modelé du sol (ravines, éperons, cônes d'éboulis, congères, affleurements dans la carte de roche) ;
+   - puis les pierriers et les rochers posés selon la pente : couchés dans le sens de la ligne de plus grande pente, enterrés de 20 à 40 %,
+     plus denses au pied des parois ;
+   - enfin les matières (neige soufflée, transition neige / terre / roche).
+
+   Remplacer les talus prismatiques des lacets par des talus en terre végétalisés, avec des enrochements ponctuels.
+3. **Une capture « avant / après » de chaque vue testée** dans `VERSIONS.md`, que le client voie la progression d'un coup d'œil.
+4. **Le poids publié et le téléchargement au démarrage** deviennent des mesures suivies, comme les FPS.
+
+Rien n'a été modifié sur `main` par la session cloud. Je réponds de nouveau quand le client me le demande (plus de vérification automatique).
