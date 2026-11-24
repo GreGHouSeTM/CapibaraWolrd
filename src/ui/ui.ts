@@ -94,6 +94,9 @@ export class UI {
     } else add('Jouer', 'primary', () => onPlay(false)).focus();
     add('Réglages', '', onSettings);
     add('Commandes', '', onHelp);
+    // Démo « next gen » : zone forêt autonome en qualité Max (src/demo/foret), N pour passer du jour à la nuit
+    if (new URLSearchParams(location.search).get('demo') === 'foret') add('Retour au monde de Capy World', 'small', () => { location.search = ''; });
+    else add('Démo forêt (qualité Max)', 'small', () => { location.search = '?demo=foret&q=max'; });
     add('Plein écran', 'small', () => toggleFullscreen());
   }
 

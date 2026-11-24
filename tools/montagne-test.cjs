@@ -118,7 +118,7 @@ const { launch } = require('./browser.cjs');
       mt.mountainTerrain.rock = () => 1;
       g.sky.hour = 10;
       g.player.climate = { night: () => 0, heatAt: () => 0 };
-      g.teleport(new V(6, 61, 3000), '');
+      g.teleport(new V(6, 61, -3500), ''); // loin des reliefs et ouvrages du terrain v2 (la paroi est de synthèse)
       g.input.keys.add('KeyW');
       let climbing = 0;
       for (let i = 0; i < 30 * 7; i++) { g.rig.yaw = Math.PI / 2; g.frame(1 / 30, false); if (g.player.climbing) climbing++; }
