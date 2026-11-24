@@ -11,15 +11,15 @@ Chaque idée a une Alpha visée (feuille de route dans `docs/PROCESSUS.md`). Ell
 | Effets de post-traitement (à développer : flou de mouvement, aberration chromatique légère, vignettage, grain, profondeur de champ…) | finitions | client 2026-11-22 |
 | Météo : pluie, flaques, boue, brouillard volumétrique, ombres des nuages, vent | finitions (le vent existe déjà) | RETOURS §9 |
 | Traces de pas et de roues (sable, neige, boue) | finitions | RETOURS §9 |
-| Simulation de conduite : boîte manuelle, compteur, 4x4, dégâts adaptés à l'âge | 0.6+ (base), finitions (détail) | RETOURS §9 |
-| Vue conducteur (POV) | 0.6+ (avec la physique de la voiture) | RETOURS §1 |
-| PNJ bipèdes | 0.6+ | RETOURS §9 |
-| Mode survie (faim, soif, vie, inventaire, magasins, cueillette ; froid qui blesse) | 0.6+ (option) | RETOURS §9, décision montagne |
-| Panneaux et marquage des routes | 0.2 (panneaux de la voie normale), puis par région | RETOURS §9 |
-| Interior mapping et intérieurs explorables | 0.6+ (par région) | RETOURS §5 |
-| Villes organiques (pas de quadrillage) | 0.6+ (blockout puis habillage, par ville) | RETOURS §4 |
-| Capybara HD (pelage réaliste, ventre qui rebondit), tenues, manteau d'hiver | 0.3 (manteau), modèle HD après 0.5 | décisions validées, RETOURS §12 |
-| Véhicules au niveau « voiture GTA » (modélisation, reflets) | 0.6+ (par région) | client 2026-11-22 |
-| Flore AAA (géométrie opaque, LOD, transmission, vent, atlas) | 0.4 | RETOURS §12 bis |
-| Désert de qualité (rides, traces, brume de sable) | 0.6+ (par région) | RETOURS §12 |
-| Lumière WebGPU (SSGI, sondes cuites) | 0.5 | en cours (`wip/lumiere-v2`) |
+| Simulation de conduite : boîte manuelle, compteur, 4x4, dégâts adaptés à l'âge | 0.7+ (base), finitions (détail) | RETOURS §9 |
+| Vue conducteur (POV) | 0.7+ (avec la physique de la voiture) | RETOURS §1 |
+| PNJ bipèdes | 0.7+ | RETOURS §9 |
+| Mode survie (faim, soif, vie, inventaire, magasins, cueillette ; froid qui blesse) | 0.7+ (option) | RETOURS §9, décision montagne |
+| Panneaux et marquage des routes | 0.3 (panneaux de la voie normale), puis par région | RETOURS §9 |
+| Interior mapping et intérieurs explorables | 0.7+ (par région) | RETOURS §5 |
+| Villes organiques (pas de quadrillage) | 0.7+ (blockout puis habillage, par ville) | RETOURS §4 |
+| Capybara HD (pelage réaliste, ventre qui rebondit), tenues, manteau d'hiver | 0.4 (manteau), modèle HD après 0.6 | décisions validées, RETOURS §12 |
+| Véhicules au niveau « voiture GTA » (modélisation, reflets) | 0.7+ (par région) | client 2026-11-22 |
+| Flore AAA (géométrie opaque, LOD, transmission, vent, atlas) | 0.5 | RETOURS §12 bis |
+| Désert de qualité (rides, traces, brume de sable) | 0.7+ (par région) | RETOURS §12 |
+| Lumière WebGPU (SSGI, sondes cuites) | r187 en 0.2, WebGPU en 0.6 | en cours (`wip/lumiere-v2`) |

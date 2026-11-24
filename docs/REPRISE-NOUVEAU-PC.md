@@ -65,14 +65,24 @@ Les notes de version sont dans `docs/VERSIONS.md`.
 | `wip/preuve-foret`, `wip/gemini` | fusionnée, et Gemini mis de côté (une clé `GEMINI_API_KEY` serait nécessaire) |
 | En pause | `wip/hd-modelisation`, `wip/hd-rendu` (erreur 1282 = boucle de rétroaction), `wip/eau-2`, `wip/decor`, `wip/conduite` : à puiser plus tard |
 
-**Prochaine session = Alpha 0.2 : le massif de l'Aurore remodelé à 1 250 m**, selon `docs/MONTAGNE-AURORE.md` (décisions du client au §9).
-- **Agent Terrain.** Il part des outils `tools/terrain/` (relance : `docs/ETAT-TERRAIN-V2.md`). Il remodèle le massif : sommet en (-2600, 520), voie normale de 4 km en lacets, étages, barres d'escalade marquées. Ensuite, il relance `rochers.py`.
-- **Agent Gameplay et blockout.** Il travaille en parallèle sur d'autres fichiers :
-  - des blocs pour le refuge et les chalets ;
-  - des marqueurs pour le lac, la grotte et la crevasse ;
-  - des panneaux sur la voie normale ;
-  - la Pierre-Vapeur du sommet, qui se réveille et sert de voyage rapide.
-- **Fin de session** : tests, publication de l'Alpha 0.2, notes de version.
+**Prochaine session = Alpha 0.2 « Village vivant »** (décidée après la revue cloud du 2026-11-24, voir `LIAISON.md` et `docs/PROCESSUS.md`).
+- **Agent Décor.** Il pose les 149 objets de `wip/decor` : place ≥ 60 objets, bandes de façade, lanternes. Il réduit les pièces d'or et les pose au sol, avec une clé stable par position.
+- **Agent Outils.** Il travaille en parallèle sur d'autres fichiers :
+  - FPS et nom de la carte graphique dans les Réglages ;
+  - menu « Aller à » vers les nouveautés ;
+  - vérification du nom de zone dans le HUD ;
+  - montée en Three.js r187 depuis `wip/lumiere-v2` (J1 seulement), si elle est sans régression.
+- **Si le temps le permet** : le torrent de `wip/eau-2`, une fois l'erreur 1282 corrigée (boucle de rétroaction : cibles de rendu privées, comme dans la démo).
+- **Fin de session** : captures avant / après, FPS, poids publié et volume téléchargé au démarrage dans `VERSIONS.md`, puis publication.
+
+**Puis l'Alpha 0.3 : le massif de l'Aurore remodelé à 1 250 m**, selon `docs/MONTAGNE-AURORE.md` et **avec la méthode de la démo forêt** (modelé du sol d'abord, rochers posés selon la pente, matières), en relançant les outils `tools/terrain/` (`docs/ETAT-TERRAIN-V2.md`).
+
+**Point urgent sur le portable** : le client mesure 2 FPS dans la démo et 5 dans le jeu sous Chrome. C'est presque sûrement Chrome qui tourne sur la puce graphique intégrée, ou en rendu logiciel. À vérifier :
+- `chrome://gpu` (lignes WebGL2 et GL_RENDERER) ;
+- l'accélération matérielle de Chrome ;
+- Windows > Graphiques > Chrome en « Hautes performances » ;
+- le panneau NVIDIA ;
+- le branchement sur secteur.
 
 Les anciens agents ne se reprennent pas d'un PC à l'autre : lance de nouveaux agents avec leur worktree recréé, la branche et les fichiers ETAT.
 

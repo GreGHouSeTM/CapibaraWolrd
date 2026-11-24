@@ -15,14 +15,16 @@ Chaque version est publiée sur https://greghousetm.github.io/CapibaraWolrd/. Co
 - **Le froid.** En altitude et la nuit, une jauge de chaleur baisse : givre au bord de l'écran, souffle visible. Le froid ne fait **aucun dégât**. On se réchauffe près des feux et des lanternes. Pour tester le manteau d'hiver, ajouter `?manteau` à l'adresse.
 - **Menu.** Nouveau bouton « Démo forêt (qualité Max) ». Dans la démo, le bouton « Retour au monde de Capy World » ramène au jeu.
 
-**Ce qu'il faut tester :**
-- monter vers le Pic de l'Aurore depuis le village des Clarines ;
-- rouler sur les routes du Pôle Nord et du Japon ;
-- faire une chute ;
-- essayer la démo forêt de jour, puis de nuit avec la touche N.
+**Ce qu'il faut tester (seulement ce qui est prêt à être jugé) :**
+- la démo forêt depuis le menu (de jour, puis de nuit avec N), sur une machine qui gère WebGL 2 et avec la carte graphique dédiée ;
+- les routes de montagne : elles sont maintenant posées au sol, en lacets ;
+- le déplacement dans les pentes, sans juger le décor : ralentissement, glissade, endurance, chute.
 
 **Limites connues :**
-- **Le massif de l'Aurore est encore brut** : grand mur brun et rochers posés en vrac. Il sera **remodelé à 1 250 m** dans l'Alpha 0.2, selon le dossier de la montagne.
+- **Le massif de l'Aurore n'est pas présentable** : neige lisse, rochers plantés au hasard, limite neige/terre trop nette, talus des lacets en blocs. **Il ne faut pas le faire tester** : il sera remodelé avec la méthode de la démo forêt (Alpha 0.3).
+- Les nouveautés sont loin du village, et il n'y a pas encore de moyen rapide d'y aller (prévu en 0.2).
+- Le nom de zone du HUD reste peut-être « Capyville » hors du village : c'est à vérifier.
+- Poids publié : 215 Mo, dont 97 Mo pour la démo forêt (elle n'est téléchargée que si on la lance).
 - **Le monde reste vide hors de Capyville** : pas de végétation, et rivières et lacs sans eau.
 - **La voiture grimpe encore des pentes trop fortes**, car sa physique n'est pas encore faite.
 

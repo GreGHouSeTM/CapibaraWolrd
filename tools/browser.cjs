@@ -36,7 +36,10 @@ async function acquireLock() {
       if (e.code !== 'EEXIST') throw e;
       let pid = 0;
       try { pid = +fs.readFileSync(LOCK, 'utf8'); } catch {}
-      if (pid && !alive(pid)) { try { fs.unlinkSync(LOCK); } catch {} continue; }
+      // verrou d'un processus mort, ou verrou vide / illisible de plus de 5 s (ancien shot-lock.sh) : on le considère libre
+      let stale = pid ? !alive(pid) : false;
+      if (!pid) { try { stale = Date.now() - fs.statSync(LOCK).mtimeMs > 5000; } catch {} }
+      if (stale) { try { fs.unlinkSync(LOCK); } catch {} continue; }
       if (!warned) { console.log(`(attente du verrou ${LOCK} tenu par le processus ${pid})`); warned = true; }
       await new Promise((r) => setTimeout(r, 1000));
     }
