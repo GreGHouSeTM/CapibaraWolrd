@@ -3,7 +3,7 @@
 À lire **en entier** au premier démarrage, avant toute action. Ensuite, lire dans l'ordre :
 1. `docs/MIGRATION-PC.md` : installation, restauration de l'archive privée, forcer la RTX.
 2. `docs/PASSATION.md` : historique, §2 décisions validées par le client (on ne les remet jamais en cause sans lui demander).
-3. `docs/PROCESSUS.md` puis `docs/BACKLOG.md` : comment on travaille désormais.
+3. `docs/PROCESSUS.md` (le plan du lead), `docs/VERSIONS.md` (Alphas publiées) puis `docs/BACKLOG.md`.
 4. `docs/BIBLE-MONDE.md`, `docs/RETOURS-CLIENT.md` (§1 à §12 bis), `docs/MONTAGNE-AURORE.md` (sur `wip/montagne`).
 5. La mémoire restaurée (`memory/MEMORY.md` et ses fichiers).
 
@@ -39,42 +39,42 @@ Concrètement :
 - **Langue et commits.** Tout est en français : jeu, code, commentaires, documents, conversation. Chaque commit se termine par la ligne d'attribution.
 - **Quota.** Le client prévient vers 80-95 %. À ce moment : commit WIP partout, push de toutes les branches `wip/...`, mise à jour de la mémoire.
 
-## 3. Processus (depuis le 2026-11-22, voir `docs/PROCESSUS.md`)
-Le client a dit : « garde ce qui est fait, on ne repart pas en arrière, mais ce processus à partir de maintenant ».
+## 3. Plan de production (décidé par le chef de projet le 2026-11-24 : voir `docs/PROCESSUS.md`)
+Le client ne connaît pas le métier. Il a demandé que **le lead choisisse le processus le plus adapté** et le fasse suivre, pour que le projet
+avance et que ses idées prennent vie. Son reproche : « on traîne, rien n'est poussé dans main, pas de version alpha à tester ».
 
-Les étapes, une seule active à la fois :
-- 0 : pré-production (faite) ;
-- 1 : **blockout gris de toute l'île** ;
-- 2 : déplacement et caméra ;
-- 3 : premier jouable ;
-- 4 : tranche verticale jouable (massif de l'Aurore) ;
-- 5 : production zone par zone ;
-- 6 : finitions.
+La règle d'or : **une session de quota = une Alpha jouable publiée sur main**, avec ses notes dans `docs/VERSIONS.md`.
+- Chaque chantier est taillé pour 2 à 3 h.
+- Deux agents au maximum en même temps.
+- Vers 75 % du quota, on fusionne, on publie, et on met à jour LIAISON et la mémoire.
+- Les idées nouvelles vont dans `docs/BACKLOG.md`.
+- Le fil conducteur est de faire du massif de l'Aurore la première expérience complète, puis d'étendre lieu par lieu. Pour chaque lieu : blockout en blocs, puis test, puis habillage.
 
-Les idées nouvelles vont dans `docs/BACKLOG.md`.
+## 4. État au 2026-11-24 et prochaine Alpha
+**L'Alpha 0.1 est publiée** (main `823b9f2`, tag `alpha-0.1`). Elle réunit :
+- le terrain v2 : routes en lacets au sol, relief corrigé, 13 rochers Blender ;
+- la montagne : pente, endurance, escalade, chutes, froid sans dégâts, manteau `?manteau` ;
+- le bouton « Démo forêt » dans le menu.
 
-## 4. État exact des branches (toutes poussées sur GitHub le 2026-11-24)
-| Branche | Dernier commit | État | À faire à la reprise |
-| --- | --- | --- | --- |
-| `main` | 7da8bb0 | jeu jouable (GitHub Pages) ; terrain 8 km, démo forêt `?demo=foret&q=max`, niveau Max, processus et backlog | — |
-| `wip/terrain-v2` | 0610bd1 | J0-J2 faits (routes en lacets, ruban posé au sol, pentes, plus de marches) ; J3 : détail de près + **13 rochers Blender** validés par asset-qa, placement `rochers.py`, `src/world/rocks.ts` | consigne : rochers **en l'état**, pas de nouvel habillage ; finir **J4** (QA, tests, FPS côte à côte avec main), compte rendu, puis fusion. État : `docs/ETAT-TERRAIN-V2.md` |
-| `wip/montagne` | 854c9ca | dossier `docs/MONTAGNE-AURORE.md` (décisions du client intégrées) ; déplacement en montagne fait (`src/gameplay/mountain.ts`, `trails.ts`, `heat.ts`, HUD, manteau `?manteau`, secousse de chute), 15 tests verts | revérifier `acces-test` (bord de l'étang), FPS contre main, compte rendu, fusion. État : `docs/ETAT-MONTAGNE.md` |
-| `wip/lumiere-v2` | ace99c7 | J1 en cours : three 0.170 → **0.187**, postprocessing 6.39.6, n8ao 2.1.0, WebGL sans régression ; début des matières TSL | consigne : finir **J1 + J2** (démo forêt en WebGPU avec SSGI et TRAA, secours WebGL) puis **s'arrêter** (J3 et J4 au backlog, étape 4). Ce worktree a son **propre `node_modules`** (`npm install` dedans). État : `docs/ETAT-LUMIERE-V2.md` |
-| `wip/preuve-foret` | 28610c0 | fusionnée dans main | rien |
-| `wip/gemini` | 4043d60 | Gemini **mis de côté** (connexion Google refusée, renvoi vers Antigravity) ; réactivable avec une clé `GEMINI_API_KEY` créée par le client | rien |
-| En pause (à puiser aux étapes 4-5) | `wip/hd-modelisation`, `wip/hd-rendu` (erreur 1282 expliquée : boucle de rétroaction), `wip/eau-2`, `wip/decor`, `wip/conduite` | | |
+Les notes de version sont dans `docs/VERSIONS.md`.
 
-**Ordre de reprise conseillé :**
-1. Relancer Terrain v2 (J4) et Montagne (fin), puis les fusionner. Ce sont des étapes 1 et 2.
-2. Lancer l'agent **Blockout** (étape 1) : toute l'île en gris, avec :
-   - le massif de l'Aurore remodelé à **1 250 m**, sommet en (-2600, 520) ;
-   - des blocs pour les villes et les bâtiments, en tracés organiques ;
-   - des marqueurs pour les grottes, lacs, refuges et Pierres-Vapeur.
+| Branche | État |
+| --- | --- |
+| `wip/terrain-v2`, `wip/montagne` | **fusionnées** dans l'Alpha 0.1 |
+| `wip/lumiere-v2` (ace99c7) | J1 en cours : three 0.187, sans régression en WebGL, début des matières TSL. À finir : J1, puis J2 (démo forêt en WebGPU, SSGI, TRAA, secours WebGL). Prévue pour l'Alpha 0.5. Ce worktree a **son propre `node_modules`**. État : `docs/ETAT-LUMIERE-V2.md` |
+| `wip/preuve-foret`, `wip/gemini` | fusionnée, et Gemini mis de côté (une clé `GEMINI_API_KEY` serait nécessaire) |
+| En pause | `wip/hd-modelisation`, `wip/hd-rendu` (erreur 1282 = boucle de rétroaction), `wip/eau-2`, `wip/decor`, `wip/conduite` : à puiser plus tard |
 
-   **Définition de « fini » :** le client et sa fille font le tour de l'île.
-3. Lumière v2 en tâche de fond, avec J1 et J2 seulement.
+**Prochaine session = Alpha 0.2 : le massif de l'Aurore remodelé à 1 250 m**, selon `docs/MONTAGNE-AURORE.md` (décisions du client au §9).
+- **Agent Terrain.** Il part des outils `tools/terrain/` (relance : `docs/ETAT-TERRAIN-V2.md`). Il remodèle le massif : sommet en (-2600, 520), voie normale de 4 km en lacets, étages, barres d'escalade marquées. Ensuite, il relance `rochers.py`.
+- **Agent Gameplay et blockout.** Il travaille en parallèle sur d'autres fichiers :
+  - des blocs pour le refuge et les chalets ;
+  - des marqueurs pour le lac, la grotte et la crevasse ;
+  - des panneaux sur la voie normale ;
+  - la Pierre-Vapeur du sommet, qui se réveille et sert de voyage rapide.
+- **Fin de session** : tests, publication de l'Alpha 0.2, notes de version.
 
-Les anciens agents ne se reprennent pas d'un PC à l'autre. Lance de **nouveaux agents** avec : le worktree recréé, la branche, le fichier ETAT, et les consignes ci-dessus.
+Les anciens agents ne se reprennent pas d'un PC à l'autre : lance de nouveaux agents avec leur worktree recréé, la branche et les fichiers ETAT.
 
 ## 5. Questions et décisions en attente
 - **Moteur** : Three.js ou Unreal 5. Le client a testé la preuve. Il n'a pas tranché formellement, mais il continue en Three.js et vise le maximum de ce que Three.js, Blender et compagnie permettent. Avec la RTX 5060 (cœurs RT), on peut réévaluer ThreeRT (natif, path tracing) et Unreal si la qualité plafonne. À reposer au moment de l'étape 4.

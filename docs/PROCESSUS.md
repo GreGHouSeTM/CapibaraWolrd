@@ -1,30 +1,45 @@
-# Processus de production de Capy World (révisé le 2026-11-22)
+# Plan de production de Capy World (décidé par le chef de projet le 2026-11-24)
 
-## Pourquoi on change
-Jusqu'ici, on a avancé « par la beauté » : des tranches HD, un terrain de 8 km, des rochers et de la lumière, avant d'avoir validé la forme
-du monde et le jeu. Résultat : on refait des choses déjà belles parce que le fond était faux. Le Pic de l'Aurore, par exemple, est à
-remodeler entièrement alors qu'on lui posait déjà des rochers. Le client le dit : « on s'éparpille ».
+## Le diagnostic
+Le problème n'était pas l'ordre « gris puis beau ». Le vrai problème : **plus rien n'arrivait dans `main`**.
+- Les agents travaillaient des heures sur des branches longues (terrain, lumière, montagne, HD…) et sur trop de fronts à la fois.
+- Il n'y avait pas de version à tester. Le client ne pouvait ni jouer, ni réagir, ni voir ses idées prendre vie.
+- Les retours sont donc arrivés tard, et on a refait du travail : le massif de l'Aurore en est l'exemple.
 
-Les studios font l'inverse. On construit d'abord un monde **vide et gris mais jouable**, on y joue, on corrige, on gèle sa forme, et
-**seulement ensuite** on habille, zone par zone. Une **tranche verticale** (un petit morceau au niveau final) sert à fixer la cible
-visuelle et à valider les outils. C'est fait : c'est la démo forêt.
+Les studios, même petits, fonctionnent par **versions jouables régulières** (« builds »), découpées en jalons courts. Chaque jalon livre une
+version qu'on teste, et les retours décident du jalon suivant. On fait aussi une **tranche verticale** : un lieu complet, au niveau final, sert
+de modèle pour le reste du jeu.
 
-## Les étapes (dans l'ordre, une seule étape active à la fois)
-| Étape | Contenu | Fini quand… | État |
-| --- | --- | --- | --- |
-| **0. Pré-production** | Bible du monde, intentions, lore, choix techniques, cible visuelle (tranche verticale) | décisions validées par le client | **fait** : bible, Three.js, démo forêt |
-| **1. Blockout du monde** (« greybox ») | L'île entière jouable **en gris** : grandes formes du relief, montagnes à leur vraie taille, routes et chemins, **blocs** pour les villes et les bâtiments, **marqueurs** pour les lieux (grottes, lacs, refuges, Pierres-Vapeur). Aucun habillage. | le client et sa fille ont **joué** le tour de l'île : distances, temps de trajet, lignes de vue, montées, routes. La forme est **gelée**. | à faire |
-| **2. Déplacement et caméra** (en même temps que l'étape 1) | Marche et course selon la pente, endurance, escalade, chute, nage, conduite de base, caméra, froid | on se déplace avec plaisir partout dans le blockout | en cours (agent Montagne) |
-| **3. Premier jouable** (« first playable ») | Boucle de jeu complète en gris : quêtes, Squishy, récompenses, tenues et objets (manteau d'hiver), voyage rapide par Pierres-Vapeur, sauvegarde, menu (« Nouvelle partie » sans recharger) | une quête complète de Capyville au sommet de l'Aurore est jouable du début à la fin | à faire |
-| **4. Tranche verticale jouable** | Le massif de l'Aurore et les Clarines **au niveau final** : relief, roches, flore, eau, lumière, sons, avec la boucle de jeu | le client valide : « c'est le niveau du jeu entier » | après 3 |
-| **5. Production** | Habillage zone par zone avec les outils validés en 4 (flore, roches, bâtiments, eau), dans l'ordre de l'histoire | chaque zone passe la grille qualité | après 4 |
-| **6. Finitions** (« polish ») | Effets et sensations : liste du backlog (lens flare, boue et pluie sur la caméra, secousses, post-traitements, météo, traces) | — | après 5 |
-| **Continu** | Optimisation (FPS mesurés à chaque fusion), tests automatiques, sauvegarde | — | toujours |
+Le blockout gris (des blocs avant l'habillage) est un **outil** que l'on utilise **pour chaque nouveau lieu**, avant de l'habiller. Ce n'est pas
+une étape géante qui reprendrait toute l'île : l'île existe déjà et se joue, et on ne repart pas en arrière.
 
-## Les règles
-1. **Une étape active à la fois.** Les agents ne travaillent que sur l'étape en cours, plus le continu.
-2. **Les idées nouvelles vont dans le backlog** (`docs/BACKLOG.md`), avec l'étape où elles seront faites. Elles ne partent pas en chantier tout de suite, sauf un bug qui bloque le jeu.
-3. **Le blockout passe avant la beauté.** Pas d'habillage d'une zone dont la forme n'est pas gelée.
-4. **Tests de jeu à chaque étape**, si possible par la fille du client (c'est elle, le public). Ses retours priment.
-5. **Chaque étape a sa définition de « fini »** (colonne ci-dessus). Le chef de projet la vérifie sur captures et chiffres avant de passer à la suivante.
-6. **Les branches HD en pause** (`wip/hd-modelisation`, `wip/hd-rendu`, `wip/eau-2`, `wip/decor`, `wip/conduite`) restent sauvegardées. On y puisera à l'étape 4 ou 5.
+## La règle d'or : une version jouable à chaque session
+- **Une session de travail** (une fenêtre de quota de 5 h) = **une Alpha publiée** sur `main` / GitHub Pages, avec ses notes dans
+  `docs/VERSIONS.md` : ce qui est nouveau, quoi tester, limites connues, FPS.
+- **Les chantiers sont taillés pour finir dans la session** : 2 à 3 h de travail d'agent au plus. Un chantier plus gros est découpé en plusieurs Alphas.
+- **Deux agents au maximum en même temps**, sur des fichiers différents.
+- **Vers 75 % du quota**, le chef de projet arrête d'ouvrir des chantiers. Il vérifie, fusionne, publie, puis met à jour LIAISON et la mémoire.
+  Un chantier non fini reste sur sa branche, et il est la première tâche de la session suivante.
+- **Vérification avant chaque publication** :
+  - tsc, vitest, build ;
+  - tests de jeu (village, combat, accès, montagne, forêt) ;
+  - captures, et FPS mesurés côte à côte avec la version précédente ;
+  - aucune régression.
+- **Le client et sa fille testent chaque Alpha.** Leurs retours vont dans `docs/RETOURS-CLIENT.md` et choisissent l'Alpha suivante.
+- **Les idées nouvelles vont dans `docs/BACKLOG.md`**, avec l'Alpha visée. On ne lance pas un chantier hors plan, sauf pour un bug qui bloque.
+
+## La feuille de route des Alphas
+Le fil conducteur : **faire du massif de l'Aurore la première expérience complète** (tranche verticale), parce que c'est là que se rejoignent les
+idées du client (vraie montagne, froid, manteau, escalade, Pierre-Vapeur, roches, forêt, lac, grotte). Ensuite, on étend lieu par lieu.
+
+| Alpha | Contenu | Le client peut… |
+| --- | --- | --- |
+| **0.1** (publiée) | Routes en lacets au sol, relief corrigé, rochers, déplacement en montagne (pente, endurance, escalade, chutes, froid sans dégâts), bouton Démo forêt | monter, glisser, grimper, tomber ; voir la démo forêt |
+| **0.2** | **Massif de l'Aurore remodelé à 1 250 m** (dossier `MONTAGNE-AURORE.md`) : voie normale en lacets avec panneaux, étages lisibles, **blocs** pour le refuge et les chalets, marqueurs du lac, de la grotte et de la crevasse, **Pierre-Vapeur au sommet** qui se réveille et sert de voyage rapide | faire une vraie ascension de 20 à 30 min et voir l'île du sommet |
+| **0.3** | **Première quête : « Le manteau d'hiver »**. Système de quêtes et journal, un PNJ des Clarines, des objectifs, le manteau en récompense (le froid disparaît). Premier Squishy (après les questions au client). Correction de « Nouvelle partie » sans rechargement | jouer une vraie quête du début à la fin |
+| **0.4** | **Habillage du massif, partie 1** : flore AAA par étage (méthode RETOURS §12 bis), forêt de vallée, alpages, eau (torrent, lac d'altitude, cascade) | se promener dans une montagne vivante |
+| **0.5** | **Habillage du massif, partie 2** : roches et parois de qualité (style de la démo forêt), grotte explorable, faune (marmottes, bouquetins, aigles), sons, lumière WebGPU si elle est validée | juger la **tranche verticale** : « est-ce le niveau du jeu ? » |
+| **0.6 et suivantes** | Une région ou un système par Alpha, dans l'ordre de l'histoire. Pour chaque région : blockout (blocs), test, puis habillage. Autres sujets : physique de la voiture et vue conducteur, villes organiques, Squishy et album, PNJ, etc. | tester chaque nouveauté au fil de l'eau |
+| **Finitions** | Effets du backlog : lens flare, boue et pluie sur la caméra, secousses, post-traitements, météo, traces. Les plus simples peuvent arriver plus tôt, à côté d'une Alpha, s'ils ne coûtent presque rien. | — |
+
+Le chef de projet tient ce tableau à jour à chaque Alpha. Il peut changer l'ordre selon les retours du client, et il l'écrit ici.
