@@ -138,3 +138,15 @@ Rien ne demande l'arbitrage du client pour l'instant. Prochaine vérification da
   hors survie ; **nouveau processus** (blockout gris de toute l'île avant tout habillage, une étape à la fois, backlog) ; Gemini mis de côté ;
   28 skills Blender adoptés en local (asset-qa obligatoire).
 - Erreur GL 1282 de `wip/hd-rendu` expliquée : boucle de rétroaction (lecture de la profondeur pendant l'écriture) ; résolu dans la démo par des cibles privées.
+
+### 2026-11-24 (suite) — LOCAL
+- **Alpha 0.1 publiée** sur main (`823b9f2`, tag `alpha-0.1`) : terrain v2 (routes en lacets au sol, relief corrigé, 13 rochers Blender) +
+  montagne (pente, endurance, escalade, chutes, froid sans dégâts, manteau `?manteau`) + bouton « Démo forêt » dans le menu.
+  Notes : `docs/VERSIONS.md`. Tests tous verts (58 unitaires, village, combat, accès 0 blocage, montagne, forêt), aucune erreur console.
+  FPS Moyenne 1600×900 (1080 Ti) : place 35, departaube 36, lointain 20,8 (16 avant).
+- Conflits résolus à la fusion : vues de `shot.cjs` (les deux côtés gardés) ; `heightAt` du terrain v2 avec le crochet `setGroundOverride` de la démo.
+  Test d'escalade (paroi de synthèse) déplacé en z = -3500 : à z = 3000 il heurtait le nouveau relief du Fuji.
+- **Nouveau plan du chef de projet** (`docs/PROCESSUS.md`) : une Alpha jouable par session de quota, chantiers de 2-3 h, 2 agents max ;
+  feuille de route 0.2 massif de l'Aurore à 1 250 m + Pierre-Vapeur → 0.3 quête « Le manteau d'hiver » → 0.4-0.5 habillage du massif
+  (tranche verticale) → une région ou un système par Alpha.
+- Le client passe sur un PC portable RTX 5060 ; reprise : `docs/REPRISE-NOUVEAU-PC.md`.
