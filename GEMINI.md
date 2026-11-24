@@ -6,6 +6,7 @@ Tu es un **équipier** du projet. Le chef de projet est Claude, et c'est lui seu
 - **Le jeu.** Capy World est un jeu open world dans le navigateur, en Three.js, Vite et TypeScript. Il est fait pour une fille de 9 à 12 ans, et le héros est un capybara. La version jouable est publiée sur GitHub Pages depuis `main`.
 - **Tout est en français** : le code, les commentaires, les commits, les documents et les comptes rendus.
 - **À lire avant de commencer** : `docs/PASSATION.md`, en particulier le §2 (les décisions validées par le client, à ne jamais remettre en cause sans le dire), puis `docs/BRIEF-AGENTS.md`. Ensuite, le document propre à ton chantier.
+- **État de l'art (nov. 2026)** : `.claude/skills/veille-3d-2026/SKILL.md` (three.js r170 → r187, optimisation, licences des assets IA). Lis-le avant toute décision de rendu, d'optimisation ou d'ajout d'asset.
 
 ## Règles absolues
 1. **Ne touche jamais à `main`. Ne pousse rien.** Tu travailles uniquement dans ton worktree, `L:\CLAUDE\CapyWorld-gemini`, sur la branche que le chef de projet t'a donnée (`wip/gemini` par défaut).
