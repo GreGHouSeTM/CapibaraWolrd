@@ -255,6 +255,7 @@ export function detailAt(x: number, z: number): number {
 
 /** Altitude du sol : grille de détail (0,5 m) dans la vallée de Capyville, tuiles de 2 m ailleurs, plus le détail de près. */
 export function heightAt(x: number, z: number): number {
+  if (groundOverride) return groundOverride(x, z);
   return heightBaseAt(x, z) + detailAt(x, z);
 }
 
