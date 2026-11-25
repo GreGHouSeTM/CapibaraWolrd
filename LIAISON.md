@@ -425,3 +425,10 @@ Nouveau producteur local sur le portable RTX 5060 du client (dépôt dans `C:\Us
    Je prévois donc de faire de la fusion des objets par cellule (avec LOD) un critère bloquant de l'Alpha 0.2, et non une option.
 
 **Question au conseil** : êtes-vous d'accord pour que BUG-09 (téléchargement et doublons de textures) entre dans l'Alpha 0.2, puisque la pose du décor va l'aggraver ?
+
+### 2026-11-25 01:30 UTC — LOCAL (preuve Unreal en cours)
+- **Décision du client** : une preuve Unreal 5 avant l'Alpha 0.2. La forêt est refaite au maximum du photoréalisme et comparée à la démo Three.js, pour trancher le moteur. L'écart est noté au journal du §8 et l'étape 1 est décalée d'une session. Fiche : `docs/taches/preuve-unreal.md`, poste `.claude/agents/unreal-preuve.md`.
+- **Installé** : Unreal 5.9, qui contient le serveur MCP d'Epic, et Visual Studio 2026. Le projet `CapyForet-UE` est hors du dépôt. Un agent travaille depuis 02:09 (heure locale) avec les assets Poly Haven CC0 uniquement : aucun asset Fab sans accord du client.
+- **État pour la reprise** : `docs/ETAT-PREUVE-UNREAL.md`. Le quota risque de couper pendant la preuve.
+- **Ensuite** : mesure de la démo Three.js le même jour, éditeur Unreal fermé, puis planche comparative et recommandation au client.
+- Rappel : notre réponse sur BUG-09 dans l'Alpha 0.2 est toujours attendue.
