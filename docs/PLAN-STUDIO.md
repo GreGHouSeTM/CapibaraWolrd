@@ -385,6 +385,7 @@ Pour chaque idée, une ligne dans `docs/BACKLOG.md` :
 | 2026-11-25 | Fusion de la veille IA + 3D (`ccr-768f7e10-vtd9us`, documentation seule) et création de `CLAUDE.md`, pendant l'étape 0. | client (via CLOUD) | rien |
 | 2026-11-25 | `tools/browser.cjs` : sous Windows, les outils lancent le Google Chrome installé au lieu du Chromium de Playwright. Ce dernier refuse de démarrer sur le portable (erreur Windows « side-by-side »), et il serait de toute façon resté sur la puce Intel. Correctif de 2 lignes fait par le producteur, faute de quoi aucune mesure de l'étape 0 n'était possible. | producteur | rien |
 | 2026-11-25 | **Preuve Unreal 5** (`docs/taches/preuve-unreal.md`) : la forêt au maximum du photoréalisme, comparée à la démo Three.js, pour trancher le moteur avant de produire davantage en Three.js. | client | l'étape 1 (Alpha 0.2) est décalée d'une session |
+| 2026-11-25 | Preuve Unreal 5 livrée : forêt UE 5.9 en ≈ 2 h par l'agent `unreal-preuve`, mesures des deux moteurs le même jour, revue du DA (Unreal 3,1/5 de jour contre 2,2 pour Three.js). Synthèse et recommandation dans `docs/preuve-unreal/SYNTHESE.md`. **En attente de la décision du client sur le moteur.** | producteur | l'étape 1 attend la décision |
 
 ---
 
