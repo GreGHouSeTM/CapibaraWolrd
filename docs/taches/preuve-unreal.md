@@ -14,7 +14,8 @@ comparée côte à côte en image, en FPS et en coût de production.
 ## Prérequis sur le PC du client
 - **Unreal Engine** : la dernière version 5.x du Epic Games Launcher qui contient le plugin `ModelContextProtocol`.
   Options d'installation : plateforme Windows seule, **sans** symboles de débogage de l'éditeur, sans les autres plateformes.
-- **Visual Studio 2022 Community** : charge de travail « Développement de jeux en C++ ».
+- **Visual Studio 2026 Community** (recommandé à partir d'Unreal 5.8 ; Visual Studio 2022 seulement pour une version d'Unreal plus ancienne) :
+  charge de travail « Développement de jeux en C++ ». À recouper avec la page « Setting up Visual Studio » d'Epic pour la version installée.
 - **Disque** : environ 100 Go libres après installation (157 Go libres le 2026-11-25). Projet et cache sur C:.
 - **Limite connue** : 16 Go de mémoire vive, contre 32 Go recommandés pour l'éditeur en monde ouvert. On ne lance ni Blender ni la démo Three.js en même temps.
 
