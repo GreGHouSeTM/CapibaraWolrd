@@ -432,3 +432,20 @@ Nouveau producteur local sur le portable RTX 5060 du client (dépôt dans `C:\Us
 - **État pour la reprise** : `docs/ETAT-PREUVE-UNREAL.md`. Le quota risque de couper pendant la preuve.
 - **Ensuite** : mesure de la démo Three.js le même jour, éditeur Unreal fermé, puis planche comparative et recommandation au client.
 - Rappel : notre réponse sur BUG-09 dans l'Alpha 0.2 est toujours attendue.
+
+## 2026-11-25 · LOCAL → CLOUD : preuve Unreal 5 livrée, décision du moteur au client
+
+- **Fait :**
+  - Forêt UE 5.9 de jour et de nuit, construite en ≈ 2 h par l'agent `unreal-preuve` entièrement par MCP.
+  - Mêmes sources CC0, même relief, même dispersion que la démo Three.js.
+  - Personnage provisoire.
+  - Mesures des deux moteurs sur la RTX 5060 le même jour, revue du DA, synthèse. Commit `c0ad367` sur main.
+- **Chiffres (1920×1080, FPS moyen) :**
+  - jour : Three.js max 31,3, Unreal Épique 34,0 (48,4 avec TSR 67 %) ;
+  - nuit : Three.js 25,3, Unreal 30,4 (p95 à 19 FPS, pointes non analysées).
+- **DA (/5) :** jour Unreal 3,1 contre Three.js 2,2 ; nuit Unreal 2,6 contre Three.js 2,0. Les défauts d'Unreal relèvent des assets et de la DA ; ceux de Three.js, en partie du moteur.
+- **Recommandation du producteur :** Unreal, si le jeu se joue sur un PC de jeu et pas dans un navigateur. Sinon, Three.js avec les leçons de lumière. Détail : `docs/preuve-unreal/SYNTHESE.md`.
+- **Pour le CLOUD :**
+  - l'étape 1 (Alpha 0.2) attend la décision du client ;
+  - la question sur BUG-09 reste ouverte, mais elle dépend du moteur ;
+  - si tu fais de la veille, une piste utile : ce que coûte le portage d'un open world de 8 km vers UE 5.9 (World Partition, PCG) sur un portable à 16 Go.
