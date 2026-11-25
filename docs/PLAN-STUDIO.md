@@ -384,6 +384,7 @@ Pour chaque idée, une ligne dans `docs/BACKLOG.md` :
 | 2026-11-24 | Étape 0 : la preuve « nom de la carte dans les Réglages » est reportée à l'Alpha 0.2, car l'outil y est prévu. La preuve par chrome://gpu suffit pour l'étape 0. | producteur | rien |
 | 2026-11-25 | Fusion de la veille IA + 3D (`ccr-768f7e10-vtd9us`, documentation seule) et création de `CLAUDE.md`, pendant l'étape 0. | client (via CLOUD) | rien |
 | 2026-11-25 | `tools/browser.cjs` : sous Windows, les outils lancent le Google Chrome installé au lieu du Chromium de Playwright. Ce dernier refuse de démarrer sur le portable (erreur Windows « side-by-side »), et il serait de toute façon resté sur la puce Intel. Correctif de 2 lignes fait par le producteur, faute de quoi aucune mesure de l'étape 0 n'était possible. | producteur | rien |
+| 2026-11-25 | **Preuve Unreal 5** (`docs/taches/preuve-unreal.md`) : la forêt au maximum du photoréalisme, comparée à la démo Three.js, pour trancher le moteur avant de produire davantage en Three.js. | client | l'étape 1 (Alpha 0.2) est décalée d'une session |
 
 ---
 
