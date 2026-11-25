@@ -393,3 +393,35 @@ Le but : qu'une session ouverte un peu vite reparte dans le bon cadre, sans que 
 
 Traitement : demande rapide et sans risque, à faire **pendant l'étape 0**, en même temps que la fusion de la veille, et à noter dans le journal du §8.
 Si `.gitignore` ignore `.claude/`, vérifie que `CLAUDE.md` à la racine n'est pas concerné.
+
+### 2026-11-25 00:05 UTC — LOCAL (étape 0 terminée)
+Nouveau producteur local sur le portable RTX 5060 du client (dépôt dans `C:\Users\greg7\Documents\CLAUDE\CapibaraWolrd`).
+
+1. **Étape en cours** : l'étape 0 est **terminée, 6 critères sur 6**. On passe à l'étape 1, Alpha 0.2 « Village vivant ».
+2. **Publié sur `main`** (`392f850`, pas de nouvelle Alpha à l'étape 0) :
+   - fusion de `ccr-768f7e10-vtd9us` (veille IA + 3D, documentation seule, sans conflit ; `.claude/agents/` et `.claude/skills/` restent suivis) ;
+   - `CLAUDE.md` à la racine, selon votre plan en 7 points ;
+   - mesures de référence 0.1 dans `VERSIONS.md` ;
+   - `tools/browser.cjs` : sous Windows, les outils lancent le Google Chrome installé. Le Chromium de Playwright refuse de démarrer sur ce PC
+     (erreur Windows « side-by-side »), et il serait de toute façon resté sur la puce Intel : seul `chrome.exe` est réglé en « Hautes performances ».
+3. **Mesures** (RTX 5060 Laptop, rendu NVIDIA D3D11 vérifié, sur secteur, qualité Moyenne, 1600×900) :
+
+   | Vue | FPS | Appels | Triangles |
+   | --- | --- | --- | --- |
+   | place | 48,8 | 877 | 4,27 M |
+   | rue | 50,8 | 903 | 4,95 M |
+   | départ aube | 51,5 | 902 | 4,39 M |
+   | nuit | 50,0 | 914 | 4,36 M |
+   | lointain | 36,0 | 4 355 | 12,73 M |
+
+   `dist/` pèse 223 Mo, dont 101 Mo pour la démo. **114 Mo sont téléchargés au démarrage, pour un budget de 60 Mo.**
+   Sont dépassés : les appels de dessin (×1,3 au sol, ×2,9 au loin), les triangles et le téléchargement. Les FPS au sol sont à la limite.
+   La qualité Haute n'est pas plus lente que la Moyenne (à comprendre).
+4. **Bugs** : BUG-09 ouvert (majeur). Les textures des bâtiments sont redemandées jusqu'à 87 fois au démarrage (1 443 requêtes pour 625 fichiers).
+   Cela fait probablement des copies en mémoire vidéo, et tout le monde est chargé avant le menu. BUG-04 (pièces géantes) est confirmé sur la capture de la place.
+5. **Idées reçues** : aucune.
+6. **Écarts au plan** : la fusion de la veille et `CLAUDE.md` (demande du client), plus le correctif de 2 lignes de `browser.cjs`, sans lequel aucune mesure n'était possible. Tout est noté au journal du §8.
+7. **Première tâche de la prochaine passe** : la fiche d'étape `docs/taches/0.2.md`. Point d'attention : la marge de FPS au sol est nulle avant la pose des 149 objets de décor.
+   Je prévois donc de faire de la fusion des objets par cellule (avec LOD) un critère bloquant de l'Alpha 0.2, et non une option.
+
+**Question au conseil** : êtes-vous d'accord pour que BUG-09 (téléchargement et doublons de textures) entre dans l'Alpha 0.2, puisque la pose du décor va l'aggraver ?
