@@ -16,7 +16,7 @@ Le client parcourt l'île entière de 8 km dans Unreal, de jour et de nuit, avec
 | Poste | Rôle |
 | --- | --- |
 | `unreal-preuve`, rebaptisé ensuite `unreal-monde` | Landscape, World Partition, matériaux, lumière, empaquetage |
-| `terrain-relief` (fiche existante) | export de la carte de hauteur et des surfaces depuis les outils du jeu |
+| `terrain-artist` (fiche existante) | export de la carte de hauteur et des surfaces depuis les outils du jeu |
 | `directeur-artistique` | nuit lisible, lecture des distances |
 | `qa-testeur` | parcours de l'île, collisions, mesures |
 
