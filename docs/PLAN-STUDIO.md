@@ -170,6 +170,26 @@ Chaque étape du §5 se déroule **toujours** dans cet ordre :
 
 ---
 
+## 5 bis. Plan Unreal (décision du client du 2026-11-25 ; remplace les étapes 1 à 7 du §5)
+Le jeu passe sous Unreal Engine 5.9. On avance par petites Alphas, chacune jouable par le client sous la forme d'un exécutable.
+- **U1 « Le monde »** : toute l'île de 8 km en version grossière, avec la nuit lisible et au moins 45 images/s. Fiche : `docs/taches/U1-le-monde.md`.
+- **U2 « Capyville »** : le village au propre (maisons, rues, lumière, habitants), au niveau de la preuve forêt.
+- **U3 « La forêt »** : la forêt de la preuve intégrée au monde et terminée (couleurs, sous-bois, nuit). On utilise les Megaplants de Fab, licence acceptée par le client.
+- **U4 et suivantes** : l'Aurore, puis le gameplay (quêtes, Squishy à collectionner), une région ou un système par Alpha.
+
+Règles propres à Unreal :
+- **Mémoire :** 16 Go de mémoire vive, sans achat prévu. Imports par lots, éditeur fermé pour tester, World Partition.
+- **Sauvegarde :**
+  - le dépôt GitHub garde les documents et les scripts (`unreal/`) qui reconstruisent le projet ;
+  - les gros fichiers du projet Unreal vont hors de GitHub, avec une copie sur disque.
+- **Assets :**
+  - CC0 d'abord (Poly Haven, ambientCG) ;
+  - les Megaplants de Fab pour la végétation ;
+  - tout ce qui fait l'identité du jeu est modélisé par le studio dans Blender : capybara, maisons, Squishy, objets de quête.
+  - Chaque licence est notée et doit permettre de vendre le jeu (souhait du client).
+
+Les étapes 1 à 7 ci-dessous (Three.js) sont gardées pour mémoire ; on n'y travaille plus.
+
 ## 5. Le plan, étape par étape
 
 Chaque étape indique ses postes, ses livrables, ses **critères d'acceptation** (tous obligatoires) et son **hors-périmètre**
