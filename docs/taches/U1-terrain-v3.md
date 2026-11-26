@@ -12,6 +12,14 @@ En une session, et une seule, refaire le relief de l'île dans Unreal : garder l
   - **la Tamise à Londres**, avec sa boucle et son estuaire vers la mer ;
   - **l'Hudson à New York**, avec une baie et une pointe d'île à l'embouchure.
 - **L'Hudson remonte vers le nord jusqu'au Pôle Nord**, comme l'Amérique du Nord qui borde le Groenland : New York au sud, puis des terres de plus en plus froides, et enfin la côte glacée du Pôle de l'autre côté d'un bras de mer.
+- **Le désert, vaste et en deux parties, commence au sud de New York :**
+  - **Au nord, côté New York : désert de type mexicain, canyon ou pampa.** Plateaux et mesas, canyons creusés par d'anciennes rivières, falaises en strates, plaines sèches de pampa. Les cactus viendront avec la végétation, plus tard.
+  - **Une transition progressive vers le Sahara :** la roche fait place au sable.
+  - **Au sud, le Sahara :**
+    - de grandes mers de dunes, avec des crêtes de dunes vives et non un bruit uniforme ;
+    - des oasis dans des cuvettes, avec un lac au plugin Water et une place réservée aux palmiers ;
+    - un plateau dégagé pour **les pyramides**, à réserver dès maintenant. Elles seront assez grandes pour y creuser des souterrains et y mener des missions : la grande fait au moins 140 m de côté et 90 m de haut.
+    - Les pyramides sont posées en volumes provisoires, à leur échelle définitive. Elles seront construites plus tard, souterrains compris.
 - **Supprimés :** les défauts de l'ancien relief, c'est-à-dire les marches, les dents le long des rivières, les plans d'eau coupés, les transitions brutales et les formes sans logique.
 
 ## Comment (pour l'agent)
@@ -20,7 +28,7 @@ En une session, et une seule, refaire le relief de l'île dans Unreal : garder l
    - Pars de `docs/BIBLE-MONDE.md` et de `src/world/layout.ts` / `world-map.ts` pour la place des régions.
    - Une région peut bouger si la cohérence l'exige ; note chaque déplacement.
    - Livrable : `docs/u1/plan-terrain-v3.png`.
-2. **Les références réelles avant de générer** : vues aériennes et cartes du relief des Alpes (une chaîne avec ses cols), de la Seine à Paris, de la Tamise, de l'Hudson et de son estuaire, des côtes du Groenland et du Grand Nord canadien.
+2. **Les références réelles avant de générer** : vues aériennes et cartes du relief des Alpes (une chaîne avec ses cols), du nord du Mexique et des canyons de l'Arizona (mesas, strates), de la pampa, des dunes du Sahara (erg, crêtes) et de ses oasis, du plateau de Gizeh, de la Seine à Paris, de la Tamise, de l'Hudson et de son estuaire, des côtes du Groenland et du Grand Nord canadien.
    - Elles servent à regarder, pas à recopier, et vont dans `docs/references/prive/u1-terrain/`.
 3. **Un générateur de relief neuf** (Node ou Python dans `unreal/relief/`), sans recopier l'ancien :
    - grandes formes posées à la main d'après le plan ;
@@ -39,6 +47,7 @@ En une session, et une seule, refaire le relief de l'île dans Unreal : garder l
 - [ ] La Seine, la Tamise et l'Hudson se reconnaissent sur une vue aérienne. L'Hudson mène au nord, vers le Pôle.
 - [ ] Aucune marche ni dent, aucun plan d'eau coupé : vérifié sur 12 captures au sol le long des fleuves et des côtes, en jeu autonome.
 - [ ] Le sommet de l'Aurore est accessible à pied.
+- [ ] Le désert part du sud de New York, avec des canyons et des mesas au nord, une transition, puis des dunes et au moins 2 oasis au sud. Le plateau des pyramides porte des volumes provisoires à l'échelle définitive. Preuve : vue aérienne et 4 captures au sol.
 - [ ] ≥ 45 images/s en 1920×1080, et `Jouer-U1.bat` à jour.
 - [ ] Le relief se reconstruit de zéro depuis `unreal/relief/`.
 
