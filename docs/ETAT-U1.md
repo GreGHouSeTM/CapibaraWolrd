@@ -1,5 +1,7 @@
 # État de l'Alpha U1 « Le monde » (poste unreal-monde)
 
+**PROCHAINE SESSION : `docs/taches/U1-terrain-v3.md` (refonte du terrain en une passe, sans rien recopier de l'ncien relief), puis U2 Capyville.**
+
 Fiche : `docs/taches/U1-le-monde.md`. Projet : `C:\Users\greg7\Documents\CLAUDE\CapyWorld-UE\CapyWorld.uproject` (UE 5.9, hors dépôt).
 Scripts : `unreal/` du dépôt. Preuves : `docs/u1/`. Lancer un script dans l'éditeur : `node unreal\outils\ue.cjs py unreal\py\<script>.py [args]`
 (ajouter `C:\Program Files\nodejs` au PATH).
@@ -58,7 +60,7 @@ rivières, empaquetage Windows, mesures jour/nuit (campagne à réécrire : `cam
   - L'eau des rivières est en plans coupés.
   - Les hauteurs et le pic de l'Aurore impressionnent le client.
   - L'erreur vient du critère « fidélité à 0,5 m » de la fiche, qui a recopié les défauts.
-- **Décision :** le terrain est plafonné à **une seule demi-session**, outils natifs d'Unreal uniquement, puis on passe à Capyville et au gameplay :
+- **Décision (complétée par le client le 2026-11-26, voir `docs/taches/U1-terrain-v3.md`) :** le terrain est plafonné à **une seule passe**, outils natifs d'Unreal uniquement, puis on passe à Capyville et au gameplay :
   1. lissage et érosion de la carte de hauteur à l'export (suppression des marches, sauf aux falaises voulues) ;
   2. rivières refaites avec le plugin Water d'Unreal (rivières sur splines qui creusent le Landscape), d'après les tracés du jeu ;
   3. pente plafonnée sur un chemin d'accès au sommet de l'Aurore.
