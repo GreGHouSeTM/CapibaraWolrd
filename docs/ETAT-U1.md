@@ -51,3 +51,15 @@ rivières, empaquetage Windows, mesures jour/nuit (campagne à réécrire : `cam
 - Lancement depuis Git Bash : les chemins `/Game/...` sont convertis en `C:/Program Files/Git/Game/...` → `MSYS_NO_PATHCONV=1`.
 - Un premier essai de mesure visait encore `CapyWorld-UE\CapyForet.uproject` (script recopié de la preuve) : boîte Windows chez le client.
   Corrigé dans `mesure.ps1` ; `campagne.ps1` et `captures.ps1` de la preuve retirés de `unreal/outils` (à réécrire pour U1).
+
+## Retour du client sur la démo (2026-11-26) : décision du producteur
+- **Constat :**
+  - Le relief porté « fidèlement » reprend tous les défauts du relief Three.js : marches et dents le long des rivières, formes sans logique, transitions brutales.
+  - L'eau des rivières est en plans coupés.
+  - Les hauteurs et le pic de l'Aurore impressionnent le client.
+  - L'erreur vient du critère « fidélité à 0,5 m » de la fiche, qui a recopié les défauts.
+- **Décision :** le terrain est plafonné à **une seule demi-session**, outils natifs d'Unreal uniquement, puis on passe à Capyville et au gameplay :
+  1. lissage et érosion de la carte de hauteur à l'export (suppression des marches, sauf aux falaises voulues) ;
+  2. rivières refaites avec le plugin Water d'Unreal (rivières sur splines qui creusent le Landscape), d'après les tracés du jeu ;
+  3. pente plafonnée sur un chemin d'accès au sommet de l'Aurore.
+- Le critère de fidélité devient : mêmes régions et mêmes sommets à ±5 m, sans marche ni dent visible.

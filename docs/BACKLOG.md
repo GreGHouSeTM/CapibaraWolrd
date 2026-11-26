@@ -24,3 +24,7 @@ Chaque idée a une Alpha visée (feuille de route dans `docs/PROCESSUS.md`). Ell
 | Désert de qualité (rides, traces, brume de sable) | 0.7+ (par région) | RETOURS §12 |
 | Lumière WebGPU (SSGI, sondes cuites) | r187 en 0.2, WebGPU en 0.6 | en cours (`wip/lumiere-v2`) |
 | Lumière de jour trop fade, ombres trop noires (démo forêt) : remplissage du ciel dans les ombres, contraste, couleur | étape 6 (0.7) — statut : planifiée (choix du client) ; estimation 0,5 session (lighting-rendu) | client 2026-11-24 (RETOURS §13) |
+
+## 2026-11-26 — retours du client sur la démo U1 (Unreal)
+- Au sommet du pic de l'Aurore : vent, particules de neige et de poussière, givre sur la caméra (« ça peut rendre super bien »).
+- La pente du pic est trop raide pour monter au sommet : prévoir un chemin praticable.
